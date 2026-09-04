@@ -16,9 +16,12 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as LockScreenRouteImport } from './routes/lock-screen'
 import { Route as FreeAuditRouteImport } from './routes/free-audit'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AcceptInviteRouteImport } from './routes/accept-invite'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -163,6 +166,16 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LockScreenRoute = LockScreenRouteImport.update({
+  id: '/lock-screen',
+  path: '/lock-screen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FreeAuditRoute = FreeAuditRouteImport.update({
   id: '/free-audit',
   path: '/free-audit',
@@ -176,6 +189,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AcceptInviteRoute = AcceptInviteRouteImport.update({
@@ -757,9 +775,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
+  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
+  '/lock-screen': typeof LockScreenRoute
+  '/logout': typeof LogoutRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -872,9 +893,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
+  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
+  '/lock-screen': typeof LockScreenRoute
+  '/logout': typeof LogoutRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -989,9 +1013,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
+  '/admin-login': typeof AdminLoginRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
+  '/lock-screen': typeof LockScreenRoute
+  '/logout': typeof LogoutRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -1106,9 +1133,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/accept-invite'
+    | '/admin-login'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
+    | '/lock-screen'
+    | '/logout'
     | '/pricing'
     | '/privacy'
     | '/refund-policy'
@@ -1221,9 +1251,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/accept-invite'
+    | '/admin-login'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
+    | '/lock-screen'
+    | '/logout'
     | '/pricing'
     | '/privacy'
     | '/refund-policy'
@@ -1337,9 +1370,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/accept-invite'
+    | '/admin-login'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
+    | '/lock-screen'
+    | '/logout'
     | '/pricing'
     | '/privacy'
     | '/refund-policy'
@@ -1458,9 +1494,12 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
   AcceptInviteRoute: typeof AcceptInviteRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   FreeAuditRoute: typeof FreeAuditRoute
+  LockScreenRoute: typeof LockScreenRoute
+  LogoutRoute: typeof LogoutRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
@@ -1560,6 +1599,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lock-screen': {
+      id: '/lock-screen'
+      path: '/lock-screen'
+      fullPath: '/lock-screen'
+      preLoaderRoute: typeof LockScreenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/free-audit': {
       id: '/free-audit'
       path: '/free-audit'
@@ -1579,6 +1632,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accept-invite': {
@@ -2573,9 +2633,12 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
   AcceptInviteRoute: AcceptInviteRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   FreeAuditRoute: FreeAuditRoute,
+  LockScreenRoute: LockScreenRoute,
+  LogoutRoute: LogoutRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RefundPolicyRoute: RefundPolicyRoute,

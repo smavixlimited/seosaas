@@ -9,6 +9,10 @@ import {
 import { GscReEngagementModal } from "@/client/features/gsc/GscReEngagementModal";
 import { Sidebar } from "@/client/components/Sidebar";
 import { VenixTopBar } from "@/client/layout/VenixTopBar";
+import {
+  InactivityLockModal,
+  useInactivityDetector,
+} from "@/client/features/auth/InactivityLockScreen";
 import { BILLING_ROUTE } from "@/shared/billing";
 import { isHostedClientAuthMode } from "@/lib/auth-mode";
 import { getSeoApiKeyStatus } from "@/serverFunctions/config";
@@ -28,9 +32,15 @@ export function AuthenticatedAppLayout({
 }) {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [isScreenLocked, setIsScreenLocked] = React.useState(false);
   const setupModalRef = React.useRef<HTMLDivElement | null>(null);
   const [showMissingSeoApiKeyModal, setShowMissingSeoApiKeyModal] =
     React.useState(false);
+
+  // 20-minute idle tracker for security lock
+  useInactivityDetector(() => {
+    setIsScreenLocked(true);
+  }, !isScreenLocked);
 
   const projectsQuery = useQuery({
     queryKey: ["projects"],
@@ -154,6 +164,11 @@ export function AuthenticatedAppLayout({
       <GscReEngagementModal
         projectId={sidebarProjectId}
         suppressed={shouldShowMissingSeoApiKeyModal}
+      />
+
+      <InactivityLockModal
+        isOpen={isScreenLocked}
+        onUnlock={() => setIsScreenLocked(false)}
       />
     </div>
   );

@@ -116,6 +116,15 @@ function createAuth() {
           // throwaway-inbox domains before the user row is created. Self-hosted
           // has no shared credit pool to protect, so it's left untouched.
           before: async (user) => {
+            const { SystemSettingsService } = await import(
+              "@/services/system-settings.service"
+            );
+            const isRegEnabled = await SystemSettingsService.isPublicRegistrationEnabled();
+            if (!isRegEnabled) {
+              throw new APIError("FORBIDDEN", {
+                message: "Public registration is currently disabled.",
+              });
+            }
             if (
               isHostedAuthMode(env.AUTH_MODE) &&
               isDisposableEmailDomain(user.email)
