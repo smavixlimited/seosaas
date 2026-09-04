@@ -231,4 +231,17 @@ flowchart TD
   4. **Table & Card Mobile Reflows:** Ensure all data tables have clean horizontal scrolling and mobile-friendly summary cards.
 - **Verification:** Test all dashboard views on mobile (375px), tablet (768px), and desktop (1440px) to verify zero overlaps, spacious search inputs, and high-visibility buttons.
 
+---
+
+### 🔹 Phase 51: Super-Admin User Messaging & Targeted Broadcast Suite
+- **Objective:** Build a multi-channel direct messaging & broadcast communication center in `/admin/users` with audience filtering, dynamic merge variables, in-app notification bell delivery, and email dispatch.
+- **Key Tasks:**
+  1. **Audience Filtering Engine:** Target All Users, Free/Starter Only, Subscribed/Paid Only, Specific Plan Tiers (`starter`, `pro`, `agency`), Specific Countries, or Single User Direct Message.
+  2. **Dynamic Merge Variables:** Support automatic substitution for `{{name}}`, `{{first_name}}`, `{{email}}`, `{{plan}}`, `{{credits}}` across title and message body.
+  3. **Multi-Channel Dispatch:** Dual delivery toggles for `[x] In-App Notification Bell` (saved to DB `userNotifications` with unread badge) and `[x] Email Delivery`.
+  4. **Live Audience Count & Preview:** Real-time recipient counter (*"Will reach 142 users"*) and live template preview.
+  5. **Admin UI Integration:** Add "Broadcast Message" header action and "Message User" row actions to `/admin/users`.
+- **Verification:** Test broadcast with merge tags, verify in-app notification bell display upon user impersonation, and confirm recipient filtering.
+
+
 

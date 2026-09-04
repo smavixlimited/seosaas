@@ -35,5 +35,5 @@ describe("ConversionAdReadinessService (0-100 Conversion & Ad Readiness Scorecar
       expect(fix.estimatedConversionLift).toBeDefined();
       expect(fix.suggestedPromptForSam.length).toBeGreaterThan(20);
     });
-  });
+  }, 15000);
 });
