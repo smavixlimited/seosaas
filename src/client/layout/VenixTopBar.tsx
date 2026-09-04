@@ -138,18 +138,19 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
           <div className="relative flex items-center">
             <Icon
               icon="solar:minimalistic-magnifer-line-duotone"
-              className="absolute left-3 h-4 w-4 text-base-content/50"
+              className="absolute left-3.5 h-4 w-4 text-base-content/60"
             />
             <input
               type="text"
-              placeholder="Search tools, keywords, or domains..."
+              placeholder="Search tools, keywords, or brands..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="input input-bordered input-sm h-9 w-64 rounded-xl pl-9 pr-3 text-xs focus:w-80 focus:border-primary focus:outline-none transition-all duration-200 bg-base-200/50"
+              className="input input-bordered h-10 w-64 md:w-72 rounded-2xl pl-10 pr-3 text-xs font-medium focus:w-80 focus:border-primary focus:outline-none transition-all duration-200 bg-base-200/60 border-base-300"
             />
           </div>
         </form>
       </div>
+
 
       {/* Right: Actions (Credit Meter, Language, Theme, Notifications, User Profile) */}
       <div className="flex items-center gap-2 md:gap-3">

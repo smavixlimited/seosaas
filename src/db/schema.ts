@@ -133,4 +133,6 @@ export const {
   brandAudits,
   trustSentimentAudits,
   viralContentItems,
+  competitorTrackedAds,
 } = schema;
+

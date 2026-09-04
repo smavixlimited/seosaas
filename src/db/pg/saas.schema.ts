@@ -752,4 +752,34 @@ export const viralContentItems = pgTable(
   ]
 );
 
+export const competitorTrackedAds = pgTable(
+  "competitor_tracked_ads",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    brandCompetitorId: text("brand_competitor_id"),
+    competitorDomain: text("competitor_domain").notNull(),
+    competitorName: text("competitor_name"),
+    platform: text("platform").notNull(), // 'meta' | 'google' | 'tiktok' | 'linkedin'
+    headline: text("headline").notNull(),
+    bodyCopy: text("body_copy"),
+    mediaUrl: text("media_url"),
+    mediaType: text("media_type").notNull().default("image"), // 'image' | 'video' | 'text_only'
+    landingPageUrl: text("landing_page_url"),
+    ctaType: text("cta_type").default("Learn More"),
+    angleCategory: text("angle_category").notNull().default("problem_solution"), // 'social_proof' | 'fomo' | 'discount_offer' | 'problem_solution' | 'educational'
+    estimatedActiveDays: integer("estimated_active_days").notNull().default(14),
+    isWinningAd: boolean("is_winning_ad").notNull().default(false),
+    isAiOpportunity: boolean("is_ai_opportunity").notNull().default(false),
+    metadataJson: text("metadata_json").notNull().default("{}"),
+    createdAt: text("created_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("competitor_ads_project_idx").on(table.projectId),
+    index("competitor_ads_competitor_domain_idx").on(table.competitorDomain),
+    index("competitor_ads_platform_idx").on(table.platform),
+  ]
+);
+
+
 

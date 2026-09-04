@@ -39,21 +39,18 @@ export function KeywordResearchSearchBar({ controller }: Props) {
 
               return (
                 <label
-                  className={`flex w-full lg:flex-1 lg:min-w-0 lg:max-w-md items-start gap-2 rounded-lg border bg-base-100 px-4 py-3 transition-colors focus-within:border-primary ${
+                  className={`flex w-full lg:flex-1 lg:min-w-0 lg:max-w-md items-start gap-2.5 rounded-2xl border bg-base-100 px-4 py-3.5 shadow-2xs transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 ${
                     keywordError ? "border-error" : "border-base-300"
                   }`}
                 >
-                  <Search className="mt-0.5 size-4 shrink-0 text-base-content/60" />
+                  <Search className="mt-1 size-4 shrink-0 text-base-content/60" />
                   <textarea
-                    className="grow min-w-0 resize-none bg-transparent text-sm leading-6 outline-none placeholder:text-base-content/40"
+                    className="grow min-w-0 resize-none bg-transparent text-sm leading-6 outline-none placeholder:text-base-content/40 font-medium"
                     rows={rows}
-                    placeholder="Enter a keyword"
+                    placeholder="Enter keywords (e.g. seo software, rank tracking)..."
                     value={field.state.value}
                     onChange={(event) => field.handleChange(event.target.value)}
                     onKeyDown={(event) => {
-                      // Enter submits. Shift+Enter inserts a newline, so
-                      // researching several keywords at once means adding a
-                      // line per keyword (or pasting newline-separated ones).
                       if (event.key === "Enter" && !event.shiftKey) {
                         event.preventDefault();
                         void controlsForm.handleSubmit();
@@ -65,13 +62,13 @@ export function KeywordResearchSearchBar({ controller }: Props) {
             }}
           </controlsForm.Field>
 
-          <div className="grid grid-cols-2 gap-2 lg:contents">
+          <div className="grid grid-cols-2 gap-2.5 lg:contents">
             <controlsForm.Field name="locationCode">
               {(field) => (
                 <LocationSelect
                   value={field.state.value}
                   onChange={(code) => field.handleChange(code)}
-                  className="w-full lg:w-44 lg:shrink-0"
+                  className="w-full lg:w-48 lg:shrink-0 h-11 rounded-2xl"
                 />
               )}
             </controlsForm.Field>
@@ -79,7 +76,7 @@ export function KeywordResearchSearchBar({ controller }: Props) {
             <controlsForm.Field name="resultLimit">
               {(field) => (
                 <select
-                  className="select select-bordered w-full lg:w-auto lg:shrink-0"
+                  className="select select-bordered w-full lg:w-auto lg:shrink-0 h-11 rounded-2xl font-bold text-xs"
                   value={field.state.value}
                   onChange={(event) => {
                     const next = Number(event.target.value);
@@ -98,13 +95,13 @@ export function KeywordResearchSearchBar({ controller }: Props) {
             <controlsForm.Field name="mode">
               {(field) => (
                 <select
-                  className="select select-bordered w-full lg:w-auto lg:shrink-0"
+                  className="select select-bordered w-full lg:w-auto lg:shrink-0 h-11 rounded-2xl font-bold text-xs"
                   value={field.state.value}
                   onChange={(event) =>
                     field.handleChange(normalizeKeywordMode(event.target.value))
                   }
                 >
-                  <option value="auto">Auto</option>
+                  <option value="auto">Auto Mode</option>
                   <option value="related">Related keywords</option>
                   <option value="suggestions">Suggestions</option>
                   <option value="ideas">Ideas</option>
@@ -114,12 +111,14 @@ export function KeywordResearchSearchBar({ controller }: Props) {
 
             <button
               type="submit"
-              className="btn btn-primary w-full px-6 lg:w-auto lg:shrink-0"
+              className="btn btn-primary h-11 rounded-2xl w-full px-6 lg:w-auto lg:shrink-0 font-bold text-white shadow-md shadow-primary/20 gap-2"
             >
-              Search
+              <Search className="size-4" />
+              <span>Search</span>
             </button>
           </div>
         </form>
+
         <controlsForm.Field name="keyword">
           {(field) => {
             const keywordError = getFieldError(field.state.meta.errors);

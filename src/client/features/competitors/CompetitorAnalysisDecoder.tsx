@@ -8,6 +8,7 @@ import {
   regenerateCompetitorStrategy,
 } from "@/serverFunctions/competitor-strategy";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
+import { CompetitorAdLibrary } from "@/client/features/competitors/CompetitorAdLibrary";
 
 interface CompetitorAnalysisDecoderProps {
   projectId: string;
@@ -36,8 +37,9 @@ export function CompetitorAnalysisDecoder({
   // Selected competitor state
   const [selectedDomain, setSelectedDomain] = React.useState(initialDomain);
   const [activeTab, setActiveTab] = React.useState<
-    "overview" | "positioning" | "content" | "keywords" | "vulnerabilities" | "playbook"
+    "overview" | "ads" | "positioning" | "content" | "keywords" | "vulnerabilities" | "playbook"
   >("overview");
+
 
   // Sync initialDomain if provided or default to first competitor
   React.useEffect(() => {
@@ -260,6 +262,7 @@ export function CompetitorAnalysisDecoder({
           <div className="flex flex-wrap gap-1.5 border-b border-base-300 pb-2">
             {[
               { id: "overview", label: "Overview & Positioning", icon: "solar:compass-bold-duotone" },
+              { id: "ads", label: "Active Ads Library", icon: "solar:fire-bold-duotone" },
               { id: "keywords", label: "Striking Distance Gaps", icon: "solar:minimalistic-magnifer-bold-duotone" },
               { id: "content", label: "Content Moat", icon: "solar:document-text-bold-duotone" },
               { id: "vulnerabilities", label: "Vulnerabilities", icon: "solar:shield-warning-bold-duotone" },
@@ -280,6 +283,11 @@ export function CompetitorAnalysisDecoder({
               </button>
             ))}
           </div>
+
+          {/* TAB: ACTIVE ADS LIBRARY */}
+          {activeTab === "ads" && (
+            <CompetitorAdLibrary projectId={projectId} initialDomain={cleanDomain} />
+          )}
 
           {/* TAB 1: OVERVIEW & POSITIONING */}
           {activeTab === "overview" && (

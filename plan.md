@@ -206,3 +206,29 @@ flowchart TD
   2. Verify all routes on desktop and mobile viewports.
   3. Prepare Docker build updates and deploy to production server.
 - **Verification:** Successful build and live testing on `https://skorvia.live`.
+
+---
+
+### 🔹 Phase 49: Competitor Ad Spying & Multi-Platform Creative Intelligence
+- **Objective:** Multi-network ad spy explorer (Meta, Google, TikTok, LinkedIn) without requiring users to connect their own ad accounts, with single-platform selection, live vs. opportunity 2-tier engine, and 1-click export to Action Roadmap.
+- **Key Tasks:**
+  1. **Platform Selector:** Allow users to choose which platform(s) to check (*Meta Only*, *Google Ads Only*, *TikTok Only*, *LinkedIn Only*, or *All*).
+  2. **Database Schema:** Create `competitorTrackedAds` schema storing ad creatives, headlines, copy, CTA, platform, longevity days, and angle categories.
+  3. **Data Pipeline & Services:** Create `competitor-ads.service.ts` integrating Meta Ad Library API, DataForSEO Google Ads SERP API, Firecrawl LinkedIn crawler, and TikTok Creative Center.
+  4. **Transparent 2-Tier Results:** Return verified real live ads when running, or generate an Untapped Opportunity Blueprint tailored to the competitor's scraped landing page if 0 ads are running on that platform.
+  5. **Competitor Ad Library UI (`/p/$projectId/competitor-analysis` & Sub-tab):** Platform selector pills, creative cards, longevity badges (*"🔥 Active 45+ days - Winning Ad"*), and 1-click **Export Angle to Action Roadmap**.
+  6. **My Analysis PDF Suite Integration:** Connect saved ad reports to `/p/$projectId/my-analysis` with print-ready PDF export.
+- **Verification:** Test single and multi-platform selection, verify transparent fallback vs. live ads, export angle to roadmap, and generate PDF report.
+
+---
+
+### 🔹 Phase 50: Dashboard Responsive Refactor, Header Overlaps & Button Contrast Polish
+- **Objective:** Full UI polish across all dashboard screens to fix text overlaps with headers, enlarge tiny search and input boxes, improve button visibility, and ensure 100% mobile/tablet responsiveness.
+- **Key Tasks:**
+  1. **Header Overlap & Clearance:** Audit and fix layout clearance (`pt-16`/`pt-20`, flex-wrap) across top bar, page titles, breadcrumbs, and mobile menus so text never overlaps.
+  2. **Search Box & Input Ergonomics:** Enlarge all search boxes and input fields (minimum `h-11`/`h-12` on mobile, comfortable padding, standard readable text sizes) to prevent iOS auto-zoom and cramped UI.
+  3. **Button Visibility & High Contrast:** Replace faint/washed-out buttons with high-contrast, bold DaisyUI/Venix styling (`btn-primary`, distinct borders, clear focus rings).
+  4. **Table & Card Mobile Reflows:** Ensure all data tables have clean horizontal scrolling and mobile-friendly summary cards.
+- **Verification:** Test all dashboard views on mobile (375px), tablet (768px), and desktop (1440px) to verify zero overlaps, spacious search inputs, and high-visibility buttons.
+
+
