@@ -1,0 +1,131 @@
+import { getDatabaseProvider } from "./provider";
+import * as sqliteApp from "./app.schema";
+import * as sqliteProjectContext from "./project-context.schema";
+import * as sqliteAudit from "./audit.schema";
+import * as sqliteSam from "./sam.schema";
+import * as sqliteAuth from "./better-auth-schema";
+import * as sqliteBilling from "./billing.schema";
+import * as sqliteGa4 from "./ga4.schema";
+import * as sqliteGsc from "./gsc.schema";
+import * as sqliteTelemetry from "./telemetry.schema";
+import * as sqliteSaas from "./saas.schema";
+import * as pgApp from "./pg/app.schema";
+import * as pgProjectContext from "./pg/project-context.schema";
+import * as pgAudit from "./pg/audit.schema";
+import * as pgSam from "./pg/sam.schema";
+import * as pgAuth from "./pg/better-auth-schema";
+import * as pgBilling from "./pg/billing.schema";
+import * as pgGa4 from "./pg/ga4.schema";
+import * as pgGsc from "./pg/gsc.schema";
+import * as pgTelemetry from "./pg/telemetry.schema";
+import * as pgSaas from "./pg/saas.schema";
+
+type AppSchema = typeof sqliteApp &
+  typeof sqliteProjectContext &
+  typeof sqliteAudit &
+  typeof sqliteSam &
+  typeof sqliteAuth &
+  typeof sqliteBilling &
+  typeof sqliteGa4 &
+  typeof sqliteGsc &
+  typeof sqliteTelemetry &
+  typeof sqliteSaas;
+
+const runtimeSchema =
+  getDatabaseProvider() === "postgres"
+    ? {
+        ...pgApp,
+        ...pgProjectContext,
+        ...pgAudit,
+        ...pgSam,
+        ...pgAuth,
+        ...pgBilling,
+        ...pgGa4,
+        ...pgGsc,
+        ...pgTelemetry,
+        ...pgSaas,
+      }
+    : {
+        ...sqliteApp,
+        ...sqliteProjectContext,
+        ...sqliteAudit,
+        ...sqliteSam,
+        ...sqliteAuth,
+        ...sqliteBilling,
+        ...sqliteGa4,
+        ...sqliteGsc,
+        ...sqliteTelemetry,
+        ...sqliteSaas,
+      };
+
+// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- guarded by schema-parity.test.ts
+const schema = runtimeSchema as unknown as AppSchema;
+
+export const {
+  userOnboardingAnswers,
+  projects,
+  savedKeywords,
+  savedKeywordTags,
+  savedKeywordTagAssignments,
+  keywordMetrics,
+  rankTrackingConfigs,
+  rankTrackingKeywords,
+  rankCheckRuns,
+  rankSnapshots,
+  organizationActivationState,
+  projectActivationState,
+  backlinkSnapshots,
+  projectContextSections,
+  projectCompetitors,
+  projectKeyPages,
+  projectResearchLog,
+  audits,
+  auditPages,
+  auditIssues,
+  auditLighthouseResults,
+  samSessions,
+  user,
+  session,
+  account,
+  apikey,
+  verification,
+  organization,
+  member,
+  invitation,
+  billingCustomerStatus,
+  ga4Connections,
+  gscConnections,
+  telemetryState,
+  saasPlans,
+  gatewaySettings,
+  manualPayments,
+  userQuotas,
+  leads,
+  uptimeMonitors,
+  whiteLabelConfigs,
+  cachedQueries,
+  seoAlertConfigs,
+  indexingSubmissions,
+  systemSettings,
+  auditLogs,
+  blogPosts,
+  webhookErrorLogs,
+  userTwoFactor,
+  userDevicesSessions,
+  teamMembers,
+  teamInvitations,
+  cancellationSurveys,
+  webhookEvents,
+  userTwoFactorPending,
+  saasCoupons,
+  couponRedemptions,
+  competitorStrategyReports,
+  roadmapTasks,
+  brandMentions,
+  aeoSentimentSnapshots,
+  conversionAdReadinessAudits,
+  localBusinessProfiles,
+  localBusinessLocations,
+  localRankGridSnapshots,
+  userNotifications,
+} = schema;

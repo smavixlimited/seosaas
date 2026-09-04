@@ -1,0 +1,145 @@
+import * as React from "react";
+import { Link } from "@tanstack/react-router";
+import { AlertTriangle, ExternalLink } from "lucide-react";
+import { Sidebar } from "@/client/components/Sidebar";
+import { dataforseoHelpLinkOptions } from "@/client/navigation/items";
+import { BRAND_CONFIG } from "@/config/brand";
+
+function SeoApiStatusBanners({
+  shouldShowSeoApiWarning,
+  seoApiKeyStatusError,
+}: {
+  shouldShowSeoApiWarning: boolean;
+  seoApiKeyStatusError: boolean;
+}) {
+  return (
+    <>
+      {shouldShowSeoApiWarning ? (
+        <div className="shrink-0 px-4 py-2.5 md:px-6">
+          <div className="mx-auto max-w-7xl">
+            <div className="alert alert-warning">
+              <AlertTriangle className="size-4 shrink-0" />
+              <span className="text-sm">
+                System Notice: Live SEO crawler service is syncing. If data is temporarily unavailable, please{" "}
+                <Link
+                  to="/docs"
+                  className="link link-primary font-medium"
+                >
+                  contact support
+                </Link>
+                .
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {seoApiKeyStatusError ? (
+        <div className="shrink-0 px-4 py-2.5 md:px-6">
+          <div className="mx-auto max-w-7xl">
+            <div className="alert alert-info">
+              <AlertTriangle className="size-4 shrink-0" />
+              <span className="text-sm">
+                Live metrics synchronization in progress. If you experience delays, please{" "}
+                <Link
+                  to="/docs"
+                  className="link link-primary font-medium"
+                >
+                  view documentation or contact support
+                </Link>
+                .
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function MobileSidebarDrawer({
+  open,
+  projectId,
+  onClose,
+}: {
+  open: boolean;
+  projectId: string | null;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 md:hidden">
+      <button
+        type="button"
+        aria-label="Close sidebar"
+        className="absolute inset-0 bg-black/45"
+        onClick={onClose}
+      />
+      <div className="absolute left-0 top-0 h-full shadow-xl">
+        <Sidebar projectId={projectId} onNavigate={onClose} onClose={onClose} />
+      </div>
+    </div>
+  );
+}
+
+const MissingSeoSetupModal = React.forwardRef<
+  HTMLDivElement,
+  {
+    isOpen: boolean;
+    onClose: () => void;
+  }
+>(({ isOpen, onClose }, ref) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dataforseo-setup-title"
+        aria-describedby="dataforseo-setup-description"
+        tabIndex={-1}
+        className="w-full max-w-lg rounded-2xl border border-base-300 bg-base-100 p-6 shadow-2xl space-y-4"
+      >
+        <div className="flex items-start gap-3">
+          <div className="rounded-xl bg-amber-500/20 p-2 text-amber-600 shrink-0">
+            <AlertTriangle className="size-5" />
+          </div>
+          <div className="space-y-1.5">
+            <h2
+              id="dataforseo-setup-title"
+              className="text-base font-bold text-base-content"
+            >
+              SEO Engine Initializing
+            </h2>
+            <p
+              id="dataforseo-setup-description"
+              className="text-xs text-base-content/75 leading-relaxed"
+            >
+              Things not right? Our crawler service is currently syncing. If live data is temporarily unavailable, please contact your administrator or support team.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" className="btn btn-ghost btn-sm rounded-xl" onClick={onClose}>
+            Dismiss
+          </button>
+          <Link
+            to="/docs"
+            className="btn btn-primary btn-sm rounded-xl text-white font-bold"
+            onClick={onClose}
+          >
+            Contact Support & Documentation
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+MissingSeoSetupModal.displayName = "MissingSeoSetupModal";
+
+export { MissingSeoSetupModal, MobileSidebarDrawer, SeoApiStatusBanners };
