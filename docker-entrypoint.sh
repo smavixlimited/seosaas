@@ -29,10 +29,13 @@ test -n "$FINGERPRINT"
 
 if [ -f "$FP_FILE" ] && [ "$(cat "$FP_FILE")" = "$FINGERPRINT" ]; then
   echo "Reusing existing build (build-relevant env unchanged)."
+elif [ -d "$OUT_DIR" ] && [ ! -f "$FP_FILE" ]; then
+  echo "Reusing pre-built image artifacts."
+  printf '%s' "$FINGERPRINT" > "$FP_FILE"
 else
-  echo "Building client + server (first start, changed build env, or new image)..."
+  echo "Building client + server (changed build env or fresh build)..."
   rm -f "$FP_FILE"
-  pnpm run build
+  NODE_OPTIONS="--max-old-space-size=4096" pnpm exec vite build
   printf '%s' "$FINGERPRINT" > "$FP_FILE"
 fi
 
