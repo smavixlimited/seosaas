@@ -128,4 +128,9 @@ export const {
   localBusinessLocations,
   localRankGridSnapshots,
   userNotifications,
+  brandProfiles,
+  brandCompetitors,
+  brandAudits,
+  trustSentimentAudits,
+  viralContentItems,
 } = schema;

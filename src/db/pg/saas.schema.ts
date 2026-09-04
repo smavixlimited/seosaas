@@ -653,3 +653,103 @@ export const userNotifications = pgTable(
   ]
 );
 
+export const brandProfiles = pgTable(
+  "brand_profiles",
+  {
+    projectId: text("project_id").primaryKey(),
+    brandName: text("brand_name").notNull(),
+    websiteUrl: text("website_url"),
+    industry: text("industry").notNull().default("SaaS / Software"),
+    companySize: text("company_size").notNull().default("1-5"),
+    targetCountry: text("target_country").notNull().default("US"),
+    targetLanguage: text("target_language").notNull().default("en"),
+    socialLinksJson: text("social_links_json").notNull().default("{}"),
+    brandDescription: text("brand_description"),
+    valueProposition: text("value_proposition"),
+    createdAt: text("created_at").notNull().default(isoNow),
+    updatedAt: text("updated_at").notNull().default(isoNow),
+  }
+);
+
+export const brandCompetitors = pgTable(
+  "brand_competitors",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    domain: text("domain").notNull(),
+    name: text("name"),
+    websiteUrl: text("website_url"),
+    socialHandlesJson: text("social_handles_json").notNull().default("{}"),
+    notes: text("notes"),
+    createdAt: text("created_at").notNull().default(isoNow),
+    updatedAt: text("updated_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("brand_competitors_project_idx").on(table.projectId),
+    index("brand_competitors_domain_idx").on(table.domain),
+  ]
+);
+
+export const brandAudits = pgTable(
+  "brand_audits",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    overallScore: integer("overall_score").notNull().default(85),
+    brandEquityScore: integer("brand_equity_score").notNull().default(82),
+    socialProofScore: integer("social_proof_score").notNull().default(88),
+    conversionReadinessScore: integer("conversion_readiness_score").notNull().default(80),
+    adClarityScore: integer("ad_clarity_score").notNull().default(85),
+    technicalHealthScore: integer("technical_health_score").notNull().default(90),
+    reputationSentimentScore: integer("reputation_sentiment_score").notNull().default(84),
+    strengthsJson: text("strengths_json").notNull(),
+    weaknessesJson: text("weaknesses_json").notNull(),
+    actionPlanJson: text("action_plan_json").notNull(),
+    createdAt: text("created_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("brand_audits_project_idx").on(table.projectId),
+  ]
+);
+
+export const trustSentimentAudits = pgTable(
+  "trust_sentiment_audits",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    trustScore: integer("trust_score").notNull().default(82),
+    preAdGateStatus: text("pre_ad_gate_status").notNull().default("approved"),
+    sentimentDistributionJson: text("sentiment_distribution_json").notNull(),
+    trustSignalsJson: text("trust_signals_json").notNull(),
+    riskAlertsJson: text("risk_alerts_json").notNull(),
+    recommendedAction: text("recommended_action").notNull(),
+    createdAt: text("created_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("trust_sentiment_project_idx").on(table.projectId),
+  ]
+);
+
+export const viralContentItems = pgTable(
+  "viral_content_items",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    title: text("title").notNull(),
+    platform: text("platform").notNull(),
+    opportunityType: text("opportunity_type").notNull(),
+    viralPotentialScore: integer("viral_potential_score").notNull().default(88),
+    hookText: text("hook_text").notNull(),
+    scriptOutline: text("script_outline").notNull(),
+    targetAudience: text("target_audience").notNull(),
+    tagsJson: text("tags_json").notNull().default("[]"),
+    status: text("status").notNull().default("suggested"),
+    createdAt: text("created_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("viral_content_project_idx").on(table.projectId),
+    index("viral_content_platform_idx").on(table.platform),
+  ]
+);
+
+
