@@ -222,7 +222,7 @@ export function ProjectSwitcher({
         <button
           ref={triggerRef}
           type="button"
-          aria-label="Switch project"
+          aria-label="Switch Brand"
           aria-expanded={open}
           aria-haspopup="listbox"
           onClick={() => (open ? closePanel() : openPanel())}
@@ -231,7 +231,7 @@ export function ProjectSwitcher({
         >
           <span className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-medium text-base-content">
-              {activeProject?.name ?? "Select project"}
+              {activeProject?.name ?? "Select Brand"}
             </span>
             {activeProject?.domain ? (
               <span className="truncate text-xs font-normal text-base-content/50">
@@ -245,8 +245,8 @@ export function ProjectSwitcher({
           <Link
             to="/p/$projectId/settings"
             params={{ projectId: activeProject.id }}
-            aria-label="Project settings"
-            title="Project settings"
+            aria-label="Brand settings"
+            title="Brand settings"
             onClick={() => {
               closePanel();
               onCloseDrawer?.();

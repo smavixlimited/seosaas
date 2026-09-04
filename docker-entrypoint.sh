@@ -35,7 +35,7 @@ elif [ -d "$OUT_DIR" ] && [ ! -f "$FP_FILE" ]; then
 else
   echo "Building client + server (changed build env or fresh build)..."
   rm -f "$FP_FILE"
-  NODE_OPTIONS="--max-old-space-size=4096" pnpm exec vite build
+  NODE_OPTIONS="--max-old-space-size=2048" pnpm exec vite build
   printf '%s' "$FINGERPRINT" > "$FP_FILE"
 fi
 

@@ -93,6 +93,8 @@ import { Route as ProjectPProjectIdIndexRouteImport } from './routes/_project/p/
 import { Route as ApiGscOauthCallbackRouteImport } from './routes/api/gsc/oauth/callback'
 import { Route as ApiGa4OauthCallbackRouteImport } from './routes/api/ga4/oauth/callback'
 import { Route as ApiBillingWebhookGatewayRouteImport } from './routes/api/billing.webhook.$gateway'
+import { Route as ProjectPProjectIdViralDetectorRouteImport } from './routes/_project/p/$projectId/viral-detector'
+import { Route as ProjectPProjectIdTrustSentimentRouteImport } from './routes/_project/p/$projectId/trust-sentiment'
 import { Route as ProjectPProjectIdSettingsRouteImport } from './routes/_project/p/$projectId/settings'
 import { Route as ProjectPProjectIdSearchPerformanceRouteImport } from './routes/_project/p/$projectId/search-performance'
 import { Route as ProjectPProjectIdScraperRouteImport } from './routes/_project/p/$projectId/scraper'
@@ -101,11 +103,15 @@ import { Route as ProjectPProjectIdSamRouteImport } from './routes/_project/p/$p
 import { Route as ProjectPProjectIdRoadmapRouteImport } from './routes/_project/p/$projectId/roadmap'
 import { Route as ProjectPProjectIdRankTrackingRouteImport } from './routes/_project/p/$projectId/rank-tracking'
 import { Route as ProjectPProjectIdPromptExplorerRouteImport } from './routes/_project/p/$projectId/prompt-explorer'
+import { Route as ProjectPProjectIdMyAnalysisRouteImport } from './routes/_project/p/$projectId/my-analysis'
 import { Route as ProjectPProjectIdLocalBusinessRouteImport } from './routes/_project/p/$projectId/local-business'
 import { Route as ProjectPProjectIdKeywordsRouteImport } from './routes/_project/p/$projectId/keywords'
 import { Route as ProjectPProjectIdDomainRouteImport } from './routes/_project/p/$projectId/domain'
+import { Route as ProjectPProjectIdCompetitorsRouteImport } from './routes/_project/p/$projectId/competitors'
+import { Route as ProjectPProjectIdCompetitorAnalysisRouteImport } from './routes/_project/p/$projectId/competitor-analysis'
 import { Route as ProjectPProjectIdBrandMentionsRouteImport } from './routes/_project/p/$projectId/brand-mentions'
 import { Route as ProjectPProjectIdBrandLookupRouteImport } from './routes/_project/p/$projectId/brand-lookup'
+import { Route as ProjectPProjectIdBrandAnalysisRouteImport } from './routes/_project/p/$projectId/brand-analysis'
 import { Route as ProjectPProjectIdBacklinksRouteImport } from './routes/_project/p/$projectId/backlinks'
 import { Route as ProjectPProjectIdAuditRouteImport } from './routes/_project/p/$projectId/audit'
 import { Route as ProjectPProjectIdAdReadinessRouteImport } from './routes/_project/p/$projectId/ad-readiness'
@@ -547,6 +553,18 @@ const ApiBillingWebhookGatewayRoute =
     path: '/api/billing/webhook/$gateway',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ProjectPProjectIdViralDetectorRoute =
+  ProjectPProjectIdViralDetectorRouteImport.update({
+    id: '/viral-detector',
+    path: '/viral-detector',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
+const ProjectPProjectIdTrustSentimentRoute =
+  ProjectPProjectIdTrustSentimentRouteImport.update({
+    id: '/trust-sentiment',
+    path: '/trust-sentiment',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
 const ProjectPProjectIdSettingsRoute =
   ProjectPProjectIdSettingsRouteImport.update({
     id: '/settings',
@@ -593,6 +611,12 @@ const ProjectPProjectIdPromptExplorerRoute =
     path: '/prompt-explorer',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
+const ProjectPProjectIdMyAnalysisRoute =
+  ProjectPProjectIdMyAnalysisRouteImport.update({
+    id: '/my-analysis',
+    path: '/my-analysis',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
 const ProjectPProjectIdLocalBusinessRoute =
   ProjectPProjectIdLocalBusinessRouteImport.update({
     id: '/local-business',
@@ -610,6 +634,18 @@ const ProjectPProjectIdDomainRoute = ProjectPProjectIdDomainRouteImport.update({
   path: '/domain',
   getParentRoute: () => ProjectPProjectIdRouteRoute,
 } as any)
+const ProjectPProjectIdCompetitorsRoute =
+  ProjectPProjectIdCompetitorsRouteImport.update({
+    id: '/competitors',
+    path: '/competitors',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
+const ProjectPProjectIdCompetitorAnalysisRoute =
+  ProjectPProjectIdCompetitorAnalysisRouteImport.update({
+    id: '/competitor-analysis',
+    path: '/competitor-analysis',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
 const ProjectPProjectIdBrandMentionsRoute =
   ProjectPProjectIdBrandMentionsRouteImport.update({
     id: '/brand-mentions',
@@ -620,6 +656,12 @@ const ProjectPProjectIdBrandLookupRoute =
   ProjectPProjectIdBrandLookupRouteImport.update({
     id: '/brand-lookup',
     path: '/brand-lookup',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
+const ProjectPProjectIdBrandAnalysisRoute =
+  ProjectPProjectIdBrandAnalysisRouteImport.update({
+    id: '/brand-analysis',
+    path: '/brand-analysis',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
 const ProjectPProjectIdBacklinksRoute =
@@ -794,11 +836,15 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
+  '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
+  '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
+  '/p/$projectId/my-analysis': typeof ProjectPProjectIdMyAnalysisRoute
   '/p/$projectId/prompt-explorer': typeof ProjectPProjectIdPromptExplorerRoute
   '/p/$projectId/rank-tracking': typeof ProjectPProjectIdRankTrackingRouteWithChildren
   '/p/$projectId/roadmap': typeof ProjectPProjectIdRoadmapRoute
@@ -807,6 +853,8 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
+  '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
+  '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
@@ -901,17 +949,23 @@ export interface FileRoutesByTo {
   '/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
   '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
+  '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
+  '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
+  '/p/$projectId/my-analysis': typeof ProjectPProjectIdMyAnalysisRoute
   '/p/$projectId/prompt-explorer': typeof ProjectPProjectIdPromptExplorerRoute
   '/p/$projectId/roadmap': typeof ProjectPProjectIdRoadmapRoute
   '/p/$projectId/sam': typeof ProjectPProjectIdSamRoute
   '/p/$projectId/saved': typeof ProjectPProjectIdSavedRoute
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
+  '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
+  '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
@@ -1014,11 +1068,15 @@ export interface FileRoutesById {
   '/_project/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/_project/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/_project/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
+  '/_project/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/_project/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/_project/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/_project/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
+  '/_project/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/_project/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/_project/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/_project/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
+  '/_project/p/$projectId/my-analysis': typeof ProjectPProjectIdMyAnalysisRoute
   '/_project/p/$projectId/prompt-explorer': typeof ProjectPProjectIdPromptExplorerRoute
   '/_project/p/$projectId/rank-tracking': typeof ProjectPProjectIdRankTrackingRouteWithChildren
   '/_project/p/$projectId/roadmap': typeof ProjectPProjectIdRoadmapRoute
@@ -1027,6 +1085,8 @@ export interface FileRoutesById {
   '/_project/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/_project/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/_project/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
+  '/_project/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
+  '/_project/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
@@ -1125,11 +1185,15 @@ export interface FileRouteTypes {
     | '/p/$projectId/ad-readiness'
     | '/p/$projectId/audit'
     | '/p/$projectId/backlinks'
+    | '/p/$projectId/brand-analysis'
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/brand-mentions'
+    | '/p/$projectId/competitor-analysis'
+    | '/p/$projectId/competitors'
     | '/p/$projectId/domain'
     | '/p/$projectId/keywords'
     | '/p/$projectId/local-business'
+    | '/p/$projectId/my-analysis'
     | '/p/$projectId/prompt-explorer'
     | '/p/$projectId/rank-tracking'
     | '/p/$projectId/roadmap'
@@ -1138,6 +1202,8 @@ export interface FileRouteTypes {
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
     | '/p/$projectId/settings'
+    | '/p/$projectId/trust-sentiment'
+    | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gsc/oauth/callback'
@@ -1232,17 +1298,23 @@ export interface FileRouteTypes {
     | '/dashboard/settings/security'
     | '/p/$projectId/ad-readiness'
     | '/p/$projectId/backlinks'
+    | '/p/$projectId/brand-analysis'
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/brand-mentions'
+    | '/p/$projectId/competitor-analysis'
+    | '/p/$projectId/competitors'
     | '/p/$projectId/domain'
     | '/p/$projectId/keywords'
     | '/p/$projectId/local-business'
+    | '/p/$projectId/my-analysis'
     | '/p/$projectId/prompt-explorer'
     | '/p/$projectId/roadmap'
     | '/p/$projectId/sam'
     | '/p/$projectId/saved'
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
+    | '/p/$projectId/trust-sentiment'
+    | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gsc/oauth/callback'
@@ -1344,11 +1416,15 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/ad-readiness'
     | '/_project/p/$projectId/audit'
     | '/_project/p/$projectId/backlinks'
+    | '/_project/p/$projectId/brand-analysis'
     | '/_project/p/$projectId/brand-lookup'
     | '/_project/p/$projectId/brand-mentions'
+    | '/_project/p/$projectId/competitor-analysis'
+    | '/_project/p/$projectId/competitors'
     | '/_project/p/$projectId/domain'
     | '/_project/p/$projectId/keywords'
     | '/_project/p/$projectId/local-business'
+    | '/_project/p/$projectId/my-analysis'
     | '/_project/p/$projectId/prompt-explorer'
     | '/_project/p/$projectId/rank-tracking'
     | '/_project/p/$projectId/roadmap'
@@ -1357,6 +1433,8 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/scraper'
     | '/_project/p/$projectId/search-performance'
     | '/_project/p/$projectId/settings'
+    | '/_project/p/$projectId/trust-sentiment'
+    | '/_project/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gsc/oauth/callback'
@@ -2021,6 +2099,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBillingWebhookGatewayRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_project/p/$projectId/viral-detector': {
+      id: '/_project/p/$projectId/viral-detector'
+      path: '/viral-detector'
+      fullPath: '/p/$projectId/viral-detector'
+      preLoaderRoute: typeof ProjectPProjectIdViralDetectorRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
+    '/_project/p/$projectId/trust-sentiment': {
+      id: '/_project/p/$projectId/trust-sentiment'
+      path: '/trust-sentiment'
+      fullPath: '/p/$projectId/trust-sentiment'
+      preLoaderRoute: typeof ProjectPProjectIdTrustSentimentRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
     '/_project/p/$projectId/settings': {
       id: '/_project/p/$projectId/settings'
       path: '/settings'
@@ -2077,6 +2169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectPProjectIdPromptExplorerRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
+    '/_project/p/$projectId/my-analysis': {
+      id: '/_project/p/$projectId/my-analysis'
+      path: '/my-analysis'
+      fullPath: '/p/$projectId/my-analysis'
+      preLoaderRoute: typeof ProjectPProjectIdMyAnalysisRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
     '/_project/p/$projectId/local-business': {
       id: '/_project/p/$projectId/local-business'
       path: '/local-business'
@@ -2098,6 +2197,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectPProjectIdDomainRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
+    '/_project/p/$projectId/competitors': {
+      id: '/_project/p/$projectId/competitors'
+      path: '/competitors'
+      fullPath: '/p/$projectId/competitors'
+      preLoaderRoute: typeof ProjectPProjectIdCompetitorsRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
+    '/_project/p/$projectId/competitor-analysis': {
+      id: '/_project/p/$projectId/competitor-analysis'
+      path: '/competitor-analysis'
+      fullPath: '/p/$projectId/competitor-analysis'
+      preLoaderRoute: typeof ProjectPProjectIdCompetitorAnalysisRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
     '/_project/p/$projectId/brand-mentions': {
       id: '/_project/p/$projectId/brand-mentions'
       path: '/brand-mentions'
@@ -2110,6 +2223,13 @@ declare module '@tanstack/react-router' {
       path: '/brand-lookup'
       fullPath: '/p/$projectId/brand-lookup'
       preLoaderRoute: typeof ProjectPProjectIdBrandLookupRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
+    '/_project/p/$projectId/brand-analysis': {
+      id: '/_project/p/$projectId/brand-analysis'
+      path: '/brand-analysis'
+      fullPath: '/p/$projectId/brand-analysis'
+      preLoaderRoute: typeof ProjectPProjectIdBrandAnalysisRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
     '/_project/p/$projectId/backlinks': {
@@ -2315,11 +2435,15 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdAdReadinessRoute: typeof ProjectPProjectIdAdReadinessRoute
   ProjectPProjectIdAuditRoute: typeof ProjectPProjectIdAuditRouteWithChildren
   ProjectPProjectIdBacklinksRoute: typeof ProjectPProjectIdBacklinksRoute
+  ProjectPProjectIdBrandAnalysisRoute: typeof ProjectPProjectIdBrandAnalysisRoute
   ProjectPProjectIdBrandLookupRoute: typeof ProjectPProjectIdBrandLookupRoute
   ProjectPProjectIdBrandMentionsRoute: typeof ProjectPProjectIdBrandMentionsRoute
+  ProjectPProjectIdCompetitorAnalysisRoute: typeof ProjectPProjectIdCompetitorAnalysisRoute
+  ProjectPProjectIdCompetitorsRoute: typeof ProjectPProjectIdCompetitorsRoute
   ProjectPProjectIdDomainRoute: typeof ProjectPProjectIdDomainRoute
   ProjectPProjectIdKeywordsRoute: typeof ProjectPProjectIdKeywordsRoute
   ProjectPProjectIdLocalBusinessRoute: typeof ProjectPProjectIdLocalBusinessRoute
+  ProjectPProjectIdMyAnalysisRoute: typeof ProjectPProjectIdMyAnalysisRoute
   ProjectPProjectIdPromptExplorerRoute: typeof ProjectPProjectIdPromptExplorerRoute
   ProjectPProjectIdRankTrackingRoute: typeof ProjectPProjectIdRankTrackingRouteWithChildren
   ProjectPProjectIdRoadmapRoute: typeof ProjectPProjectIdRoadmapRoute
@@ -2328,6 +2452,8 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdScraperRoute: typeof ProjectPProjectIdScraperRoute
   ProjectPProjectIdSearchPerformanceRoute: typeof ProjectPProjectIdSearchPerformanceRoute
   ProjectPProjectIdSettingsRoute: typeof ProjectPProjectIdSettingsRouteWithChildren
+  ProjectPProjectIdTrustSentimentRoute: typeof ProjectPProjectIdTrustSentimentRoute
+  ProjectPProjectIdViralDetectorRoute: typeof ProjectPProjectIdViralDetectorRoute
   ProjectPProjectIdIndexRoute: typeof ProjectPProjectIdIndexRoute
 }
 
@@ -2336,11 +2462,16 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdAdReadinessRoute: ProjectPProjectIdAdReadinessRoute,
     ProjectPProjectIdAuditRoute: ProjectPProjectIdAuditRouteWithChildren,
     ProjectPProjectIdBacklinksRoute: ProjectPProjectIdBacklinksRoute,
+    ProjectPProjectIdBrandAnalysisRoute: ProjectPProjectIdBrandAnalysisRoute,
     ProjectPProjectIdBrandLookupRoute: ProjectPProjectIdBrandLookupRoute,
     ProjectPProjectIdBrandMentionsRoute: ProjectPProjectIdBrandMentionsRoute,
+    ProjectPProjectIdCompetitorAnalysisRoute:
+      ProjectPProjectIdCompetitorAnalysisRoute,
+    ProjectPProjectIdCompetitorsRoute: ProjectPProjectIdCompetitorsRoute,
     ProjectPProjectIdDomainRoute: ProjectPProjectIdDomainRoute,
     ProjectPProjectIdKeywordsRoute: ProjectPProjectIdKeywordsRoute,
     ProjectPProjectIdLocalBusinessRoute: ProjectPProjectIdLocalBusinessRoute,
+    ProjectPProjectIdMyAnalysisRoute: ProjectPProjectIdMyAnalysisRoute,
     ProjectPProjectIdPromptExplorerRoute: ProjectPProjectIdPromptExplorerRoute,
     ProjectPProjectIdRankTrackingRoute:
       ProjectPProjectIdRankTrackingRouteWithChildren,
@@ -2351,6 +2482,8 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdSearchPerformanceRoute:
       ProjectPProjectIdSearchPerformanceRoute,
     ProjectPProjectIdSettingsRoute: ProjectPProjectIdSettingsRouteWithChildren,
+    ProjectPProjectIdTrustSentimentRoute: ProjectPProjectIdTrustSentimentRoute,
+    ProjectPProjectIdViralDetectorRoute: ProjectPProjectIdViralDetectorRoute,
     ProjectPProjectIdIndexRoute: ProjectPProjectIdIndexRoute,
   }
 

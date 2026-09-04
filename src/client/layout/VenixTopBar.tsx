@@ -436,7 +436,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
                 <Icon icon="solar:folder-with-files-bold-duotone" className="h-4 w-4 text-primary" />
-                <span>My Projects</span>
+                <span>My Brands</span>
               </Link>
             </li>
 
@@ -459,17 +459,6 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
               >
                 <Icon icon="solar:settings-bold-duotone" className="h-4 w-4 text-primary" />
                 <span>Settings</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="/admin"
-                onClick={() => closeDropdown()}
-                className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium text-amber-500 hover:bg-amber-500/10"
-              >
-                <Icon icon="solar:shield-star-bold-duotone" className="h-4 w-4 text-amber-500" />
-                <span>Super-Admin Portal</span>
               </Link>
             </li>
 

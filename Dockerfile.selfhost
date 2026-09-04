@@ -13,8 +13,8 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-# Pre-build client and server during docker build to speed up container startup
-RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm exec vite build
+# Pre-build client and server during image build with controlled heap size
+RUN NODE_OPTIONS="--max-old-space-size=2048" pnpm exec vite build
 
 EXPOSE 3001
 
