@@ -7,6 +7,7 @@ import {
   getConversionReadiness,
   runConversionReadinessAudit,
 } from "@/serverFunctions/conversion-readiness";
+import { createRoadmapTask } from "@/serverFunctions/roadmap";
 import type { RecommendedFixItem, ConversionAuditResult } from "@/services/conversion-ad-readiness.service";
 
 interface ConversionReadinessPageProps {
@@ -25,6 +26,49 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
   });
 
   const audit = auditQuery.data;
+
+  const addRoadmapTaskMutation = useMutation({
+    mutationFn: (fix: RecommendedFixItem) =>
+      createRoadmapTask({
+        data: {
+          title: fix.title,
+          description: fix.action,
+          category: fix.priority === "HIGH" ? "high_impact" : fix.priority === "QUICK_WIN" ? "quick_win" : "growth",
+          priority: fix.priority === "HIGH" ? "critical" : "high",
+          aiPrompt: fix.suggestedPromptForSam,
+        },
+      }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      toast.success("Added fix to Action Roadmap!");
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to add fix to roadmap");
+    },
+  });
+
+  const exportAllToRoadmapMutation = useMutation({
+    mutationFn: async (fixes: RecommendedFixItem[]) => {
+      for (const fix of fixes) {
+        await createRoadmapTask({
+          data: {
+            title: fix.title,
+            description: fix.action,
+            category: fix.priority === "HIGH" ? "high_impact" : fix.priority === "QUICK_WIN" ? "quick_win" : "growth",
+            priority: fix.priority === "HIGH" ? "critical" : "high",
+            aiPrompt: fix.suggestedPromptForSam,
+          },
+        });
+      }
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      toast.success("Exported all optimization fixes to Action Roadmap!");
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to export fixes to roadmap");
+    },
+  });
 
   const runAuditMutation = useMutation({
     mutationFn: () =>
@@ -310,12 +354,35 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
             </div>
           </div>
 
-          {/* Recommended Fixes with 1-Click SAM Action */}
+          {/* Recommended Fixes with 1-Click Roadmap Export & SAM Action */}
           <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
-            <h3 className="text-base font-black text-base-content flex items-center gap-2">
-              <Icon icon="solar:bolt-bold" className="h-5 w-5 text-amber-500" />
-              <span>Recommended Optimization Actions</span>
-            </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-base-200 pb-3">
+              <div>
+                <h3 className="text-base font-black text-base-content flex items-center gap-2">
+                  <Icon icon="solar:bolt-bold" className="h-5 w-5 text-amber-500" />
+                  <span>Recommended Optimization Actions</span>
+                </h3>
+                <p className="text-xs text-base-content/60 mt-0.5">
+                  Actionable CRO tasks prioritized by estimated conversion lift.
+                </p>
+              </div>
+
+              {audit.recommendedFixes && audit.recommendedFixes.length > 0 && (
+                <button
+                  type="button"
+                  disabled={exportAllToRoadmapMutation.isPending}
+                  onClick={() => exportAllToRoadmapMutation.mutate(audit.recommendedFixes)}
+                  className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white shadow-md shadow-primary/20 gap-1.5"
+                >
+                  <Icon icon="solar:rocket-bold" className="h-4 w-4" />
+                  <span>
+                    {exportAllToRoadmapMutation.isPending
+                      ? "Exporting to Roadmap..."
+                      : "Export All to Action Roadmap"}
+                  </span>
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {audit.recommendedFixes.map((fix, idx) => (
@@ -333,14 +400,25 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
                     <p className="text-xs text-base-content/70 leading-relaxed">{fix.action}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleLaunchSamForFix(fix)}
-                    className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 w-full"
-                  >
-                    <Icon icon="solar:stars-bold" className="h-4 w-4" />
-                    <span>Generate AI Fix</span>
-                  </button>
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-base-300/60">
+                    <button
+                      type="button"
+                      onClick={() => addRoadmapTaskMutation.mutate(fix)}
+                      className="btn btn-xs btn-outline rounded-xl font-bold text-[11px] gap-1 hover:bg-primary hover:text-white"
+                    >
+                      <Icon icon="solar:rocket-bold" className="h-3 w-3" />
+                      <span>Roadmap</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleLaunchSamForFix(fix)}
+                      className="btn btn-xs btn-primary rounded-xl font-bold text-[11px] text-white shadow-xs gap-1"
+                    >
+                      <Icon icon="solar:stars-bold" className="h-3 w-3" />
+                      <span>AI Fix</span>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
