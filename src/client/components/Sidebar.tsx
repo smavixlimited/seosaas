@@ -240,8 +240,11 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
         <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-2 space-y-3">
           {navGroups.map((group) => (
             <div key={group.label} className="space-y-1">
-              <div className="px-2 pt-2 text-[10px] font-black uppercase tracking-wider text-base-content/40">
-                {group.label}
+              <div className="flex items-center gap-1.5 px-2 pt-2 text-[10px] font-black uppercase tracking-wider text-base-content/45">
+                {(group as { solarIcon?: string }).solarIcon ? (
+                  <Icon icon={(group as { solarIcon?: string }).solarIcon!} className="h-3 w-3 text-primary/70" />
+                ) : null}
+                <span>{group.label}</span>
               </div>
               {group.items.map((item) => {
                 const { icon, solarIcon, label, benefit, ...linkProps } = item as {

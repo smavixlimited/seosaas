@@ -254,6 +254,7 @@ export function getProjectNavGroups(projectId: string) {
   return [
     {
       label: "Overview",
+      solarIcon: "solar:widget-6-bold-duotone",
       items: [
         byPath("/p/$projectId"),
         byPath("/p/$projectId/roadmap"),
@@ -262,6 +263,7 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Brand & Ad Readiness",
+      solarIcon: "solar:shield-star-bold-duotone",
       items: [
         byPath("/p/$projectId/brand-analysis"),
         byPath("/p/$projectId/trust-sentiment"),
@@ -270,6 +272,7 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Competitor Intelligence",
+      solarIcon: "solar:swords-bold-duotone",
       items: [
         byPath("/p/$projectId/competitors"),
         byPath("/p/$projectId/competitor-analysis"),
@@ -277,6 +280,7 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Organic Search (SEO)",
+      solarIcon: "solar:minimalistic-magnifer-bold-duotone",
       items: [
         byPath("/p/$projectId/keywords"),
         byPath("/p/$projectId/saved"),
@@ -288,12 +292,14 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Local Business",
+      solarIcon: "solar:shop-2-bold-duotone",
       items: [
         byPath("/p/$projectId/local-business"),
       ],
     },
     {
       label: "AI Search & Radar",
+      solarIcon: "solar:radar-bold-duotone",
       items: [
         byPath("/p/$projectId/brand-lookup"),
         byPath("/p/$projectId/brand-mentions"),

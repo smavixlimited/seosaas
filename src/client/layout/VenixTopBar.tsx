@@ -161,7 +161,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
             title={`${currentPlan} Plan: ${creditsRemaining} of ${creditsLimit} credits available`}
           >
             <span className={isDepleted ? "text-error animate-pulse" : isNearLimit ? "text-amber-500" : "text-primary"}>
-              ⚡
+              <Icon icon="solar:bolt-bold-duotone" className="h-3.5 w-3.5 shrink-0" />
             </span>
             <span className="font-mono">{creditsRemaining.toLocaleString()}</span>
             <span className="text-base-content/40 font-mono text-[11px]">/ {creditsLimit.toLocaleString()}</span>
