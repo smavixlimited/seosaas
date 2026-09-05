@@ -7,6 +7,8 @@ dist/
 dist-sourcemaps/
 .wrangler
 /tmp
+analytics-reporting/
+
 
 .output/
 .tanstack/

@@ -243,5 +243,30 @@ flowchart TD
   5. **Admin UI Integration:** Add "Broadcast Message" header action and "Message User" row actions to `/admin/users`.
 - **Verification:** Test broadcast with merge tags, verify in-app notification bell display upon user impersonation, and confirm recipient filtering.
 
+---
+
+### 🔹 Phase 52: Public NextSaaS Redesign, Outcome-Driven Onboarding & Complete Auth Suite Elevation
+- **Objective:** Redesign the entire public marketing experience to match the exact `seosaas/analytics-reporting` NextSaaS template layout, elevate the onboarding wizard with Senior Sales outcome-driven activation, and upgrade the complete auth & security flow (Login, Register, Logout, Session Timeout, Forgot/Reset Password, and unverified user Confirm Email redirect gate).
+- **Key Tasks:**
+  1. **Public Marketing Redesign (`seosaas/analytics-reporting` Mirror):**
+     - Copy template assets, SVGs, and card styling from `seosaas/analytics-reporting/public/images` to `public/images/template/`.
+     - Build exact template components: `Navbar.tsx`, `Hero.tsx` + `HeroPerspective.tsx` (with embedded Interactive Domain/Keyword Live Scanner for instant value before signup), `Feature.tsx` (3-card tilted bento), `Services.tsx` (with custom shape icons & hover transforms), `Process.tsx` (3-step outcome roadmap), `IntegrationMarquee.tsx`, `Number.tsx` (trust stats & counters), `Faq.tsx` (accordion), and `Footer.tsx`.
+     - Redesign [`src/routes/index.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/index.tsx), [`src/routes/pricing.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/pricing.tsx), and [`src/routes/free-audit.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/free-audit.tsx).
+  2. **Outcome-Driven Onboarding Experience (`SkorviaOnboardingWizard.tsx`):**
+     - Reframe onboarding around *Pain Point $\rightarrow$ Desired Outcome*:
+       - Step 1: Growth Baseline Benchmark (Brand & Industry)
+       - Step 2: High-Stakes Competitor Targeting (Domains & Social Assets)
+       - Step 3: First High-Value Victory Selector (Direct activation into Competitor Ad Spying, AI Citation Radar, or Brand Trust Pre-Ad Gate)
+     - Style wizard cards with `rounded-[20px] bg-white dark:bg-background-6 border border-stroke-1 dark:border-stroke-7 shadow-xl`.
+  3. **Complete Auth & Security Suite Polish:**
+     - **Login (`_auth.sign-in.tsx`):** NextSaaS auth card layout with remember me, social login, 2FA prompt, and unverified email redirect.
+     - **Registration (`_auth.sign-up.tsx`):** Sleek sign-up card with live password strength, turnstile, and outcome framing.
+     - **Confirm Email Gate (`/confirm-email` & `verify-email.tsx`):** Dedicated page for users who signed up but haven't confirmed their email. Users attempting to log in with an unverified account are smoothly redirected here with a 1-click resend verification button until their email is confirmed.
+     - **Forgot Password (`forgot-password.tsx`) & Reset Password (`reset-password.tsx`):** NextSaaS styling with instant confirmation feedback.
+     - **Logout (`logout.tsx`):** Clean sign-out confirmation and session cleanup screen.
+     - **Session Timeout & Inactivity Lock:** Polished re-authentication dialog for timed-out sessions.
+- **Verification:** Test public pages across mobile/desktop, verify interactive hero scanner without login, test unverified user login redirect to `/confirm-email`, test onboarding outcome selector, and run full test suites.
+
+
 
 

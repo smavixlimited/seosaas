@@ -80,7 +80,14 @@ function SignInPage() {
           return;
         }
 
-        if (result.error.status === 403) {
+        const errorMsg = result.error.message?.toLowerCase() || "";
+        if (
+          result.error.status === 403 ||
+          errorMsg.includes("email not verified") ||
+          errorMsg.includes("verify your email") ||
+          errorMsg.includes("confirm your email") ||
+          errorMsg.includes("unverified")
+        ) {
           captureClientEvent("auth:sign_in_block_unverified", {
             redirect_to: redirectTo,
           });
