@@ -436,8 +436,12 @@ export function MarketingNavbar() {
 
         {/* Right Actions: Currency Dropdown, Language Dropdown, Theme Toggle, Auth Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2.5">
-          <CurrencyDropdown />
-          <LanguageDropdown />
+          <div className="hidden sm:block">
+            <CurrencyDropdown />
+          </div>
+          <div className="hidden md:block">
+            <LanguageDropdown />
+          </div>
 
           {/* Theme Toggle */}
           <button
