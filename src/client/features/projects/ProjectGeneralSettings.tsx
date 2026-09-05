@@ -150,18 +150,18 @@ function DangerSection({
     onSuccess: async () => {
       if (getLastProjectId() === project.id) clearLastProjectId();
       await queryClient.invalidateQueries({ queryKey: ["projects"] });
-      toast.success("Project archived");
-      // Re-resolve to a remaining project via the landing redirect.
-      void navigate({ to: "/" });
+      toast.success("Brand archived");
+      // Re-resolve to a remaining brand via the landing redirect.
+      void navigate({ to: "/my-brands" });
     },
     onError: (error) =>
-      toast.error(getStandardErrorMessage(error, "Failed to archive project")),
+      toast.error(getStandardErrorMessage(error, "Failed to archive brand")),
   });
 
   return (
     <section className="space-y-3 border-t border-base-300 pt-8">
       <h2 className="text-sm font-medium text-base-content/50">
-        Archive project
+        Archive Brand
       </h2>
 
       {confirming ? (
@@ -172,7 +172,7 @@ function DangerSection({
               {project.name}
             </span>{" "}
             removes it from your workspace and stops its scheduled rank
-            tracking. You can restore it later from the Projects page.
+            tracking. You can restore it later from the My Brands page.
           </p>
           <div className="flex gap-2">
             <button
@@ -181,7 +181,7 @@ function DangerSection({
               onClick={() => archiveMutation.mutate()}
               disabled={archiveMutation.isPending}
             >
-              Yes, archive project
+              Yes, archive brand
             </button>
             <button
               type="button"
@@ -197,8 +197,8 @@ function DangerSection({
         <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-base-content/60">
             {canArchive
-              ? "Archive this project to remove it from your workspace."
-              : "You can't archive your only project."}
+              ? "Archive this brand to remove it from your workspace."
+              : "You can't archive your only brand."}
           </p>
           <button
             type="button"
@@ -206,7 +206,7 @@ function DangerSection({
             onClick={() => setConfirming(true)}
             disabled={!canArchive}
           >
-            Archive project
+            Archive Brand
           </button>
         </div>
       )}

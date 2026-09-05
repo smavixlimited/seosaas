@@ -19,6 +19,7 @@ import { toast } from "sonner";
 const signInSchema = z.object({
   email: z.string().trim().email("Enter a valid email address."),
   password: z.string().min(1, "Enter your password."),
+  rememberMe: z.boolean(),
 });
 
 export const Route = createFileRoute("/_auth/sign-in")({
@@ -32,8 +33,9 @@ function SignInPage() {
   const { redirectTo, oauthQuery, isHostedMode } = useAuthPageState(
     search.redirect,
   );
-  const authCallbackURL = redirectTo;
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const targetRedirect =
+    !redirectTo || redirectTo === "/" ? "/my-brands" : redirectTo;
+  const authCallbackURL = targetRedirect;
   const [isStartingGoogle, setIsStartingGoogle] = useState(false);
   const [socialError, setSocialError] = useState<string | null>(null);
 
@@ -48,6 +50,7 @@ function SignInPage() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
     validators: {
       onSubmit: signInSchema,
@@ -56,20 +59,22 @@ function SignInPage() {
       try {
         const email = value.email.trim();
         captureClientEvent("auth:sign_in_submit", {
-          redirect_to: redirectTo,
+          redirect_to: targetRedirect,
         });
 
         const result = await authClient.signIn.email({
           email,
           password: value.password,
           callbackURL: authCallbackURL,
+          rememberMe: value.rememberMe,
           ...(oauthQuery ? { oauth_query: oauthQuery } : {}),
         });
 
         if (!result.error) {
           captureClientEvent("auth:sign_in_success", {
-            redirect_to: redirectTo,
+            redirect_to: targetRedirect,
           });
+          window.location.replace(targetRedirect);
           return;
         }
 
@@ -89,11 +94,11 @@ function SignInPage() {
           errorMsg.includes("unverified")
         ) {
           captureClientEvent("auth:sign_in_block_unverified", {
-            redirect_to: redirectTo,
+            redirect_to: targetRedirect,
           });
           void navigate({
-            to: "/verify-email",
-            search: getVerifyEmailSearch(email, redirectTo),
+            to: "/confirm-email",
+            search: getVerifyEmailSearch(email, targetRedirect),
           });
           return;
         }
@@ -132,8 +137,8 @@ function SignInPage() {
 
       if (res.isValid) {
         toast.success("Two-Factor Authentication verified!");
-        captureClientEvent("auth:2fa_verified", { redirect_to: redirectTo });
-        window.location.href = redirectTo || "/projects";
+        captureClientEvent("auth:2fa_verified", { redirect_to: targetRedirect });
+        window.location.replace(targetRedirect);
       } else {
         setTfaError("Invalid 6-digit authentication code or backup recovery code.");
       }
@@ -174,11 +179,11 @@ function SignInPage() {
       title={show2FAChallenge ? "Two-Factor Verification" : "Sign in to your account"}
       helperText={
         show2FAChallenge
-          ? "Enter the 6-digit TOTP code from your authenticator app or an emergency backup code."
-          : "Welcome back! Please enter your details or continue with Google."
+          ? "Enter the 6-digit TOTP code from your authenticator app or backup recovery code."
+          : "Welcome back! Enter your login details to access your search intelligence workspace."
       }
       footer={
-        <div className="pt-2 text-center text-xs text-base-content/70 space-y-2">
+        <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70 space-y-2">
           {show2FAChallenge ? (
             <button
               type="button"
@@ -186,34 +191,21 @@ function SignInPage() {
                 setShow2FAChallenge(false);
                 setTfaError(null);
               }}
-              className="text-primary font-bold hover:underline"
+              className="text-primary dark:text-brand-300 font-bold hover:underline"
             >
-              &larr; Back to password login
+              &larr; Back to password sign in
             </button>
           ) : (
-            <>
-              {showEmailForm && (
-                <div>
-                  <Link
-                    to="/forgot-password"
-                    search={getSignInSearch(redirectTo)}
-                    className="text-primary font-bold hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-              )}
-              <div>
-                Don&apos;t have an account yet?{" "}
-                <Link
-                  to="/sign-up"
-                  search={getSignInSearch(redirectTo)}
-                  className="font-bold text-primary hover:underline"
-                >
-                  Sign up here &rarr;
-                </Link>
-              </div>
-            </>
+            <div>
+              Not registered yet?{" "}
+              <Link
+                to="/sign-up"
+                search={getSignInSearch(redirectTo)}
+                className="font-bold text-primary dark:text-brand-300 hover:underline"
+              >
+                Create an Account &rarr;
+              </Link>
+            </div>
           )}
         </div>
       }
@@ -221,31 +213,31 @@ function SignInPage() {
       {show2FAChallenge ? (
         <form onSubmit={handleVerify2FASubmit} className="space-y-4">
           <div className="flex justify-center my-2">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-              <Icon icon="solar:shield-keyhole-bold-duotone" className="h-6 w-6" />
+            <div className="size-12 rounded-2xl bg-primary/10 text-primary dark:text-brand-300 flex items-center justify-center">
+              <Icon icon="solar:shield-keyhole-bold-duotone" className="size-6" />
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-base-content/70 mb-1">
+          <fieldset className="space-y-2">
+            <label className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none text-center">
               Authentication Code
             </label>
             <input
               type="text"
-              className="input input-bordered w-full text-center font-mono text-lg font-bold tracking-widest"
+              className="auth-form-input text-center font-mono text-lg font-bold tracking-widest"
               placeholder="000000"
               value={tfaCode}
               onChange={(e) => setTfaCode(e.target.value)}
               autoFocus
               required
             />
-            <p className="mt-1 text-[11px] text-base-content/50 text-center">
-              Enter 6-digit app code or 14-char backup code (e.g. skorv-xxxx-xxxx)
+            <p className="text-[11px] text-secondary/50 dark:text-accent/50 text-center">
+              Enter 6-digit TOTP code or backup recovery code
             </p>
-          </div>
+          </fieldset>
 
           {tfaError && (
-            <div className="p-3 rounded-xl bg-error/10 border border-error/20 text-error text-xs font-medium">
+            <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
               {tfaError}
             </div>
           )}
@@ -253,29 +245,11 @@ function SignInPage() {
           <button
             type="submit"
             disabled={isVerifying2FA || !tfaCode.trim()}
-            className="btn btn-primary w-full text-white font-bold rounded-xl shadow-md shadow-primary/20"
+            className="btn btn-md btn-primary hover:btn-secondary dark:hover:btn-accent w-full"
           >
             {isVerifying2FA ? "Verifying Code..." : "Verify & Continue"}
           </button>
         </form>
-      ) : !showEmailForm ? (
-        <>
-          <AuthMethodChooser
-            googleLabel="Continue with Google"
-            disabled={!isHostedMode}
-            isBusy={isStartingGoogle}
-            onContinueWithGoogle={() => {
-              void handleContinueWithGoogle();
-            }}
-            onContinueWithEmail={() => {
-              setShowEmailForm(true);
-              setSocialError(null);
-            }}
-          />
-          {socialError ? (
-            <p className="text-sm text-error">{socialError}</p>
-          ) : null}
-        </>
       ) : (
         <form
           className="space-y-4"
@@ -284,16 +258,24 @@ function SignInPage() {
             void form.handleSubmit();
           }}
         >
+          {/* Email Field */}
           <form.Field name="email">
             {(field) => {
               const error = getFieldError(field.state.meta.errors);
 
               return (
-                <div>
+                <fieldset className="space-y-1.5">
+                  <label
+                    htmlFor="email"
+                    className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                  >
+                    Your email
+                  </label>
                   <input
+                    id="email"
                     type="email"
-                    className="input input-bordered w-full"
-                    placeholder="Email address..."
+                    className="auth-form-input"
+                    placeholder="name@company.com"
                     value={field.state.value}
                     onChange={(event) => field.handleChange(event.target.value)}
                     autoComplete="email"
@@ -301,23 +283,31 @@ function SignInPage() {
                     required
                   />
                   {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
+                    <p className="text-xs text-rose-500">{error}</p>
                   ) : null}
-                </div>
+                </fieldset>
               );
             }}
           </form.Field>
 
+          {/* Password Field */}
           <form.Field name="password">
             {(field) => {
               const error = getFieldError(field.state.meta.errors);
 
               return (
-                <div>
+                <fieldset className="space-y-1.5">
+                  <label
+                    htmlFor="password"
+                    className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                  >
+                    Password
+                  </label>
                   <input
+                    id="password"
                     type="password"
-                    className="input input-bordered w-full"
-                    placeholder="Password..."
+                    className="auth-form-input"
+                    placeholder="At least 8 characters"
                     value={field.state.value}
                     onChange={(event) => field.handleChange(event.target.value)}
                     autoComplete="current-password"
@@ -325,12 +315,39 @@ function SignInPage() {
                     required
                   />
                   {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
+                    <p className="text-xs text-rose-500">{error}</p>
                   ) : null}
-                </div>
+                </fieldset>
               );
             }}
           </form.Field>
+
+          {/* Remember me & Forgot Password */}
+          <div className="flex items-center justify-between pt-1">
+            <form.Field name="rememberMe">
+              {(field) => (
+                <label className="inline-flex cursor-pointer items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.checked)}
+                    className="size-4 rounded-full border-stroke-3 text-primary focus:ring-primary accent-primary cursor-pointer"
+                  />
+                  <span className="text-tagline-3 text-secondary/70 dark:text-accent/70 select-none">
+                    Remember me
+                  </span>
+                </label>
+              )}
+            </form.Field>
+
+            <Link
+              to="/forgot-password"
+              search={getSignInSearch(redirectTo)}
+              className="text-tagline-3 text-primary dark:text-brand-300 hover:underline font-semibold"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           <form.Subscribe
             selector={(state) => ({
@@ -343,20 +360,37 @@ function SignInPage() {
               return (
                 <>
                   {errorMessage ? (
-                    <p className="text-sm text-error">{errorMessage}</p>
+                    <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+                      {errorMessage}
+                    </div>
                   ) : null}
                   <button
-                    className="btn btn-soft w-full"
+                    type="submit"
+                    className="btn btn-md btn-primary hover:btn-secondary dark:hover:btn-accent w-full mt-2"
                     disabled={!isHostedMode || isSubmitting}
                   >
-                    {isSubmitting ? "Signing in..." : "Sign in"}
+                    {isSubmitting ? "Signing in..." : "Log In"}
                   </button>
                 </>
               );
             }}
           </form.Subscribe>
+
+          {/* Social Auth */}
+          <AuthMethodChooser
+            googleLabel="Continue with Google"
+            disabled={!isHostedMode}
+            isBusy={isStartingGoogle}
+            onContinueWithGoogle={() => {
+              void handleContinueWithGoogle();
+            }}
+          />
+          {socialError ? (
+            <p className="text-xs text-rose-500 text-center">{socialError}</p>
+          ) : null}
         </form>
       )}
     </AuthPageCard>
   );
 }
+

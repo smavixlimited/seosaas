@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import "./next-saas.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="skorvia-dark"], [data-theme="skorvia-dark"] *, .dark, .dark *));
@@ -6,9 +7,53 @@
 @theme {
   --font-sans: "Inter Tight", "Plus Jakarta Sans", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-inter-tight: "Inter Tight", sans-serif;
   --container-8xl: 88rem;
   
   --color-primary: #17199b;
+  --color-primary-50: #f4f2fe;
+  --color-primary-100: #ece8ff;
+  --color-primary-200: #dcd4ff;
+  --color-primary-300: #c3b1ff;
+  --color-primary-400: #a585ff;
+  --color-primary-500: #17199b;
+  --color-primary-600: #252bb8;
+  --color-primary-700: #17199b;
+  --color-primary-800: #13167b;
+
+  --color-secondary: #000000;
+  --color-accent: #ffffff;
+  --color-split-text: #000000;
+
+  --color-background-1: #fcfcfd;
+  --color-background-2: #f9fafb;
+  --color-background-3: #f4f5f8;
+  --color-background-4: #f0f2f6;
+  --color-background-5: #13171e;
+  --color-background-6: #0f1217;
+  --color-background-7: #181d26;
+  --color-background-8: #070b10;
+  --color-background-9: #1f252f;
+  --color-background-10: #ebebeb;
+  --color-background-11: #b5b5b9;
+  --color-background-12: #eaeceb;
+
+  --color-stroke-1: #dfe4eb;
+  --color-stroke-2: #e3e7ed;
+  --color-stroke-3: #d7dde5;
+  --color-stroke-4: #eceff4;
+  --color-stroke-5: #1b232f;
+  --color-stroke-6: #202731;
+  --color-stroke-7: #2a333e;
+  --color-stroke-8: #303b49;
+
+  --color-ns-yellow: #f9eb57;
+  --color-ns-green: #c6f56f;
+  --color-ns-red: #ffb9a2;
+  --color-ns-cyan: #83e7ee;
+  --color-ns-green-light: #e8fbc6;
+  --color-ns-cyan-light: #cdf5f8;
+  --color-ns-yellow-light: #fdf7bc;
   
   --color-brand-50: #eef0ff;
   --color-brand-100: #dce1fe;
@@ -34,7 +79,6 @@
 }
 
 @plugin "daisyui" {
-  /* @property isn't supported by some browsers and gives a noisy warning https://github.com/saadeghi/daisyui/issues/3882 */
   exclude: properties;
 }
 
@@ -48,7 +92,7 @@
   --color-base-200: oklch(97.5% 0.005 260);
   --color-base-300: oklch(92% 0.01 260);
   --color-base-content: oklch(18% 0.02 265);
-  --color-primary: oklch(38% 0.23 270); /* #17199b */
+  --color-primary: oklch(38% 0.23 270);
   --color-primary-content: oklch(100% 0 0);
   --color-secondary: oklch(65% 0.18 230);
   --color-secondary-content: oklch(100% 0 0);
@@ -83,77 +127,7 @@
   --color-base-200: oklch(12% 0.025 265);
   --color-base-300: oklch(26% 0.025 265);
   --color-base-content: oklch(94% 0.01 260);
-  --color-primary: oklch(38% 0.23 270); /* #17199b */
-  --color-primary-content: oklch(100% 0 0);
-  --color-secondary: oklch(70% 0.16 230);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(70% 0.18 160);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(85% 0 0);
-  --color-neutral-content: oklch(15% 0 0);
-  --color-info: oklch(70% 0.16 230);
-  --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(68% 0.18 145);
-  --color-success-content: oklch(100% 0 0);
-  --color-warning: oklch(80% 0.16 75);
-  --color-warning-content: oklch(100% 0 0);
-  --color-error: oklch(65% 0.22 25);
-  --color-error-content: oklch(100% 0 0);
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.75rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
-}
-
-/* Fallback aliases for OpenSEO theme names */
-@plugin "daisyui/theme" {
-  name: "openseo";
-  default: false;
-  prefersdark: false;
-  color-scheme: light;
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(97.5% 0.005 260);
-  --color-base-300: oklch(92% 0.01 260);
-  --color-base-content: oklch(18% 0.02 265);
   --color-primary: oklch(38% 0.23 270);
-  --color-primary-content: oklch(100% 0 0);
-  --color-secondary: oklch(65% 0.18 230);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(65% 0.18 160);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(22% 0.02 265);
-  --color-neutral-content: oklch(100% 0 0);
-  --color-info: oklch(68% 0.16 230);
-  --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(65% 0.18 145);
-  --color-success-content: oklch(100% 0 0);
-  --color-warning: oklch(78% 0.16 75);
-  --color-warning-content: oklch(100% 0 0);
-  --color-error: oklch(62% 0.22 25);
-  --color-error-content: oklch(100% 0 0);
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.75rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
-}
-
-@plugin "daisyui/theme" {
-  name: "openseo-dark";
-  prefersdark: false;
-  color-scheme: dark;
-  --color-base-100: oklch(18% 0.02 265);
-  --color-base-200: oklch(12% 0.025 265);
-  --color-base-300: oklch(26% 0.025 265);
-  --color-base-content: oklch(94% 0.01 260);
-  --color-primary: oklch(38% 0.23 270); /* #17199b */
   --color-primary-content: oklch(100% 0 0);
   --color-secondary: oklch(70% 0.16 230);
   --color-secondary-content: oklch(100% 0 0);
@@ -181,20 +155,19 @@
 
 html,
 body {
-  @apply m-0 bg-base-200 font-sans;
+  @apply m-0 font-sans;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
 }
 
-/* Prevent Safari mobile from zooming on input focus (requires 16px minimum) */
+/* Prevent Safari mobile from zooming on input focus */
 input,
 textarea,
 select {
   @apply text-base;
 }
 
-/* Global input focus styling - use primary color instead of default ring */
+/* Global input focus styling */
 .input:focus,
 .input:focus-visible,
 .textarea:focus,
@@ -214,243 +187,7 @@ select {
   }
 }
 
-/* Override DaisyUI dock's fixed positioning to use flex layout instead */
-.dock {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  right: auto;
-  border-top: none;
-  height: 4rem;
-  padding-bottom: 0;
-}
-
-/* Touch device optimizations */
-@media (pointer: coarse) {
-  html {
-    touch-action: none;
-  }
-  body {
-    touch-action: pan-x pan-y;
-  }
-}
-
-/* Dark mode button surface overrides */
-html[data-theme="skorvia-dark"]
-  .btn:not(
-    .btn-primary,
-    .btn-error,
-    .btn-neutral,
-    .btn-ghost,
-    .btn-outline,
-    .btn-soft
-  ),
-html[data-theme="openseo-dark"]
-  .btn:not(
-    .btn-primary,
-    .btn-error,
-    .btn-neutral,
-    .btn-ghost,
-    .btn-outline,
-    .btn-soft
-  ) {
-  --btn-color: oklch(25% 0 0);
-}
-
-/* Light mode button surface overrides */
-html[data-theme="skorvia"]
-  .btn:not(
-    .btn-primary,
-    .btn-error,
-    .btn-neutral,
-    .btn-ghost,
-    .btn-outline,
-    .btn-soft
-  ),
-html[data-theme="openseo"]
-  .btn:not(
-    .btn-primary,
-    .btn-error,
-    .btn-neutral,
-    .btn-ghost,
-    .btn-outline,
-    .btn-soft
-  ) {
-  --btn-color: var(--color-base-100);
-  --btn-border: var(--color-base-300);
-}
-
-/* Underline tabs */
-.tabs-border > .tab.tab-active::before {
-  --tab-border-color: var(--color-primary);
-}
-
-/* Custom alert styling */
-.alert {
-  @apply flex gap-3 rounded-lg border p-4 text-base-content/70;
-}
-
-.alert-warning {
-  @apply border-warning/70 bg-warning/40 text-base-content/90;
-}
-
-.alert-info {
-  @apply border-info/70 bg-info/40 text-base-content/90;
-}
-
-.alert-success {
-  @apply border-success/70 bg-success/40 text-base-content/90;
-}
-
-.alert-error {
-  @apply border-error/70 bg-error/40 text-base-content/90;
-}
-
-/* Tag chip colors */
-.tag-chip-slate {
-  background-color: color-mix(in oklab, #64748b 14%, transparent);
-  color: #334155;
-  --tw-ring-color: color-mix(in oklab, #64748b 30%, transparent);
-}
-.tag-chip-rose {
-  background-color: color-mix(in oklab, #f43f5e 14%, transparent);
-  color: #9f1239;
-  --tw-ring-color: color-mix(in oklab, #f43f5e 30%, transparent);
-}
-.tag-chip-amber {
-  background-color: color-mix(in oklab, #f59e0b 16%, transparent);
-  color: #92400e;
-  --tw-ring-color: color-mix(in oklab, #f59e0b 32%, transparent);
-}
-.tag-chip-lime {
-  background-color: color-mix(in oklab, #84cc16 16%, transparent);
-  color: #3f6212;
-  --tw-ring-color: color-mix(in oklab, #84cc16 32%, transparent);
-}
-.tag-chip-emerald {
-  background-color: color-mix(in oklab, #10b981 14%, transparent);
-  color: #065f46;
-  --tw-ring-color: color-mix(in oklab, #10b981 30%, transparent);
-}
-.tag-chip-sky {
-  background-color: color-mix(in oklab, #0ea5e9 14%, transparent);
-  color: #075985;
-  --tw-ring-color: color-mix(in oklab, #0ea5e9 30%, transparent);
-}
-.tag-chip-violet {
-  background-color: color-mix(in oklab, #8b5cf6 16%, transparent);
-  color: #5b21b6;
-  --tw-ring-color: color-mix(in oklab, #8b5cf6 32%, transparent);
-}
-.tag-chip-fuchsia {
-  background-color: color-mix(in oklab, #d946ef 14%, transparent);
-  color: #86198f;
-  --tw-ring-color: color-mix(in oklab, #d946ef 30%, transparent);
-}
-
-html[data-theme="skorvia-dark"] .tag-chip-slate,
-html[data-theme="openseo-dark"] .tag-chip-slate {
-  color: #cbd5e1;
-}
-html[data-theme="skorvia-dark"] .tag-chip-rose,
-html[data-theme="openseo-dark"] .tag-chip-rose {
-  color: #fda4af;
-}
-html[data-theme="skorvia-dark"] .tag-chip-amber,
-html[data-theme="openseo-dark"] .tag-chip-amber {
-  color: #fcd34d;
-}
-html[data-theme="skorvia-dark"] .tag-chip-lime,
-html[data-theme="openseo-dark"] .tag-chip-lime {
-  color: #d9f99d;
-}
-html[data-theme="skorvia-dark"] .tag-chip-emerald,
-html[data-theme="openseo-dark"] .tag-chip-emerald {
-  color: #6ee7b7;
-}
-html[data-theme="skorvia-dark"] .tag-chip-sky,
-html[data-theme="openseo-dark"] .tag-chip-sky {
-  color: #7dd3fc;
-}
-html[data-theme="skorvia-dark"] .tag-chip-violet,
-html[data-theme="openseo-dark"] .tag-chip-violet {
-  color: #c4b5fd;
-}
-html[data-theme="skorvia-dark"] .tag-chip-fuchsia,
-html[data-theme="openseo-dark"] .tag-chip-fuchsia {
-  color: #f5d0fe;
-}
-
-/* Keyword difficulty score badges */
-.score-badge {
-  @apply ring-1 ring-inset;
-}
-
-.score-tier-na {
-  background-color: color-mix(in oklab, #94a3b8 12%, transparent);
-  color: #475569;
-  --tw-ring-color: color-mix(in oklab, #94a3b8 28%, transparent);
-}
-
-.score-tier-1 {
-  background-color: color-mix(in oklab, #10b981 15%, transparent);
-  color: #065f46;
-  --tw-ring-color: color-mix(in oklab, #10b981 30%, transparent);
-}
-
-.score-tier-2 {
-  background-color: color-mix(in oklab, #84cc16 15%, transparent);
-  color: #3f6212;
-  --tw-ring-color: color-mix(in oklab, #84cc16 30%, transparent);
-}
-
-.score-tier-3 {
-  background-color: color-mix(in oklab, #eab308 15%, transparent);
-  color: #713f12;
-  --tw-ring-color: color-mix(in oklab, #eab308 30%, transparent);
-}
-
-.score-tier-4 {
-  background-color: color-mix(in oklab, #f97316 15%, transparent);
-  color: #7c2d12;
-  --tw-ring-color: color-mix(in oklab, #f97316 30%, transparent);
-}
-
-.score-tier-5 {
-  background-color: color-mix(in oklab, #ef4444 15%, transparent);
-  color: #7f1d1d;
-  --tw-ring-color: color-mix(in oklab, #ef4444 30%, transparent);
-}
-
-html[data-theme="skorvia-dark"] .score-tier-na,
-html[data-theme="openseo-dark"] .score-tier-na {
-  color: #94a3b8;
-}
-html[data-theme="skorvia-dark"] .score-tier-1,
-html[data-theme="openseo-dark"] .score-tier-1 {
-  color: #34d399;
-}
-html[data-theme="skorvia-dark"] .score-tier-2,
-html[data-theme="openseo-dark"] .score-tier-2 {
-  color: #a3e635;
-}
-html[data-theme="skorvia-dark"] .score-tier-3,
-html[data-theme="openseo-dark"] .score-tier-3 {
-  color: #facc15;
-}
-html[data-theme="skorvia-dark"] .score-tier-4,
-html[data-theme="openseo-dark"] .score-tier-4 {
-  color: #fb923c;
-}
-html[data-theme="skorvia-dark"] .score-tier-5,
-html[data-theme="openseo-dark"] .score-tier-5 {
-  color: #f87171;
-}
-
-/* ==========================================================================
-   Venix Template Modern Components & Styling Overhauls
-   ========================================================================== */
-
+/* Venix Card Glass fallback */
 .venix-card {
   @apply rounded-xl border border-base-300 bg-base-100 shadow-sm transition-all duration-200 hover:shadow-md;
 }
@@ -460,88 +197,3 @@ html[data-theme="openseo-dark"] .score-tier-5 {
   backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklab, var(--color-base-300) 60%, transparent);
 }
-
-.venix-glow-primary {
-  position: relative;
-}
-.venix-glow-primary::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0.15;
-  filter: blur(8px);
-}
-
-.venix-gradient-text {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.venix-stat-card {
-  @apply p-5 rounded-2xl border border-base-300 bg-base-100 flex flex-col justify-between relative overflow-hidden;
-}
-
-.venix-nav-item {
-  @apply flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-base-content/80 hover:text-base-content hover:bg-base-200;
-}
-
-.venix-nav-item-active {
-  @apply bg-primary/10 text-primary font-semibold;
-}
-
-/* ==========================================================================
-   NextSaaS Analytics-Reporting Design System & Tokens
-   ========================================================================== */
-
-.main-container {
-  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
-}
-
-.badge-green {
-  @apply inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 backdrop-blur-md;
-}
-
-.badge-outline-pill {
-  @apply inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100/60 px-4 py-1.5 text-xs font-semibold text-base-content/80 backdrop-blur-md;
-}
-
-.auth-form-input {
-  @apply w-full rounded-xl border border-base-300 bg-base-100 px-4 py-3 text-sm text-base-content placeholder:text-base-content/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all;
-}
-
-.btn-white {
-  @apply bg-base-100 text-base-content border border-base-300 hover:bg-base-200 hover:border-base-content/20 shadow-xs font-bold;
-}
-
-.hero-perspective-wrap {
-  perspective: 1200px;
-}
-
-.hero-perspective-card {
-  transform: perspective(1200px) rotateX(4deg) scale(0.98);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
-}
-
-.hero-perspective-card:hover {
-  transform: perspective(1200px) rotateX(0deg) scale(1);
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-

@@ -21,6 +21,7 @@ import { Route as LockScreenRouteImport } from './routes/lock-screen'
 import { Route as FreeAuditRouteImport } from './routes/free-audit'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConfirmEmailRouteImport } from './routes/confirm-email'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AcceptInviteRouteImport } from './routes/accept-invite'
 import { Route as AboutRouteImport } from './routes/about'
@@ -68,6 +69,7 @@ import { Route as AppUptimeRouteImport } from './routes/_app/uptime'
 import { Route as AppSupportRouteImport } from './routes/_app/support'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProjectsRouteImport } from './routes/_app/projects'
+import { Route as AppMyBrandsRouteImport } from './routes/_app/my-brands'
 import { Route as AppIndexingRouteImport } from './routes/_app/indexing'
 import { Route as AppBillingRouteImport } from './routes/_app/billing'
 import { Route as AppAiRouteImport } from './routes/_app/ai'
@@ -189,6 +191,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmEmailRoute = ConfirmEmailRouteImport.update({
+  id: '/confirm-email',
+  path: '/confirm-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -425,6 +432,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppProjectsRoute = AppProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMyBrandsRoute = AppMyBrandsRouteImport.update({
+  id: '/my-brands',
+  path: '/my-brands',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppIndexingRoute = AppIndexingRouteImport.update({
@@ -776,6 +788,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/admin-login': typeof AdminLoginRoute
+  '/confirm-email': typeof ConfirmEmailRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
@@ -792,6 +805,7 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AppAiRoute
   '/billing': typeof AppBillingRoute
   '/indexing': typeof AppIndexingRoute
+  '/my-brands': typeof AppMyBrandsRoute
   '/projects': typeof AppProjectsRoute
   '/settings': typeof AppSettingsRoute
   '/support': typeof AppSupportRoute
@@ -894,6 +908,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/admin-login': typeof AdminLoginRoute
+  '/confirm-email': typeof ConfirmEmailRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
@@ -910,6 +925,7 @@ export interface FileRoutesByTo {
   '/ai': typeof AppAiRoute
   '/billing': typeof AppBillingRoute
   '/indexing': typeof AppIndexingRoute
+  '/my-brands': typeof AppMyBrandsRoute
   '/projects': typeof AppProjectsRoute
   '/settings': typeof AppSettingsRoute
   '/support': typeof AppSupportRoute
@@ -1014,6 +1030,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/accept-invite': typeof AcceptInviteRoute
   '/admin-login': typeof AdminLoginRoute
+  '/confirm-email': typeof ConfirmEmailRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/free-audit': typeof FreeAuditRoute
@@ -1030,6 +1047,7 @@ export interface FileRoutesById {
   '/_app/ai': typeof AppAiRoute
   '/_app/billing': typeof AppBillingRoute
   '/_app/indexing': typeof AppIndexingRoute
+  '/_app/my-brands': typeof AppMyBrandsRoute
   '/_app/projects': typeof AppProjectsRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/support': typeof AppSupportRoute
@@ -1134,6 +1152,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accept-invite'
     | '/admin-login'
+    | '/confirm-email'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
@@ -1150,6 +1169,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/billing'
     | '/indexing'
+    | '/my-brands'
     | '/projects'
     | '/settings'
     | '/support'
@@ -1252,6 +1272,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accept-invite'
     | '/admin-login'
+    | '/confirm-email'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
@@ -1268,6 +1289,7 @@ export interface FileRouteTypes {
     | '/ai'
     | '/billing'
     | '/indexing'
+    | '/my-brands'
     | '/projects'
     | '/settings'
     | '/support'
@@ -1371,6 +1393,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/accept-invite'
     | '/admin-login'
+    | '/confirm-email'
     | '/contact'
     | '/forgot-password'
     | '/free-audit'
@@ -1387,6 +1410,7 @@ export interface FileRouteTypes {
     | '/_app/ai'
     | '/_app/billing'
     | '/_app/indexing'
+    | '/_app/my-brands'
     | '/_app/projects'
     | '/_app/settings'
     | '/_app/support'
@@ -1495,6 +1519,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcceptInviteRoute: typeof AcceptInviteRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ConfirmEmailRoute: typeof ConfirmEmailRoute
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   FreeAuditRoute: typeof FreeAuditRoute
@@ -1632,6 +1657,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirm-email': {
+      id: '/confirm-email'
+      path: '/confirm-email'
+      fullPath: '/confirm-email'
+      preLoaderRoute: typeof ConfirmEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin-login': {
@@ -1961,6 +1993,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof AppProjectsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/my-brands': {
+      id: '/_app/my-brands'
+      path: '/my-brands'
+      fullPath: '/my-brands'
+      preLoaderRoute: typeof AppMyBrandsRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/indexing': {
@@ -2404,6 +2443,7 @@ interface AppRouteRouteChildren {
   AppAiRoute: typeof AppAiRoute
   AppBillingRoute: typeof AppBillingRoute
   AppIndexingRoute: typeof AppIndexingRoute
+  AppMyBrandsRoute: typeof AppMyBrandsRoute
   AppProjectsRoute: typeof AppProjectsRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppSupportRoute: typeof AppSupportRoute
@@ -2419,6 +2459,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAiRoute: AppAiRoute,
   AppBillingRoute: AppBillingRoute,
   AppIndexingRoute: AppIndexingRoute,
+  AppMyBrandsRoute: AppMyBrandsRoute,
   AppProjectsRoute: AppProjectsRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppSupportRoute: AppSupportRoute,
@@ -2634,6 +2675,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcceptInviteRoute: AcceptInviteRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ConfirmEmailRoute: ConfirmEmailRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   FreeAuditRoute: FreeAuditRoute,

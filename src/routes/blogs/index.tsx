@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Calendar, ChevronRight, Clock, Search, Tag, User } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
@@ -41,34 +41,35 @@ function BlogIndexPage() {
   });
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background-2 dark:bg-background-8 text-secondary dark:text-accent font-sans selection:bg-primary selection:text-white">
       <MarketingNavbar />
 
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24">
+        <div className="main-container">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
-              SEO & AEO Research Publications
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-base-content">
+            <span className="badge badge-cyan">SEO & AEO Research</span>
+            <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               {BRAND_CONFIG.name} Engineering Blog
             </h1>
-            <p className="text-base sm:text-lg text-base-content/70">
-              Technical SEO blueprints, AI search visibility breakdowns, and organic growth playbooks.
+            <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
+              Technical SEO blueprints, AI search visibility breakdowns, and modern organic growth playbooks.
             </p>
           </div>
 
           {/* Search & Category Filter Toolbar */}
-          <div className="mt-12 max-w-4xl mx-auto space-y-6">
+          <div className="mt-12 max-w-3xl mx-auto space-y-6">
             <div className="relative max-w-md mx-auto">
-              <Search className="absolute left-3.5 top-3 h-4 w-4 text-base-content/40" />
+              <Icon
+                icon="solar:magnifer-linear"
+                className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-secondary/40 dark:text-accent/40"
+              />
               <input
                 type="text"
                 placeholder="Search articles, guides, keywords..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="input input-bordered w-full pl-10 rounded-2xl text-xs bg-base-100 shadow-xs"
+                className="w-full pl-11 pr-4 py-3 rounded-full text-tagline-2 bg-background-1 dark:bg-background-7 border border-stroke-4 dark:border-stroke-8 text-secondary dark:text-accent focus:outline-none focus:ring-2 focus:ring-primary-500/20 shadow-xs"
               />
             </div>
 
@@ -79,10 +80,10 @@ function BlogIndexPage() {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`btn btn-xs sm:btn-sm rounded-xl font-bold transition-all ${
+                  className={`rounded-full px-5 py-2 text-tagline-3 font-semibold transition-all ${
                     selectedCategory === cat
-                      ? "btn-primary text-white shadow-xs"
-                      : "btn-ghost text-base-content/70 hover:bg-base-200"
+                      ? "bg-secondary text-white dark:bg-accent dark:text-secondary shadow-xs"
+                      : "bg-background-1 dark:bg-background-7 text-secondary/70 dark:text-accent/70 border border-stroke-4 dark:border-stroke-8 hover:text-secondary dark:hover:text-accent"
                   }`}
                 >
                   {cat === "all" ? "All Topics" : cat}
@@ -92,58 +93,69 @@ function BlogIndexPage() {
           </div>
 
           {/* Articles Grid */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {filteredPosts.length === 0 ? (
-              <div className="col-span-full py-16 text-center text-base-content/50">
+              <div className="col-span-full py-20 text-center text-tagline-1 text-secondary/40 dark:text-accent/40">
                 No articles matched your search query. Try another keyword or topic.
               </div>
             ) : (
               filteredPosts.map((blog) => (
-                <Link
-                  key={blog.slug}
-                  to="/blogs/$"
-                  params={{ _splat: blog.slug }}
-                  className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm transition-all duration-200 hover:shadow-xl hover:border-primary/40 flex flex-col justify-between group overflow-hidden"
-                >
-                  <div className="space-y-4">
-                    {blog.coverImageUrl && (
-                      <div className="overflow-hidden rounded-2xl -mx-2 -mt-2 mb-3">
-                        <img
-                          src={blog.coverImageUrl}
-                          alt={blog.title}
-                          className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-between text-xs text-base-content/60">
-                      <span className="badge badge-primary badge-outline badge-xs font-bold">
-                        {blog.category}
-                      </span>
-                      <span className="flex items-center gap-1 font-mono text-[11px]">
-                        <Clock className="h-3 w-3" />
-                        {blog.readingTimeMinutes} min read
-                      </span>
-                    </div>
-
+                <article key={blog.slug} className="group">
+                  <div className="bg-background-1 dark:bg-background-6 relative scale-100 overflow-hidden rounded-[20px] border border-stroke-4 dark:border-stroke-8 transition-transform duration-300 hover:scale-[102%] hover:shadow-xl flex flex-col justify-between h-full">
                     <div>
-                      <h3 className="text-lg font-black text-base-content group-hover:text-primary transition-colors line-clamp-2 leading-snug">
-                        {blog.title}
-                      </h3>
-                      <p className="text-xs text-base-content/70 mt-2 leading-relaxed line-clamp-3">
-                        {blog.description}
-                      </p>
+                      {blog.coverImageUrl ? (
+                        <figure className="h-[230px] max-w-full overflow-hidden">
+                          <img
+                            src={blog.coverImageUrl}
+                            alt={blog.title}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        </figure>
+                      ) : (
+                        <div className="h-[180px] bg-gradient-to-br from-primary-500/10 via-background-2 to-secondary/10 flex items-center justify-center">
+                          <Icon icon="solar:document-text-bold-duotone" className="size-16 text-primary-500/40" />
+                        </div>
+                      )}
+
+                      <div className="space-y-4 p-6">
+                        <div className="flex items-center gap-2">
+                          <span className="badge badge-green">
+                            {blog.category}
+                          </span>
+                          <span className="h-1.5 w-1.5 rounded-full bg-stroke-4 dark:bg-stroke-8"></span>
+                          <span className="text-tagline-3 text-secondary/60 dark:text-accent/60 font-normal">
+                            {blog.readingTimeMinutes} min read
+                          </span>
+                        </div>
+
+                        <div>
+                          <h3 className="text-heading-6 font-bold font-interTight line-clamp-2 text-secondary dark:text-accent group-hover:text-primary-500 transition-colors">
+                            <Link to="/blogs/$" params={{ _splat: blog.slug }}>
+                              {blog.title}
+                            </Link>
+                          </h3>
+                          <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 line-clamp-3 mt-2 font-normal leading-relaxed">
+                            {blog.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 pt-0 flex items-center justify-between border-t border-stroke-4/60 dark:border-stroke-8/60 mt-4">
+                      <span className="text-tagline-3 text-secondary/60 dark:text-accent/60 font-medium">
+                        {blog.authorName}
+                      </span>
+                      <Link
+                        to="/blogs/$"
+                        params={{ _splat: blog.slug }}
+                        className="btn btn-sm btn-white hover:btn-secondary dark:btn-transparent dark:hover:btn-accent dark:hover:text-secondary rounded-full font-bold text-xs"
+                      >
+                        Read Article
+                      </Link>
                     </div>
                   </div>
-
-                  <div className="pt-6 border-t border-base-200/60 mt-4 flex items-center justify-between text-xs">
-                    <span className="text-base-content/60 font-medium">{blog.authorName}</span>
-                    <span className="font-bold text-primary flex items-center gap-0.5">
-                      Read <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </div>
-                </Link>
+                </article>
               ))
             )}
           </div>

@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import { isHostedClientAuthMode } from "@/lib/auth-mode";
 import { getSignInSearch, normalizeAuthRedirect } from "@/lib/auth-redirect";
 import { z } from "zod";
+import { Icon } from "@iconify/react";
 
 const forgotPasswordSchema = z.object({
   email: z.string().trim().email("Enter a valid email address."),
@@ -77,32 +78,52 @@ function ForgotPasswordPage() {
 
           return (
             <AuthPageCard
-              title={isSuccess ? "Check your email" : "Forgot password"}
+              title={isSuccess ? "Reset Link Dispatched" : "Reset Password"}
               helperText={
                 isSuccess
-                  ? `If an account exists for ${submittedEmail}, we sent a reset link.`
+                  ? `If an account exists for ${submittedEmail}, we sent password recovery instructions.`
                   : isHostedMode
-                    ? "Enter your email and we'll send you a password reset link."
+                    ? "Enter your account email to receive a secure password recovery link."
                     : "Password reset isn't available right now."
               }
               footer={
-                <p className="text-sm">
+                <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70">
+                  Remember your password?{" "}
                   <Link
                     to="/sign-in"
                     search={getSignInSearch(redirectTo)}
-                    className="text-base-content/50 hover:text-base-content transition-colors"
+                    className="font-bold text-primary dark:text-brand-300 hover:underline"
                   >
-                    Back to sign in
+                    Back to sign in &rarr;
                   </Link>
-                </p>
+                </div>
               }
             >
               {isSuccess ? (
-                <div className="alert alert-success">
-                  <span>
-                    If an account exists for that email, you'll receive password
-                    reset instructions shortly.
-                  </span>
+                <div className="space-y-5">
+                  <div className="flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                    <div className="size-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-3">
+                      <Icon icon="solar:letter-check-bold-duotone" className="size-8" />
+                    </div>
+                    <p className="text-tagline-2 font-medium text-secondary dark:text-accent">
+                      Check your inbox at:
+                    </p>
+                    <p className="mt-1 text-tagline-1 font-bold text-secondary dark:text-accent break-all">
+                      {submittedEmail}
+                    </p>
+                    <p className="mt-3 text-xs text-secondary/70 dark:text-accent/70 leading-relaxed">
+                      Click the link inside to set a new password. The link will expire in 1 hour.
+                    </p>
+                  </div>
+
+                  <Link
+                    to="/sign-in"
+                    search={getSignInSearch(redirectTo)}
+                    className="btn btn-primary w-full h-11 rounded-full text-tagline-2 font-bold shadow-md shadow-primary/20 flex items-center justify-center gap-2"
+                  >
+                    <Icon icon="solar:arrow-left-linear" className="size-4" />
+                    <span>Return to Sign In</span>
+                  </Link>
                 </div>
               ) : (
                 <form
@@ -117,21 +138,30 @@ function ForgotPasswordPage() {
                       const error = getFieldError(field.state.meta.errors);
 
                       return (
-                        <div>
-                          <input
-                            type="email"
-                            className="input input-bordered w-full"
-                            placeholder="Email address..."
-                            value={field.state.value}
-                            onChange={(event) =>
-                              field.handleChange(event.target.value)
-                            }
-                            autoComplete="email"
-                            disabled={!isHostedMode}
-                            required
-                          />
+                        <div className="space-y-1.5">
+                          <label className="text-tagline-3 font-semibold text-secondary/80 dark:text-accent/80 block">
+                            Account Email Address
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="email"
+                              className="auth-form-input w-full pl-11 pr-4"
+                              placeholder="name@company.com"
+                              value={field.state.value}
+                              onChange={(event) =>
+                                field.handleChange(event.target.value)
+                              }
+                              autoComplete="email"
+                              disabled={!isHostedMode}
+                              required
+                            />
+                            <Icon
+                              icon="solar:letter-linear"
+                              className="absolute left-3.5 top-1/2 -translate-y-1/2 size-5 text-secondary/40 dark:text-accent/40 pointer-events-none"
+                            />
+                          </div>
                           {error ? (
-                            <p className="mt-1 text-sm text-error">{error}</p>
+                            <p className="mt-1 text-xs text-rose-500 font-medium">{error}</p>
                           ) : null}
                         </div>
                       );
@@ -139,13 +169,27 @@ function ForgotPasswordPage() {
                   </form.Field>
 
                   {errorMessage ? (
-                    <p className="text-sm text-error">{errorMessage}</p>
+                    <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 font-medium">
+                      {errorMessage}
+                    </div>
                   ) : null}
+
                   <button
-                    className="btn btn-soft w-full"
+                    type="submit"
+                    className="btn btn-primary w-full h-11 rounded-full text-tagline-2 font-bold shadow-md shadow-primary/20 flex items-center justify-center gap-2 mt-2"
                     disabled={!isHostedMode || isSubmitting}
                   >
-                    {isSubmitting ? "Sending reset link..." : "Send reset link"}
+                    {isSubmitting ? (
+                      <>
+                        <span className="loading loading-spinner loading-xs" />
+                        <span>Sending reset link...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                        <span>Send Reset Instructions</span>
+                      </>
+                    )}
                   </button>
                 </form>
               )}

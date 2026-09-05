@@ -1,94 +1,89 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { Icon } from "@iconify/react";
+
+const servicesList = [
+  {
+    slug: "competitor-ad-decoder",
+    icon: "ns-shape-45",
+    title: "Competitor Ad Decoder",
+    description: "Monitor multi-network ad creatives, active dates, and copy frameworks across Meta, Google, and TikTok in real-time.",
+    to: "/features/competitor-page-decoder",
+  },
+  {
+    slug: "keyword-research",
+    icon: "ns-shape-67",
+    title: "Keyword Revenue Radar",
+    description: "Discover intent clusters, search volume, CPC value, and position 11-20 low-hanging fruits ready to jump to Page 1.",
+    to: "/features/keyword-research",
+  },
+  {
+    slug: "ai-search-aeo",
+    icon: "ns-shape-10",
+    title: "AI Search & AEO Monitor",
+    description: "Track how ChatGPT, Perplexity, and Claude cite your brand and safeguard your organic share of voice across answer engines.",
+    to: "/features/ai-search-aeo",
+  },
+  {
+    slug: "local-geo-grid",
+    icon: "ns-shape-33",
+    title: "Google Maps Geo-Grid",
+    description: "Audit local 3-pack rankings across precise GPS coordinate grid points with competitor share-of-local comparisons.",
+    to: "/features/local-business",
+  },
+  {
+    slug: "executive-pdf-reports",
+    icon: "ns-shape-56",
+    title: "Executive PDF Reporting",
+    description: "Generate 1-click white-label client and board reports with automated executive insights and action checklists.",
+    to: "/features/white-label-reports",
+  },
+];
 
 export function TemplateServices() {
-  const services = [
-    {
-      id: "trust-gate",
-      badge: "Pre-Ad Verification",
-      icon: "solar:shield-check-bold",
-      title: "Audience Trust & Sentiment Pre-Ad Gate",
-      description: "Verify your landing page credibility and sentiment score before spending a single dollar on paid Meta, Google, or TikTok ads.",
-      link: "/features/conversion-ad-readiness",
-      metric: "Save 40%+ on wasted ad spend",
-    },
-    {
-      id: "local-grid",
-      badge: "Local Domination",
-      icon: "solar:map-point-wave-bold",
-      title: "13x13 Google Maps Geo-Grid Explorer",
-      description: "Pinpoint your Google Maps local pack ranking block-by-block across entire cities. Know exactly where competitors steal your local phone calls.",
-      link: "/features/local-business",
-      metric: "3x to 13x visual geo-grid",
-    },
-    {
-      id: "viral-detector",
-      badge: "Viral Growth",
-      icon: "solar:fire-bold",
-      title: "Viral Trend & High-CTR Hook Detector",
-      description: "Discover breakout topic opportunities, winning content angles, and high-converting video hooks across your niche before competitors catch on.",
-      link: "/features/prompt-explorer",
-      metric: "Real-time niche trend signals",
-    },
-  ];
-
   return (
-    <section className="bg-base-100 dark:bg-[#070b10] py-20 lg:py-28">
+    <section className="dark:bg-background-6 bg-white pt-[50px] pb-[80px] md:pt-[85px] xl:pt-[100px] xl:pb-[140px]">
       <div className="main-container">
-        <div className="space-y-12 lg:space-y-16">
-          {/* Header */}
-          <div className="mx-auto max-w-2xl space-y-4 text-center">
-            <div className="badge-green">
-              <Icon icon="solar:widget-bold" className="h-3.5 w-3.5" />
-              <span>Full-Spectrum Capabilities</span>
+        <div className="space-y-[40px] md:space-y-[50px] lg:space-y-[60px] xl:space-y-[70px]">
+          {/* Section Heading */}
+          <div className="mx-auto max-w-[810px] space-y-4 text-center lg:w-full">
+            <span className="badge badge-green mb-3 md:mb-4 lg:mb-5">Our Services</span>
+            <div className="space-y-3">
+              <h2 className="text-heading-4 sm:text-heading-3 md:text-heading-2 font-bold text-secondary dark:text-accent">
+                Leading growth teams around the globe rely on Skorvia.
+              </h2>
+              <p className="mx-auto max-w-[582px] sm:w-full text-tagline-1 text-secondary/60 dark:text-accent/60">
+                A unified, flat-rate search intelligence workspace with zero seat limits, zero token taxes, and deep competitive insights.
+              </p>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-base-content leading-tight">
-              Tools That Give You An Unfair Advantage.
-            </h2>
-            <p className="text-base text-base-content/70 font-medium">
-              Engineered for founders, agencies, and high-growth brands who demand actionable intelligence over passive charts.
-            </p>
           </div>
 
-          {/* 3-Card Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((svc) => (
-              <article
-                key={svc.id}
-                className="group relative flex flex-col justify-between rounded-[24px] bg-base-200/50 dark:bg-[#0f1217] border border-base-300 dark:border-white/10 p-8 transition-all duration-300 hover:translate-y-[-8px] hover:border-primary/40 hover:shadow-2xl"
-              >
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Icon icon={svc.icon} className="h-7 w-7" />
-                    </div>
-                    <span className="badge badge-sm badge-outline font-bold text-base-content/70">
-                      {svc.badge}
-                    </span>
-                  </div>
+          {/* Service Cards */}
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            {servicesList.map((service) => (
+              <article key={service.slug}>
+                <div className="bg-background-2 dark:bg-background-5 flex w-full max-w-[403px] flex-col items-center gap-6 rounded-[20px] px-6 py-8 transition-transform duration-500 ease-in-out hover:translate-y-[-10px] border border-stroke-3/50 dark:border-stroke-7 shadow-sm hover:shadow-md">
+                  {/* Icon */}
+                  <span className={`${service.icon} text-secondary dark:text-accent text-[54px]`} />
 
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-black text-base-content group-hover:text-primary transition-colors">
-                      {svc.title}
+                  {/* Heading & Description */}
+                  <div className="space-y-2 text-center">
+                    <h3 className="text-heading-5 font-bold text-secondary dark:text-accent">
+                      {service.title}
                     </h3>
-                    <p className="text-sm text-base-content/70 leading-relaxed font-medium">
-                      {svc.description}
+                    <p className="text-tagline-2 text-secondary/60 dark:text-accent/60">
+                      {service.description}
                     </p>
                   </div>
-                </div>
 
-                <div className="pt-8 border-t border-base-300/60 dark:border-white/5 flex items-center justify-between mt-6">
-                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                    {svc.metric}
-                  </span>
-                  <Link
-                    to={svc.link as any}
-                    className="btn btn-sm btn-ghost text-primary font-bold hover:bg-primary/10 gap-1 rounded-xl"
-                  >
-                    <span>View Feature</span>
-                    <Icon icon="solar:arrow-right-linear" className="h-3.5 w-3.5" />
-                  </Link>
+                  {/* Button */}
+                  <div>
+                    <Link
+                      to={service.to}
+                      className="btn btn-md btn-white-v2 hover:btn-secondary dark:btn-transparent dark:hover:btn-accent"
+                    >
+                      Explore Feature
+                    </Link>
+                  </div>
                 </div>
               </article>
             ))}
@@ -98,3 +93,4 @@ export function TemplateServices() {
     </section>
   );
 }
+export default TemplateServices;

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Icon } from "@iconify/react";
 
 interface ScanResult {
@@ -8,143 +8,215 @@ interface ScanResult {
   monthlyLostTraffic: number;
   estimatedRevenueLeak: number;
   aiCitationShare: number;
-  topKeywordGaps: { keyword: string; volume: string; diff: string; cpc: string }[];
-  criticalIssues: { title: string; severity: "critical" | "warning" | "opportunity"; impact: string }[];
+  criticalIssues: Array<{
+    title: string;
+    impact: string;
+    severity: "critical" | "warning" | "opportunity";
+  }>;
+  topKeywordGaps: Array<{
+    keyword: string;
+    volume: string;
+    diff: string;
+    cpc: string;
+  }>;
 }
 
-const PRESET_DOMAINS: Record<string, ScanResult> = {
+const PRESET_DATA: Record<string, ScanResult> = {
   "saas-sample.com": {
     domain: "saas-sample.com",
-    healthScore: 82,
+    healthScore: 74,
     monthlyLostTraffic: 14200,
-    estimatedRevenueLeak: 6800,
-    aiCitationShare: 24,
-    topKeywordGaps: [
-      { keyword: "ai competitor ad spy tool", volume: "18.2K", diff: "Low (28)", cpc: "$3.40" },
-      { keyword: "b2b organic rank tracker", volume: "12.5K", diff: "Med (42)", cpc: "$4.15" },
-      { keyword: "answer engine optimization platform", volume: "8.9K", diff: "Low (19)", cpc: "$2.90" },
-    ],
+    estimatedRevenueLeak: 18400,
+    aiCitationShare: 18,
     criticalIssues: [
-      { title: "32 High-Intent Keywords Ranking on Page 2 (Positions 11-18)", severity: "critical", impact: "+$3,200/mo if boosted to Top 3" },
-      { title: "Zero Citations on Perplexity & Claude for Primary Solution Query", severity: "warning", impact: "Losing ~1.4K high-intent monthly searches" },
-      { title: "Competitor Meta & Google Ads running 14 winning angles with 45+ day longevity", severity: "opportunity", impact: "High-CTR creative blueprint ready to clone" },
+      {
+        title: "Missing Structured Data on 18 Pricing & Feature Pages",
+        impact: "Blocks AI Overview summary boxes",
+        severity: "critical",
+      },
+      {
+        title: "Cannibalizing 'B2B CRM software' with 3 duplicate URLs",
+        impact: "Splits PageRank between duplicate landing pages",
+        severity: "critical",
+      },
+      {
+        title: "24 Slow LCP (>3.4s) Assets on Core Product Tour",
+        impact: "Reduces mobile ranking score",
+        severity: "warning",
+      },
+    ],
+    topKeywordGaps: [
+      { keyword: "best ai sales assistant", volume: "9,900/mo", diff: "KD 28 (Easy)", cpc: "$4.80" },
+      { keyword: "automated pipeline reporting", volume: "4,400/mo", diff: "KD 32 (Easy)", cpc: "$6.20" },
+      { keyword: "enterprise crm integrations", volume: "3,100/mo", diff: "KD 41 (Med)", cpc: "$8.50" },
     ],
   },
   "ecommerce-store.com": {
     domain: "ecommerce-store.com",
-    healthScore: 74,
-    monthlyLostTraffic: 28500,
-    estimatedRevenueLeak: 12400,
-    aiCitationShare: 18,
-    topKeywordGaps: [
-      { keyword: "best organic skincare routine", volume: "45.0K", diff: "Med (38)", cpc: "$1.85" },
-      { keyword: "cruelty free barrier cream", volume: "22.1K", diff: "Low (24)", cpc: "$2.10" },
-      { keyword: "dermatologist approved serum", volume: "19.4K", diff: "Med (44)", cpc: "$3.20" },
-    ],
+    healthScore: 68,
+    monthlyLostTraffic: 32400,
+    estimatedRevenueLeak: 46800,
+    aiCitationShare: 9,
     criticalIssues: [
-      { title: "Missing Product Schema on 140 Category Pages", severity: "critical", impact: "-35% Rich Snippet click-through rate" },
-      { title: "Competitor TikTok & Meta Ads scaling 6 video angles", severity: "opportunity", impact: "Unlock 3.8x ad ROAS insights" },
-      { title: "45 Broken Backlinks from High-Authority Beauty Blogs", severity: "warning", impact: "Lost link juice recoverable via 301 redirects" },
+      {
+        title: "Missing Product & AggregateRating Schema on 140 Items",
+        impact: "Zero rich snippets appearing in Google Shopping",
+        severity: "critical",
+      },
+      {
+        title: "Faceted Navigation Creating 1,200 Index Bloat URLs",
+        impact: "Diluting crawl budget on filtered variants",
+        severity: "critical",
+      },
+      {
+        title: "Broken Internal Links in Mobile Navigation Menu",
+        impact: "Traps search engine bots on collection pages",
+        severity: "warning",
+      },
+    ],
+    topKeywordGaps: [
+      { keyword: "organic cotton hoodies", volume: "22,000/mo", diff: "KD 34 (Easy)", cpc: "$1.40" },
+      { keyword: "sustainable gym clothes", volume: "14,500/mo", diff: "KD 39 (Med)", cpc: "$2.10" },
+      { keyword: "eco friendly athletic wear", volume: "8,800/mo", diff: "KD 29 (Easy)", cpc: "$1.90" },
     ],
   },
   "local-agency.com": {
     domain: "local-agency.com",
-    healthScore: 68,
-    monthlyLostTraffic: 8900,
-    estimatedRevenueLeak: 4500,
-    aiCitationShare: 12,
-    topKeywordGaps: [
-      { keyword: "commercial roofing contractor near me", volume: "9.8K", diff: "Low (22)", cpc: "$8.50" },
-      { keyword: "emergency leak repair service", volume: "6.4K", diff: "Low (18)", cpc: "$12.00" },
-      { keyword: "best licensed roofer reviews", volume: "4.1K", diff: "Low (15)", cpc: "$6.20" },
-    ],
+    healthScore: 82,
+    monthlyLostTraffic: 6100,
+    estimatedRevenueLeak: 12200,
+    aiCitationShare: 34,
     criticalIssues: [
-      { title: "Google Maps 7x7 Geo-Grid Drops Outside 3-Mile Radius", severity: "critical", impact: "Losing 60% of nearby commercial quote requests" },
-      { title: "Inconsistent NAP Citations across 18 Local Directories", severity: "warning", impact: "Dragging down GBP map pack authority" },
-      { title: "Unanswered 5-Star & 3-Star Customer Google Reviews", severity: "opportunity", impact: "AI instant replies boost local ranking velocity" },
+      {
+        title: "NAP Inconsistency across 14 Top Local Citation Directories",
+        impact: "Reduces Google Maps Local 3-Pack rankings",
+        severity: "critical",
+      },
+      {
+        title: "Missing LocalBusiness Schema & Geo Coordinates",
+        impact: "Hurts near-me voice search accuracy",
+        severity: "warning",
+      },
+      {
+        title: "Unoptimized Service Sub-Pages for Neighboring Cities",
+        impact: "Missing 1,800 monthly local service searches",
+        severity: "opportunity",
+      },
+    ],
+    topKeywordGaps: [
+      { keyword: "local seo agency near me", volume: "6,600/mo", diff: "KD 24 (Easy)", cpc: "$14.20" },
+      { keyword: "google maps ranking service", volume: "3,200/mo", diff: "KD 22 (Easy)", cpc: "$11.50" },
+      { keyword: "b2b lead generation agency", volume: "2,400/mo", diff: "KD 38 (Med)", cpc: "$16.80" },
     ],
   },
 };
 
 export function HeroInteractiveScanner() {
-  const navigate = useNavigate();
-  const [domainInput, setDomainInput] = React.useState("saas-sample.com");
-  const [isScanning, setIsScanning] = React.useState(false);
-  const [scanResult, setScanResult] = React.useState<ScanResult>(PRESET_DOMAINS["saas-sample.com"]);
-  const [activeTab, setActiveTab] = React.useState<"overview" | "gaps" | "citations" | "fixes">("overview");
+  const [domainInput, setDomainInput] = useState("saas-sample.com");
+  const [activeTab, setActiveTab] = useState<"overview" | "gaps" | "citations">("overview");
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<ScanResult>(PRESET_DATA["saas-sample.com"]);
 
-  const runScan = (targetDomain: string) => {
-    const clean = targetDomain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
-    if (!clean) return;
+  const handleScan = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!domainInput.trim()) return;
 
     setIsScanning(true);
     setTimeout(() => {
-      if (PRESET_DOMAINS[clean]) {
-        setScanResult(PRESET_DOMAINS[clean]);
+      const cleanDomain = domainInput.replace(/^https?:\/\//, "").replace(/\/.*$/, "").toLowerCase();
+      if (PRESET_DATA[cleanDomain]) {
+        setScanResult(PRESET_DATA[cleanDomain]);
       } else {
-        // Generate intelligent dynamic benchmark for custom domain
-        const hash = clean.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const score = 65 + (hash % 25);
-        const lostTraffic = 5000 + (hash % 20000);
-        const revLeak = Math.round((lostTraffic * 0.45) / 100) * 100;
-        const aiShare = 15 + (hash % 30);
+        // Generate realistic dynamic metrics for custom entered domain
+        const hash = cleanDomain.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const health = 65 + (hash % 26);
+        const lostTraffic = 5000 + (hash % 35000);
+        const revenueLeak = Math.round(lostTraffic * 1.35);
+        const aiCitation = 10 + (hash % 30);
 
         setScanResult({
-          domain: clean,
-          healthScore: score,
+          domain: cleanDomain,
+          healthScore: health,
           monthlyLostTraffic: lostTraffic,
-          estimatedRevenueLeak: revLeak,
-          aiCitationShare: aiShare,
-          topKeywordGaps: [
-            { keyword: `${clean.split(".")[0]} alternatives & pricing`, volume: "14.2K", diff: "Low (24)", cpc: "$3.80" },
-            { keyword: `best ${clean.split(".")[0]} tools for teams`, volume: "9.8K", diff: "Low (18)", cpc: "$2.95" },
-            { keyword: `how to choose ${clean.split(".")[0]} platform`, volume: "6.5K", diff: "Med (35)", cpc: "$4.10" },
-          ],
+          estimatedRevenueLeak: revenueLeak,
+          aiCitationShare: aiCitation,
           criticalIssues: [
-            { title: "18 High-Intent Search Queries Trapped in Positions 11-20", severity: "critical", impact: `+$${Math.round(revLeak * 0.6)}/mo with page-1 ranking` },
-            { title: "Zero AEO Citation Presence on ChatGPT & Perplexity", severity: "warning", impact: "Rivals monopolizing AI recommendations" },
-            { title: "Competitor Ad Strategy & Winning Creative Hooks Active", severity: "opportunity", impact: "Clone 45+ day winning ad angles" },
+            {
+              title: `Unoptimized title tags & missing schema across ${cleanDomain}`,
+              impact: "Missing rich AI snippets & SERP highlights",
+              severity: "critical",
+            },
+            {
+              title: "32 Orphaned product/landing pages with 0 internal links",
+              impact: "Crawl bot efficiency reduced by 44%",
+              severity: "critical",
+            },
+            {
+              title: "Mobile page speed score below Google's 85 recommended threshold",
+              impact: "Core Web Vitals penalty on mobile devices",
+              severity: "warning",
+            },
+          ],
+          topKeywordGaps: [
+            { keyword: `best ${cleanDomain.split(".")[0]} tools`, volume: "8,400/mo", diff: "KD 29 (Easy)", cpc: "$5.40" },
+            { keyword: `${cleanDomain.split(".")[0]} software comparison`, volume: "4,200/mo", diff: "KD 31 (Easy)", cpc: "$7.20" },
+            { keyword: "automated audit software", volume: "3,800/mo", diff: "KD 36 (Med)", cpc: "$9.10" },
           ],
         });
       }
       setIsScanning(false);
-    }, 650);
+    }, 600);
   };
 
-  const handlePresetClick = (presetKey: string) => {
-    setDomainInput(presetKey);
-    runScan(presetKey);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    runScan(domainInput);
+  const handlePresetClick = (presetDomain: string) => {
+    setDomainInput(presetDomain);
+    setScanResult(PRESET_DATA[presetDomain]);
   };
 
   return (
-    <div className="w-full rounded-[24px] bg-base-100 dark:bg-[#0f1217] border border-base-300 dark:border-white/10 shadow-2xl overflow-hidden text-left">
-      {/* Interactive Top Control Bar */}
-      <div className="p-4 sm:p-6 bg-base-200/50 dark:bg-[#13171e] border-b border-base-300 dark:border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col sm:flex-row items-center gap-2">
-          <div className="relative flex-1 w-full">
-            <Icon icon="solar:magnifer-linear" className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-base-content/40" />
+    <div className="w-full max-w-4xl mx-auto rounded-[28px] border border-stroke-3/80 bg-white dark:bg-background-6 shadow-2xl overflow-hidden transition-all">
+      {/* Header / Interactive Scan Input */}
+      <div className="p-4 sm:p-6 border-b border-stroke-3/60 bg-background-2/70 dark:bg-secondary/40 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-secondary/70 dark:text-accent/70">
+              Live Interactive Sandbox • No Account Required
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-semibold text-primary dark:text-brand-300">
+            <Icon icon="solar:bolt-bold" className="h-4 w-4" />
+            <span>Analyzing: <strong className="underline">{scanResult.domain}</strong></span>
+          </div>
+        </div>
+
+        {/* Input Form */}
+        <form onSubmit={handleScan} className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1">
+            <Icon
+              icon="solar:global-bold-duotone"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary/40 dark:text-accent/40"
+            />
             <input
               type="text"
               value={domainInput}
               onChange={(e) => setDomainInput(e.target.value)}
-              placeholder="Enter your website or competitor domain..."
-              className="w-full rounded-xl border border-base-300 dark:border-white/10 bg-base-100 dark:bg-black/30 pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 text-base-content"
+              placeholder="Enter any domain (e.g. stripe.com or yoursite.com)..."
+              className="w-full h-12 pl-11 pr-4 rounded-xl border border-stroke-3 bg-white dark:bg-secondary text-sm font-medium text-secondary dark:text-accent placeholder:text-secondary/40 focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={isScanning}
-            className="btn btn-primary btn-sm h-10 px-5 rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-2 w-full sm:w-auto"
+            className="btn btn-primary h-12 px-6 rounded-xl font-bold text-xs shadow-md shadow-primary/20 flex items-center justify-center gap-2 shrink-0"
           >
             {isScanning ? (
               <>
                 <span className="loading loading-spinner loading-xs" />
-                <span>Scanning Live...</span>
+                <span>Auditing...</span>
               </>
             ) : (
               <>
@@ -156,8 +228,8 @@ export function HeroInteractiveScanner() {
         </form>
 
         {/* 1-Click Presets */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs text-base-content/70">
-          <span className="font-semibold text-base-content/50 shrink-0 mr-1">Presets:</span>
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs text-secondary/70 dark:text-accent/70">
+          <span className="font-semibold text-secondary/50 dark:text-accent/50 shrink-0 mr-1">Presets:</span>
           {[
             { label: "SaaS", key: "saas-sample.com" },
             { label: "E-Commerce", key: "ecommerce-store.com" },
@@ -169,8 +241,8 @@ export function HeroInteractiveScanner() {
               onClick={() => handlePresetClick(preset.key)}
               className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all whitespace-nowrap ${
                 domainInput === preset.key
-                  ? "bg-primary/10 border-primary text-primary"
-                  : "border-base-300 dark:border-white/10 hover:bg-base-200"
+                  ? "bg-primary/10 border-primary text-primary dark:text-brand-300"
+                  : "border-stroke-3 bg-white dark:bg-secondary/60 hover:border-primary/50"
               }`}
             >
               {preset.label}
@@ -183,72 +255,72 @@ export function HeroInteractiveScanner() {
       <div className="p-4 sm:p-6 space-y-6">
         {/* KPI Scorecards Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="rounded-2xl border border-base-300 dark:border-white/10 bg-base-200/30 p-4 relative overflow-hidden">
+          <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-base-content/60 uppercase tracking-wider">SEO Health Score</span>
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">SEO Health Score</span>
               <Icon icon="solar:shield-check-bold" className="h-4 w-4 text-emerald-500" />
             </div>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-emerald-500">{scanResult.healthScore}</span>
-              <span className="text-xs font-bold text-base-content/50">/ 100</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">/ 100</span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
               {scanResult.healthScore >= 80 ? "Solid foundation" : "High optimization headroom"}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-base-300 dark:border-white/10 bg-base-200/30 p-4 relative overflow-hidden">
+          <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-base-content/60 uppercase tracking-wider">Lost Traffic / Mo</span>
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">Lost Traffic / Mo</span>
               <Icon icon="solar:graph-down-bold" className="h-4 w-4 text-rose-500" />
             </div>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-rose-500">
                 {scanResult.monthlyLostTraffic.toLocaleString()}
               </span>
-              <span className="text-xs font-bold text-base-content/50">visits</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">visits</span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
               Trapped in positions 11-20
             </div>
           </div>
 
-          <div className="rounded-2xl border border-base-300 dark:border-white/10 bg-base-200/30 p-4 relative overflow-hidden">
+          <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-base-content/60 uppercase tracking-wider">Est. Monthly Leak</span>
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">Est. Monthly Leak</span>
               <Icon icon="solar:dollar-bold" className="h-4 w-4 text-amber-500" />
             </div>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-amber-500">
                 ${scanResult.estimatedRevenueLeak.toLocaleString()}
               </span>
-              <span className="text-xs font-bold text-base-content/50">/ mo</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">/ mo</span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-amber-600 dark:text-amber-400">
               Recoverable via Top 3 rank
             </div>
           </div>
 
-          <div className="rounded-2xl border border-base-300 dark:border-white/10 bg-base-200/30 p-4 relative overflow-hidden">
+          <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-base-content/60 uppercase tracking-wider">AEO Citation Share</span>
-              <Icon icon="solar:stars-bold" className="h-4 w-4 text-indigo-500" />
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">AEO Citation Share</span>
+              <Icon icon="solar:stars-bold" className="h-4 w-4 text-primary dark:text-brand-300" />
             </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-black text-indigo-500">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-2xl sm:text-3xl font-black text-primary dark:text-brand-300">
                 {scanResult.aiCitationShare}%
               </span>
-              <span className="text-xs font-bold text-base-content/50">in AI SERPs</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">in AI SERPs</span>
             </div>
-            <div className="mt-2 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400">
+            <div className="mt-2 text-[11px] font-semibold text-primary/80 dark:text-brand-300/80">
               ChatGPT & Perplexity
             </div>
           </div>
         </div>
 
         {/* Interactive Sub-Tabs */}
-        <div className="border border-base-300 dark:border-white/10 rounded-2xl overflow-hidden bg-base-100 dark:bg-black/20">
-          <div className="flex border-b border-base-300 dark:border-white/10 bg-base-200/50 dark:bg-white/5 overflow-x-auto">
+        <div className="border border-stroke-3/60 rounded-2xl overflow-hidden bg-white dark:bg-secondary/40">
+          <div className="flex border-b border-stroke-3/60 bg-background-2/60 dark:bg-secondary/60 overflow-x-auto">
             {[
               { id: "overview", label: "Prioritized Fixes", icon: "solar:checklist-bold" },
               { id: "gaps", label: "Top Keyword Gaps", icon: "solar:target-bold" },
@@ -260,8 +332,8 @@ export function HeroInteractiveScanner() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-5 py-3 text-xs font-bold border-b-2 transition-all whitespace-nowrap ${
                   activeTab === tab.id
-                    ? "border-primary text-primary bg-base-100 dark:bg-[#13171e]"
-                    : "border-transparent text-base-content/70 hover:text-base-content"
+                    ? "border-primary text-primary dark:text-brand-300 bg-white dark:bg-secondary"
+                    : "border-transparent text-secondary/70 dark:text-accent/70 hover:text-secondary dark:hover:text-accent"
                 }`}
               >
                 <Icon icon={tab.icon} className="h-4 w-4" />
@@ -276,21 +348,21 @@ export function HeroInteractiveScanner() {
                 {scanResult.criticalIssues.map((issue, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl border border-base-300 dark:border-white/10 bg-base-200/20"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl border border-stroke-3/50 bg-background-2/30 dark:bg-secondary/20"
                   >
                     <div className="flex items-start gap-2.5">
                       <span
                         className={`badge badge-sm mt-0.5 font-bold ${
                           issue.severity === "critical"
-                            ? "badge-error text-white"
+                            ? "bg-rose-500 text-white"
                             : issue.severity === "warning"
-                            ? "badge-warning text-white"
-                            : "badge-success text-white"
+                            ? "bg-amber-500 text-white"
+                            : "bg-emerald-500 text-white"
                         }`}
                       >
                         {issue.severity.toUpperCase()}
                       </span>
-                      <span className="text-xs sm:text-sm font-semibold text-base-content">
+                      <span className="text-xs sm:text-sm font-semibold text-secondary dark:text-accent">
                         {issue.title}
                       </span>
                     </div>
@@ -299,71 +371,119 @@ export function HeroInteractiveScanner() {
                     </span>
                   </div>
                 ))}
+
+                {/* Frosted Gated Preview of Additional 48 Issues */}
+                <div className="relative mt-4 pt-4 border-t border-stroke-3/40 rounded-xl overflow-hidden">
+                  <div className="opacity-35 blur-[1.5px] pointer-events-none space-y-2 select-none">
+                    <div className="p-3 rounded-xl border border-stroke-3 bg-background-2 flex items-center justify-between">
+                      <span className="text-xs font-semibold text-secondary">H1 tag hierarchy missing on 14 product category archives</span>
+                      <span className="text-xs font-bold text-rose-500">Critical Crawl Issue</span>
+                    </div>
+                    <div className="p-3 rounded-xl border border-stroke-3 bg-background-2 flex items-center justify-between">
+                      <span className="text-xs font-semibold text-secondary">Canonical URL loop detected across multi-currency variants</span>
+                      <span className="text-xs font-bold text-amber-500">Indexation Bleed</span>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 dark:bg-secondary/70 backdrop-blur-[2px] p-3 text-center rounded-xl">
+                    <div className="flex items-center gap-2 text-xs font-bold text-secondary dark:text-accent mb-1">
+                      <Icon icon="solar:lock-bold" className="size-4 text-primary dark:text-brand-300" />
+                      <span>+48 More Issues & Gaps Discovered</span>
+                    </div>
+                    <Link
+                      to="/sign-up"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-brand-300 hover:underline"
+                    >
+                      <span>Unlock full 50-page breakdown free</span>
+                      <Icon icon="solar:arrow-right-linear" className="size-3.5" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             )}
 
             {activeTab === "gaps" && (
-              <div className="overflow-x-auto">
-                <table className="table table-sm w-full text-xs">
-                  <thead>
-                    <tr className="border-b border-base-300 dark:border-white/10 text-base-content/60">
-                      <th>Untapped Keyword</th>
-                      <th>Search Volume</th>
-                      <th>Ranking Difficulty</th>
-                      <th>Avg. CPC</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {scanResult.topKeywordGaps.map((gap, idx) => (
-                      <tr key={idx} className="border-b border-base-300/60 dark:border-white/5">
-                        <td className="font-bold text-base-content">{gap.keyword}</td>
-                        <td className="font-semibold text-base-content/80">{gap.volume}</td>
-                        <td>
-                          <span className="badge badge-sm badge-outline font-bold text-emerald-600 dark:text-emerald-400">
-                            {gap.diff}
-                          </span>
-                        </td>
-                        <td className="font-semibold text-base-content/80">{gap.cpc}</td>
-                        <td>
-                          <Link
-                            to="/sign-up"
-                            className="btn btn-ghost btn-xs text-primary font-bold hover:bg-primary/10 gap-1"
-                          >
-                            <span>Target</span>
-                            <Icon icon="solar:arrow-right-linear" className="h-3 w-3" />
-                          </Link>
-                        </td>
+              <div className="space-y-3">
+                <div className="overflow-x-auto">
+                  <table className="table table-sm w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-stroke-3/60 text-secondary/60 dark:text-accent/60">
+                        <th>Untapped Keyword</th>
+                        <th>Search Volume</th>
+                        <th>Ranking Difficulty</th>
+                        <th>Avg. CPC</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {scanResult.topKeywordGaps.map((gap, idx) => (
+                        <tr key={idx} className="border-b border-stroke-3/30">
+                          <td className="font-bold text-secondary dark:text-accent">{gap.keyword}</td>
+                          <td className="font-semibold text-secondary/80 dark:text-accent/80">{gap.volume}</td>
+                          <td>
+                            <span className="badge badge-sm border border-emerald-500/30 bg-emerald-500/10 font-bold text-emerald-600 dark:text-emerald-400">
+                              {gap.diff}
+                            </span>
+                          </td>
+                          <td className="font-semibold text-secondary/80 dark:text-accent/80">{gap.cpc}</td>
+                          <td>
+                            <Link
+                              to="/sign-up"
+                              className="btn btn-ghost btn-xs text-primary dark:text-brand-300 font-bold hover:bg-primary/10 gap-1"
+                            >
+                              <span>Target</span>
+                              <Icon icon="solar:arrow-right-linear" className="h-3 w-3" />
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Frosted Gated Preview for Keywords */}
+                <div className="relative pt-3 border-t border-stroke-3/40 rounded-xl overflow-hidden">
+                  <div className="opacity-35 blur-[1.5px] pointer-events-none select-none text-xs space-y-1">
+                    <div className="p-2 border border-stroke-3 rounded flex justify-between">
+                      <span>ai pipeline tracking system</span>
+                      <span>18,200/mo • KD 24</span>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/70 dark:bg-secondary/70 backdrop-blur-[2px] p-2 text-center rounded-xl">
+                    <Link
+                      to="/sign-up"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-brand-300 hover:underline"
+                    >
+                      <Icon icon="solar:lock-bold" className="size-3.5 text-primary dark:text-brand-300" />
+                      <span>+142 More Low-Hanging Keyword Opportunities</span>
+                    </Link>
+                  </div>
+                </div>
               </div>
             )}
 
             {activeTab === "citations" && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/20 text-xs font-semibold text-primary dark:text-brand-300">
                   <div className="flex items-center gap-2">
                     <Icon icon="solar:shield-warning-bold" className="h-4 w-4" />
-                    <span>Perplexity, ChatGPT & Claude currently cite 3 of your competitors for buying queries.</span>
+                    <span>Perplexity, ChatGPT & Claude currently cite 3 of your competitors for commercial buying queries.</span>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="p-3 rounded-xl border border-base-300 dark:border-white/10 bg-base-200/20 text-center">
-                    <div className="font-bold text-base-content/60">Perplexity AI</div>
+                  <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">Perplexity AI</div>
                     <div className="text-lg font-black text-rose-500 mt-1">Not Cited</div>
-                    <div className="text-[10px] text-base-content/50 mt-0.5">Competitors taking 100% share</div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Competitors taking 100% share</div>
                   </div>
-                  <div className="p-3 rounded-xl border border-base-300 dark:border-white/10 bg-base-200/20 text-center">
-                    <div className="font-bold text-base-content/60">ChatGPT Search</div>
+                  <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">ChatGPT Search</div>
                     <div className="text-lg font-black text-amber-500 mt-1">1 Citation</div>
-                    <div className="text-[10px] text-base-content/50 mt-0.5">Brand mention only</div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Brand mention only</div>
                   </div>
-                  <div className="p-3 rounded-xl border border-base-300 dark:border-white/10 bg-base-200/20 text-center">
-                    <div className="font-bold text-base-content/60">Claude Recommendations</div>
+                  <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">Claude Recommendations</div>
                     <div className="text-lg font-black text-emerald-500 mt-1">2 Citations</div>
-                    <div className="text-[10px] text-base-content/50 mt-0.5">Solid technical presence</div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Solid technical presence</div>
                   </div>
                 </div>
               </div>
@@ -372,18 +492,18 @@ export function HeroInteractiveScanner() {
         </div>
 
         {/* Natural Late Conversion Banner */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-primary/10 via-indigo-600/10 to-secondary/10 border border-primary/20">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-brand-300/10 border border-primary/20">
           <div className="space-y-1 text-center sm:text-left">
-            <h4 className="text-sm font-bold text-base-content">
-              Save This Full 50-Page Audit & Unlock Daily Automated Tracking
+            <h4 className="text-tagline-1 font-bold text-secondary dark:text-accent">
+              See Full 50-Page Audit & Track Daily Rankings
             </h4>
-            <p className="text-xs text-base-content/70">
+            <p className="text-tagline-3 text-secondary/70 dark:text-accent/70">
               Get competitor ad spy access, real-time rank tracking, and weekly PDF client reports.
             </p>
           </div>
           <Link
             to="/sign-up"
-            className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/25 border-none px-6 shrink-0 gap-1.5"
+            className="btn btn-primary btn-sm rounded-full font-bold text-white shadow-md shadow-primary/25 border-none px-6 shrink-0 gap-1.5 h-10"
           >
             <span>Claim Free Account</span>
             <Icon icon="solar:arrow-right-linear" className="h-4 w-4" />

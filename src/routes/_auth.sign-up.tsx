@@ -51,12 +51,26 @@ export const Route = createFileRoute("/_auth/sign-up")({
   component: SignUpPage,
 });
 
+function calculatePasswordStrength(pass: string): { score: number; label: string; color: string } {
+  if (!pass) return { score: 0, label: "Empty", color: "bg-stroke-3" };
+  let score = 0;
+  if (pass.length >= 8) score += 1;
+  if (/[A-Z]/.test(pass)) score += 1;
+  if (/[0-9]/.test(pass)) score += 1;
+  if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+
+  if (score <= 1) return { score: 25, label: "Weak", color: "bg-rose-500" };
+  if (score === 2) return { score: 50, label: "Fair", color: "bg-amber-500" };
+  if (score === 3) return { score: 75, label: "Good", color: "bg-primary" };
+  return { score: 100, label: "Strong", color: "bg-emerald-500" };
+}
+
 function SignUpPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const { redirectTo, isHostedMode } = useAuthPageState(search.redirect);
   const postSignupRedirect = redirectTo === "/" ? "/onboarding" : redirectTo;
-  const [showEmailForm, setShowEmailForm] = useState(true);
+  const [passwordInput, setPasswordInput] = useState("");
   const google = useGoogleSignUp({ redirectTo, postSignupRedirect });
 
   const registrationQuery = useQuery({
@@ -64,23 +78,23 @@ function SignUpPage() {
     queryFn: () => getRegistrationStatus(),
   });
 
-  // Turnstile is active only in hosted mode with a configured site key.
   const isTurnstileEnabled = isHostedMode && Boolean(TURNSTILE_SITE_KEY);
   const captcha = useTurnstileCaptcha();
 
-  // If public registration has been locked by admin, show closed message
+  const strength = calculatePasswordStrength(passwordInput);
+
   if (registrationQuery.data && registrationQuery.data.enabled === false) {
     return (
       <AuthPageCard
         title="Registrations Closed"
         helperText="New account sign-ups are temporarily closed."
         footer={
-          <div className="pt-2 text-center text-xs text-base-content/70">
+          <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70">
             Already have an account?{" "}
             <Link
               to="/sign-in"
               search={getSignInSearch(redirectTo)}
-              className="font-bold text-primary hover:underline"
+              className="font-bold text-primary dark:text-brand-300 hover:underline"
             >
               Sign in here &rarr;
             </Link>
@@ -88,17 +102,17 @@ function SignUpPage() {
         }
       >
         <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-center space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center">
-            <Lock className="h-6 w-6" />
+          <div className="mx-auto size-12 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center">
+            <Lock className="size-6" />
           </div>
-          <h3 className="text-sm font-bold text-base-content">Sign-ups are by Invitation Only</h3>
-          <p className="text-xs text-base-content/70 leading-relaxed">
+          <h3 className="text-tagline-1 font-bold text-secondary dark:text-accent">Sign-ups are by Invitation Only</h3>
+          <p className="text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed">
             Public registration is currently locked. If you are an enterprise client or hold an invitation token, please reach out to our team.
           </p>
           <div className="pt-2">
             <a
               href="mailto:support@skorvia.com"
-              className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-sm"
+              className="btn btn-primary btn-sm rounded-full font-bold text-white shadow-xs"
             >
               Contact Support
             </a>
@@ -123,7 +137,7 @@ function SignUpPage() {
       if (isTurnstileEnabled && !captchaToken) {
         formApi.setErrorMap({
           onSubmit: {
-            form: "Please complete the captcha to continue.",
+            form: "Please complete the security captcha to continue.",
             fields: {},
           },
         });
@@ -137,7 +151,7 @@ function SignUpPage() {
         const resolvedName =
           value.name.trim() || email.split("@")[0] || "Skorvia User";
         const verificationCallbackURL = new URL(
-          "/verify-email",
+          "/confirm-email",
           window.location.origin,
         );
         const verificationSearch = getVerifyEmailSearch(
@@ -165,7 +179,6 @@ function SignUpPage() {
         });
 
         if (result.error) {
-          // Turnstile tokens are single-use; re-challenge so a retry can succeed.
           if (isTurnstileEnabled) captcha.reset();
           formApi.setErrorMap({
             onSubmit: {
@@ -180,7 +193,7 @@ function SignUpPage() {
           redirect_to: redirectTo,
         });
         void navigate({
-          to: "/verify-email",
+          to: "/confirm-email",
           search: getVerifyEmailSearch(email, postSignupRedirect),
           replace: true,
         });
@@ -199,223 +212,244 @@ function SignUpPage() {
   return (
     <AuthPageCard
       title="Create your account"
-      helperText="Get started with next-gen SEO intelligence and AI ranking analytics."
+      helperText="Start your 14-day free trial. Dominate SEO rankings, competitor ads & AI search."
       footer={
-        <div className="pt-2 text-center text-xs text-base-content/70 space-y-2">
-          {showEmailForm && (
-            <div>
-              <button
-                type="button"
-                className="text-xs font-semibold text-base-content/60 hover:text-base-content hover:underline"
-                onClick={() => {
-                  setShowEmailForm(false);
-                  google.clearError();
-                }}
-              >
-                &larr; Choose another method
-              </button>
-            </div>
-          )}
+        <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70 space-y-2">
           <div>
             Already have an account?{" "}
             <Link
               to="/sign-in"
               search={getSignInSearch(redirectTo)}
-              className="font-bold text-primary hover:underline"
+              className="font-bold text-primary dark:text-brand-300 hover:underline"
             >
               Sign in here &rarr;
             </Link>
           </div>
-          <p className="text-[11px] text-base-content/50">
+          <p className="text-tagline-3 text-secondary/50 dark:text-accent/50 pt-1">
             By signing up, you agree to our{" "}
-            <a
-              href="https://skorvia.com/terms"
-              target="_blank"
-              rel="noreferrer"
-              className="text-base-content/70 underline hover:text-base-content"
+            <Link
+              to="/terms"
+              className="text-secondary/70 dark:text-accent/70 underline hover:text-primary"
             >
               Terms
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a
-              href="https://skorvia.com/privacy"
-              target="_blank"
-              rel="noreferrer"
-              className="text-base-content/70 underline hover:text-base-content"
+            <Link
+              to="/privacy"
+              className="text-secondary/70 dark:text-accent/70 underline hover:text-primary"
             >
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </div>
       }
     >
-      {!showEmailForm ? (
-        <>
-          <AuthMethodChooser
-            googleLabel="Continue with Google"
-            disabled={!isHostedMode}
-            isBusy={google.isStarting}
-            onContinueWithGoogle={() => {
-              void google.start();
-            }}
-            onContinueWithEmail={() => {
-              setShowEmailForm(true);
-              google.clearError();
-            }}
-          />
-          {google.error ? (
-            <p className="text-sm text-error">{google.error}</p>
-          ) : null}
-        </>
-      ) : (
-        <form
-          className="space-y-4"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void form.handleSubmit();
+      <form
+        className="space-y-4"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <form.Field name="name">
+          {(field) => {
+            const error = getFieldError(field.state.meta.errors);
+
+            return (
+              <fieldset className="space-y-1.5">
+                <label
+                  htmlFor="name"
+                  className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                >
+                  Full name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="auth-form-input"
+                  placeholder="e.g. Alex Morgan"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  autoComplete="name"
+                  disabled={!isHostedMode}
+                />
+                {error ? (
+                  <p className="text-xs text-rose-500">{error}</p>
+                ) : null}
+              </fieldset>
+            );
           }}
+        </form.Field>
+
+        <form.Field name="email">
+          {(field) => {
+            const error = getFieldError(field.state.meta.errors);
+
+            return (
+              <fieldset className="space-y-1.5">
+                <label
+                  htmlFor="signup-email"
+                  className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                >
+                  Work email
+                </label>
+                <input
+                  id="signup-email"
+                  type="email"
+                  className="auth-form-input"
+                  placeholder="name@company.com"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  autoComplete="email"
+                  disabled={!isHostedMode}
+                  required
+                />
+                {error ? (
+                  <p className="text-xs text-rose-500">{error}</p>
+                ) : null}
+              </fieldset>
+            );
+          }}
+        </form.Field>
+
+        <form.Field name="password">
+          {(field) => {
+            const error = getFieldError(field.state.meta.errors);
+
+            return (
+              <fieldset className="space-y-1.5">
+                <label
+                  htmlFor="signup-password"
+                  className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                >
+                  Password
+                </label>
+                <input
+                  id="signup-password"
+                  type="password"
+                  className="auth-form-input"
+                  placeholder="At least 8 characters"
+                  value={field.state.value}
+                  onChange={(event) => {
+                    field.handleChange(event.target.value);
+                    setPasswordInput(event.target.value);
+                  }}
+                  autoComplete="new-password"
+                  disabled={!isHostedMode}
+                  required
+                  minLength={HOSTED_PASSWORD_MIN_LENGTH}
+                  maxLength={HOSTED_PASSWORD_MAX_LENGTH}
+                />
+                {passwordInput && (
+                  <div className="space-y-1 pt-1">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-secondary/60 dark:text-accent/60">
+                      <span>Strength: {strength.label}</span>
+                      <span>{strength.score}%</span>
+                    </div>
+                    <div className="w-full bg-stroke-3 dark:bg-stroke-7 h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-300 ${strength.color}`}
+                        style={{ width: `${strength.score}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+                {error ? (
+                  <p className="text-xs text-rose-500">{error}</p>
+                ) : null}
+              </fieldset>
+            );
+          }}
+        </form.Field>
+
+        <form.Field name="confirmPassword">
+          {(field) => {
+            const error = getFieldError(field.state.meta.errors);
+
+            return (
+              <fieldset className="space-y-1.5">
+                <label
+                  htmlFor="confirmPassword"
+                  className="text-tagline-2 text-secondary dark:text-accent block font-medium select-none"
+                >
+                  Confirm password
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  className="auth-form-input"
+                  placeholder="Re-enter your password"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  autoComplete="new-password"
+                  disabled={!isHostedMode}
+                  required
+                  minLength={HOSTED_PASSWORD_MIN_LENGTH}
+                  maxLength={HOSTED_PASSWORD_MAX_LENGTH}
+                />
+                {error ? (
+                  <p className="text-xs text-rose-500">{error}</p>
+                ) : null}
+              </fieldset>
+            );
+          }}
+        </form.Field>
+
+        {isTurnstileEnabled ? (
+          <TurnstileWidget
+            onToken={captcha.onToken}
+            resetNonce={captcha.resetNonce}
+          />
+        ) : null}
+
+        <form.Subscribe
+          selector={(state) => ({
+            submitError: state.errorMap.onSubmit,
+            isSubmitting: state.isSubmitting,
+          })}
         >
-          <form.Field name="name">
-            {(field) => {
-              const error = getFieldError(field.state.meta.errors);
+          {({ submitError, isSubmitting }) => {
+            const errorMessage = getFormError(submitError);
+            return (
+              <>
+                {errorMessage ? (
+                  <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+                    {errorMessage}
+                  </div>
+                ) : null}
+                <button
+                  type="submit"
+                  className="btn btn-md btn-primary hover:btn-secondary dark:hover:btn-accent w-full mt-2"
+                  disabled={
+                    !isHostedMode ||
+                    isSubmitting ||
+                    (isTurnstileEnabled && !captcha.hasToken)
+                  }
+                >
+                  {isSubmitting ? "Creating account..." : "Sign Up Free"}
+                </button>
+              </>
+            );
+          }}
+        </form.Subscribe>
 
-              return (
-                <div>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    placeholder="Name (optional)..."
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    autoComplete="name"
-                    disabled={!isHostedMode}
-                  />
-                  {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
-                  ) : null}
-                </div>
-              );
-            }}
-          </form.Field>
-
-          <form.Field name="email">
-            {(field) => {
-              const error = getFieldError(field.state.meta.errors);
-
-              return (
-                <div>
-                  <input
-                    type="email"
-                    className="input input-bordered w-full"
-                    placeholder="Email address..."
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    autoComplete="email"
-                    disabled={!isHostedMode}
-                    required
-                  />
-                  {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
-                  ) : null}
-                </div>
-              );
-            }}
-          </form.Field>
-
-          <form.Field name="password">
-            {(field) => {
-              const error = getFieldError(field.state.meta.errors);
-
-              return (
-                <div>
-                  <input
-                    type="password"
-                    className="input input-bordered w-full"
-                    placeholder="Password..."
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    autoComplete="new-password"
-                    disabled={!isHostedMode}
-                    required
-                    minLength={HOSTED_PASSWORD_MIN_LENGTH}
-                    maxLength={HOSTED_PASSWORD_MAX_LENGTH}
-                  />
-                  {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
-                  ) : null}
-                </div>
-              );
-            }}
-          </form.Field>
-
-          <form.Field name="confirmPassword">
-            {(field) => {
-              const error = getFieldError(field.state.meta.errors);
-
-              return (
-                <div>
-                  <input
-                    type="password"
-                    className="input input-bordered w-full"
-                    placeholder="Confirm password..."
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    autoComplete="new-password"
-                    disabled={!isHostedMode}
-                    required
-                    minLength={HOSTED_PASSWORD_MIN_LENGTH}
-                    maxLength={HOSTED_PASSWORD_MAX_LENGTH}
-                  />
-                  {error ? (
-                    <p className="mt-1 text-sm text-error">{error}</p>
-                  ) : null}
-                </div>
-              );
-            }}
-          </form.Field>
-
-          {isTurnstileEnabled ? (
-            <TurnstileWidget
-              onToken={captcha.onToken}
-              resetNonce={captcha.resetNonce}
-            />
-          ) : null}
-
-          <form.Subscribe
-            selector={(state) => ({
-              submitError: state.errorMap.onSubmit,
-              isSubmitting: state.isSubmitting,
-            })}
-          >
-            {({ submitError, isSubmitting }) => {
-              const errorMessage = getFormError(submitError);
-              return (
-                <>
-                  {errorMessage ? (
-                    <p className="text-sm text-error">{errorMessage}</p>
-                  ) : null}
-                  <button
-                    className="btn btn-soft w-full"
-                    disabled={
-                      !isHostedMode ||
-                      isSubmitting ||
-                      (isTurnstileEnabled && !captcha.hasToken)
-                    }
-                  >
-                    {isSubmitting ? "Creating account..." : "Create account"}
-                  </button>
-                </>
-              );
-            }}
-          </form.Subscribe>
-        </form>
-      )}
+        <AuthMethodChooser
+          googleLabel="Sign up with Google"
+          disabled={!isHostedMode}
+          isBusy={google.isStarting}
+          onContinueWithGoogle={() => {
+            void google.start();
+          }}
+        />
+        {google.error ? (
+          <p className="text-xs text-rose-500 text-center">{google.error}</p>
+        ) : null}
+      </form>
     </AuthPageCard>
   );
 }
 
-// Google sign-up: kicks off the social OAuth redirect and surfaces its error.
 function useGoogleSignUp({
   redirectTo,
   postSignupRedirect,

@@ -191,7 +191,7 @@ export async function archiveProject(
 ) {
   const remaining = await ProjectRepository.countProjects(organizationId);
   if (remaining <= 1) {
-    throw new AppError("CONFLICT", "You can't archive your only project.");
+    throw new AppError("CONFLICT", "You can't archive your only brand.");
   }
 
   await ProjectRepository.archiveProject(input.projectId, organizationId);

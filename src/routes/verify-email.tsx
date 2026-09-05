@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 import {
   AuthPageCard,
   AuthPageShell,
@@ -32,69 +33,16 @@ export const Route = createFileRoute("/verify-email")({
 function getVerificationErrorMessage(error: string | undefined) {
   switch ((error ?? "").toLowerCase()) {
     case "invalid_token":
-      return "This link is no longer valid. Request a new email to keep going.";
+      return "This verification link is no longer valid or has already been used. Please request a new confirmation email.";
     case "token_expired":
-      return "This link has expired. Request a new email to keep going.";
+      return "This verification link has expired. Please request a fresh confirmation link.";
     case "user_not_found":
-      return "We couldn't find this account anymore. Try creating it again.";
+      return "We couldn't locate this account. Please create a new account or try signing in.";
     default:
       return error
-        ? "We couldn't confirm this email. Request a new email and try again."
+        ? "We couldn't confirm this email. Please request a new link and try again."
         : null;
   }
-}
-
-function getVerifyEmailPageCopy({
-  isHostedMode,
-  errorMessage,
-  isPending,
-  isRedirecting,
-  email,
-}: {
-  isHostedMode: boolean;
-  errorMessage: string | null;
-  isPending: boolean;
-  isRedirecting: boolean;
-  email: string | undefined;
-}) {
-  if (!isHostedMode) {
-    return {
-      title: "Verify email",
-      helperText: "Email confirmation isn't available right now.",
-    };
-  }
-
-  if (errorMessage) {
-    return {
-      title: "We couldn't confirm your email",
-      helperText: errorMessage,
-    };
-  }
-
-  if (isRedirecting) {
-    return {
-      title: "Email confirmed",
-      helperText: "You're all set. Taking you to your account now.",
-    };
-  }
-
-  if (isPending) {
-    return {
-      title: "Verify email",
-      helperText: "Checking your email confirmation.",
-    };
-  }
-
-  // Default: the user just signed up (or reloaded this page) and still needs to
-  // click the verification link. There is never a sign-in CTA here — an
-  // unverified hosted user would be bounced straight back by the verification
-  // gate.
-  return {
-    title: "Verify your email",
-    helperText: email
-      ? `Click the link we sent to ${email} to verify your email.`
-      : "Check your inbox for the link to verify your email.",
-  };
 }
 
 function VerifyEmailPage() {
@@ -108,19 +56,20 @@ function VerifyEmailPage() {
     ? verificationIssueSchema.parse(search.error)
     : null;
   const email = search.email ?? session?.user?.email;
-  const isVerified = !!session?.user?.emailVerified;
+  const isVerified = Boolean(session?.user?.emailVerified);
   const [isResending, setIsResending] = useState(false);
-  // Verified (or bypass) users are sent on to the app by the effect below; until
-  // that lands we show the redirecting state instead of the resend prompt.
+  const [countdown, setCountdown] = useState(0);
+
   const isRedirecting =
     isVerified || (bypassEmailVerification && Boolean(session?.user?.id));
-  const pageCopy = getVerifyEmailPageCopy({
-    isHostedMode,
-    errorMessage,
-    isPending,
-    isRedirecting,
-    email,
-  });
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   useEffect(() => {
     if (
@@ -136,11 +85,6 @@ function VerifyEmailPage() {
       });
     }
 
-    // Full page reload instead of client-side navigation: the auth→app
-    // transition needs a clean server-side load so that all server function
-    // handlers are freshly registered (client-side nav during Vite HMR can
-    // hit the server before updated handlers are ready, causing
-    // "action is not a function" errors).
     window.location.replace(redirectTo);
   }, [
     bypassEmailVerification,
@@ -161,7 +105,7 @@ function VerifyEmailPage() {
   }, [verificationIssueType]);
 
   async function handleResend() {
-    if (!email) return;
+    if (!email || countdown > 0) return;
     setIsResending(true);
     try {
       const callbackURL = new URL("/verify-email", window.location.origin);
@@ -172,64 +116,165 @@ function VerifyEmailPage() {
         callbackURL: callbackURL.toString(),
       });
       if (result.error) {
-        toast.error(result.error.message || "We couldn't send another email.");
+        toast.error(result.error.message || "We couldn't send another verification email.");
         return;
       }
       captureClientEvent("auth:verification_resend");
-      toast.success("A new email is on the way.");
+      toast.success("A fresh confirmation email has been dispatched!");
+      setCountdown(60);
     } catch {
       toast.error(
-        "We couldn't send another email right now. Please try again.",
+        "We couldn't send another verification email right now. Please try again.",
       );
     } finally {
       setIsResending(false);
     }
   }
 
+  const title = !isHostedMode
+    ? "Verify Email"
+    : errorMessage
+      ? "Verification Failed"
+      : isRedirecting
+        ? "Email Verified!"
+        : isPending
+          ? "Verifying Email..."
+          : "Verify Your Email";
+
+  const helperText = !isHostedMode
+    ? "Email confirmation isn't available right now."
+    : errorMessage
+      ? "There was a problem confirming your email address."
+      : isRedirecting
+        ? "Taking you straight to your domain intelligence dashboard..."
+        : isPending
+          ? "Checking your verification credentials."
+          : email
+            ? `Click the link we sent to ${email} to verify your email.`
+            : "Check your inbox for the link to verify your email.";
+
   return (
     <AuthPageShell>
       <AuthPageCard
-        title={pageCopy.title}
-        helperText={pageCopy.helperText}
+        title={title}
+        helperText={helperText}
         footer={
-          <p className="text-sm">
+          <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70">
             <Link
               to="/sign-in"
               search={getSignInSearch(redirectTo)}
-              className="text-base-content/50 hover:text-base-content transition-colors"
+              className="font-bold text-primary dark:text-brand-300 hover:underline"
             >
-              Back to sign in
+              Back to sign in &rarr;
             </Link>
-          </p>
+          </div>
         }
       >
-        {!isHostedMode ? null : errorMessage ? (
-          <div className="space-y-3">
-            <div className="alert alert-error">
-              <span>{errorMessage}</span>
+        <div className="space-y-6">
+          {!isHostedMode ? null : errorMessage ? (
+            <div className="space-y-4">
+              <div className="flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
+                <div className="size-14 rounded-2xl bg-rose-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/20 mb-3">
+                  <Icon icon="solar:danger-triangle-bold" className="size-7" />
+                </div>
+                <p className="text-tagline-2 text-secondary dark:text-accent font-medium leading-relaxed">
+                  {errorMessage}
+                </p>
+              </div>
+
+              {email ? (
+                <button
+                  type="button"
+                  className="btn btn-primary w-full h-11 rounded-full text-tagline-2 font-bold shadow-md shadow-primary/20 flex items-center justify-center gap-2"
+                  onClick={() => void handleResend()}
+                  disabled={isResending || countdown > 0}
+                >
+                  {isResending ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs" />
+                      <span>Sending link...</span>
+                    </>
+                  ) : countdown > 0 ? (
+                    <>
+                      <Icon icon="solar:history-bold-duotone" className="size-4" />
+                      <span>Resend in {countdown}s</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                      <span>Request new verification link</span>
+                    </>
+                  )}
+                </button>
+              ) : null}
+
+              <Link
+                to="/sign-in"
+                search={getSignInSearch(redirectTo)}
+                className="btn btn-soft w-full h-11 rounded-full text-tagline-2 font-semibold flex items-center justify-center gap-2"
+              >
+                <Icon icon="solar:arrow-left-linear" className="size-4" />
+                <span>Back to sign in</span>
+              </Link>
             </div>
-            <Link
-              to="/sign-in"
-              search={getSignInSearch(redirectTo)}
-              className="btn btn-soft w-full"
-            >
-              Back to sign in
-            </Link>
-          </div>
-        ) : isPending || isRedirecting ? (
-          <div className="flex justify-center py-4">
-            <span className="loading loading-spinner loading-md" />
-          </div>
-        ) : email ? (
-          <button
-            type="button"
-            className="btn btn-soft w-full"
-            onClick={() => void handleResend()}
-            disabled={isResending}
-          >
-            {isResending ? "Sending email..." : "Resend email"}
-          </button>
-        ) : null}
+          ) : isPending || isRedirecting ? (
+            <div className="flex flex-col items-center justify-center py-6 space-y-4">
+              <div className="size-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <Icon icon="solar:check-circle-bold-duotone" className="size-8" />
+              </div>
+              <span className="loading loading-spinner loading-md text-primary" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/15">
+                <div className="size-14 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20 mb-3">
+                  <Icon icon="solar:letter-opened-bold-duotone" className="size-7" />
+                </div>
+                <p className="text-tagline-2 text-secondary/70 dark:text-accent/70">
+                  Confirmation sent to:
+                </p>
+                <p className="mt-1 text-tagline-1 font-bold text-secondary dark:text-accent break-all">
+                  {email || "your registered email"}
+                </p>
+              </div>
+
+              {email ? (
+                <button
+                  type="button"
+                  className="btn btn-primary w-full h-11 rounded-full text-tagline-2 font-bold shadow-md shadow-primary/20 flex items-center justify-center gap-2"
+                  onClick={() => void handleResend()}
+                  disabled={isResending || countdown > 0}
+                >
+                  {isResending ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs" />
+                      <span>Sending email...</span>
+                    </>
+                  ) : countdown > 0 ? (
+                    <>
+                      <Icon icon="solar:history-bold-duotone" className="size-4" />
+                      <span>Resend in {countdown}s</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                      <span>Resend confirmation email</span>
+                    </>
+                  )}
+                </button>
+              ) : null}
+
+              <Link
+                to="/sign-in"
+                search={getSignInSearch(redirectTo)}
+                className="btn btn-soft w-full h-11 rounded-full text-tagline-2 font-semibold flex items-center justify-center gap-2"
+              >
+                <Icon icon="solar:arrow-left-linear" className="size-4" />
+                <span>Back to sign in</span>
+              </Link>
+            </div>
+          )}
+        </div>
       </AuthPageCard>
     </AuthPageShell>
   );

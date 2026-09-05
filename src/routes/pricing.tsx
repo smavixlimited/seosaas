@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, X } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
@@ -26,6 +26,7 @@ function PricingPage() {
   const [billingInterval, setBillingInterval] = React.useState<"month" | "year">("month");
   const [selectedPlan, setSelectedPlan] = React.useState<PlanItem | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = React.useState(false);
+  const [openFaq, setOpenFaq] = React.useState<number | null>(null);
 
   const isAnnual = billingInterval === "year";
 
@@ -164,42 +165,60 @@ function PricingPage() {
       agency: agencyPlan?.features?.mcp_api_access ?? agencyPlan?.features?.mcpAccess ?? true,
     },
     {
-      feature: "Priority 24/7 Dedicated Support",
+      feature: "Priority Dedicated Support",
       starter: starterPlan?.features?.priority_support ? "Priority" : "Standard",
       pro: proPlan?.features?.priority_support ? "Priority 24/7" : "Priority (12hr)",
       agency: agencyPlan?.features?.priority_support ? "Dedicated 24/7" : "Dedicated 24/7",
     },
   ];
 
+  const faqs = [
+    {
+      q: "Can I cancel or switch my plan at any time?",
+      a: "Yes, you can upgrade, downgrade, or cancel your subscription at any time directly inside your Brand Settings. When upgrading, your prorated credit is immediately applied.",
+    },
+    {
+      q: "Do you charge extra for additional team members or client seats?",
+      a: "No. Unlike legacy SEO tools that charge up to $45/mo for every additional seat, Skorvia Pro and Agency plans include generous multi-user access with role-based permissions.",
+    },
+    {
+      q: "What is MCP Server access and how does it work?",
+      a: "Skorvia provides a live Model Context Protocol (MCP) server. You can connect Claude Code, Cursor, Windsurf, or custom AI agents to query live rankings, keyword volume, and backlink data directly in your AI coding environment.",
+    },
+    {
+      q: "What payment gateways are supported?",
+      a: "We support Stripe, PayPal, Lemon Squeezy, Paystack, and Flutterwave for effortless global payments in both USD ($) and Nigerian Naira (₦).",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-base-100 text-base-content selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background-2 dark:bg-background-8 text-secondary dark:text-accent font-sans selection:bg-primary selection:text-white">
       <MarketingNavbar />
 
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Hero & Pricing Cards Section */}
+      <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24">
+        <div className="main-container">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
-              Simple, Transparent Pricing
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-base-content">
+            <span className="badge badge-cyan">Simple, Transparent Pricing</span>
+            <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               Invest in high-converting SEO without the enterprise tax.
             </h1>
-            <p className="text-base sm:text-lg text-base-content/70">
-              Choose the plan that fits your growth stage. Cancel or switch tiers at any time.
+            <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
+              Select the pricing plan that best suits your needs. Scale seamlessly from solo founder to full-service agency.
             </p>
 
-            {/* Currency & Billing Interval Controls */}
+            {/* Currency & Billing Toggle */}
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              {/* Billing Cycle Toggle */}
-              <div className="flex items-center gap-2 rounded-2xl border border-base-300 bg-base-200/60 p-1.5 shadow-xs">
+              {/* Billing Toggle */}
+              <div className="flex items-center gap-1 rounded-full border border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-7 p-1.5 shadow-xs">
                 <button
                   type="button"
                   onClick={() => setBillingInterval("month")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-bold transition-all ${
+                  className={`rounded-full px-5 py-2 text-tagline-3 font-semibold transition-all ${
                     !isAnnual
-                      ? "bg-base-100 text-base-content shadow-xs"
-                      : "text-base-content/60 hover:text-base-content"
+                      ? "bg-secondary text-white dark:bg-accent dark:text-secondary shadow-xs"
+                      : "text-secondary/60 dark:text-accent/60 hover:text-secondary dark:hover:text-accent"
                   }`}
                 >
                   Monthly Billing
@@ -207,14 +226,16 @@ function PricingPage() {
                 <button
                   type="button"
                   onClick={() => setBillingInterval("year")}
-                  className={`flex items-center gap-1.5 rounded-xl px-4 py-1.5 text-xs font-bold transition-all ${
+                  className={`flex items-center gap-2 rounded-full px-5 py-2 text-tagline-3 font-semibold transition-all ${
                     isAnnual
-                      ? "bg-primary text-white shadow-xs"
-                      : "text-base-content/60 hover:text-base-content"
+                      ? "bg-primary-500 text-white shadow-xs"
+                      : "text-secondary/60 dark:text-accent/60 hover:text-secondary dark:hover:text-accent"
                   }`}
                 >
                   <span>Annual Billing</span>
-                  <span className={`rounded-md px-1.5 py-0.2 text-[10px] font-black ${isAnnual ? "bg-white/20 text-white" : "bg-primary/10 text-primary"}`}>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-black ${
+                    isAnnual ? "bg-white/20 text-white" : "bg-primary-500/15 text-primary-500"
+                  }`}>
                     SAVE 20%
                   </span>
                 </button>
@@ -230,60 +251,82 @@ function PricingPage() {
             {tiers.map((tier) => {
               const formattedPrice = formatPrice(tier.priceUsd, tier.priceNgn);
               const isHighlighted = tier.id === "pro";
-
               const staticMeta = BRAND_CONFIG.pricing.tiers.find((t) => t.id === tier.id);
 
               return (
                 <div
                   key={tier.id}
-                  className={`rounded-3xl border p-8 shadow-sm flex flex-col justify-between relative transition-all duration-200 ${
+                  className={`rounded-[24px] border p-8 flex flex-col justify-between relative transition-all duration-300 ${
                     isHighlighted
-                      ? "border-primary bg-base-100 shadow-2xl ring-2 ring-primary/20"
-                      : "border-base-300 bg-base-100 hover:shadow-lg"
+                      ? "border-primary-500 bg-secondary dark:bg-background-5 text-white shadow-2xl ring-2 ring-primary-500/30 scale-[102%]"
+                      : "border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 text-secondary dark:text-accent hover:shadow-lg"
                   }`}
                 >
                   {isHighlighted && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3.5 py-1 text-xs font-black text-white shadow-md">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary-500 px-4 py-1 text-[11px] font-black tracking-wide text-white uppercase shadow-md">
                       MOST POPULAR
                     </div>
                   )}
 
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-xl font-bold text-base-content">{tier.name}</h3>
-                      <p className="text-xs text-base-content/60 mt-1 min-h-[32px]">
+                      <div className="flex items-center justify-between">
+                        <h3 className={`text-heading-5 font-bold font-interTight ${isHighlighted ? "text-white" : "text-secondary dark:text-accent"}`}>
+                          {tier.name}
+                        </h3>
+                        <span className={`badge ${isHighlighted ? "badge-yellow" : "badge-cyan"}`}>
+                          {tier.id === "starter" ? "Starter" : tier.id === "pro" ? "Scale" : "Agency"}
+                        </span>
+                      </div>
+                      <p className={`text-tagline-2 mt-2 min-h-[40px] leading-relaxed ${
+                        isHighlighted ? "text-accent/80" : "text-secondary/60 dark:text-accent/60"
+                      }`}>
                         {staticMeta?.description || "High-performance SEO intelligence suite."}
                       </p>
                     </div>
 
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-4xl sm:text-5xl font-black text-base-content">
+                    <div className="flex items-baseline gap-2 pt-2">
+                      <span className={`text-heading-2 font-extrabold font-interTight ${
+                        isHighlighted ? "text-white" : "text-secondary dark:text-accent"
+                      }`}>
                         {formattedPrice}
                       </span>
-                      <span className="text-xs font-semibold text-base-content/60">
+                      <span className={`text-tagline-2 font-medium ${
+                        isHighlighted ? "text-accent/70" : "text-secondary/50 dark:text-accent/50"
+                      }`}>
                         / month
                       </span>
                     </div>
 
                     {isAnnual && (
-                      <p className="text-xs text-accent font-semibold">
-                        Billed annually (20% discount applied)
+                      <p className="text-[12px] text-ns-green font-bold">
+                        ✓ Billed annually (20% discount applied)
                       </p>
                     )}
 
-                    <div className="space-y-3 pt-4 border-t border-base-300/80">
-                      <p className="text-xs font-bold uppercase tracking-wider text-base-content/50">
-                        Included Features
+                    <div className={`space-y-3 pt-6 border-t ${
+                      isHighlighted ? "border-white/10" : "border-stroke-4 dark:border-stroke-8"
+                    }`}>
+                      <p className={`text-[11px] font-black uppercase tracking-wider ${
+                        isHighlighted ? "text-accent/60" : "text-secondary/40 dark:text-accent/40"
+                      }`}>
+                        Included Capabilities
                       </p>
-                      <ul className="space-y-2.5 text-sm text-base-content/80">
+                      <ul className="space-y-3 text-tagline-2">
                         {(staticMeta?.features || [
                           "Live SERP Keyword Tracking",
                           "Backlink Analysis",
                           "Technical Site Audit",
                         ]).map((feat, idx) => (
-                          <li key={idx} className="flex items-center gap-2.5">
-                            <Check className="h-4 w-4 text-accent shrink-0" />
-                            <span>{feat}</span>
+                          <li key={idx} className="flex items-center gap-3">
+                            <div className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${
+                              isHighlighted ? "bg-primary-500 text-white" : "bg-primary-500/10 text-primary-500"
+                            }`}>
+                              <Icon icon="solar:check-circle-bold" className="size-4" />
+                            </div>
+                            <span className={isHighlighted ? "text-accent/90" : "text-secondary/80 dark:text-accent/80"}>
+                              {feat}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -294,13 +337,13 @@ function PricingPage() {
                     <button
                       type="button"
                       onClick={() => openCheckout(tier)}
-                      className={`btn w-full rounded-2xl font-bold shadow-md ${
+                      className={`btn btn-md w-full rounded-full font-bold shadow-md transition-all ${
                         isHighlighted
-                          ? "btn-primary text-white border-none bg-primary hover:bg-primary/90"
-                          : "btn-outline"
+                          ? "btn-primary bg-primary-500 hover:bg-primary-600 text-white border-none shadow-primary-500/25"
+                          : "btn-outline border-stroke-4 dark:border-stroke-8 hover:bg-secondary hover:text-white dark:hover:bg-accent dark:hover:text-secondary"
                       }`}
                     >
-                      Subscribe with {tier.name}
+                      Subscribe to {tier.name}
                     </button>
                   </div>
                 </div>
@@ -308,70 +351,144 @@ function PricingPage() {
             })}
           </div>
 
+          {/* Feature Highlights & Trust Stats */}
+          <div className="mt-20 bg-secondary dark:bg-background-7 text-white rounded-[24px] p-8 sm:p-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
+              <div className="space-y-2 py-4 md:py-0 px-4">
+                <div className="mx-auto w-12 h-12 rounded-full bg-ns-yellow/20 text-ns-yellow flex items-center justify-center mb-3">
+                  <Icon icon="solar:shield-check-bold" className="size-6" />
+                </div>
+                <h4 className="text-heading-5 font-bold font-interTight">99.9% Data Accuracy</h4>
+                <p className="text-tagline-2 text-accent/70">
+                  Direct live SERP scrape & verified real-time volume from premier global search infrastructure.
+                </p>
+              </div>
+
+              <div className="space-y-2 py-4 md:py-0 px-4">
+                <div className="mx-auto w-12 h-12 rounded-full bg-ns-cyan/20 text-ns-cyan flex items-center justify-center mb-3">
+                  <Icon icon="solar:users-group-two-rounded-bold" className="size-6" />
+                </div>
+                <h4 className="text-heading-5 font-bold font-interTight">Zero Seat Tax</h4>
+                <p className="text-tagline-2 text-accent/70">
+                  Invite your team and clients without paying up to $45/month extra per team member.
+                </p>
+              </div>
+
+              <div className="space-y-2 py-4 md:py-0 px-4">
+                <div className="mx-auto w-12 h-12 rounded-full bg-ns-red/20 text-ns-red flex items-center justify-center mb-3">
+                  <Icon icon="solar:bolt-bold" className="size-6" />
+                </div>
+                <h4 className="text-heading-5 font-bold font-interTight">MCP Agent Ready</h4>
+                <p className="text-tagline-2 text-accent/70">
+                  Connect autonomous coding and research agents via standard Model Context Protocol.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Detailed Feature Comparison Matrix */}
           <div className="mt-24 space-y-8 max-w-5xl mx-auto">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-black text-base-content">
+            <div className="text-center space-y-3">
+              <span className="badge badge-green">Detailed Breakdown</span>
+              <h2 className="text-heading-3 font-bold text-secondary dark:text-accent font-interTight">
                 Compare All Plan Features
               </h2>
-              <p className="text-sm text-base-content/60">
-                Detailed breakdown of limits and technical capabilities.
+              <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
+                Transparent technical limits, seat allowances, and automated workflows.
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-3xl border border-base-300 bg-base-100 shadow-sm">
-              <table className="table w-full text-xs">
+            <div className="overflow-x-auto rounded-[24px] border border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 shadow-sm">
+              <table className="w-full text-tagline-2 text-left">
                 <thead>
-                  <tr className="border-b border-base-300 bg-base-200/50 text-[11px] font-bold uppercase tracking-wider text-base-content/70">
+                  <tr className="border-b border-stroke-4 dark:border-stroke-8 bg-background-2/50 dark:bg-background-7/50 text-[11px] font-black uppercase tracking-wider text-secondary/70 dark:text-accent/70">
                     <th className="py-4 px-6">Feature</th>
-                    <th className="text-center">Starter</th>
-                    <th className="text-center text-primary font-black">Pro (Popular)</th>
-                    <th className="text-center">Agency</th>
+                    <th className="py-4 px-6 text-center">Starter</th>
+                    <th className="py-4 px-6 text-center text-primary-500 font-black">Pro (Popular)</th>
+                    <th className="py-4 px-6 text-center">Agency</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-stroke-4 dark:divide-stroke-8">
                   {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className="border-b border-base-300/40 hover:bg-base-200/30">
-                      <td className="py-3.5 px-6 font-semibold text-base-content/90">
+                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-background-7/40 transition-colors">
+                      <td className="py-4 px-6 font-medium text-secondary/90 dark:text-accent/90">
                         {row.feature}
                       </td>
-                      <td className="text-center">
+                      <td className="py-4 px-6 text-center">
                         {typeof row.starter === "boolean" ? (
                           row.starter ? (
-                            <Check className="h-4 w-4 text-accent mx-auto" />
+                            <Icon icon="solar:check-circle-bold" className="size-5 text-ns-green mx-auto" />
                           ) : (
-                            <X className="h-4 w-4 text-base-content/30 mx-auto" />
+                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
                           )
                         ) : (
-                          <span className="font-bold text-base-content">{row.starter}</span>
+                          <span className="font-bold text-secondary dark:text-accent">{row.starter}</span>
                         )}
                       </td>
-                      <td className="text-center bg-primary/5">
+                      <td className="py-4 px-6 text-center bg-primary-500/5">
                         {typeof row.pro === "boolean" ? (
                           row.pro ? (
-                            <Check className="h-4 w-4 text-primary mx-auto" />
+                            <Icon icon="solar:check-circle-bold" className="size-5 text-primary-500 mx-auto" />
                           ) : (
-                            <X className="h-4 w-4 text-base-content/30 mx-auto" />
+                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
                           )
                         ) : (
-                          <span className="font-bold text-primary">{row.pro}</span>
+                          <span className="font-black text-primary-500">{row.pro}</span>
                         )}
                       </td>
-                      <td className="text-center">
+                      <td className="py-4 px-6 text-center">
                         {typeof row.agency === "boolean" ? (
                           row.agency ? (
-                            <Check className="h-4 w-4 text-accent mx-auto" />
+                            <Icon icon="solar:check-circle-bold" className="size-5 text-ns-green mx-auto" />
                           ) : (
-                            <X className="h-4 w-4 text-base-content/30 mx-auto" />
+                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
                           )
                         ) : (
-                          <span className="font-bold text-base-content">{row.agency}</span>
+                          <span className="font-bold text-secondary dark:text-accent">{row.agency}</span>
                         )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+
+          {/* Pricing FAQs */}
+          <div className="mt-24 max-w-4xl mx-auto space-y-8">
+            <div className="text-center space-y-3">
+              <span className="badge badge-yellow">Frequently Asked Questions</span>
+              <h2 className="text-heading-3 font-bold text-secondary dark:text-accent font-interTight">
+                Got questions? We have answers.
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-[20px] border border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 overflow-hidden transition-all"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                    className="w-full flex items-center justify-between p-6 text-left font-bold text-secondary dark:text-accent hover:text-primary-500 transition-colors"
+                  >
+                    <span className="text-tagline-1">{faq.q}</span>
+                    <Icon
+                      icon="solar:alt-arrow-down-bold"
+                      className={`size-5 shrink-0 transition-transform duration-300 ${
+                        openFaq === idx ? "rotate-180 text-primary-500" : "text-secondary/40 dark:text-accent/40"
+                      }`}
+                    />
+                  </button>
+                  {openFaq === idx && (
+                    <div className="px-6 pb-6 text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed border-t border-stroke-4 dark:border-stroke-8 pt-4">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

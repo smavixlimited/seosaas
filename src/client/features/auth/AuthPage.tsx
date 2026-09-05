@@ -43,35 +43,33 @@ export function AuthMethodChooser({
 }) {
   return (
     <div className="space-y-3 w-full">
-      <div className="relative flex items-center justify-center my-3">
-        <div className="border-t border-base-300 w-full" />
-        <span className="bg-base-100 px-3 text-[11px] uppercase font-bold text-base-content/40 tracking-wider">
+      <div className="flex items-center my-4">
+        <div className="h-[1px] flex-1 bg-stroke-3 dark:bg-stroke-7" />
+        <span className="px-3 text-tagline-3 text-secondary/50 dark:text-accent/50 uppercase tracking-wider font-semibold">
           Or continue with
         </span>
+        <div className="h-[1px] flex-1 bg-stroke-3 dark:bg-stroke-7" />
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="space-y-2.5">
         <button
           type="button"
-          className="btn btn-outline w-full rounded-2xl h-10 border-base-300 bg-base-100 font-semibold text-xs hover:bg-base-200 hover:text-base-content gap-2 shadow-2xs"
+          className="btn-social-auth"
           onClick={onContinueWithGoogle}
           disabled={disabled || isBusy}
         >
           <GoogleLogo />
-          <span>Google</span>
+          <span>{googleLabel || "Continue with Google"}</span>
         </button>
 
         <button
           type="button"
-          className="btn btn-outline w-full rounded-2xl h-10 border-base-300 bg-base-100 font-semibold text-xs hover:bg-base-200 hover:text-base-content gap-2 shadow-2xs"
-          onClick={() => {
-            // Apple OAuth trigger
-            onContinueWithGoogle();
-          }}
+          className="btn-social-auth"
+          onClick={onContinueWithGoogle}
           disabled={disabled || isBusy}
         >
-          <Icon icon="solar:apple-bold" className="h-4 w-4 text-base-content" />
-          <span>Apple</span>
+          <Icon icon="solar:apple-bold" className="size-5" />
+          <span>Continue with Apple</span>
         </button>
       </div>
     </div>
@@ -113,33 +111,49 @@ export function AuthPageCard({
   footer?: React.ReactNode;
 }) {
   return (
-    <div className="w-full max-w-md space-y-4">
-      <div className="space-y-1 text-left">
-        <h1 className="text-2xl font-black tracking-tight text-base-content">{title}</h1>
+    <div className="w-full max-w-[420px] mx-auto space-y-4">
+      {/* Brand Header */}
+      <div className="text-center space-y-2 mb-2">
+        <Link to="/" className="inline-flex items-center gap-2.5 mx-auto">
+          <img
+            src={BRAND_CONFIG.logoUrl}
+            alt={BRAND_CONFIG.name}
+            className="size-8 rounded-full object-contain"
+          />
+          <span className="text-xl font-bold tracking-tight text-secondary dark:text-accent font-interTight">
+            {BRAND_CONFIG.name}
+          </span>
+        </Link>
+        <h1 className="text-heading-5 font-bold text-secondary dark:text-accent pt-1">
+          {title}
+        </h1>
         {helperText ? (
-          <p className="text-xs text-base-content/60 font-medium">{helperText}</p>
+          <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 max-w-sm mx-auto">
+            {helperText}
+          </p>
         ) : null}
       </div>
 
-      <div className="rounded-3xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-xs space-y-4">
+      {/* Main NextSaaS Auth Card */}
+      <div className="rounded-[24px] border border-stroke-3/60 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 sm:p-9 shadow-xl space-y-4">
         {children}
       </div>
 
-      {footer ? <div className="text-xs text-center text-base-content/60 pt-2">{footer}</div> : null}
+      {footer ? <div className="text-tagline-2 text-center text-secondary/70 dark:text-accent/70 pt-2">{footer}</div> : null}
 
-      {/* Venix Legal Footer Links */}
-      <div className="pt-3 text-center">
-        <div className="flex items-center justify-center gap-4 text-[11px] text-base-content/50 font-medium">
+      {/* Legal Footer Links */}
+      <div className="pt-4 text-center">
+        <div className="flex items-center justify-center gap-4 text-tagline-3 text-secondary/50 dark:text-accent/50">
           <Link to="/terms" className="hover:text-primary transition-colors">
-            Terms & Conditions
+            Terms &amp; Conditions
           </Link>
           <span>•</span>
           <Link to="/privacy" className="hover:text-primary transition-colors">
             Privacy Policy
           </Link>
           <span>•</span>
-          <Link to="/help/dataforseo-api-key" className="hover:text-primary transition-colors">
-            Help
+          <Link to="/contact" className="hover:text-primary transition-colors">
+            Support
           </Link>
         </div>
       </div>
@@ -147,112 +161,17 @@ export function AuthPageCard({
   );
 }
 
-const TESTIMONIAL_SLIDES = [
-  {
-    image: "/auth-illustrations/login_first.svg",
-    quote:
-      "Skorvia made it incredibly easy to track keyword rankings, audit site health, and decode competitor strategies in minutes.",
-    author: "Sophie Turner",
-    role: "Frontend Engineer & SEO Lead",
-  },
-  {
-    image: "/auth-illustrations/login_second.svg",
-    quote:
-      "We doubled our organic search traffic within 90 days. The AI Brand Coach and conversion readiness checks are an unfair advantage.",
-    author: "Amit Doshi",
-    role: "Tech Lead & Founder",
-  },
-  {
-    image: "/auth-illustrations/login_third.svg",
-    quote:
-      "I highly recommend Skorvia for any team looking to dominate Google, local map packs, and AI search engines like ChatGPT & Perplexity.",
-    author: "Lena Carter",
-    role: "VP of Organic Growth",
-  },
-];
-
 export function AuthPageShell({ children }: { children: React.ReactNode }) {
-  const [activeSlide, setActiveSlide] = React.useState(0);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % TESTIMONIAL_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const currentSlide = TESTIMONIAL_SLIDES[activeSlide];
-
   return (
-    <div className="min-h-screen w-full bg-base-200/40 flex items-center justify-center p-3 sm:p-6 lg:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 w-full max-w-5xl rounded-3xl border border-base-300 bg-base-100 shadow-2xl overflow-hidden min-h-[660px]">
-        {/* Left Column: Venix Testimonial & Illustration Showcase */}
-        <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-8 xl:p-10 bg-gradient-to-br from-primary via-primary/95 to-slate-950 text-white relative overflow-hidden">
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-          
-          {/* Header Brand */}
-          <div className="relative z-10 flex items-center gap-2.5">
-            <img
-              src={BRAND_CONFIG.logoUrl}
-              alt={BRAND_CONFIG.name}
-              className="h-8 w-8 rounded-xl object-contain shadow-xs ring-1 ring-white/20 bg-white/10 p-1"
-            />
-            <span className="text-xl font-black tracking-tight text-white">
-              {BRAND_CONFIG.name}
-            </span>
-          </div>
-
-          {/* Center Illustration */}
-          <div className="relative z-10 py-4 flex flex-col items-center justify-center">
-            <img
-              src={currentSlide.image}
-              alt="Skorvia Platform"
-              className="max-h-52 object-contain drop-shadow-2xl transition-all duration-700 transform"
-              onError={(e) => {
-                (e.currentTarget as HTMLElement).style.display = "none";
-              }}
-            />
-          </div>
-
-          {/* Testimonial Quote & Pagination */}
-          <div className="relative z-10 space-y-3">
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-md space-y-2 border border-white/10">
-              <div className="flex items-center gap-1 text-amber-300">
-                {[...Array(5)].map((_, i) => (
-                  <Icon key={i} icon="solar:star-bold" className="h-3.5 w-3.5" />
-                ))}
-              </div>
-              <p className="text-xs italic text-white/90 leading-relaxed">
-                &ldquo;{currentSlide.quote}&rdquo;
-              </p>
-              <div>
-                <div className="text-xs font-bold text-white">{currentSlide.author}</div>
-                <div className="text-[10px] text-white/70">{currentSlide.role}</div>
-              </div>
-            </div>
-
-            {/* Slider Dots */}
-            <div className="flex items-center justify-center gap-1.5 pt-1">
-              {TESTIMONIAL_SLIDES.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setActiveSlide(index)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeSlide === index ? "w-6 bg-white" : "w-1.5 bg-white/30"
-                  }`}
-                  aria-label={`Slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Form Container */}
-        <div className="col-span-1 lg:col-span-7 flex flex-col items-center justify-center p-6 sm:p-10 lg:p-12">
-          {children}
-        </div>
+    <div className="min-h-screen w-full bg-background-2 dark:bg-background-5 flex items-center justify-center py-12 px-4 sm:px-6 relative overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="absolute -top-40 -left-40 size-96 rounded-full bg-primary/5 dark:bg-brand-300/5 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 size-96 rounded-full bg-ns-green/5 blur-3xl pointer-events-none" />
+      
+      <div className="w-full relative z-10">
+        {children}
       </div>
     </div>
   );
 }
+

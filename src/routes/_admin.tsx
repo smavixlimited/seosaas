@@ -26,9 +26,19 @@ function AdminLayoutShell() {
   const currentPath = routerState.location.pathname;
   const navigate = useNavigate();
   const { themePreference, setThemePreference } = useThemePreference();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  // Strict Admin Gate: If not authenticated, redirect to /admin-login
+  React.useEffect(() => {
+    if (!isPending && !session?.user) {
+      void navigate({
+        to: "/admin-login",
+        search: { redirect: currentPath },
+      });
+    }
+  }, [isPending, session, navigate, currentPath]);
 
   const isDarkActive =
     themePreference === "dark" ||
@@ -40,6 +50,21 @@ function AdminLayoutShell() {
     const nextTheme: "light" | "dark" = isDarkActive ? "light" : "dark";
     setThemePreference(nextTheme);
   };
+
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 space-y-4">
+        <span className="loading loading-spinner loading-lg text-primary" />
+        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+          Verifying Administrator Authorization...
+        </p>
+      </div>
+    );
+  }
+
+  if (!session?.user) {
+    return null;
+  }
 
   const navGroups: NavGroup[] = [
     {
@@ -223,7 +248,7 @@ function AdminLayoutShell() {
         {sidebarOpen && (
           <div className="p-4 border-t border-slate-700/60 bg-[#172033] space-y-2">
             <Link
-              to="/projects"
+              to="/my-brands"
               className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-slate-700/80 hover:bg-slate-700 text-xs font-bold text-white transition-all shadow-sm"
             >
               <Icon icon="solar:arrow-left-bold" className="h-4 w-4" />
@@ -351,7 +376,7 @@ function AdminLayoutShell() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/projects" className="text-xs font-semibold py-2">
+                  <Link to="/my-brands" className="text-xs font-semibold py-2">
                     <Icon icon="solar:window-frame-bold-duotone" className="h-4 w-4 text-indigo-500" />
                     <span>Client Workspace</span>
                   </Link>

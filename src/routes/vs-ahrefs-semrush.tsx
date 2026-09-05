@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Sparkles, TrendingUp, X, Zap } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
@@ -19,14 +19,28 @@ function ComparisonPage() {
       winner: "skorvia",
     },
     {
-      metric: "AI Search & AEO (ChatGPT & Perplexity)",
+      metric: "Seat Tax / User Limits",
+      skorvia: "Unlimited Team Seats",
+      ahrefs: "$30/mo per user add-on",
+      semrush: "$45/mo per user add-on",
+      winner: "skorvia",
+    },
+    {
+      metric: "AI Search & AEO (ChatGPT, Perplexity & Claude)",
       skorvia: true,
       ahrefs: false,
       semrush: false,
       winner: "skorvia",
     },
     {
-      metric: "MCP Agent Tool Protocol Support",
+      metric: "Multi-Network Competitor Ad Spy (Meta, Google, TikTok)",
+      skorvia: true,
+      ahrefs: false,
+      semrush: "Google Ads Only",
+      winner: "skorvia",
+    },
+    {
+      metric: "MCP Autonomous Agent Protocol Support",
       skorvia: true,
       ahrefs: false,
       semrush: false,
@@ -40,7 +54,7 @@ function ComparisonPage() {
       winner: "skorvia",
     },
     {
-      metric: "Keyword Research & SERP Volume",
+      metric: "Keyword Research & Search Intent Clustering",
       skorvia: true,
       ahrefs: true,
       semrush: true,
@@ -54,7 +68,7 @@ function ComparisonPage() {
       winner: "tie",
     },
     {
-      metric: "Technical Site Audit & Core Web Vitals",
+      metric: "Deep Technical Site Audit & Core Web Vitals",
       skorvia: true,
       ahrefs: true,
       semrush: true,
@@ -64,136 +78,178 @@ function ComparisonPage() {
       metric: "White-Label Agency PDF Reports",
       skorvia: "Included in Agency ($199)",
       ahrefs: "Enterprise ($999+)",
-      semrush: "Agency Add-on (+$249)",
-      winner: "skorvia",
-    },
-    {
-      metric: "Credit Expiration / Overage Fees",
-      skorvia: "Fair predictable limits",
-      ahrefs: "Strict credit paywall",
-      semrush: "Strict credit paywall",
+      semrush: "Agency Add-on (+$249/mo)",
       winner: "skorvia",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background-2 dark:bg-background-8 text-secondary dark:text-accent font-sans selection:bg-primary selection:text-white">
       <MarketingNavbar />
 
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Hero Section */}
+      <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24 overflow-hidden relative">
+        <div className="main-container">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
-              Head-to-Head Comparison
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-base-content">
+            <span className="badge badge-green">Head-to-Head Breakdown</span>
+            <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               {BRAND_CONFIG.name} vs. Ahrefs vs. Semrush
             </h1>
-            <p className="text-base sm:text-lg text-base-content/70">
-              Why modern founders, agencies, and high-growth brands are choosing {BRAND_CONFIG.name} over bloated legacy tools.
+            <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
+              Why fast-growing founders, marketing directors, and modern agencies are switching from legacy tools to {BRAND_CONFIG.name}.
             </p>
           </div>
 
-          {/* Highlight Cards */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xs">
-              <div className="flex items-center gap-3 text-primary font-bold">
-                <TrendingUp className="h-5 w-5" />
-                <span>Save Up To 70% Annually</span>
+          {/* 3 Core Advantage Pillars */}
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-4">
+              <div className="size-12 rounded-2xl bg-primary/10 dark:bg-primary/20 text-primary dark:text-brand-300 flex items-center justify-center">
+                <Icon icon="solar:wallet-money-bold-duotone" className="size-6" />
               </div>
-              <p className="text-xs text-base-content/70 mt-2 leading-relaxed">
-                Legacy tools charge \$1,500 - \$5,000+ every year with punitive credit limits. {BRAND_CONFIG.name} provides clean, affordable tiering.
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                Flat-Rate Zero Seat Tax
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Legacy tools charge $1,500–$5,000+/year and charge extra for every single team seat. {BRAND_CONFIG.name} provides flat-rate pricing with unlimited team collaboration.
               </p>
             </div>
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xs">
-              <div className="flex items-center gap-3 text-secondary font-bold">
-                <Sparkles className="h-5 w-5" />
-                <span>First-Class AI/AEO Tracking</span>
+
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-4">
+              <div className="size-12 rounded-2xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 flex items-center justify-center">
+                <Icon icon="solar:stars-bold-duotone" className="size-6" />
               </div>
-              <p className="text-xs text-base-content/70 mt-2 leading-relaxed">
-                Track your citations and rankings in ChatGPT, Perplexity, and Claude search responses—capabilities legacy tools ignore.
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                Native AI &amp; AEO Citation Radar
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Track your brand’s citation share across ChatGPT, Perplexity, and Claude search responses—crucial capabilities that legacy platforms still completely ignore.
               </p>
             </div>
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xs">
-              <div className="flex items-center gap-3 text-accent font-bold">
-                <Zap className="h-5 w-5" />
-                <span>AI Agent Integration (MCP)</span>
+
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-4">
+              <div className="size-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                <Icon icon="solar:bolt-bold-duotone" className="size-6" />
               </div>
-              <p className="text-xs text-base-content/70 mt-2 leading-relaxed">
-                Connect your AI agents directly into your live SEO database using the Model Context Protocol (MCP) server.
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                Autonomous AI &amp; MCP Native
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Connect Claude Code, Cursor, or your internal AI agents directly to live SERP and backlink pipelines via our built-in Model Context Protocol (MCP) server.
               </p>
             </div>
           </div>
 
-          {/* Comparison Table */}
-          <div className="mt-14 max-w-5xl mx-auto overflow-x-auto rounded-3xl border border-base-300 bg-base-100 shadow-xl">
-            <table className="table w-full text-left">
-              <thead>
-                <tr className="border-b border-base-300 bg-base-200/60">
-                  <th className="py-4 px-6 text-sm font-bold text-base-content">Feature & Metric</th>
-                  <th className="py-4 px-4 text-sm font-extrabold text-center text-primary bg-primary/5">
-                    {BRAND_CONFIG.name}
-                  </th>
-                  <th className="py-4 px-4 text-sm font-bold text-center text-base-content/70">Ahrefs</th>
-                  <th className="py-4 px-4 text-sm font-bold text-center text-base-content/70">Semrush</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-base-300">
-                {comparisonData.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-base-200/30">
-                    <td className="py-4 px-6 text-sm font-semibold text-base-content">
-                      {row.metric}
-                    </td>
-                    <td className="py-4 px-4 text-sm font-bold text-center text-primary bg-primary/5">
-                      {typeof row.skorvia === "boolean" ? (
-                        <Check className="h-5 w-5 text-accent mx-auto" />
-                      ) : (
-                        row.skorvia
-                      )}
-                    </td>
-                    <td className="py-4 px-4 text-sm text-center text-base-content/70">
-                      {typeof row.ahrefs === "boolean" ? (
-                        row.ahrefs ? (
-                          <Check className="h-4 w-4 text-base-content/60 mx-auto" />
-                        ) : (
-                          <X className="h-4 w-4 text-base-content/30 mx-auto" />
-                        )
-                      ) : (
-                        row.ahrefs
-                      )}
-                    </td>
-                    <td className="py-4 px-4 text-sm text-center text-base-content/70">
-                      {typeof row.semrush === "boolean" ? (
-                        row.semrush ? (
-                          <Check className="h-4 w-4 text-base-content/60 mx-auto" />
-                        ) : (
-                          <X className="h-4 w-4 text-base-content/30 mx-auto" />
-                        )
-                      ) : (
-                        row.semrush
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="mt-16 text-center space-y-4">
-            <h3 className="text-2xl font-black text-base-content">
-              Switch to {BRAND_CONFIG.name} today.
-            </h3>
-            <p className="text-sm text-base-content/70 max-w-md mx-auto">
-              Migration takes less than 2 minutes. Import your existing keyword and domain lists effortlessly.
-            </p>
-            <div className="pt-2">
+          {/* Comparison Matrix Table */}
+          <div id="feature-matrix" className="mt-16 max-w-5xl mx-auto rounded-[28px] border border-stroke-3/80 dark:border-stroke-7 bg-white dark:bg-background-6 shadow-2xl overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-stroke-3/60 dark:border-stroke-7 bg-background-2/50 dark:bg-secondary/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-heading-4 font-bold text-secondary dark:text-accent font-interTight">
+                  Comprehensive Feature &amp; Pricing Matrix
+                </h3>
+                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
+                  Verified platform feature comparison based on current publicly published tier limits.
+                </p>
+              </div>
               <Link
                 to="/sign-up"
-                className="btn btn-primary rounded-2xl px-8 font-bold text-white bg-primary hover:bg-primary/90 border-none shadow-lg shadow-primary/25"
+                className="btn btn-primary btn-sm rounded-full font-bold text-white shadow-md shadow-primary/25 shrink-0 px-5"
               >
-                Get Started Free
+                Try Skorvia Free
               </Link>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-stroke-3/60 dark:border-stroke-7 bg-background-2/40 dark:bg-secondary/40 text-xs font-bold uppercase tracking-wider text-secondary/60 dark:text-accent/60">
+                    <th className="py-4 px-6">Capability / Metric</th>
+                    <th className="py-4 px-6 text-primary dark:text-brand-300 font-extrabold bg-primary/5 dark:bg-primary/10">
+                      {BRAND_CONFIG.name}
+                    </th>
+                    <th className="py-4 px-6">Ahrefs</th>
+                    <th className="py-4 px-6">Semrush</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
+                  {comparisonData.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                      <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
+                        {row.metric}
+                      </td>
+                      <td className="py-4 px-6 font-bold bg-primary/5 dark:bg-primary/10 text-primary dark:text-brand-300">
+                        {typeof row.skorvia === "boolean" ? (
+                          row.skorvia ? (
+                            <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
+                              <Icon icon="solar:check-circle-bold" className="size-5" />
+                              <span>Included</span>
+                            </span>
+                          ) : (
+                            <Icon icon="solar:close-circle-bold" className="size-5 text-rose-500" />
+                          )
+                        ) : (
+                          <span className="font-extrabold">{row.skorvia}</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-6 text-secondary/70 dark:text-accent/70">
+                        {typeof row.ahrefs === "boolean" ? (
+                          row.ahrefs ? (
+                            <Icon icon="solar:check-circle-bold" className="size-5 text-emerald-500" />
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-secondary/40 dark:text-accent/40 font-medium">
+                              <Icon icon="solar:close-circle-bold" className="size-4" />
+                              <span>Not Available</span>
+                            </span>
+                          )
+                        ) : (
+                          <span>{row.ahrefs}</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-6 text-secondary/70 dark:text-accent/70">
+                        {typeof row.semrush === "boolean" ? (
+                          row.semrush ? (
+                            <Icon icon="solar:check-circle-bold" className="size-5 text-emerald-500" />
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-secondary/40 dark:text-accent/40 font-medium">
+                              <Icon icon="solar:close-circle-bold" className="size-4" />
+                              <span>Not Available</span>
+                            </span>
+                          )
+                        ) : (
+                          <span>{row.semrush}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Bottom Conversion CTA */}
+          <div className="mt-16 max-w-4xl mx-auto rounded-[28px] bg-gradient-to-r from-primary via-indigo-900 to-secondary p-8 sm:p-12 text-center text-white shadow-2xl relative overflow-hidden">
+            <div className="relative z-10 space-y-4">
+              <span className="badge badge-green text-xs font-bold">Zero-Risk 14-Day Free Access</span>
+              <h2 className="text-heading-3 font-bold text-white font-interTight">
+                Ready to replace expensive legacy SEO suites?
+              </h2>
+              <p className="text-tagline-1 text-white/80 max-w-xl mx-auto">
+                Start tracking competitor ad variations, keyword revenue leaks, and AI citations in under 60 seconds.
+              </p>
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  to="/sign-up"
+                  className="btn btn-white hover:btn-primary dark:btn-white-dark rounded-full px-8 font-bold text-xs h-12 flex items-center justify-center gap-2 shadow-lg"
+                >
+                  <span>Start 14-Day Free Trial</span>
+                  <Icon icon="solar:arrow-right-linear" className="size-4" />
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="btn btn-outline border-white/30 text-white hover:bg-white/10 rounded-full px-6 font-semibold text-xs h-12 flex items-center justify-center"
+                >
+                  View All Pricing Tiers
+                </Link>
+              </div>
             </div>
           </div>
         </div>

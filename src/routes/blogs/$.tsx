@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { ArrowLeft, Calendar, Clock, Tag, User } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
@@ -53,52 +53,54 @@ function BlogPostReaderPage() {
   const blog = Route.useLoaderData() as BlogPostRecord | null;
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background-2 dark:bg-background-8 text-secondary dark:text-accent font-sans selection:bg-primary selection:text-white">
       <MarketingNavbar />
 
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-8">
-          {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs font-bold text-primary">
-            <Link to="/blogs" className="hover:underline flex items-center gap-1">
-              <ArrowLeft className="h-3 w-3" /> All Articles
+      <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24">
+        <div className="main-container max-w-4xl space-y-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-tagline-3 font-semibold text-primary-500">
+            <Link to="/blogs" className="hover:underline flex items-center gap-1.5">
+              <Icon icon="solar:arrow-left-linear" className="size-4" /> All Articles
             </Link>
-            <span>/</span>
-            <span className="text-base-content/70 capitalize">{slug.replace(/-/g, " ")}</span>
+            <span className="text-secondary/30 dark:text-accent/30">/</span>
+            <span className="text-secondary/60 dark:text-accent/60 capitalize truncate">
+              {slug.replace(/-/g, " ")}
+            </span>
           </div>
 
           {blog ? (
             <article className="space-y-8">
               {/* Article Header */}
-              <div className="space-y-4 border-b border-base-300 pb-8">
-                <div className="flex items-center gap-2">
-                  <span className="badge badge-primary badge-sm font-bold">{blog.category}</span>
-                  <span className="text-xs text-base-content/50 flex items-center gap-1 font-mono">
-                    <Clock className="h-3 w-3" /> {blog.readingTimeMinutes} min read
+              <div className="space-y-4 border-b border-stroke-4 dark:border-stroke-8 pb-8">
+                <div className="flex items-center gap-3">
+                  <span className="badge badge-green">{blog.category}</span>
+                  <span className="text-tagline-3 text-secondary/60 dark:text-accent/60 flex items-center gap-1">
+                    <Icon icon="solar:clock-circle-linear" className="size-4" /> {blog.readingTimeMinutes} min read
                   </span>
                 </div>
 
-                <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-base-content leading-tight">
+                <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight leading-tight">
                   {blog.title}
                 </h1>
 
-                <div className="flex items-center gap-4 text-xs text-base-content/60 pt-1">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5" />
+                <div className="flex items-center gap-4 text-tagline-3 text-secondary/60 dark:text-accent/60 pt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Icon icon="solar:calendar-linear" className="size-4" />
                     {new Date(blog.publishedAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
                     })}
                   </span>
-                  <span className="flex items-center gap-1 font-medium">
-                    <User className="h-3.5 w-3.5" />
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <Icon icon="solar:user-linear" className="size-4" />
                     {blog.authorName}
                   </span>
                 </div>
 
                 {blog.description && (
-                  <p className="text-lg text-base-content/80 font-medium leading-relaxed pt-2">
+                  <p className="text-tagline-1 text-secondary/80 dark:text-accent/80 font-medium leading-relaxed pt-2">
                     {blog.description}
                   </p>
                 )}
@@ -106,43 +108,48 @@ function BlogPostReaderPage() {
 
               {/* Cover Image */}
               {blog.coverImageUrl && (
-                <div className="overflow-hidden rounded-3xl border border-base-300 shadow-sm">
+                <div className="overflow-hidden rounded-[24px] border border-stroke-4 dark:border-stroke-8 shadow-sm">
                   <img
                     src={blog.coverImageUrl}
                     alt={blog.title}
-                    className="w-full max-h-[420px] object-cover"
+                    className="w-full max-h-[440px] object-cover"
                   />
                 </div>
               )}
 
               {/* Article Body */}
-              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 sm:p-10 shadow-xs">
+              <div className="rounded-[24px] border border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 p-6 sm:p-10 shadow-xs prose prose-lg dark:prose-invert max-w-none">
                 <Markdown>{blog.content}</Markdown>
               </div>
 
               {/* Author Bio Card */}
-              <div className="p-6 rounded-3xl border border-base-300 bg-base-200/40 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-lg">
+              <div className="p-6 rounded-[20px] border border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary-500/10 text-primary-500 flex items-center justify-center font-black text-lg">
                   {blog.authorName[0]}
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-sm text-base-content">{blog.authorName}</h4>
-                  <p className="text-xs text-base-content/60">{blog.authorRole || "Technical SEO Specialist"}</p>
+                  <h4 className="text-heading-6 font-bold font-interTight text-secondary dark:text-accent">
+                    {blog.authorName}
+                  </h4>
+                  <p className="text-tagline-3 text-secondary/60 dark:text-accent/60">
+                    {blog.authorRole || "Technical SEO Specialist"}
+                  </p>
                 </div>
               </div>
 
               {/* Bottom Conversion CTA */}
-              <div className="rounded-3xl border border-primary/25 bg-gradient-to-r from-primary/10 via-base-100 to-secondary/10 p-8 text-center space-y-4 shadow-sm">
-                <h3 className="text-2xl font-black text-base-content">
-                  Boost your search visibility with {BRAND_CONFIG.name}
+              <div className="rounded-[24px] border border-primary-500/30 bg-secondary dark:bg-background-5 p-8 sm:p-10 text-center space-y-4 shadow-xl text-white">
+                <span className="badge badge-yellow">Scale Your Search Footprint</span>
+                <h3 className="text-heading-3 font-bold font-interTight text-white">
+                  Boost your organic visibility with {BRAND_CONFIG.name}
                 </h3>
-                <p className="text-sm text-base-content/70 max-w-lg mx-auto">
-                  Get full access to live SERP volume, competitor keyword gaps, and AI Answer Engine visibility tracking today.
+                <p className="text-tagline-1 text-accent/80 max-w-lg mx-auto">
+                  Access live SERP keyword tracking, AI Search citations, backlink discovery, and automated technical audits today.
                 </p>
-                <div className="pt-2">
+                <div className="pt-3">
                   <Link
                     to="/sign-up"
-                    className="btn btn-primary rounded-2xl px-8 font-bold text-white bg-primary hover:bg-primary/90 border-none shadow-md shadow-primary/25"
+                    className="btn btn-primary bg-primary-500 hover:bg-primary-600 text-white rounded-full px-8 font-bold border-none shadow-lg shadow-primary-500/25"
                   >
                     Start Free 14-Day Trial
                   </Link>
@@ -150,12 +157,14 @@ function BlogPostReaderPage() {
               </div>
             </article>
           ) : (
-            <div className="text-center py-16 space-y-4">
-              <h2 className="text-2xl font-bold text-base-content">Article Not Found</h2>
-              <p className="text-sm text-base-content/60">
+            <div className="text-center py-20 space-y-4">
+              <h2 className="text-heading-4 font-bold text-secondary dark:text-accent font-interTight">
+                Article Not Found
+              </h2>
+              <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
                 The requested blog post could not be located.
               </p>
-              <Link to="/blogs" className="btn btn-primary btn-sm rounded-xl font-bold">
+              <Link to="/blogs" className="btn btn-primary btn-md rounded-full font-bold">
                 Return to Blog Hub
               </Link>
             </div>

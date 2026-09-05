@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Sparkles, TrendingUp, X, Zap, ArrowRight, ShieldCheck } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
@@ -14,20 +13,32 @@ function SkorviaVsAhrefsPage() {
   const comparisonRows = [
     {
       feature: "Starting Monthly Price",
-      skorvia: "$29 / mo (Transparent)",
+      skorvia: "$29 / mo (Flat Rate)",
       competitor: "$129 / mo (+ Strict credit gates)",
       winner: "skorvia",
     },
     {
+      feature: "Team Seats & Collaboration",
+      skorvia: "Unlimited Team Seats Included",
+      competitor: "$30/mo per extra seat fee",
+      winner: "skorvia",
+    },
+    {
       feature: "Credit Limits & Overage Traps",
-      skorvia: "Fair quotas with rollover & zero hidden penalty fees",
-      competitor: "500 credits consumed in minutes with expensive add-ons",
+      skorvia: "Fair generous quotas & zero hidden overage penalties",
+      competitor: "500 credits consumed in minutes with expensive reloads",
       winner: "skorvia",
     },
     {
       feature: "AI Search & AEO Optimization",
       skorvia: "Track visibility across ChatGPT, Claude & Perplexity",
       competitor: "Traditional Google SERP only (No LLM / AEO tracking)",
+      winner: "skorvia",
+    },
+    {
+      feature: "Competitor Ad Creative Spy",
+      skorvia: "Meta, Google, TikTok, and LinkedIn ad spy engine",
+      competitor: "Zero social ad spy capabilities",
       winner: "skorvia",
     },
     {
@@ -43,15 +54,9 @@ function SkorviaVsAhrefsPage() {
       winner: "skorvia",
     },
     {
-      feature: "Instant IndexNow Submissions",
-      skorvia: "Automated real-time Bing & Yandex push notifications",
-      competitor: "Manual indexing only",
-      winner: "skorvia",
-    },
-    {
-      feature: "Keyword Intelligence & SERP Difficulty",
-      skorvia: "3.2B+ Global Search Queries with Intent Classification",
-      competitor: "Global Keyword Explorer Database",
+      feature: "Keyword Intelligence & Intent",
+      skorvia: "Global search queries with transactional intent grouping",
+      competitor: "Keyword Explorer Database",
       winner: "tie",
     },
     {
@@ -60,169 +65,110 @@ function SkorviaVsAhrefsPage() {
       competitor: "Extensive Live Backlink Index",
       winner: "tie",
     },
-    {
-      feature: "White-Label Agency PDF Reports",
-      skorvia: "Custom logo, color palette & client portal included in Agency",
-      competitor: "Locked behind $999/mo Enterprise Plan",
-      winner: "skorvia",
-    },
-    {
-      feature: "AI Copilot & MCP Tool Protocol",
-      skorvia: "Native Cursor/Claude MCP tools & SAM AI live data chat",
-      competitor: "No native MCP or AI chat agents",
-      winner: "skorvia",
-    },
   ];
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background-2 dark:bg-background-8 text-secondary dark:text-accent font-sans selection:bg-primary selection:text-white">
       <MarketingNavbar />
 
-      {/* Hero Section */}
-      <section className="py-16 sm:py-24 border-b border-base-200 bg-linear-to-b from-primary/5 via-base-100 to-base-100">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black text-primary ring-1 ring-primary/20">
-            <Sparkles className="h-4 w-4" />
-            <span>Modern SEO Platform Comparison</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-base-content max-w-4xl mx-auto leading-tight">
-            {BRAND_CONFIG.name} vs. <span className="text-primary">Ahrefs</span>
-          </h1>
-
-          <p className="text-base sm:text-xl text-base-content/75 max-w-2xl mx-auto leading-relaxed font-medium">
-            Tired of restrictive credit limits and 4x higher pricing? See why high-growth startups, founders, and modern agencies are switching to {BRAND_CONFIG.name}.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <Link
-              to="/sign-up"
-              className="btn btn-primary btn-md rounded-2xl font-black text-white px-8 shadow-lg shadow-primary/30"
-            >
-              <span>Start 14-Day Free Trial</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/pricing"
-              className="btn btn-outline btn-md rounded-2xl font-bold px-6"
-            >
-              View Transparent Pricing
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 3 Value Pillars */}
-      <section className="py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-3xl border border-base-300 bg-base-200/40 space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                <Zap className="h-5 w-5" />
-              </div>
-              <h3 className="font-extrabold text-base text-base-content">Transparent Pricing ($29 vs $129)</h3>
-              <p className="text-xs text-base-content/70 leading-relaxed">
-                Save over 75% without sacrificing keyword depth, backlink metrics, or technical site health crawlers.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-3xl border border-base-300 bg-base-200/40 space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <h3 className="font-extrabold text-base text-base-content">Zero Restrictive Credit Paywalls</h3>
-              <p className="text-xs text-base-content/70 leading-relaxed">
-                No surprise credit exhaustion from simply clicking between reports or reviewing keyword filters.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-3xl border border-base-300 bg-base-200/40 space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-purple-600/10 text-purple-600 flex items-center justify-center">
-                <Icon icon="solar:stars-bold" className="h-5 w-5" />
-              </div>
-              <h3 className="font-extrabold text-base text-base-content">Built-in AI &amp; AEO Engine</h3>
-              <p className="text-xs text-base-content/70 leading-relaxed">
-                Track how often your brand is cited inside ChatGPT, Claude, and Perplexity answer engines alongside Google SERP.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="py-12 sm:py-16 bg-base-200/30 border-y border-base-200">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-black text-base-content">
-              Detailed Feature-by-Feature Breakdown
-            </h2>
-            <p className="text-xs sm:text-sm text-base-content/60">
-              Direct comparison based on publicly available features and pricing tiers as of 2026.
+      <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24 overflow-hidden relative">
+        <div className="main-container">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <span className="badge badge-green">Alternative Breakdown</span>
+            <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
+              {BRAND_CONFIG.name} vs. Ahrefs
+            </h1>
+            <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
+              Tired of unexpected credit overage fees and expensive user seat penalties? Discover why top growth teams are switching from Ahrefs to {BRAND_CONFIG.name}.
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border border-base-300 bg-base-100 shadow-sm">
-            <table className="table table-sm w-full text-xs">
-              <thead className="bg-base-200/70 text-base-content/80">
-                <tr>
-                  <th className="py-4 px-5 text-sm font-black">Feature / Capability</th>
-                  <th className="py-4 px-5 text-sm font-black text-primary bg-primary/5">
-                    {BRAND_CONFIG.name}
-                  </th>
-                  <th className="py-4 px-5 text-sm font-black text-base-content/70">
-                    Ahrefs
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-base-200">
-                {comparisonRows.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-base-200/40 transition-colors">
-                    <td className="py-3.5 px-5 font-extrabold text-base-content">
-                      {row.feature}
-                    </td>
-                    <td className="py-3.5 px-5 font-bold text-primary bg-primary/5">
-                      <div className="flex items-center gap-2">
-                        <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span>{row.skorvia}</span>
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-5 text-base-content/70">
-                      <div className="flex items-center gap-2">
-                        {row.winner === "skorvia" ? (
-                          <X className="h-4 w-4 text-red-500 shrink-0" />
-                        ) : (
-                          <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                        )}
-                        <span>{row.competitor}</span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+          {/* Key Advantages Grid */}
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
+              <div className="size-12 rounded-2xl bg-primary/10 text-primary dark:text-brand-300 flex items-center justify-center">
+                <Icon icon="solar:lock-unlocked-bold-duotone" className="size-6" />
+              </div>
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                No Credit Traps
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Never get locked out of your reports mid-month. Enjoy predictable pricing without aggressive credit caps.
+              </p>
+            </div>
 
-      {/* Migration Banner */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 rounded-3xl border border-primary/20 bg-linear-to-b from-primary/10 to-base-100 p-8 sm:p-12 shadow-xl">
-          <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center mx-auto shadow-md">
-            <ShieldCheck className="h-6 w-6" />
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
+              <div className="size-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
+                <Icon icon="solar:stars-bold-duotone" className="size-6" />
+              </div>
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                Future-Proof AEO Tracking
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Monitor and defend your brand’s AI answer engine citations across ChatGPT, Perplexity, and Claude in real time.
+              </p>
+            </div>
+
+            <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
+              <div className="size-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                <Icon icon="solar:users-group-rounded-bold-duotone" className="size-6" />
+              </div>
+              <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
+                Unlimited Seats
+              </h3>
+              <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
+                Invite your entire team, agency clients, and freelancers without paying $30/month for every extra user account.
+              </p>
+            </div>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-base-content">
-            Switch from Ahrefs in Under 60 Seconds
-          </h2>
-          <p className="text-sm sm:text-base text-base-content/70 max-w-xl mx-auto leading-relaxed">
-            Simply export your keyword list as a CSV from Ahrefs and drop it into {BRAND_CONFIG.name}&apos;s 1-Click Migration Importer. All your search volumes, difficulties, and tags transfer automatically.
-          </p>
-          <div className="pt-2">
-            <Link
-              to="/sign-up"
-              className="btn btn-primary btn-md rounded-2xl font-black text-white px-8 shadow-md shadow-primary/30"
-            >
-              Start Free Migration Trial &rarr;
-            </Link>
+
+          {/* Detailed Feature Table */}
+          <div className="mt-16 max-w-5xl mx-auto rounded-[28px] border border-stroke-3/80 dark:border-stroke-7 bg-white dark:bg-background-6 shadow-2xl overflow-hidden">
+            <div className="p-6 sm:p-8 border-b border-stroke-3/60 dark:border-stroke-7 bg-background-2/50 dark:bg-secondary/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-heading-4 font-bold text-secondary dark:text-accent font-interTight">
+                  Detailed Feature Comparison
+                </h3>
+                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
+                  Side-by-side assessment of capabilities, limits, and pricing structures.
+                </p>
+              </div>
+              <Link
+                to="/sign-up"
+                className="btn btn-primary btn-sm rounded-full font-bold text-white shadow-md shadow-primary/25 shrink-0 px-5"
+              >
+                Claim Free Account
+              </Link>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-stroke-3/60 dark:border-stroke-7 bg-background-2/40 dark:bg-secondary/40 text-xs font-bold uppercase tracking-wider text-secondary/60 dark:text-accent/60">
+                    <th className="py-4 px-6">Feature / Capability</th>
+                    <th className="py-4 px-6 text-primary dark:text-brand-300 font-extrabold bg-primary/5 dark:bg-primary/10">
+                      {BRAND_CONFIG.name}
+                    </th>
+                    <th className="py-4 px-6">Ahrefs</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
+                  {comparisonRows.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                      <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
+                        {row.feature}
+                      </td>
+                      <td className="py-4 px-6 font-bold bg-primary/5 dark:bg-primary/10 text-primary dark:text-brand-300">
+                        {row.skorvia}
+                      </td>
+                      <td className="py-4 px-6 text-secondary/70 dark:text-accent/70">
+                        {row.competitor}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
