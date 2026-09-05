@@ -1,16 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAuthenticatedContext, requireProjectContext } from "./middleware";
+import {
+  requireAuthenticatedContext,
+  requireProjectContext,
+} from "./middleware";
 import { BrandCompetitorService } from "@/services/brand-competitor.service";
 
-const socialLinksSchema = z.object({
-  instagram: z.string().optional(),
-  linkedin: z.string().optional(),
-  twitter: z.string().optional(),
-  facebook: z.string().optional(),
-  youtube: z.string().optional(),
-  tiktok: z.string().optional(),
-}).optional();
+const socialLinksSchema = z
+  .object({
+    instagram: z.string().optional(),
+    linkedin: z.string().optional(),
+    twitter: z.string().optional(),
+    facebook: z.string().optional(),
+    youtube: z.string().optional(),
+    tiktok: z.string().optional(),
+  })
+  .optional();
 
 const competitorInputSchema = z.object({
   domain: z.string().min(1),
@@ -66,10 +71,13 @@ export const syncBrandCompetitors = createServerFn({ method: "POST" })
     z.object({
       projectId: z.string().min(1),
       competitors: z.array(competitorInputSchema),
-    })
+    }),
   )
   .handler(async ({ data }) => {
-    return BrandCompetitorService.syncCompetitors(data.projectId, data.competitors);
+    return BrandCompetitorService.syncCompetitors(
+      data.projectId,
+      data.competitors,
+    );
   });
 
 export const updateBrandCompetitor = createServerFn({ method: "POST" })
@@ -79,13 +87,13 @@ export const updateBrandCompetitor = createServerFn({ method: "POST" })
       projectId: z.string().min(1),
       competitorId: z.string().min(1),
       data: competitorInputSchema.partial(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     return BrandCompetitorService.updateCompetitor(
       data.projectId,
       data.competitorId,
-      data.data
+      data.data,
     );
   });
 
@@ -95,12 +103,12 @@ export const deleteBrandCompetitor = createServerFn({ method: "POST" })
     z.object({
       projectId: z.string().min(1),
       competitorId: z.string().min(1),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     return BrandCompetitorService.deleteCompetitor(
       data.projectId,
-      data.competitorId
+      data.competitorId,
     );
   });
 

@@ -13,28 +13,32 @@ function DocsIndexPage() {
   const docCategories = [
     {
       title: "Model Context Protocol (MCP)",
-      description: "Connect Skorvia directly to Claude Code, Cursor, Windsurf, and custom AI agents to query your live SEO data.",
+      description:
+        "Connect Skorvia directly to Claude Code, Cursor, Windsurf, and custom AI agents to query your live SEO data.",
       href: "/docs/mcp",
       icon: "solar:chat-round-dots-bold-duotone",
       badge: "AI Native",
     },
     {
       title: "SEO Agent Skills",
-      description: "Pre-built autonomous prompt & tool workflows for audits, keyword clustering, and link outreach.",
+      description:
+        "Pre-built autonomous prompt & tool workflows for audits, keyword clustering, and link outreach.",
       href: "/docs/skills",
       icon: "solar:magic-stick-3-bold-duotone",
       badge: "10 Workflows",
     },
     {
       title: "Claude Code Plugin",
-      description: "Install the Skorvia CLI plugin to research keywords and audit domains straight from your terminal.",
+      description:
+        "Install the Skorvia CLI plugin to research keywords and audit domains straight from your terminal.",
       href: "/docs/claude-code-plugin",
       icon: "solar:code-square-bold-duotone",
       badge: "CLI Tool",
     },
     {
       title: "Cursor & IDE Integration",
-      description: "Enable inline SEO intelligence inside your IDE when generating copy or technical meta tags.",
+      description:
+        "Enable inline SEO intelligence inside your IDE when generating copy or technical meta tags.",
       href: "/docs/codex-plugin",
       icon: "solar:laptop-minimalistic-bold-duotone",
       badge: "IDE Ready",
@@ -53,7 +57,8 @@ function DocsIndexPage() {
               {BRAND_CONFIG.name} Documentation
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
-              Everything you need to integrate MCP tools, run autonomous agent skills, and deploy your custom SEO data pipelines.
+              Everything you need to integrate MCP tools, run autonomous agent
+              skills, and deploy your custom SEO data pipelines.
             </p>
           </div>
 
@@ -68,7 +73,10 @@ function DocsIndexPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="h-12 w-12 rounded-2xl bg-primary-500/10 text-primary-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Icon icon={doc.icon} className="size-6 text-primary-500" />
+                        <Icon
+                          icon={doc.icon}
+                          className="size-6 text-primary-500"
+                        />
                       </div>
                       <span className="badge badge-yellow text-[11px]">
                         {doc.badge}
@@ -86,7 +94,10 @@ function DocsIndexPage() {
 
                   <div className="pt-6 flex items-center text-tagline-3 font-bold text-primary-500">
                     <span>View Guide</span>
-                    <Icon icon="solar:arrow-right-linear" className="size-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+                    <Icon
+                      icon="solar:arrow-right-linear"
+                      className="size-4 ml-1.5 transition-transform group-hover:translate-x-1"
+                    />
                   </div>
                 </Link>
               );

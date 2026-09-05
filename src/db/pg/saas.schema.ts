@@ -1,5 +1,12 @@
 import { sql } from "drizzle-orm";
-import { boolean, integer, pgTable, text, index, doublePrecision } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  index,
+  doublePrecision,
+} from "drizzle-orm/pg-core";
 import { user } from "./better-auth-schema";
 
 const isoNow = sql`to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`;
@@ -49,7 +56,7 @@ export const manualPayments = pgTable(
   (table) => [
     index("manual_payments_user_id_idx").on(table.userId),
     index("manual_payments_status_idx").on(table.status),
-  ]
+  ],
 );
 
 export const userQuotas = pgTable("user_quotas", {
@@ -78,7 +85,7 @@ export const leads = pgTable(
   (table) => [
     index("leads_email_idx").on(table.email),
     index("leads_domain_idx").on(table.domain),
-  ]
+  ],
 );
 
 export const uptimeMonitors = pgTable(
@@ -97,7 +104,7 @@ export const uptimeMonitors = pgTable(
     isActive: boolean("is_active").notNull().default(true),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [index("uptime_monitors_user_id_idx").on(table.userId)]
+  (table) => [index("uptime_monitors_user_id_idx").on(table.userId)],
 );
 
 export const whiteLabelConfigs = pgTable("white_label_configs", {
@@ -123,7 +130,7 @@ export const cachedQueries = pgTable(
     expiresAt: text("expires_at").notNull(),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [index("cached_queries_expires_at_idx").on(table.expiresAt)]
+  (table) => [index("cached_queries_expires_at_idx").on(table.expiresAt)],
 );
 
 export const seoAlertConfigs = pgTable(
@@ -134,13 +141,19 @@ export const seoAlertConfigs = pgTable(
     userEmail: text("user_email").notNull(),
     rankDropThreshold: integer("rank_drop_threshold").notNull().default(3),
     rankDropAlerts: boolean("rank_drop_alerts").notNull().default(true),
-    criticalAuditAlerts: boolean("critical_audit_alerts").notNull().default(true),
-    sslExpirationAlerts: boolean("ssl_expiration_alerts").notNull().default(true),
-    uptimeDowntimeAlerts: boolean("uptime_downtime_alerts").notNull().default(true),
+    criticalAuditAlerts: boolean("critical_audit_alerts")
+      .notNull()
+      .default(true),
+    sslExpirationAlerts: boolean("ssl_expiration_alerts")
+      .notNull()
+      .default(true),
+    uptimeDowntimeAlerts: boolean("uptime_downtime_alerts")
+      .notNull()
+      .default(true),
     weeklyDigestEmail: boolean("weekly_digest_email").notNull().default(true),
     updatedAt: text("updated_at").notNull().default(isoNow),
   },
-  (table) => [index("seo_alert_configs_project_id_idx").on(table.projectId)]
+  (table) => [index("seo_alert_configs_project_id_idx").on(table.projectId)],
 );
 
 export const indexingSubmissions = pgTable(
@@ -159,7 +172,7 @@ export const indexingSubmissions = pgTable(
     statusMessage: text("status_message"),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [index("indexing_submissions_user_id_idx").on(table.userId)]
+  (table) => [index("indexing_submissions_user_id_idx").on(table.userId)],
 );
 
 export const systemSettings = pgTable("system_settings", {
@@ -186,7 +199,7 @@ export const auditLogs = pgTable(
     index("audit_logs_admin_id_idx").on(table.adminId),
     index("audit_logs_action_idx").on(table.action),
     index("audit_logs_created_at_idx").on(table.createdAt),
-  ]
+  ],
 );
 
 export const blogPosts = pgTable(
@@ -214,7 +227,7 @@ export const blogPosts = pgTable(
     index("blog_posts_slug_idx").on(table.slug),
     index("blog_posts_category_idx").on(table.category),
     index("blog_posts_status_idx").on(table.status),
-  ]
+  ],
 );
 
 export const webhookErrorLogs = pgTable(
@@ -236,7 +249,7 @@ export const webhookErrorLogs = pgTable(
     index("webhook_error_logs_provider_idx").on(table.provider),
     index("webhook_error_logs_status_idx").on(table.status),
     index("webhook_error_logs_created_at_idx").on(table.createdAt),
-  ]
+  ],
 );
 
 export const userTwoFactor = pgTable(
@@ -250,9 +263,7 @@ export const userTwoFactor = pgTable(
     createdAt: text("created_at").notNull().default(isoNow),
     updatedAt: text("updated_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("user_two_factor_user_id_idx").on(table.userId),
-  ]
+  (table) => [index("user_two_factor_user_id_idx").on(table.userId)],
 );
 
 export const userDevicesSessions = pgTable(
@@ -274,7 +285,7 @@ export const userDevicesSessions = pgTable(
   (table) => [
     index("user_devices_sessions_user_id_idx").on(table.userId),
     index("user_devices_sessions_ip_idx").on(table.ipAddress),
-  ]
+  ],
 );
 
 export const teamMembers = pgTable(
@@ -286,7 +297,9 @@ export const teamMembers = pgTable(
     memberEmail: text("member_email").notNull(),
     memberName: text("member_name").notNull(),
     role: text("role").notNull().default("viewer"),
-    assignedProjectIdsJson: text("assigned_project_ids_json").notNull().default("[]"),
+    assignedProjectIdsJson: text("assigned_project_ids_json")
+      .notNull()
+      .default("[]"),
     createdAt: text("created_at").notNull().default(isoNow),
     updatedAt: text("updated_at").notNull().default(isoNow),
   },
@@ -294,7 +307,7 @@ export const teamMembers = pgTable(
     index("team_members_owner_id_idx").on(table.ownerId),
     index("team_members_member_user_id_idx").on(table.memberUserId),
     index("team_members_member_email_idx").on(table.memberEmail),
-  ]
+  ],
 );
 
 export const teamInvitations = pgTable(
@@ -304,7 +317,9 @@ export const teamInvitations = pgTable(
     ownerId: text("owner_id").notNull(),
     email: text("email").notNull(),
     role: text("role").notNull().default("viewer"),
-    assignedProjectIdsJson: text("assigned_project_ids_json").notNull().default("[]"),
+    assignedProjectIdsJson: text("assigned_project_ids_json")
+      .notNull()
+      .default("[]"),
     token: text("token").notNull().unique(),
     status: text("status").notNull().default("pending"),
     expiresAt: text("expires_at").notNull(),
@@ -314,7 +329,7 @@ export const teamInvitations = pgTable(
     index("team_invitations_owner_id_idx").on(table.ownerId),
     index("team_invitations_token_idx").on(table.token),
     index("team_invitations_email_idx").on(table.email),
-  ]
+  ],
 );
 
 export const cancellationSurveys = pgTable(
@@ -326,14 +341,14 @@ export const cancellationSurveys = pgTable(
     planId: text("plan_id").notNull(),
     reason: text("reason").notNull(),
     feedback: text("feedback"),
-    acceptedRetentionDiscount: boolean("accepted_retention_discount").notNull().default(false),
+    acceptedRetentionDiscount: boolean("accepted_retention_discount")
+      .notNull()
+      .default(false),
     discountPercent: integer("discount_percent").default(0),
     discountExpiresAt: text("discount_expires_at"),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("cancellation_surveys_user_id_idx").on(table.userId),
-  ]
+  (table) => [index("cancellation_surveys_user_id_idx").on(table.userId)],
 );
 
 export const webhookEvents = pgTable(
@@ -350,20 +365,17 @@ export const webhookEvents = pgTable(
   (table) => [
     index("webhook_events_event_id_idx").on(table.eventId),
     index("webhook_events_gateway_idx").on(table.gateway),
-  ]
+  ],
 );
 
-export const userTwoFactorPending = pgTable(
-  "user_two_factor_pending",
-  {
-    userId: text("user_id").primaryKey(),
-    secret: text("secret").notNull(),
-    backupCodesJson: text("backup_codes_json").notNull(),
-    backupCodesHashedJson: text("backup_codes_hashed_json").notNull(),
-    expiresAt: text("expires_at").notNull(),
-    createdAt: text("created_at").notNull().default(isoNow),
-  }
-);
+export const userTwoFactorPending = pgTable("user_two_factor_pending", {
+  userId: text("user_id").primaryKey(),
+  secret: text("secret").notNull(),
+  backupCodesJson: text("backup_codes_json").notNull(),
+  backupCodesHashedJson: text("backup_codes_hashed_json").notNull(),
+  expiresAt: text("expires_at").notNull(),
+  createdAt: text("created_at").notNull().default(isoNow),
+});
 
 export const saasCoupons = pgTable(
   "saas_coupons",
@@ -378,7 +390,9 @@ export const saasCoupons = pgTable(
     customerEligibility: text("customer_eligibility").notNull().default("all"), // 'all' | 'new_customers_only' | 'existing_customers_only'
     maxRedemptions: integer("max_redemptions"), // Total global cap across all users (null for unlimited)
     timesRedeemed: integer("times_redeemed").notNull().default(0),
-    maxRedemptionsPerUser: integer("max_redemptions_per_user").notNull().default(1),
+    maxRedemptionsPerUser: integer("max_redemptions_per_user")
+      .notNull()
+      .default(1),
     expiresAt: text("expires_at"),
     isActive: boolean("is_active").notNull().default(true),
     createdAt: text("created_at").notNull().default(isoNow),
@@ -387,7 +401,7 @@ export const saasCoupons = pgTable(
   (table) => [
     index("saas_coupons_code_idx").on(table.code),
     index("saas_coupons_is_active_idx").on(table.isActive),
-  ]
+  ],
 );
 
 export const couponRedemptions = pgTable(
@@ -414,7 +428,7 @@ export const couponRedemptions = pgTable(
     index("coupon_redemptions_coupon_id_idx").on(table.couponId),
     index("coupon_redemptions_user_id_idx").on(table.userId),
     index("coupon_redemptions_coupon_code_idx").on(table.couponCode),
-  ]
+  ],
 );
 
 export const competitorStrategyReports = pgTable(
@@ -437,7 +451,7 @@ export const competitorStrategyReports = pgTable(
   (table) => [
     index("competitor_strategy_project_idx").on(table.projectId),
     index("competitor_strategy_target_idx").on(table.targetDomain),
-  ]
+  ],
 );
 
 export const roadmapTasks = pgTable(
@@ -467,7 +481,7 @@ export const roadmapTasks = pgTable(
     index("roadmap_tasks_project_idx").on(table.projectId),
     index("roadmap_tasks_status_idx").on(table.status),
     index("roadmap_tasks_category_idx").on(table.category),
-  ]
+  ],
 );
 
 export const brandMentions = pgTable(
@@ -494,7 +508,7 @@ export const brandMentions = pgTable(
     index("brand_mentions_project_idx").on(table.projectId),
     index("brand_mentions_type_idx").on(table.mentionType),
     index("brand_mentions_claim_status_idx").on(table.claimStatus),
-  ]
+  ],
 );
 
 export const aeoSentimentSnapshots = pgTable(
@@ -506,8 +520,12 @@ export const aeoSentimentSnapshots = pgTable(
     aiEngine: text("ai_engine").notNull(), // 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'google_aio'
     sentimentScore: integer("sentiment_score").notNull().default(85), // 0-100
     sentimentSummary: text("sentiment_summary").notNull(),
-    entityCitationStatus: text("entity_citation_status").notNull().default("present"), // 'present' | 'missing' | 'ambiguous'
-    keyStrengthsHighlightedJson: text("key_strengths_highlighted_json").notNull(),
+    entityCitationStatus: text("entity_citation_status")
+      .notNull()
+      .default("present"), // 'present' | 'missing' | 'ambiguous'
+    keyStrengthsHighlightedJson: text(
+      "key_strengths_highlighted_json",
+    ).notNull(),
     keyMissingGapsJson: text("key_missing_gaps_json").notNull(),
     modelUsed: text("model_used"),
     createdAt: text("created_at").notNull().default(isoNow),
@@ -515,7 +533,7 @@ export const aeoSentimentSnapshots = pgTable(
   (table) => [
     index("aeo_sentiment_project_idx").on(table.projectId),
     index("aeo_sentiment_engine_idx").on(table.aiEngine),
-  ]
+  ],
 );
 
 export const conversionAdReadinessAudits = pgTable(
@@ -526,12 +544,24 @@ export const conversionAdReadinessAudits = pgTable(
     targetUrl: text("target_url").notNull(),
     overallScore: integer("overall_score").notNull().default(78), // 0-100
     grade: text("grade").notNull().default("B+"), // 'A+' | 'A' | 'B' | 'C' | 'D' | 'F'
-    adWastedSpendRisk: text("ad_wasted_spend_risk").notNull().default("moderate"), // 'low' | 'moderate' | 'high' | 'critical'
-    trustAndCredibilityScore: integer("trust_and_credibility_score").notNull().default(85),
-    ctaAndOfferClarityScore: integer("cta_and_offer_clarity_score").notNull().default(75),
-    pageSpeedAndMobileScore: integer("page_speed_and_mobile_score").notNull().default(70),
-    socialProofAndReviewsScore: integer("social_proof_and_reviews_score").notNull().default(80),
-    frictionAndFormLengthScore: integer("friction_and_form_length_score").notNull().default(80),
+    adWastedSpendRisk: text("ad_wasted_spend_risk")
+      .notNull()
+      .default("moderate"), // 'low' | 'moderate' | 'high' | 'critical'
+    trustAndCredibilityScore: integer("trust_and_credibility_score")
+      .notNull()
+      .default(85),
+    ctaAndOfferClarityScore: integer("cta_and_offer_clarity_score")
+      .notNull()
+      .default(75),
+    pageSpeedAndMobileScore: integer("page_speed_and_mobile_score")
+      .notNull()
+      .default(70),
+    socialProofAndReviewsScore: integer("social_proof_and_reviews_score")
+      .notNull()
+      .default(80),
+    frictionAndFormLengthScore: integer("friction_and_form_length_score")
+      .notNull()
+      .default(80),
     trackingPixelScore: integer("tracking_pixel_score").notNull().default(85),
     detectedPixelsJson: text("detected_pixels_json"),
     checksPassedJson: text("checks_passed_json").notNull(),
@@ -544,7 +574,7 @@ export const conversionAdReadinessAudits = pgTable(
   (table) => [
     index("conversion_audit_project_idx").on(table.projectId),
     index("conversion_audit_target_idx").on(table.targetUrl),
-  ]
+  ],
 );
 
 export const localBusinessProfiles = pgTable(
@@ -560,7 +590,9 @@ export const localBusinessProfiles = pgTable(
     countryCode: text("country_code").notNull().default("US"),
     phoneNumber: text("phone_number"),
     websiteUrl: text("website_url"),
-    primaryCategory: text("primary_category").notNull().default("General Business"),
+    primaryCategory: text("primary_category")
+      .notNull()
+      .default("General Business"),
     gbpClaimed: boolean("gbp_claimed").notNull().default(true),
     gbpHealthScore: integer("gbp_health_score").notNull().default(85), // 0-100
     averageRating: doublePrecision("average_rating").notNull().default(4.8),
@@ -572,9 +604,7 @@ export const localBusinessProfiles = pgTable(
     createdAt: text("created_at").notNull().default(isoNow),
     updatedAt: text("updated_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("local_business_project_idx").on(table.projectId),
-  ]
+  (table) => [index("local_business_project_idx").on(table.projectId)],
 );
 
 export const localBusinessLocations = pgTable(
@@ -592,7 +622,9 @@ export const localBusinessLocations = pgTable(
     countryCode: text("country_code").notNull().default("US"),
     phoneNumber: text("phone_number"),
     websiteUrl: text("website_url"),
-    primaryCategory: text("primary_category").notNull().default("General Business"),
+    primaryCategory: text("primary_category")
+      .notNull()
+      .default("General Business"),
     lat: doublePrecision("lat").notNull().default(37.7749),
     lng: doublePrecision("lng").notNull().default(-122.4194),
     reviewLink: text("review_link"),
@@ -604,9 +636,7 @@ export const localBusinessLocations = pgTable(
     createdAt: text("created_at").notNull().default(isoNow),
     updatedAt: text("updated_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("local_locations_project_idx").on(table.projectId),
-  ]
+  (table) => [index("local_locations_project_idx").on(table.projectId)],
 );
 
 export const localRankGridSnapshots = pgTable(
@@ -621,7 +651,9 @@ export const localRankGridSnapshots = pgTable(
     centerLng: doublePrecision("center_lng").notNull(),
     radiusKm: doublePrecision("radius_km").notNull().default(5.0),
     averageRank: doublePrecision("average_rank").notNull().default(2.4),
-    topThreeCoverageRate: integer("top_three_coverage_rate").notNull().default(80), // %
+    topThreeCoverageRate: integer("top_three_coverage_rate")
+      .notNull()
+      .default(80), // %
     gridPointsJson: text("grid_points_json").notNull(),
     createdAt: text("created_at").notNull().default(isoNow),
   },
@@ -629,7 +661,7 @@ export const localRankGridSnapshots = pgTable(
     index("local_grid_project_idx").on(table.projectId),
     index("local_grid_keyword_idx").on(table.keyword),
     index("local_grid_location_idx").on(table.locationId),
-  ]
+  ],
 );
 
 export const userNotifications = pgTable(
@@ -650,26 +682,23 @@ export const userNotifications = pgTable(
   (table) => [
     index("user_notifications_user_idx").on(table.userId),
     index("user_notifications_is_read_idx").on(table.isRead),
-  ]
+  ],
 );
 
-export const brandProfiles = pgTable(
-  "brand_profiles",
-  {
-    projectId: text("project_id").primaryKey(),
-    brandName: text("brand_name").notNull(),
-    websiteUrl: text("website_url"),
-    industry: text("industry").notNull().default("SaaS / Software"),
-    companySize: text("company_size").notNull().default("1-5"),
-    targetCountry: text("target_country").notNull().default("US"),
-    targetLanguage: text("target_language").notNull().default("en"),
-    socialLinksJson: text("social_links_json").notNull().default("{}"),
-    brandDescription: text("brand_description"),
-    valueProposition: text("value_proposition"),
-    createdAt: text("created_at").notNull().default(isoNow),
-    updatedAt: text("updated_at").notNull().default(isoNow),
-  }
-);
+export const brandProfiles = pgTable("brand_profiles", {
+  projectId: text("project_id").primaryKey(),
+  brandName: text("brand_name").notNull(),
+  websiteUrl: text("website_url"),
+  industry: text("industry").notNull().default("SaaS / Software"),
+  companySize: text("company_size").notNull().default("1-5"),
+  targetCountry: text("target_country").notNull().default("US"),
+  targetLanguage: text("target_language").notNull().default("en"),
+  socialLinksJson: text("social_links_json").notNull().default("{}"),
+  brandDescription: text("brand_description"),
+  valueProposition: text("value_proposition"),
+  createdAt: text("created_at").notNull().default(isoNow),
+  updatedAt: text("updated_at").notNull().default(isoNow),
+});
 
 export const brandCompetitors = pgTable(
   "brand_competitors",
@@ -687,7 +716,7 @@ export const brandCompetitors = pgTable(
   (table) => [
     index("brand_competitors_project_idx").on(table.projectId),
     index("brand_competitors_domain_idx").on(table.domain),
-  ]
+  ],
 );
 
 export const brandAudits = pgTable(
@@ -698,18 +727,22 @@ export const brandAudits = pgTable(
     overallScore: integer("overall_score").notNull().default(85),
     brandEquityScore: integer("brand_equity_score").notNull().default(82),
     socialProofScore: integer("social_proof_score").notNull().default(88),
-    conversionReadinessScore: integer("conversion_readiness_score").notNull().default(80),
+    conversionReadinessScore: integer("conversion_readiness_score")
+      .notNull()
+      .default(80),
     adClarityScore: integer("ad_clarity_score").notNull().default(85),
-    technicalHealthScore: integer("technical_health_score").notNull().default(90),
-    reputationSentimentScore: integer("reputation_sentiment_score").notNull().default(84),
+    technicalHealthScore: integer("technical_health_score")
+      .notNull()
+      .default(90),
+    reputationSentimentScore: integer("reputation_sentiment_score")
+      .notNull()
+      .default(84),
     strengthsJson: text("strengths_json").notNull(),
     weaknessesJson: text("weaknesses_json").notNull(),
     actionPlanJson: text("action_plan_json").notNull(),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("brand_audits_project_idx").on(table.projectId),
-  ]
+  (table) => [index("brand_audits_project_idx").on(table.projectId)],
 );
 
 export const trustSentimentAudits = pgTable(
@@ -725,9 +758,7 @@ export const trustSentimentAudits = pgTable(
     recommendedAction: text("recommended_action").notNull(),
     createdAt: text("created_at").notNull().default(isoNow),
   },
-  (table) => [
-    index("trust_sentiment_project_idx").on(table.projectId),
-  ]
+  (table) => [index("trust_sentiment_project_idx").on(table.projectId)],
 );
 
 export const viralContentItems = pgTable(
@@ -749,7 +780,7 @@ export const viralContentItems = pgTable(
   (table) => [
     index("viral_content_project_idx").on(table.projectId),
     index("viral_content_platform_idx").on(table.platform),
-  ]
+  ],
 );
 
 export const competitorTrackedAds = pgTable(
@@ -778,8 +809,5 @@ export const competitorTrackedAds = pgTable(
     index("competitor_ads_project_idx").on(table.projectId),
     index("competitor_ads_competitor_domain_idx").on(table.competitorDomain),
     index("competitor_ads_platform_idx").on(table.platform),
-  ]
+  ],
 );
-
-
-

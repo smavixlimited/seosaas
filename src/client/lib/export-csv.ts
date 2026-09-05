@@ -5,7 +5,9 @@
 
 export interface CsvColumn<T> {
   header: string;
-  accessor: keyof T | ((row: T) => string | number | boolean | null | undefined);
+  accessor:
+    | keyof T
+    | ((row: T) => string | number | boolean | null | undefined);
 }
 
 function sanitizeCsvField(val: unknown): string {
@@ -13,12 +15,22 @@ function sanitizeCsvField(val: unknown): string {
   let str = String(val).trim();
 
   // Prevent formula injection in spreadsheet software
-  if (str.startsWith("=") || str.startsWith("+") || str.startsWith("-") || str.startsWith("@")) {
+  if (
+    str.startsWith("=") ||
+    str.startsWith("+") ||
+    str.startsWith("-") ||
+    str.startsWith("@")
+  ) {
     str = `'${str}`;
   }
 
   // Escape double quotes and wrap in quotes if containing comma or newline
-  if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
+  if (
+    str.includes(",") ||
+    str.includes('"') ||
+    str.includes("\n") ||
+    str.includes("\r")
+  ) {
     return `"${str.replace(/"/g, '""')}"`;
   }
   return str;
@@ -26,16 +38,19 @@ function sanitizeCsvField(val: unknown): string {
 
 export function generateCsvString<T extends object>(
   data: T[],
-  columns: CsvColumn<T>[]
+  columns: CsvColumn<T>[],
 ): string {
   const headerRow = columns.map((c) => sanitizeCsvField(c.header)).join(",");
   const dataRows = data.map((row) =>
     columns
       .map((col) => {
-        const val = typeof col.accessor === "function" ? col.accessor(row) : row[col.accessor];
+        const val =
+          typeof col.accessor === "function"
+            ? col.accessor(row)
+            : row[col.accessor];
         return sanitizeCsvField(val);
       })
-      .join(",")
+      .join(","),
   );
 
   return [headerRow, ...dataRows].join("\r\n");
@@ -46,7 +61,9 @@ export function downloadCsvFile(filename: string, csvContent: string): void {
 
   // Add UTF-8 BOM for automatic Excel delimiter and character encoding detection
   const bom = "\uFEFF";
-  const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([bom + csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
 
   const timestamp = new Date().toISOString().split("T")[0];
@@ -67,7 +84,7 @@ export function downloadCsvFile(filename: string, csvContent: string): void {
 export function exportRecordsToCsv<T extends object>(
   filename: string,
   records: T[],
-  columns: CsvColumn<T>[]
+  columns: CsvColumn<T>[],
 ): void {
   const csv = generateCsvString(records, columns);
   downloadCsvFile(filename, csv);

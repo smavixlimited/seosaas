@@ -10,7 +10,10 @@ import {
 import { BRAND_CONFIG } from "@/config/brand";
 
 export async function getActivePublicPlans() {
-  const plans = await db.select().from(saasPlans).where(eq(saasPlans.isActive, true));
+  const plans = await db
+    .select()
+    .from(saasPlans)
+    .where(eq(saasPlans.isActive, true));
 
   if (plans.length === 0) {
     return BRAND_CONFIG.pricing.tiers.map((t) => ({
@@ -22,7 +25,8 @@ export async function getActivePublicPlans() {
       isActive: true,
       limits: {
         maxDomains: t.id === "starter" ? 5 : t.id === "pro" ? 20 : 9999,
-        monthlyCredits: t.id === "starter" ? 500 : t.id === "pro" ? 2500 : 10000,
+        monthlyCredits:
+          t.id === "starter" ? 500 : t.id === "pro" ? 2500 : 10000,
         auditPages: t.id === "starter" ? 5000 : t.id === "pro" ? 50000 : 250000,
         uptimeMonitors: t.id === "starter" ? 0 : t.id === "pro" ? 5 : 50,
       },
@@ -90,22 +94,25 @@ export async function initializePaystackCheckout(params: {
     };
   }
 
-  const response = await fetch("https://api.paystack.co/transaction/initialize", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${secretKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: params.email,
-      amount: params.amountNgn * 100, // Paystack expects amount in Kobo
-      callback_url: params.callbackUrl || "https://skorvia.com/billing",
-      metadata: {
-        userId: params.userId,
-        planId: params.planId,
+  const response = await fetch(
+    "https://api.paystack.co/transaction/initialize",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secretKey}`,
+        "Content-Type": "application/json",
       },
-    }),
-  });
+      body: JSON.stringify({
+        email: params.email,
+        amount: params.amountNgn * 100, // Paystack expects amount in Kobo
+        callback_url: params.callbackUrl || "https://skorvia.com/billing",
+        metadata: {
+          userId: params.userId,
+          planId: params.planId,
+        },
+      }),
+    },
+  );
 
   const data = (await response.json()) as {
     status: boolean;
@@ -138,7 +145,8 @@ export async function activateUserSubscription(params: {
     return { success: false, reason: "User not found" };
   }
 
-  const credits = params.planId === "agency" ? 10000 : params.planId === "pro" ? 2500 : 500;
+  const credits =
+    params.planId === "agency" ? 10000 : params.planId === "pro" ? 2500 : 500;
   const now = new Date().toISOString();
   const resetAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -195,7 +203,7 @@ export async function verifyWebhookHmacSignature(
   rawBody: string,
   signatureHeader: string | null,
   secretKey: string,
-  algorithm: "SHA-512" | "SHA-256" = "SHA-512"
+  algorithm: "SHA-512" | "SHA-256" = "SHA-512",
 ): Promise<boolean> {
   if (!signatureHeader || !secretKey) return false;
 
@@ -205,7 +213,7 @@ export async function verifyWebhookHmacSignature(
     enc.encode(secretKey),
     { name: "HMAC", hash: { name: algorithm } },
     false,
-    ["sign"]
+    ["sign"],
   );
 
   const sigBuffer = await crypto.subtle.sign("HMAC", key, enc.encode(rawBody));

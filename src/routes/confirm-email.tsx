@@ -84,7 +84,10 @@ function ConfirmEmailPage() {
         callbackURL: callbackURL.toString(),
       });
       if (result.error) {
-        toast.error(result.error.message || "We couldn't send another confirmation email.");
+        toast.error(
+          result.error.message ||
+            "We couldn't send another confirmation email.",
+        );
         return;
       }
       captureClientEvent("auth:verification_resend");
@@ -121,9 +124,15 @@ function ConfirmEmailPage() {
           {/* Vector Illustration Badge */}
           <div className="flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/15">
             <div className="relative mb-3 flex items-center justify-center size-16 rounded-2xl bg-primary text-white shadow-lg shadow-primary/25">
-              <Icon icon="solar:letter-opened-bold-duotone" className="size-8 text-white" />
+              <Icon
+                icon="solar:letter-opened-bold-duotone"
+                className="size-8 text-white"
+              />
               <div className="absolute -top-1 -right-1 size-5 rounded-full bg-brand-300 flex items-center justify-center border-2 border-white dark:border-secondary">
-                <Icon icon="solar:shield-check-bold" className="size-3 text-secondary" />
+                <Icon
+                  icon="solar:shield-check-bold"
+                  className="size-3 text-secondary"
+                />
               </div>
             </div>
 
@@ -138,15 +147,23 @@ function ConfirmEmailPage() {
           <div className="space-y-3">
             <div className="p-3.5 rounded-xl bg-background-2 dark:bg-secondary/40 border border-stroke-3/50 text-xs text-secondary/80 dark:text-accent/80 space-y-2">
               <div className="flex items-start gap-2">
-                <Icon icon="solar:info-circle-bold" className="size-4 text-primary shrink-0 mt-0.5" />
+                <Icon
+                  icon="solar:info-circle-bold"
+                  className="size-4 text-primary shrink-0 mt-0.5"
+                />
                 <span>
-                  Please click the confirmation link in the email to activate your account and unlock your domain intelligence dashboard.
+                  Please click the confirmation link in the email to activate
+                  your account and unlock your domain intelligence dashboard.
                 </span>
               </div>
               <div className="flex items-start gap-2">
-                <Icon icon="solar:clock-circle-bold" className="size-4 text-secondary/60 dark:text-accent/60 shrink-0 mt-0.5" />
+                <Icon
+                  icon="solar:clock-circle-bold"
+                  className="size-4 text-secondary/60 dark:text-accent/60 shrink-0 mt-0.5"
+                />
                 <span>
-                  Haven't received it yet? Be sure to check your spam or promotions folder.
+                  Haven't received it yet? Be sure to check your spam or
+                  promotions folder.
                 </span>
               </div>
             </div>
@@ -165,12 +182,18 @@ function ConfirmEmailPage() {
                   </>
                 ) : countdown > 0 ? (
                   <>
-                    <Icon icon="solar:history-bold-duotone" className="size-4" />
+                    <Icon
+                      icon="solar:history-bold-duotone"
+                      className="size-4"
+                    />
                     <span>Resend in {countdown}s</span>
                   </>
                 ) : (
                   <>
-                    <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                    <Icon
+                      icon="solar:plain-2-bold-duotone"
+                      className="size-4"
+                    />
                     <span>Resend confirmation email</span>
                   </>
                 )}

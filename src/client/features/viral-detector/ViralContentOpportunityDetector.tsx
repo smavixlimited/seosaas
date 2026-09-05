@@ -8,7 +8,10 @@ import {
   updateViralOpportunityStatus,
 } from "@/serverFunctions/viral-content";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
-import type { ViralPlatform, ViralOpportunityItem } from "@/services/viral-content.service";
+import type {
+  ViralPlatform,
+  ViralOpportunityItem,
+} from "@/services/viral-content.service";
 
 interface ViralContentOpportunityDetectorProps {
   projectId: string;
@@ -18,25 +21,31 @@ export function ViralContentOpportunityDetector({
   projectId,
 }: ViralContentOpportunityDetectorProps) {
   const queryClient = useQueryClient();
-  const [selectedPlatform, setSelectedPlatform] = React.useState<ViralPlatform | "all">("all");
+  const [selectedPlatform, setSelectedPlatform] = React.useState<
+    ViralPlatform | "all"
+  >("all");
 
   const opportunitiesQuery = useQuery({
     queryKey: ["viralOpportunities", projectId, selectedPlatform],
     queryFn: () =>
       getViralOpportunities({
-        data: { platform: selectedPlatform === "all" ? undefined : selectedPlatform },
+        data: {
+          platform: selectedPlatform === "all" ? undefined : selectedPlatform,
+        },
       }),
   });
 
   const generateMutation = useMutation({
     mutationFn: () =>
       generateViralOpportunities({
-        data: { platform: selectedPlatform === "all" ? undefined : selectedPlatform },
+        data: {
+          platform: selectedPlatform === "all" ? undefined : selectedPlatform,
+        },
       }),
     onSuccess: (data) => {
       queryClient.setQueryData(
         ["viralOpportunities", projectId, selectedPlatform],
-        data
+        data,
       );
       toast.success("Generated fresh viral hooks & scripts!");
     },
@@ -56,7 +65,9 @@ export function ViralContentOpportunityDetector({
         },
       }),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       toast.success("Added viral content task to Action Roadmap!");
     },
     onError: (err: any) => {
@@ -123,7 +134,8 @@ export function ViralContentOpportunityDetector({
               </span>
             </div>
             <p className="text-xs text-base-content/70 mt-0.5">
-              Generate battle-tested video hooks, contrarian threads, and high-conversion ad angles tailored to your niche.
+              Generate battle-tested video hooks, contrarian threads, and
+              high-conversion ad angles tailored to your niche.
             </p>
           </div>
         </div>
@@ -138,19 +150,43 @@ export function ViralContentOpportunityDetector({
             icon="solar:magic-stick-3-bold"
             className={`h-4 w-4 ${generateMutation.isPending ? "animate-spin" : ""}`}
           />
-          <span>{generateMutation.isPending ? "Scanning Trends..." : "Generate Fresh Hooks"}</span>
+          <span>
+            {generateMutation.isPending
+              ? "Scanning Trends..."
+              : "Generate Fresh Hooks"}
+          </span>
         </button>
       </div>
 
       {/* Platform Filter Buttons */}
       <div className="flex flex-wrap items-center gap-2 border-b border-base-300 pb-3">
         {[
-          { id: "all", label: "All Platforms", icon: "solar:widget-bold-duotone" },
-          { id: "tiktok", label: "TikTok", icon: "solar:music-notes-bold-duotone" },
-          { id: "instagram", label: "Instagram Reels", icon: "solar:camera-bold-duotone" },
-          { id: "youtube", label: "YouTube Shorts", icon: "solar:videocamera-bold-duotone" },
+          {
+            id: "all",
+            label: "All Platforms",
+            icon: "solar:widget-bold-duotone",
+          },
+          {
+            id: "tiktok",
+            label: "TikTok",
+            icon: "solar:music-notes-bold-duotone",
+          },
+          {
+            id: "instagram",
+            label: "Instagram Reels",
+            icon: "solar:camera-bold-duotone",
+          },
+          {
+            id: "youtube",
+            label: "YouTube Shorts",
+            icon: "solar:videocamera-bold-duotone",
+          },
           { id: "x", label: "X (Twitter)", icon: "solar:hashtag-bold-duotone" },
-          { id: "linkedin", label: "LinkedIn", icon: "solar:case-bold-duotone" },
+          {
+            id: "linkedin",
+            label: "LinkedIn",
+            icon: "solar:case-bold-duotone",
+          },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -180,9 +216,12 @@ export function ViralContentOpportunityDetector({
           <div className="mx-auto w-14 h-14 rounded-2xl bg-base-200 text-base-content/40 flex items-center justify-center">
             <Icon icon="solar:fire-bold" className="h-7 w-7" />
           </div>
-          <h3 className="text-base font-bold text-base-content">No Viral Opportunities Found</h3>
+          <h3 className="text-base font-bold text-base-content">
+            No Viral Opportunities Found
+          </h3>
           <p className="text-xs text-base-content/60 max-w-md mx-auto">
-            Click &quot;Generate Fresh Hooks&quot; to discover high-converting content formats for your brand.
+            Click &quot;Generate Fresh Hooks&quot; to discover high-converting
+            content formats for your brand.
           </p>
           <button
             type="button"
@@ -206,7 +245,10 @@ export function ViralContentOpportunityDetector({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <div className={`p-2 rounded-xl border ${platformColor}`}>
-                        <Icon icon={getPlatformIcon(item.platform)} className="h-4 w-4" />
+                        <Icon
+                          icon={getPlatformIcon(item.platform)}
+                          className="h-4 w-4"
+                        />
                       </div>
                       <div>
                         <span className="text-xs font-black uppercase tracking-wider text-base-content block">
@@ -224,7 +266,9 @@ export function ViralContentOpportunityDetector({
                     </div>
                   </div>
 
-                  <h3 className="text-base font-black text-base-content">{item.title}</h3>
+                  <h3 className="text-base font-black text-base-content">
+                    {item.title}
+                  </h3>
 
                   {/* Hook Text Display */}
                   <div className="rounded-2xl bg-base-200/50 p-4 border border-base-300/60 space-y-2">
@@ -234,7 +278,9 @@ export function ViralContentOpportunityDetector({
                       </span>
                       <button
                         type="button"
-                        onClick={() => copyToClipboard(item.hookText, "Hook Text")}
+                        onClick={() =>
+                          copyToClipboard(item.hookText, "Hook Text")
+                        }
                         className="btn btn-ghost btn-xs text-primary font-bold gap-1 p-1 hover:bg-primary/10 rounded-lg"
                       >
                         <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
@@ -259,7 +305,10 @@ export function ViralContentOpportunityDetector({
                   {/* Target Audience & Hashtags */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
                     <div className="text-[11px] text-base-content/70">
-                      Audience: <strong className="text-base-content">{item.targetAudience}</strong>
+                      Audience:{" "}
+                      <strong className="text-base-content">
+                        {item.targetAudience}
+                      </strong>
                     </div>
 
                     <div className="flex flex-wrap gap-1">
@@ -282,7 +331,7 @@ export function ViralContentOpportunityDetector({
                     onClick={() =>
                       copyToClipboard(
                         `Hook:\n"${item.hookText}"\n\nOutline:\n${item.scriptOutline}\n\nTarget Audience: ${item.targetAudience}\nTags: ${item.tags.join(" ")}`,
-                        "Full Script"
+                        "Full Script",
                       )
                     }
                     className="btn btn-outline btn-sm rounded-2xl text-xs font-bold gap-1.5 border-base-300 hover:bg-base-200 hover:text-base-content"

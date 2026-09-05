@@ -28,7 +28,8 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
               AEO & Answer Engine Optimization Intelligence
             </h3>
             <p className="text-xs text-base-content/60">
-              Actionable recommendations to win citations in ChatGPT, Claude 3.5, Gemini, and Perplexity.
+              Actionable recommendations to win citations in ChatGPT, Claude
+              3.5, Gemini, and Perplexity.
             </p>
           </div>
         </div>
@@ -46,7 +47,9 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
         <div className="rounded-2xl bg-base-200/50 p-4 space-y-3">
           <div className="flex items-center justify-between text-xs font-bold text-base-content/70">
             <span>Brand Sentiment in AI Responses</span>
-            <span className="text-emerald-500 font-extrabold">{positivePct}% Positive</span>
+            <span className="text-emerald-500 font-extrabold">
+              {positivePct}% Positive
+            </span>
           </div>
 
           <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-base-300">
@@ -69,13 +72,16 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
 
           <div className="flex items-center justify-between text-[11px] text-base-content/60 pt-1">
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-emerald-500" /> Positive ({positivePct}%)
+              <span className="size-2 rounded-full bg-emerald-500" /> Positive (
+              {positivePct}%)
             </span>
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-amber-400" /> Neutral ({neutralPct}%)
+              <span className="size-2 rounded-full bg-amber-400" /> Neutral (
+              {neutralPct}%)
             </span>
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-rose-500" /> Negative ({negativePct}%)
+              <span className="size-2 rounded-full bg-rose-500" /> Negative (
+              {negativePct}%)
             </span>
           </div>
         </div>
@@ -87,16 +93,41 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
             {[
-              { name: "ChatGPT 4o", status: "Active", icon: "solar:chat-round-dots-bold-duotone", color: "text-emerald-500" },
-              { name: "Claude 3.5", status: "Active", icon: "solar:atom-bold-duotone", color: "text-orange-500" },
-              { name: "Google Gemini", status: "Active", icon: "solar:stars-bold-duotone", color: "text-sky-500" },
-              { name: "Perplexity.ai", status: "Active", icon: "solar:compass-bold-duotone", color: "text-violet-500" },
+              {
+                name: "ChatGPT 4o",
+                status: "Active",
+                icon: "solar:chat-round-dots-bold-duotone",
+                color: "text-emerald-500",
+              },
+              {
+                name: "Claude 3.5",
+                status: "Active",
+                icon: "solar:atom-bold-duotone",
+                color: "text-orange-500",
+              },
+              {
+                name: "Google Gemini",
+                status: "Active",
+                icon: "solar:stars-bold-duotone",
+                color: "text-sky-500",
+              },
+              {
+                name: "Perplexity.ai",
+                status: "Active",
+                icon: "solar:compass-bold-duotone",
+                color: "text-violet-500",
+              },
             ].map((m) => (
-              <div key={m.name} className="flex items-center gap-2 rounded-xl bg-base-100 p-2.5 border border-base-300/60 shadow-xs">
+              <div
+                key={m.name}
+                className="flex items-center gap-2 rounded-xl bg-base-100 p-2.5 border border-base-300/60 shadow-xs"
+              >
                 <Icon icon={m.icon} className={`h-4 w-4 shrink-0 ${m.color}`} />
                 <div className="min-w-0">
                   <div className="text-xs font-bold truncate">{m.name}</div>
-                  <div className="text-[10px] text-emerald-600 font-semibold">{m.status}</div>
+                  <div className="text-[10px] text-emerald-600 font-semibold">
+                    {m.status}
+                  </div>
                 </div>
               </div>
             ))}
@@ -113,11 +144,16 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="rounded-2xl border border-base-300 bg-base-100 p-4 space-y-2 hover:border-primary/40 transition-colors">
             <div className="flex items-center gap-2 text-primary font-bold text-xs">
-              <Icon icon="solar:document-text-bold-duotone" className="h-4 w-4" />
+              <Icon
+                icon="solar:document-text-bold-duotone"
+                className="h-4 w-4"
+              />
               <span>Direct Answer Formatting</span>
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Place concise, factual answers (under 60 words) immediately after H2 question tags. LLMs favor explicit definition snippets for retrieval.
+              Place concise, factual answers (under 60 words) immediately after
+              H2 question tags. LLMs favor explicit definition snippets for
+              retrieval.
             </p>
           </div>
 
@@ -127,7 +163,9 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
               <span>Entity Schema Graph</span>
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Implement JSON-LD Schema (`Organization` with `sameAs` links to Crunchbase, LinkedIn, and Wikidata) to strengthen brand knowledge graph nodes.
+              Implement JSON-LD Schema (`Organization` with `sameAs` links to
+              Crunchbase, LinkedIn, and Wikidata) to strengthen brand knowledge
+              graph nodes.
             </p>
           </div>
 
@@ -137,7 +175,9 @@ export function AeoOptimizationCard({ result }: AeoOptimizationCardProps) {
               <span>Secondary Source Mentions</span>
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Perplexity and SearchGPT rely on review roundups and high-authority industry blogs. Target features on top cited domain lists.
+              Perplexity and SearchGPT rely on review roundups and
+              high-authority industry blogs. Target features on top cited domain
+              lists.
             </p>
           </div>
         </div>

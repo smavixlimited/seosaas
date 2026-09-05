@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 import { isUserSuperAdmin } from "@/services/admin.service";
-import { AdminBroadcastService, BroadcastAudienceTarget, BroadcastChannel } from "@/services/admin-broadcast.service";
+import {
+  AdminBroadcastService,
+  BroadcastAudienceTarget,
+  BroadcastChannel,
+} from "@/services/admin-broadcast.service";
 import { AppError } from "@/server/lib/errors";
 
 const audienceEnum = z.enum([
@@ -32,7 +36,13 @@ const sendBroadcastSchema = z.object({
   channels: z.array(channelEnum).min(1),
   titleTemplate: z.string().min(1).max(200),
   messageTemplate: z.string().min(1).max(5000),
-  category: z.enum(["system", "announcement", "special_offer", "warning", "update"]),
+  category: z.enum([
+    "system",
+    "announcement",
+    "special_offer",
+    "warning",
+    "update",
+  ]),
   priority: z.enum(["info", "warning", "success", "critical"]),
   actionUrl: z.string().optional(),
   details: z.string().optional(),

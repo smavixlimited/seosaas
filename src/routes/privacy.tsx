@@ -20,29 +20,55 @@ function PrivacyPage() {
               Privacy Policy
             </h1>
             <p className="text-xs text-base-content/60">
-              Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+              Last updated:{" "}
+              {new Date().toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
             </p>
           </div>
 
           <div className="prose prose-sm max-w-none text-base-content/80 space-y-6">
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-base-content">1. Information We Collect</h2>
+              <h2 className="text-lg font-bold text-base-content">
+                1. Information We Collect
+              </h2>
               <p>
-                We collect personal information that you provide when registering an account, including your name, email address, password hash, and billing details. We also collect analytical telemetry regarding feature utilization.
+                We collect personal information that you provide when
+                registering an account, including your name, email address,
+                password hash, and billing details. We also collect analytical
+                telemetry regarding feature utilization.
               </p>
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-base-content">2. Use of Information</h2>
+              <h2 className="text-lg font-bold text-base-content">
+                2. Use of Information
+              </h2>
               <p>
-                We use collected information to authenticate users, fulfill API queries, compute SEO metrics, provide customer support, and communicate service updates. We do not sell your personal data or search histories to third parties.
+                We use collected information to authenticate users, fulfill API
+                queries, compute SEO metrics, provide customer support, and
+                communicate service updates. We do not sell your personal data
+                or search histories to third parties.
               </p>
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-base-content">3. GDPR & NDPR Compliance</h2>
+              <h2 className="text-lg font-bold text-base-content">
+                3. GDPR & NDPR Compliance
+              </h2>
               <p>
-                Users in the European Union and Nigeria possess rights to access, rectify, port, or request permanent deletion of their personal data. To exercise data erasure rights, contact <a href={`mailto:${BRAND_CONFIG.supportEmail}`} className="link link-primary">{BRAND_CONFIG.supportEmail}</a>.
+                Users in the European Union and Nigeria possess rights to
+                access, rectify, port, or request permanent deletion of their
+                personal data. To exercise data erasure rights, contact{" "}
+                <a
+                  href={`mailto:${BRAND_CONFIG.supportEmail}`}
+                  className="link link-primary"
+                >
+                  {BRAND_CONFIG.supportEmail}
+                </a>
+                .
               </p>
             </section>
           </div>

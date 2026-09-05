@@ -33,7 +33,9 @@ function ForEcommercePage() {
             </h1>
 
             <p className="text-base sm:text-lg text-base-content/70 font-medium max-w-2xl mx-auto leading-relaxed">
-              Paid ads CAC is skyrocketing. Scale free organic traffic to thousands of product SKUs with deep technical site crawls, broken link detectors, and long-tail transactional keyword tracking.
+              Paid ads CAC is skyrocketing. Scale free organic traffic to
+              thousands of product SKUs with deep technical site crawls, broken
+              link detectors, and long-tail transactional keyword tracking.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -62,7 +64,8 @@ function ForEcommercePage() {
               E-Commerce SEO That Converts Shoppers into Revenue
             </h2>
             <p className="text-sm text-base-content/70">
-              Stop losing sales to out-of-stock 404s, slow mobile speeds, and duplicate collection URLs.
+              Stop losing sales to out-of-stock 404s, slow mobile speeds, and
+              duplicate collection URLs.
             </p>
           </div>
 
@@ -91,8 +94,12 @@ function ForEcommercePage() {
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
                   <Icon icon={card.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="font-extrabold text-base text-base-content">{card.title}</h3>
-                <p className="text-xs text-base-content/70 leading-relaxed">{card.desc}</p>
+                <h3 className="font-extrabold text-base text-base-content">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {card.desc}
+                </p>
               </div>
             ))}
           </div>

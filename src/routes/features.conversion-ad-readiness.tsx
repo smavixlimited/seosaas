@@ -26,7 +26,10 @@ export function ConversionAdReadinessFeaturePage() {
               Stop Bleeding Ad Spend on Broken Landing Pages
             </h1>
             <p className="text-base sm:text-lg text-base-content/70 leading-relaxed">
-              Before you spend a single dollar on Meta, Google, TikTok, or LinkedIn ads, run a pre-flight 0–100 audit. Catch hidden checkout leaks, copy friction, and ensure your tracking pixels are firing properly.
+              Before you spend a single dollar on Meta, Google, TikTok, or
+              LinkedIn ads, run a pre-flight 0–100 audit. Catch hidden checkout
+              leaks, copy friction, and ensure your tracking pixels are firing
+              properly.
             </p>
             <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -53,15 +56,24 @@ export function ConversionAdReadinessFeaturePage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-black text-base-content">Ready for Paid Traffic</h3>
-                    <span className="badge badge-success badge-sm font-bold text-white text-[10px]">Grade A</span>
+                    <h3 className="text-lg font-black text-base-content">
+                      Ready for Paid Traffic
+                    </h3>
+                    <span className="badge badge-success badge-sm font-bold text-white text-[10px]">
+                      Grade A
+                    </span>
                   </div>
-                  <p className="text-xs text-base-content/60 font-mono">https://yourbrand.com/pricing</p>
+                  <p className="text-xs text-base-content/60 font-mono">
+                    https://yourbrand.com/pricing
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <span className="badge badge-outline text-xs font-bold gap-1 py-3 px-3">
-                  <Icon icon="solar:shield-check-bold" className="h-3.5 w-3.5 text-emerald-500" />
+                  <Icon
+                    icon="solar:shield-check-bold"
+                    className="h-3.5 w-3.5 text-emerald-500"
+                  />
                   <span>Ad Spend Risk: Low</span>
                 </span>
               </div>
@@ -70,20 +82,65 @@ export function ConversionAdReadinessFeaturePage() {
             {/* 6 Sub-Pillars Grid */}
             <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
-                { title: "Ad Pixels & Tracking", score: "100/100", status: "Meta & Google Active", icon: "solar:radar-bold", color: "text-emerald-500" },
-                { title: "CTA & Offer Clarity", score: "88/100", status: "Above-the-fold CTA", icon: "solar:bolt-bold", color: "text-primary" },
-                { title: "Trust & Credibility", score: "92/100", status: "SSL & Privacy Verified", icon: "solar:shield-star-bold", color: "text-blue-500" },
-                { title: "Mobile & Page Speed", score: "84/100", status: "1.2s LCP on Mobile", icon: "solar:stopwatch-bold", color: "text-amber-500" },
-                { title: "Social Proof", score: "86/100", status: "Reviews & Badges", icon: "solar:star-bold", color: "text-purple-500" },
-                { title: "Checkout & Form Length", score: "80/100", status: "Frictionless 2-Field", icon: "solar:cart-check-bold", color: "text-indigo-500" },
+                {
+                  title: "Ad Pixels & Tracking",
+                  score: "100/100",
+                  status: "Meta & Google Active",
+                  icon: "solar:radar-bold",
+                  color: "text-emerald-500",
+                },
+                {
+                  title: "CTA & Offer Clarity",
+                  score: "88/100",
+                  status: "Above-the-fold CTA",
+                  icon: "solar:bolt-bold",
+                  color: "text-primary",
+                },
+                {
+                  title: "Trust & Credibility",
+                  score: "92/100",
+                  status: "SSL & Privacy Verified",
+                  icon: "solar:shield-star-bold",
+                  color: "text-blue-500",
+                },
+                {
+                  title: "Mobile & Page Speed",
+                  score: "84/100",
+                  status: "1.2s LCP on Mobile",
+                  icon: "solar:stopwatch-bold",
+                  color: "text-amber-500",
+                },
+                {
+                  title: "Social Proof",
+                  score: "86/100",
+                  status: "Reviews & Badges",
+                  icon: "solar:star-bold",
+                  color: "text-purple-500",
+                },
+                {
+                  title: "Checkout & Form Length",
+                  score: "80/100",
+                  status: "Frictionless 2-Field",
+                  icon: "solar:cart-check-bold",
+                  color: "text-indigo-500",
+                },
               ].map((p, i) => (
-                <div key={i} className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-1.5">
+                <div
+                  key={i}
+                  className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-1.5"
+                >
                   <div className="flex items-center justify-between">
                     <Icon icon={p.icon} className={`h-5 w-5 ${p.color}`} />
-                    <span className="font-black text-xs font-mono">{p.score}</span>
+                    <span className="font-black text-xs font-mono">
+                      {p.score}
+                    </span>
                   </div>
-                  <div className="font-black text-xs text-base-content">{p.title}</div>
-                  <div className="text-[11px] text-base-content/60 font-medium">{p.status}</div>
+                  <div className="font-black text-xs text-base-content">
+                    {p.title}
+                  </div>
+                  <div className="text-[11px] text-base-content/60 font-medium">
+                    {p.status}
+                  </div>
                 </div>
               ))}
             </div>
@@ -95,9 +152,12 @@ export function ConversionAdReadinessFeaturePage() {
       <section className="py-16 bg-base-200/50 border-y border-base-300">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-3xl font-black text-base-content">Why Pre-Ad Audits Pay for Themselves</h2>
+            <h2 className="text-3xl font-black text-base-content">
+              Why Pre-Ad Audits Pay for Themselves
+            </h2>
             <p className="text-sm text-base-content/70">
-              Driving paid ad traffic without conversion tracking blinds ad algorithms and drains marketing budgets.
+              Driving paid ad traffic without conversion tracking blinds ad
+              algorithms and drains marketing budgets.
             </p>
           </div>
 
@@ -106,9 +166,13 @@ export function ConversionAdReadinessFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
                 <Icon icon="solar:radar-2-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">Automated Pixel Health Scanner</h3>
+              <h3 className="text-lg font-black text-base-content">
+                Automated Pixel Health Scanner
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Automatically scans for Meta Pixel, Google Ads Conversion Tag, Google Tag Manager, TikTok, LinkedIn, and GA4 to ensure your purchase events fire correctly.
+                Automatically scans for Meta Pixel, Google Ads Conversion Tag,
+                Google Tag Manager, TikTok, LinkedIn, and GA4 to ensure your
+                purchase events fire correctly.
               </p>
             </div>
 
@@ -116,9 +180,13 @@ export function ConversionAdReadinessFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                 <Icon icon="solar:danger-triangle-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">Critical Friction Diagnostics</h3>
+              <h3 className="text-lg font-black text-base-content">
+                Critical Friction Diagnostics
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Highlights high-friction roadblocks like overly long checkout forms, hidden pricing, unclear value propositions, and slow mobile viewport shifts.
+                Highlights high-friction roadblocks like overly long checkout
+                forms, hidden pricing, unclear value propositions, and slow
+                mobile viewport shifts.
               </p>
             </div>
 
@@ -126,9 +194,13 @@ export function ConversionAdReadinessFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
                 <Icon icon="solar:stars-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">1-Click AI Fix Recommendations</h3>
+              <h3 className="text-lg font-black text-base-content">
+                1-Click AI Fix Recommendations
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Receive prioritized, high-lift copywriting adjustments and conversion tweaks formulated by Skorvia AI to double your conversion rate.
+                Receive prioritized, high-lift copywriting adjustments and
+                conversion tweaks formulated by Skorvia AI to double your
+                conversion rate.
               </p>
             </div>
           </div>
@@ -156,9 +228,16 @@ export function ConversionAdReadinessFeaturePage() {
                 a: "Yes! You can audit any public landing page or competitor URL without needing access to their source code or CMS.",
               },
             ].map((faq, idx) => (
-              <div key={idx} className="rounded-2xl border border-base-300 bg-base-100 p-5 space-y-1.5">
-                <h4 className="font-black text-sm text-base-content">{faq.q}</h4>
-                <p className="text-xs text-base-content/70 leading-relaxed">{faq.a}</p>
+              <div
+                key={idx}
+                className="rounded-2xl border border-base-300 bg-base-100 p-5 space-y-1.5"
+              >
+                <h4 className="font-black text-sm text-base-content">
+                  {faq.q}
+                </h4>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {faq.a}
+                </p>
               </div>
             ))}
           </div>

@@ -38,7 +38,7 @@ export const BackupService = {
    * Generates a portable JSON backup snapshot of a project.
    */
   async createProjectBackupSnapshot(
-    projectId: string
+    projectId: string,
   ): Promise<ProjectBackupSnapshot> {
     const { db } = await import("@/db");
     const {
@@ -127,10 +127,13 @@ export const BackupService = {
   async restoreProjectBackupSnapshot(
     snapshot: ProjectBackupSnapshot,
     userId: string,
-    organizationId: string
+    organizationId: string,
   ) {
     if (!snapshot || snapshot.version !== "1.0" || !snapshot.project?.domain) {
-      throw new AppError("VALIDATION_ERROR", "Invalid backup snapshot payload structure");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Invalid backup snapshot payload structure",
+      );
     }
 
     const { db } = await import("@/db");

@@ -52,7 +52,9 @@ describe("Phase 25: Monetization, Credit Usage Meter & Retention Suite", () => {
       expect(result.surveyRecorded).toBe(true);
       expect(result.discountApplied).toBe(false);
 
-      const discountCheck = RetentionService.hasActiveDiscount("usr_cancelling_user_02");
+      const discountCheck = RetentionService.hasActiveDiscount(
+        "usr_cancelling_user_02",
+      );
       expect(discountCheck.hasDiscount).toBe(false);
     });
   });

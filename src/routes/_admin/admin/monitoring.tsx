@@ -23,7 +23,8 @@ function AdminMonitoringPage() {
   const [search, setSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const [inspectingLog, setInspectingLog] = React.useState<WebhookErrorRecord | null>(null);
+  const [inspectingLog, setInspectingLog] =
+    React.useState<WebhookErrorRecord | null>(null);
 
   const monitorQuery = useQuery({
     queryKey: ["adminSystemMonitoring"],
@@ -32,7 +33,10 @@ function AdminMonitoringPage() {
   });
 
   const webhooksQuery = useQuery({
-    queryKey: ["adminWebhookErrors", { provider: providerFilter, status: statusFilter, search, page }],
+    queryKey: [
+      "adminWebhookErrors",
+      { provider: providerFilter, status: statusFilter, search, page },
+    ],
     queryFn: () =>
       getWebhookErrorLogsServerFn({
         data: {
@@ -69,7 +73,9 @@ function AdminMonitoringPage() {
 
   const probes = monitorQuery.data?.probes ?? [];
   const kpis = monitorQuery.data?.kpis;
-  const webhookData = webhooksQuery.data as { logs: WebhookErrorRecord[]; total: number; totalPages: number } | undefined;
+  const webhookData = webhooksQuery.data as
+    | { logs: WebhookErrorRecord[]; total: number; totalPages: number }
+    | undefined;
   const webhookLogs = webhookData?.logs ?? [];
   const total = webhookData?.total ?? 0;
   const totalPages = webhookData?.totalPages ?? 1;
@@ -83,7 +89,8 @@ function AdminMonitoringPage() {
             System Monitoring &amp; Infrastructure
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Live round-trip latency diagnostics for 3rd-party dependencies, runtime KPIs, and webhook retries.
+            Live round-trip latency diagnostics for 3rd-party dependencies,
+            runtime KPIs, and webhook retries.
           </p>
         </div>
 
@@ -109,7 +116,8 @@ function AdminMonitoringPage() {
               Process Memory (RSS)
             </div>
             <div className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">
-              {kpis.memoryRssMb} <span className="text-xs font-normal text-slate-500">MB</span>
+              {kpis.memoryRssMb}{" "}
+              <span className="text-xs font-normal text-slate-500">MB</span>
             </div>
             <div className="text-[10px] text-slate-400 font-mono mt-0.5">
               Heap: {kpis.memoryHeapUsedMb} / {kpis.memoryHeapTotalMb} MB
@@ -121,9 +129,12 @@ function AdminMonitoringPage() {
               Server Uptime
             </div>
             <div className="text-xl font-bold text-primary font-mono mt-1">
-              {Math.floor(kpis.uptimeSeconds / 3600)}h {Math.floor((kpis.uptimeSeconds % 3600) / 60)}m
+              {Math.floor(kpis.uptimeSeconds / 3600)}h{" "}
+              {Math.floor((kpis.uptimeSeconds % 3600) / 60)}m
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Continuous availability</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">
+              Continuous availability
+            </div>
           </div>
 
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
@@ -133,7 +144,9 @@ function AdminMonitoringPage() {
             <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
               Dual-DB Parity
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Cloudflare D1 / Postgres</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">
+              Cloudflare D1 / Postgres
+            </div>
           </div>
 
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
@@ -143,7 +156,9 @@ function AdminMonitoringPage() {
             <div className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">
               {kpis.nodeVersion}
             </div>
-            <div className="text-[10px] text-slate-400 font-mono mt-0.5">OS: {kpis.platform}</div>
+            <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+              OS: {kpis.platform}
+            </div>
           </div>
         </div>
       )}
@@ -151,8 +166,12 @@ function AdminMonitoringPage() {
       {/* 3rd Party Dependency Latency Grid */}
       <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
-          <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">Dependency Health &amp; Latency</h5>
-          <span className="text-xs text-slate-400">Auto-Refreshes every 30s</span>
+          <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+            Dependency Health &amp; Latency
+          </h5>
+          <span className="text-xs text-slate-400">
+            Auto-Refreshes every 30s
+          </span>
         </div>
 
         <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -172,8 +191,8 @@ function AdminMonitoringPage() {
                         isOperational
                           ? "bg-emerald-500/10 text-emerald-600"
                           : isDegraded
-                          ? "bg-amber-500/10 text-amber-600"
-                          : "bg-rose-500/10 text-rose-600"
+                            ? "bg-amber-500/10 text-amber-600"
+                            : "bg-rose-500/10 text-rose-600"
                       }`}
                     >
                       {probe.status.toUpperCase()}
@@ -183,7 +202,9 @@ function AdminMonitoringPage() {
                     </span>
                   </div>
 
-                  <h6 className="font-bold text-xs text-slate-800 dark:text-slate-100 truncate">{probe.name}</h6>
+                  <h6 className="font-bold text-xs text-slate-800 dark:text-slate-100 truncate">
+                    {probe.name}
+                  </h6>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">
                     {probe.details || probe.endpoint}
                   </p>
@@ -202,8 +223,13 @@ function AdminMonitoringPage() {
       <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">Failed Webhooks &amp; Inbound Error Logger</h5>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Audit and re-dispatch failed payment, subscription, and sync webhooks.</p>
+            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+              Failed Webhooks &amp; Inbound Error Logger
+            </h5>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Audit and re-dispatch failed payment, subscription, and sync
+              webhooks.
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -250,13 +276,21 @@ function AdminMonitoringPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {webhookLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-400">
-                    {webhooksQuery.isLoading ? "Loading logs..." : "No failed webhooks recorded."}
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-slate-400"
+                  >
+                    {webhooksQuery.isLoading
+                      ? "Loading logs..."
+                      : "No failed webhooks recorded."}
                   </td>
                 </tr>
               ) : (
                 webhookLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={log.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5">
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
                         {log.provider}
@@ -295,7 +329,10 @@ function AdminMonitoringPage() {
                         className="p-1 rounded text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-700"
                         title="Inspect Payload"
                       >
-                        <Icon icon="solar:eye-bold-duotone" className="h-4 w-4" />
+                        <Icon
+                          icon="solar:eye-bold-duotone"
+                          className="h-4 w-4"
+                        />
                       </button>
                       {log.status !== "resolved" && (
                         <button
@@ -323,7 +360,8 @@ function AdminMonitoringPage() {
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 max-w-2xl w-full p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
               <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
-                Webhook Payload: {inspectingLog.provider} / {inspectingLog.event}
+                Webhook Payload: {inspectingLog.provider} /{" "}
+                {inspectingLog.event}
               </h5>
               <button
                 type="button"

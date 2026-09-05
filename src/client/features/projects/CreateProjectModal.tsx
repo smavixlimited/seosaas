@@ -53,7 +53,10 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
           const updatesList = [];
           if (overviewText) {
-            updatesList.push({ section: "business_overview" as const, content: overviewText });
+            updatesList.push({
+              section: "business_overview" as const,
+              content: overviewText,
+            });
           }
           if (usp) {
             updatesList.push({ section: "positioning" as const, content: usp });
@@ -109,19 +112,25 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center justify-between border-b border-base-300 pb-3">
           <div>
-            <h2 id="create-brand-title" className="text-lg font-black text-base-content flex items-center gap-2">
+            <h2
+              id="create-brand-title"
+              className="text-lg font-black text-base-content flex items-center gap-2"
+            >
               <Icon icon="solar:shop-2-bold" className="h-5 w-5 text-primary" />
               <span>Create New Brand</span>
             </h2>
             <p className="text-xs text-base-content/60">
-              Configure brand identity, website, target market, and audience for Skorvia AI.
+              Configure brand identity, website, target market, and audience for
+              Skorvia AI.
             </p>
           </div>
         </div>
 
         <div className="space-y-3 text-xs">
           <label className="flex flex-col gap-1">
-            <span className="font-bold text-base-content">Brand / Business Name *</span>
+            <span className="font-bold text-base-content">
+              Brand / Business Name *
+            </span>
             <input
               type="text"
               required
@@ -136,7 +145,10 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
           <label className="flex flex-col gap-1">
             <span className="font-bold text-base-content">
-              Brand Website <span className="text-base-content/50 font-normal">(optional)</span>
+              Brand Website{" "}
+              <span className="text-base-content/50 font-normal">
+                (optional)
+              </span>
             </span>
             <input
               type="text"
@@ -157,15 +169,28 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
               onClick={() => setShowAdvanced(!showAdvanced)}
               className="btn btn-ghost btn-xs font-bold text-primary gap-1 p-0 hover:bg-transparent"
             >
-              <Icon icon={showAdvanced ? "solar:alt-arrow-up-bold" : "solar:alt-arrow-down-bold"} className="h-3.5 w-3.5" />
-              <span>{showAdvanced ? "Hide Brand Details" : "+ Add Socials, ICP & Value Proposition"}</span>
+              <Icon
+                icon={
+                  showAdvanced
+                    ? "solar:alt-arrow-up-bold"
+                    : "solar:alt-arrow-down-bold"
+                }
+                className="h-3.5 w-3.5"
+              />
+              <span>
+                {showAdvanced
+                  ? "Hide Brand Details"
+                  : "+ Add Socials, ICP & Value Proposition"}
+              </span>
             </button>
           </div>
 
           {showAdvanced && (
             <div className="space-y-3 p-4 rounded-2xl bg-base-200/50 border border-base-300 animate-in fade-in duration-100">
               <label className="flex flex-col gap-1">
-                <span className="font-bold text-base-content">Industry / Business Niche</span>
+                <span className="font-bold text-base-content">
+                  Industry / Business Niche
+                </span>
                 <input
                   type="text"
                   value={industry}
@@ -176,7 +201,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
               </label>
 
               <label className="flex flex-col gap-1">
-                <span className="font-bold text-base-content">Target Audience / Ideal Customer Profile (ICP)</span>
+                <span className="font-bold text-base-content">
+                  Target Audience / Ideal Customer Profile (ICP)
+                </span>
                 <input
                   type="text"
                   value={audience}
@@ -187,7 +214,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
               </label>
 
               <label className="flex flex-col gap-1">
-                <span className="font-bold text-base-content">Unique Value Proposition (USP)</span>
+                <span className="font-bold text-base-content">
+                  Unique Value Proposition (USP)
+                </span>
                 <input
                   type="text"
                   value={usp}
@@ -198,7 +227,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
               </label>
 
               <label className="flex flex-col gap-1">
-                <span className="font-bold text-base-content">Social Media &amp; Profiles</span>
+                <span className="font-bold text-base-content">
+                  Social Media &amp; Profiles
+                </span>
                 <input
                   type="text"
                   value={socialLinks}

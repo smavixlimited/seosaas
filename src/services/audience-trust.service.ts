@@ -15,7 +15,11 @@ export interface TrustSignalItem {
 
 export interface RiskAlertItem {
   severity: "high" | "moderate" | "low";
-  category: "ad_comment_risk" | "refund_sentiment" | "trust_gap" | "social_proof_missing";
+  category:
+    | "ad_comment_risk"
+    | "refund_sentiment"
+    | "trust_gap"
+    | "social_proof_missing";
   title: string;
   description: string;
   recommendedAction: string;
@@ -95,7 +99,8 @@ export const AudienceTrustService = {
         title: "Strong Testimonial & Case Study Presence",
         source: "Landing Page & Client Reviews",
         sentiment: "positive",
-        snippet: "Verified customer testimonials prominently displayed with quantified ROI results.",
+        snippet:
+          "Verified customer testimonials prominently displayed with quantified ROI results.",
         verified: true,
       },
       {
@@ -103,7 +108,8 @@ export const AudienceTrustService = {
         title: "Transparent Pricing & Active SSL",
         source: "Website Security Audit",
         sentiment: "positive",
-        snippet: "Valid SSL certificate, clear refund terms, and no hidden checkout friction points detected.",
+        snippet:
+          "Valid SSL certificate, clear refund terms, and no hidden checkout friction points detected.",
         verified: true,
       },
       {
@@ -111,7 +117,8 @@ export const AudienceTrustService = {
         title: "External Trustpilot & G2 Profile Coverage",
         source: "Public Aggregators",
         sentiment: "positive",
-        snippet: "Average 4.8/5.0 rating across public software review directories.",
+        snippet:
+          "Average 4.8/5.0 rating across public software review directories.",
         verified: true,
       },
       {
@@ -119,7 +126,8 @@ export const AudienceTrustService = {
         title: "Social Brand Mentions & Engagement",
         source: "X (Twitter) & LinkedIn",
         sentiment: "neutral",
-        snippet: "Consistent founder & brand presence with active community interactions and low dispute rate.",
+        snippet:
+          "Consistent founder & brand presence with active community interactions and low dispute rate.",
         verified: false,
       },
     ];
@@ -129,25 +137,53 @@ export const AudienceTrustService = {
         severity: "low",
         category: "ad_comment_risk",
         title: "Low Ad Comment Toxicity Risk",
-        description: "Public sentiment is largely positive. Risk of toxic/derogatory comment threads on paid Meta/TikTok ads is minimal.",
-        recommendedAction: "Maintain an active moderation protocol and pinned FAQ link in the first ad comment.",
+        description:
+          "Public sentiment is largely positive. Risk of toxic/derogatory comment threads on paid Meta/TikTok ads is minimal.",
+        recommendedAction:
+          "Maintain an active moderation protocol and pinned FAQ link in the first ad comment.",
       },
       {
         severity: "moderate",
         category: "social_proof_missing",
         title: "Video UGC Proof Under-Utilized",
-        description: "Text testimonials are present, but video user testimonials or customer walkthroughs increase paid ad conversion by 34%.",
-        recommendedAction: "Collect 2-3 short vertical video testimonial clips to use in creative assets and above-the-fold landing page.",
+        description:
+          "Text testimonials are present, but video user testimonials or customer walkthroughs increase paid ad conversion by 34%.",
+        recommendedAction:
+          "Collect 2-3 short vertical video testimonial clips to use in creative assets and above-the-fold landing page.",
       },
     ];
 
     const preAdChecklist = [
-      { item: "Valid Meta / Google Ads Conversion Tracking Pixels Installed", passed: true, importance: "critical" as const },
-      { item: "Clear Value Proposition & Direct CTA Above the Fold", passed: true, importance: "critical" as const },
-      { item: "Public Trust Signals (Reviews / Testimonials / Guarantee)", passed: true, importance: "high" as const },
-      { item: "Mobile Page Load Speed Under 2.5s", passed: true, importance: "high" as const },
-      { item: "Transparent Privacy Policy & Terms of Service in Footer", passed: true, importance: "critical" as const },
-      { item: "Video UGC Social Proof Clips Available", passed: false, importance: "recommended" as const },
+      {
+        item: "Valid Meta / Google Ads Conversion Tracking Pixels Installed",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Clear Value Proposition & Direct CTA Above the Fold",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Public Trust Signals (Reviews / Testimonials / Guarantee)",
+        passed: true,
+        importance: "high" as const,
+      },
+      {
+        item: "Mobile Page Load Speed Under 2.5s",
+        passed: true,
+        importance: "high" as const,
+      },
+      {
+        item: "Transparent Privacy Policy & Terms of Service in Footer",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Video UGC Social Proof Clips Available",
+        passed: false,
+        importance: "recommended" as const,
+      },
     ];
 
     const recommendedAction =
@@ -202,12 +238,36 @@ export const AudienceTrustService = {
     }
 
     const preAdChecklist = [
-      { item: "Valid Meta / Google Ads Conversion Tracking Pixels Installed", passed: true, importance: "critical" as const },
-      { item: "Clear Value Proposition & Direct CTA Above the Fold", passed: true, importance: "critical" as const },
-      { item: "Public Trust Signals (Reviews / Testimonials / Guarantee)", passed: true, importance: "high" as const },
-      { item: "Mobile Page Load Speed Under 2.5s", passed: true, importance: "high" as const },
-      { item: "Transparent Privacy Policy & Terms of Service in Footer", passed: true, importance: "critical" as const },
-      { item: "Video UGC Social Proof Clips Available", passed: false, importance: "recommended" as const },
+      {
+        item: "Valid Meta / Google Ads Conversion Tracking Pixels Installed",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Clear Value Proposition & Direct CTA Above the Fold",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Public Trust Signals (Reviews / Testimonials / Guarantee)",
+        passed: true,
+        importance: "high" as const,
+      },
+      {
+        item: "Mobile Page Load Speed Under 2.5s",
+        passed: true,
+        importance: "high" as const,
+      },
+      {
+        item: "Transparent Privacy Policy & Terms of Service in Footer",
+        passed: true,
+        importance: "critical" as const,
+      },
+      {
+        item: "Video UGC Social Proof Clips Available",
+        passed: false,
+        importance: "recommended" as const,
+      },
     ];
 
     return {

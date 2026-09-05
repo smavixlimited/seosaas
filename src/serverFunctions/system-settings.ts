@@ -28,7 +28,15 @@ const brandingUpdateSchema = z.object({
 
 // Categorized API Settings Update Schema
 const updateApiSettingsSchema = z.object({
-  category: z.enum(["seo", "ai", "local", "analytics", "communications", "payments", "auth"]),
+  category: z.enum([
+    "seo",
+    "ai",
+    "local",
+    "analytics",
+    "communications",
+    "payments",
+    "auth",
+  ]),
   seo: z
     .object({
       dataforseoLogin: z.string().optional(),
@@ -115,7 +123,7 @@ const updateApiSettingsSchema = z.object({
 export const getPublicBranding = createServerFn({ method: "GET" }).handler(
   async () => {
     return SystemSettingsService.getBranding();
-  }
+  },
 );
 
 /**
@@ -126,7 +134,7 @@ export const getRegistrationStatus = createServerFn({ method: "GET" }).handler(
     return {
       enabled: await SystemSettingsService.isPublicRegistrationEnabled(),
     };
-  }
+  },
 );
 
 /**
@@ -136,13 +144,18 @@ export const getPublicTrackingCodes = createServerFn({ method: "GET" }).handler(
   async () => {
     const analytics = await SystemSettingsService.getAnalyticsApis();
     return {
-      ga4MeasurementId: analytics.ga4MeasurementId || process.env.VITE_GA4_MEASUREMENT_ID || "",
+      ga4MeasurementId:
+        analytics.ga4MeasurementId || process.env.VITE_GA4_MEASUREMENT_ID || "",
       googleAnalyticsSnippet: analytics.googleAnalyticsSnippet || "",
-      gscSiteVerificationTag: analytics.gscSiteVerificationTag || process.env.VITE_GSC_VERIFICATION_TAG || "",
-      metaPixelId: analytics.metaPixelId || process.env.VITE_META_PIXEL_ID || "",
+      gscSiteVerificationTag:
+        analytics.gscSiteVerificationTag ||
+        process.env.VITE_GSC_VERIFICATION_TAG ||
+        "",
+      metaPixelId:
+        analytics.metaPixelId || process.env.VITE_META_PIXEL_ID || "",
       metaPixelSnippet: analytics.metaPixelSnippet || "",
     };
-  }
+  },
 );
 
 /**
@@ -161,7 +174,10 @@ export const updateAdminBranding = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(brandingUpdateSchema)
   .handler(async ({ data, context }) => {
-    return SystemSettingsService.setBranding(data as Partial<BrandingSettings>, context.userId);
+    return SystemSettingsService.setBranding(
+      data as Partial<BrandingSettings>,
+      context.userId,
+    );
   });
 
 /**
@@ -170,15 +186,16 @@ export const updateAdminBranding = createServerFn({ method: "POST" })
 export const getAdminApiSettings = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .handler(async () => {
-    const [seo, ai, local, analytics, communications, payments, auth] = await Promise.all([
-      SystemSettingsService.getSeoApis(),
-      SystemSettingsService.getAiApis(),
-      SystemSettingsService.getLocalMapsApis(),
-      SystemSettingsService.getAnalyticsApis(),
-      SystemSettingsService.getCommunicationsApis(),
-      SystemSettingsService.getPaymentGatewaysApis(),
-      SystemSettingsService.getAuthSecurityApis(),
-    ]);
+    const [seo, ai, local, analytics, communications, payments, auth] =
+      await Promise.all([
+        SystemSettingsService.getSeoApis(),
+        SystemSettingsService.getAiApis(),
+        SystemSettingsService.getLocalMapsApis(),
+        SystemSettingsService.getAnalyticsApis(),
+        SystemSettingsService.getCommunicationsApis(),
+        SystemSettingsService.getPaymentGatewaysApis(),
+        SystemSettingsService.getAuthSecurityApis(),
+      ]);
 
     return { seo, ai, local, analytics, communications, payments, auth };
   });
@@ -192,25 +209,46 @@ export const updateAdminApiSettings = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { category } = data;
     if (category === "seo" && data.seo) {
-      return SystemSettingsService.setSeoApis(data.seo as Partial<SeoApiSettings>, context.userId);
+      return SystemSettingsService.setSeoApis(
+        data.seo as Partial<SeoApiSettings>,
+        context.userId,
+      );
     }
     if (category === "ai" && data.ai) {
-      return SystemSettingsService.setAiApis(data.ai as Partial<AiApiSettings>, context.userId);
+      return SystemSettingsService.setAiApis(
+        data.ai as Partial<AiApiSettings>,
+        context.userId,
+      );
     }
     if (category === "local" && data.local) {
-      return SystemSettingsService.setLocalMapsApis(data.local as Partial<LocalMapsApiSettings>, context.userId);
+      return SystemSettingsService.setLocalMapsApis(
+        data.local as Partial<LocalMapsApiSettings>,
+        context.userId,
+      );
     }
     if (category === "analytics" && data.analytics) {
-      return SystemSettingsService.setAnalyticsApis(data.analytics as Partial<AnalyticsTrackingSettings>, context.userId);
+      return SystemSettingsService.setAnalyticsApis(
+        data.analytics as Partial<AnalyticsTrackingSettings>,
+        context.userId,
+      );
     }
     if (category === "communications" && data.communications) {
-      return SystemSettingsService.setCommunicationsApis(data.communications as Partial<CommunicationsApiSettings>, context.userId);
+      return SystemSettingsService.setCommunicationsApis(
+        data.communications as Partial<CommunicationsApiSettings>,
+        context.userId,
+      );
     }
     if (category === "payments" && data.payments) {
-      return SystemSettingsService.setPaymentGatewaysApis(data.payments as Partial<PaymentGatewaysApiSettings>, context.userId);
+      return SystemSettingsService.setPaymentGatewaysApis(
+        data.payments as Partial<PaymentGatewaysApiSettings>,
+        context.userId,
+      );
     }
     if (category === "auth" && data.auth) {
-      return SystemSettingsService.setAuthSecurityApis(data.auth as Partial<AuthSecurityApiSettings>, context.userId);
+      return SystemSettingsService.setAuthSecurityApis(
+        data.auth as Partial<AuthSecurityApiSettings>,
+        context.userId,
+      );
     }
     return { success: true };
   });

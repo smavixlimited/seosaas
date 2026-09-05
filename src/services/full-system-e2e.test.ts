@@ -36,7 +36,8 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
   describe("3. User Management & Magic Impersonation (Phase 17)", () => {
     it("handles tokenized magic impersonation lifecycle", async () => {
       // Direct session test
-      const session = UserManagementService.getImpersonationSession("non_existent_token");
+      const session =
+        UserManagementService.getImpersonationSession("non_existent_token");
       expect(session).toBeNull();
 
       const ended = UserManagementService.endImpersonation("sample_token");
@@ -76,7 +77,9 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
 
   describe("6. Integrated Blog CMS & SEO Publishing (Phase 20)", () => {
     it("validates slug generation and article publication pipeline", async () => {
-      const slug = BlogCmsService.generateSlug("The Ultimate Guide to Modern SEO & AI Citations");
+      const slug = BlogCmsService.generateSlug(
+        "The Ultimate Guide to Modern SEO & AI Citations",
+      );
       expect(slug).toBe("the-ultimate-guide-to-modern-seo-ai-citations");
 
       const posts = await BlogCmsService.getBlogPosts({ status: "published" });
@@ -101,19 +104,25 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
 
   describe("Phase 23: Two-Factor Authentication & Device Session Security", () => {
     it("generates TOTP setup secrets, QR codes, and 8 recovery backup codes", async () => {
-      const { TwoFactorService } = await import("@/services/two-factor.service");
-      const setup = await TwoFactorService.setup2FA("usr_totp_e2e_01", "user@skorvia.com");
+      const { TwoFactorService } =
+        await import("@/services/two-factor.service");
+      const setup = await TwoFactorService.setup2FA(
+        "usr_totp_e2e_01",
+        "user@skorvia.com",
+      );
       expect(setup.secret).toBeDefined();
       expect(setup.qrCodeDataUri).toContain("data:image/svg+xml");
       expect(setup.backupCodes).toHaveLength(8);
     });
 
     it("parses user agents and tracks device sessions", async () => {
-      const { SessionManagerService } = await import("@/services/session-manager.service");
+      const { SessionManagerService } =
+        await import("@/services/session-manager.service");
       const session = await SessionManagerService.trackLoginSession({
         userId: "usr_totp_e2e_01",
         email: "user@skorvia.com",
-        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+        userAgent:
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
         ipAddress: "1.1.1.1",
       });
       expect(session.os).toBe("macOS");
@@ -124,7 +133,8 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
 
   describe("Phase 24: Hierarchical Team Management & Quota Enforcement", () => {
     it("enforces seat quotas and manages team invitations", async () => {
-      const { TeamManagementService } = await import("@/services/team-management.service");
+      const { TeamManagementService } =
+        await import("@/services/team-management.service");
       expect(TeamManagementService.getSeatLimitForPlan("pro")).toBe(5);
       expect(TeamManagementService.getSeatLimitForPlan("enterprise")).toBe(50);
 
@@ -143,7 +153,9 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
   describe("Phase 25: Monetization, Credit Usage Meter & Retention Flow", () => {
     it("calculates real-time credit metrics and applies 30% retention discount", async () => {
       const { RetentionService } = await import("@/services/retention.service");
-      const usage = await RetentionService.getUserCreditUsage("usr_e2e_retention_01");
+      const usage = await RetentionService.getUserCreditUsage(
+        "usr_e2e_retention_01",
+      );
       expect(usage.creditsRemaining).toBeGreaterThanOrEqual(0);
 
       const result = await RetentionService.processCancellationSurvey({
@@ -160,10 +172,14 @@ describe("Skorvia SaaS: Phase 22 Full-System End-to-End Production Verification"
 
   describe("Phase 26: Automated Monday Weekly Digests & Universal CSV Exporter", () => {
     it("calculates weekly metrics, dispatches digest email, and formats CSV", async () => {
-      const { WeeklyDigestService } = await import("@/services/weekly-digest.service");
+      const { WeeklyDigestService } =
+        await import("@/services/weekly-digest.service");
       const { generateCsvString } = await import("@/client/lib/export-csv");
 
-      const digestResult = await WeeklyDigestService.sendDigestToUser("usr_e2e_digest_01", "digest@skorvia.com");
+      const digestResult = await WeeklyDigestService.sendDigestToUser(
+        "usr_e2e_digest_01",
+        "digest@skorvia.com",
+      );
       expect(digestResult.success).toBe(true);
 
       const sampleData = [{ keyword: "skorvia seo", rank: 1 }];

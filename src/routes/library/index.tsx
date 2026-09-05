@@ -1,6 +1,12 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Compass, Search, Target, TrendingUp } from "lucide-react";
+import {
+  ChevronRight,
+  Compass,
+  Search,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
@@ -22,7 +28,7 @@ function StrategyLibraryPage() {
       s.slug === "gsc-programmatic-discovery" ||
       s.slug === "opportunity-sizing-forecasting" ||
       s.slug === "intent-beyond-google" ||
-      s.slug === "positioning-to-demand"
+      s.slug === "positioning-to-demand",
   );
 
   const competitiveStrategies = allStrategies.filter(
@@ -30,7 +36,7 @@ function StrategyLibraryPage() {
       s.slug === "find-your-real-competitors" ||
       s.slug === "keyword-gap-analysis" ||
       s.slug === "competitor-traffic-estimates" ||
-      s.slug === "backlink-gap-analysis"
+      s.slug === "backlink-gap-analysis",
   );
 
   return (
@@ -48,7 +54,9 @@ function StrategyLibraryPage() {
               {BRAND_CONFIG.name} Strategy Library
             </h1>
             <p className="text-base sm:text-lg text-base-content/70">
-              Practical, step-by-step methodologies for search intent classification, topical hub construction, competitor gap mining, and AI answer engine dominance.
+              Practical, step-by-step methodologies for search intent
+              classification, topical hub construction, competitor gap mining,
+              and AI answer engine dominance.
             </p>
           </div>
 
@@ -60,7 +68,8 @@ function StrategyLibraryPage() {
                 Keyword & Search Intent Mastery
               </h2>
               <p className="text-xs text-base-content/60 mt-1">
-                From harvesting customer conversations to building topical clusters with compounding rank velocity.
+                From harvesting customer conversations to building topical
+                clusters with compounding rank velocity.
               </p>
             </div>
 
@@ -85,7 +94,8 @@ function StrategyLibraryPage() {
                   </div>
 
                   <div className="pt-4 flex items-center text-xs font-bold text-primary">
-                    Read Playbook <ChevronRight className="h-3.5 w-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+                    Read Playbook{" "}
+                    <ChevronRight className="h-3.5 w-3.5 ml-1 transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>
               ))}
@@ -100,7 +110,8 @@ function StrategyLibraryPage() {
                 Competitive Intelligence & Authority Gaps
               </h2>
               <p className="text-xs text-base-content/60 mt-1">
-                Extract non-branded keyword gaps, audit authority link profiles, and dissect real SERP competitors.
+                Extract non-branded keyword gaps, audit authority link profiles,
+                and dissect real SERP competitors.
               </p>
             </div>
 
@@ -125,7 +136,8 @@ function StrategyLibraryPage() {
                   </div>
 
                   <div className="pt-4 flex items-center text-xs font-bold text-secondary">
-                    Read Playbook <ChevronRight className="h-3.5 w-3.5 ml-1 transition-transform group-hover:translate-x-1" />
+                    Read Playbook{" "}
+                    <ChevronRight className="h-3.5 w-3.5 ml-1 transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>
               ))}

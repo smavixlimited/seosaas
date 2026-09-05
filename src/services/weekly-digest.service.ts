@@ -18,7 +18,10 @@ export const WeeklyDigestService = {
   /**
    * Generates weekly performance metrics for a user's primary project.
    */
-  async computeUserDigestMetrics(userId: string, email: string): Promise<UserDigestSummary> {
+  async computeUserDigestMetrics(
+    userId: string,
+    email: string,
+  ): Promise<UserDigestSummary> {
     let domain = "mywebsite.com";
     let projectId = "proj_default";
 
@@ -26,10 +29,7 @@ export const WeeklyDigestService = {
       const { db } = await import("@/db");
       const { projects } = await import("@/db/schema");
 
-      const [firstProject] = await db
-        .select()
-        .from(projects)
-        .limit(1);
+      const [firstProject] = await db.select().from(projects).limit(1);
 
       if (firstProject) {
         domain = firstProject.domain || firstProject.name;
@@ -62,7 +62,10 @@ export const WeeklyDigestService = {
   /**
    * Dispatches a weekly digest email to a single user.
    */
-  async sendDigestToUser(userId: string, email: string): Promise<{ success: boolean; id?: string }> {
+  async sendDigestToUser(
+    userId: string,
+    email: string,
+  ): Promise<{ success: boolean; id?: string }> {
     const metrics = await this.computeUserDigestMetrics(userId, email);
 
     const result = await sendWeeklySeoDigestEmail({
@@ -84,7 +87,10 @@ export const WeeklyDigestService = {
         action: "WEEKLY_DIGEST_SENT",
         targetId: userId,
         targetType: "email_digest",
-        metadata: { domain: metrics.domain, keywordsGained: metrics.keywordsGained },
+        metadata: {
+          domain: metrics.domain,
+          keywordsGained: metrics.keywordsGained,
+        },
       });
     }
 
@@ -94,14 +100,19 @@ export const WeeklyDigestService = {
   /**
    * Automated Cloudflare Cron Trigger Handler for Monday morning digests.
    */
-  async handleMondayDigestCron(): Promise<{ processedCount: number; successCount: number }> {
+  async handleMondayDigestCron(): Promise<{
+    processedCount: number;
+    successCount: number;
+  }> {
     let usersList: { id: string; email: string }[] = [];
 
     try {
       const { db } = await import("@/db");
       const { user } = await import("@/db/schema");
 
-      const rows = await db.select({ id: user.id, email: user.email }).from(user);
+      const rows = await db
+        .select({ id: user.id, email: user.email })
+        .from(user);
       usersList = rows;
     } catch {}
 

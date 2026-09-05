@@ -8,7 +8,10 @@ import { WeeklyDigestService } from "@/services/weekly-digest.service";
 export const triggerWeeklyDigestServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .handler(async ({ context }) => {
-    return WeeklyDigestService.sendDigestToUser(context.userId, context.userEmail);
+    return WeeklyDigestService.sendDigestToUser(
+      context.userId,
+      context.userEmail,
+    );
   });
 
 /**
@@ -17,5 +20,8 @@ export const triggerWeeklyDigestServerFn = createServerFn({ method: "POST" })
 export const getWeeklyDigestPreviewServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .handler(async ({ context }) => {
-    return WeeklyDigestService.computeUserDigestMetrics(context.userId, context.userEmail);
+    return WeeklyDigestService.computeUserDigestMetrics(
+      context.userId,
+      context.userEmail,
+    );
   });

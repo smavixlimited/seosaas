@@ -24,10 +24,15 @@ function BacklinkCheckerFeaturePage() {
               Monitor Authority Links & Identify Toxic Backlinks
             </h1>
             <p className="text-base sm:text-lg text-base-content/70">
-              Audit referring domains, anchor text distribution, dofollow/nofollow ratios, and lost links with real-time crawler updates.
+              Audit referring domains, anchor text distribution,
+              dofollow/nofollow ratios, and lost links with real-time crawler
+              updates.
             </p>
             <div className="pt-2 flex justify-center gap-3">
-              <Link to="/sign-up" className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary">
+              <Link
+                to="/sign-up"
+                className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary"
+              >
                 Analyze Backlinks Free
               </Link>
             </div>
@@ -38,9 +43,12 @@ function BacklinkCheckerFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
                 <Globe className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Referring Domain Profiling</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Referring Domain Profiling
+              </h3>
               <p className="text-sm text-base-content/70">
-                Track root domain authority, historical link acquisition velocity, and geographical distribution of inbound links.
+                Track root domain authority, historical link acquisition
+                velocity, and geographical distribution of inbound links.
               </p>
             </div>
 
@@ -48,9 +56,12 @@ function BacklinkCheckerFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Link2 className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Anchor Text Diversity</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Anchor Text Diversity
+              </h3>
               <p className="text-sm text-base-content/70">
-                Ensure natural anchor text distribution across branded, exact match, and generic terms to avoid algorithmic penalties.
+                Ensure natural anchor text distribution across branded, exact
+                match, and generic terms to avoid algorithmic penalties.
               </p>
             </div>
 
@@ -58,9 +69,12 @@ function BacklinkCheckerFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center">
                 <AlertCircle className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Lost Link & Disavow Alerts</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Lost Link & Disavow Alerts
+              </h3>
               <p className="text-sm text-base-content/70">
-                Receive notifications when high-authority links drop or 404, with one-click Google disavow file generation.
+                Receive notifications when high-authority links drop or 404,
+                with one-click Google disavow file generation.
               </p>
             </div>
           </div>

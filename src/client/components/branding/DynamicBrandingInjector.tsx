@@ -41,7 +41,11 @@ export function DynamicBrandingInjector() {
     // 2. Dynamic Document Title update if configured
     if (branding.siteTitle) {
       const currentTitle = document.title;
-      if (!currentTitle || currentTitle.includes("OpenSEO") || currentTitle.includes("Skorvia")) {
+      if (
+        !currentTitle ||
+        currentTitle.includes("OpenSEO") ||
+        currentTitle.includes("Skorvia")
+      ) {
         const tagline = branding.tagline || "Enterprise SEO & Growth SaaS";
         document.title = `${branding.siteTitle} — ${tagline}`;
       }

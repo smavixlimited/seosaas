@@ -73,25 +73,30 @@ describe("SEO Intelligence Alerts & Cron Schedulers", () => {
 
   describe("CronOrchestratorService", () => {
     it("handles 5-minute uptime ping cron trigger", async () => {
-      const res = await CronOrchestratorService.executeScheduledTask("five_min_uptime_ping");
+      const res = await CronOrchestratorService.executeScheduledTask(
+        "five_min_uptime_ping",
+      );
       expect(res.success).toBe(true);
       expect(res.schedule).toBe("five_min_uptime_ping");
     });
 
     it("handles daily rank check cron trigger", async () => {
-      const res = await CronOrchestratorService.executeScheduledTask("daily_rank_check");
+      const res =
+        await CronOrchestratorService.executeScheduledTask("daily_rank_check");
       expect(res.success).toBe(true);
       expect(res.schedule).toBe("daily_rank_check");
     });
 
     it("handles weekly site audit cron trigger", async () => {
-      const res = await CronOrchestratorService.executeScheduledTask("weekly_site_audit");
+      const res =
+        await CronOrchestratorService.executeScheduledTask("weekly_site_audit");
       expect(res.success).toBe(true);
       expect(res.schedule).toBe("weekly_site_audit");
     });
 
     it("handles weekly SEO digest cron trigger", async () => {
-      const res = await CronOrchestratorService.executeScheduledTask("weekly_seo_digest");
+      const res =
+        await CronOrchestratorService.executeScheduledTask("weekly_seo_digest");
       expect(res.success).toBe(true);
       expect(res.schedule).toBe("weekly_seo_digest");
     });

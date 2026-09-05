@@ -19,17 +19,24 @@ function ViralDetectorRoute() {
               Viral Content & Opportunity Detector
             </h1>
             <p className="text-xs text-base-content/60">
-              Discover high-CTR angles, trending content hooks, and viral social patterns tailored to your brand.
+              Discover high-CTR angles, trending content hooks, and viral social
+              patterns tailored to your brand.
             </p>
           </div>
         </div>
       </div>
 
       <div className="rounded-3xl border border-base-300 bg-base-100 p-8 text-center space-y-4 shadow-sm">
-        <Icon icon="solar:magic-stick-3-bold-duotone" className="h-12 w-12 text-primary mx-auto animate-pulse" />
-        <h3 className="text-lg font-bold text-base-content">Viral Content Intelligence</h3>
+        <Icon
+          icon="solar:magic-stick-3-bold-duotone"
+          className="h-12 w-12 text-primary mx-auto animate-pulse"
+        />
+        <h3 className="text-lg font-bold text-base-content">
+          Viral Content Intelligence
+        </h3>
         <p className="text-xs text-base-content/60 max-w-md mx-auto">
-          Scan competitor social proof, viral hook patterns, and trending search formats to generate high-converting content ideas.
+          Scan competitor social proof, viral hook patterns, and trending search
+          formats to generate high-converting content ideas.
         </p>
       </div>
     </div>

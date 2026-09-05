@@ -104,7 +104,8 @@ function SettingsPage() {
                     <span>Two-Factor Authentication & Devices</span>
                   </div>
                   <p className="text-xs text-base-content/60">
-                    Protect your account with TOTP (Google Authenticator) and manage signed-in device sessions.
+                    Protect your account with TOTP (Google Authenticator) and
+                    manage signed-in device sessions.
                   </p>
                 </div>
                 <Link
@@ -128,7 +129,8 @@ function SettingsPage() {
                     <span>Team Members & Seat Management</span>
                   </div>
                   <p className="text-xs text-base-content/60">
-                    Invite colleagues, assign RBAC roles (Admin, Editor, Viewer), and manage shared project access.
+                    Invite colleagues, assign RBAC roles (Admin, Editor,
+                    Viewer), and manage shared project access.
                   </p>
                 </div>
                 <Link

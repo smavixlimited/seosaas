@@ -92,7 +92,8 @@ const DEFAULT_BRANDING: BrandingSettings = {
   supportEmail: BRAND_CONFIG.supportEmail,
   publicRegistrationEnabled: true,
   metaDescription: BRAND_CONFIG.description,
-  metaKeywords: "SEO SaaS, AEO Search Optimization, Keyword Tracking, Backlinks, Rank Tracker, Skorvia",
+  metaKeywords:
+    "SEO SaaS, AEO Search Optimization, Keyword Tracking, Backlinks, Rank Tracker, Skorvia",
 };
 
 const DEFAULT_SEO_APIS: SeoApiSettings = {
@@ -154,7 +155,8 @@ const DEFAULT_PAYMENTS_APIS: PaymentGatewaysApiSettings = {
   manualPaymentBankName: "Skorvia Enterprise Bank",
   manualPaymentAccountNumber: "0123456789",
   manualPaymentAccountName: "Skorvia Technologies Ltd",
-  manualPaymentInstructions: "Please transfer the exact plan amount and upload the payment receipt.",
+  manualPaymentInstructions:
+    "Please transfer the exact plan amount and upload the payment receipt.",
 };
 
 const DEFAULT_AUTH_SECURITY_APIS: AuthSecurityApiSettings = {
@@ -193,14 +195,20 @@ export const SystemSettingsService = {
 
       if (row && row.valueJson) {
         const parsed = JSON.parse(row.valueJson) as T;
-        memoryCache.set(key, { value: parsed, expiresAt: Date.now() + CACHE_TTL_MS });
+        memoryCache.set(key, {
+          value: parsed,
+          expiresAt: Date.now() + CACHE_TTL_MS,
+        });
         return { ...defaultValue, ...parsed };
       }
     } catch {
       // Fallback on dev/test environment or before tables migrate
     }
 
-    memoryCache.set(key, { value: defaultValue, expiresAt: Date.now() + CACHE_TTL_MS });
+    memoryCache.set(key, {
+      value: defaultValue,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    });
     return defaultValue;
   },
 
@@ -266,7 +274,10 @@ export const SystemSettingsService = {
     return this.getSetting<BrandingSettings>("branding", DEFAULT_BRANDING);
   },
 
-  async setBranding(settings: Partial<BrandingSettings>, updatedBy?: string): Promise<BrandingSettings> {
+  async setBranding(
+    settings: Partial<BrandingSettings>,
+    updatedBy?: string,
+  ): Promise<BrandingSettings> {
     const current = await this.getBranding();
     const updated = { ...current, ...settings };
     return this.setSetting<BrandingSettings>("branding", updated, updatedBy);
@@ -281,7 +292,10 @@ export const SystemSettingsService = {
     return this.getSetting<SeoApiSettings>("api_seo", DEFAULT_SEO_APIS);
   },
 
-  async setSeoApis(settings: Partial<SeoApiSettings>, updatedBy?: string): Promise<SeoApiSettings> {
+  async setSeoApis(
+    settings: Partial<SeoApiSettings>,
+    updatedBy?: string,
+  ): Promise<SeoApiSettings> {
     const current = await this.getSeoApis();
     const updated = { ...current, ...settings };
     return this.setSetting<SeoApiSettings>("api_seo", updated, updatedBy);
@@ -291,59 +305,112 @@ export const SystemSettingsService = {
     return this.getSetting<AiApiSettings>("api_ai", DEFAULT_AI_APIS);
   },
 
-  async setAiApis(settings: Partial<AiApiSettings>, updatedBy?: string): Promise<AiApiSettings> {
+  async setAiApis(
+    settings: Partial<AiApiSettings>,
+    updatedBy?: string,
+  ): Promise<AiApiSettings> {
     const current = await this.getAiApis();
     const updated = { ...current, ...settings };
     return this.setSetting<AiApiSettings>("api_ai", updated, updatedBy);
   },
 
   async getLocalMapsApis(): Promise<LocalMapsApiSettings> {
-    return this.getSetting<LocalMapsApiSettings>("api_local", DEFAULT_LOCAL_APIS);
+    return this.getSetting<LocalMapsApiSettings>(
+      "api_local",
+      DEFAULT_LOCAL_APIS,
+    );
   },
 
-  async setLocalMapsApis(settings: Partial<LocalMapsApiSettings>, updatedBy?: string): Promise<LocalMapsApiSettings> {
+  async setLocalMapsApis(
+    settings: Partial<LocalMapsApiSettings>,
+    updatedBy?: string,
+  ): Promise<LocalMapsApiSettings> {
     const current = await this.getLocalMapsApis();
     const updated = { ...current, ...settings };
-    return this.setSetting<LocalMapsApiSettings>("api_local", updated, updatedBy);
+    return this.setSetting<LocalMapsApiSettings>(
+      "api_local",
+      updated,
+      updatedBy,
+    );
   },
 
   async getAnalyticsApis(): Promise<AnalyticsTrackingSettings> {
-    return this.getSetting<AnalyticsTrackingSettings>("api_analytics", DEFAULT_ANALYTICS_APIS);
+    return this.getSetting<AnalyticsTrackingSettings>(
+      "api_analytics",
+      DEFAULT_ANALYTICS_APIS,
+    );
   },
 
-  async setAnalyticsApis(settings: Partial<AnalyticsTrackingSettings>, updatedBy?: string): Promise<AnalyticsTrackingSettings> {
+  async setAnalyticsApis(
+    settings: Partial<AnalyticsTrackingSettings>,
+    updatedBy?: string,
+  ): Promise<AnalyticsTrackingSettings> {
     const current = await this.getAnalyticsApis();
     const updated = { ...current, ...settings };
-    return this.setSetting<AnalyticsTrackingSettings>("api_analytics", updated, updatedBy);
+    return this.setSetting<AnalyticsTrackingSettings>(
+      "api_analytics",
+      updated,
+      updatedBy,
+    );
   },
 
   async getCommunicationsApis(): Promise<CommunicationsApiSettings> {
-    return this.getSetting<CommunicationsApiSettings>("api_communications", DEFAULT_COMMS_APIS);
+    return this.getSetting<CommunicationsApiSettings>(
+      "api_communications",
+      DEFAULT_COMMS_APIS,
+    );
   },
 
-  async setCommunicationsApis(settings: Partial<CommunicationsApiSettings>, updatedBy?: string): Promise<CommunicationsApiSettings> {
+  async setCommunicationsApis(
+    settings: Partial<CommunicationsApiSettings>,
+    updatedBy?: string,
+  ): Promise<CommunicationsApiSettings> {
     const current = await this.getCommunicationsApis();
     const updated = { ...current, ...settings };
-    return this.setSetting<CommunicationsApiSettings>("api_communications", updated, updatedBy);
+    return this.setSetting<CommunicationsApiSettings>(
+      "api_communications",
+      updated,
+      updatedBy,
+    );
   },
 
   async getPaymentGatewaysApis(): Promise<PaymentGatewaysApiSettings> {
-    return this.getSetting<PaymentGatewaysApiSettings>("api_payments", DEFAULT_PAYMENTS_APIS);
+    return this.getSetting<PaymentGatewaysApiSettings>(
+      "api_payments",
+      DEFAULT_PAYMENTS_APIS,
+    );
   },
 
-  async setPaymentGatewaysApis(settings: Partial<PaymentGatewaysApiSettings>, updatedBy?: string): Promise<PaymentGatewaysApiSettings> {
+  async setPaymentGatewaysApis(
+    settings: Partial<PaymentGatewaysApiSettings>,
+    updatedBy?: string,
+  ): Promise<PaymentGatewaysApiSettings> {
     const current = await this.getPaymentGatewaysApis();
     const updated = { ...current, ...settings };
-    return this.setSetting<PaymentGatewaysApiSettings>("api_payments", updated, updatedBy);
+    return this.setSetting<PaymentGatewaysApiSettings>(
+      "api_payments",
+      updated,
+      updatedBy,
+    );
   },
 
   async getAuthSecurityApis(): Promise<AuthSecurityApiSettings> {
-    return this.getSetting<AuthSecurityApiSettings>("api_auth_security", DEFAULT_AUTH_SECURITY_APIS);
+    return this.getSetting<AuthSecurityApiSettings>(
+      "api_auth_security",
+      DEFAULT_AUTH_SECURITY_APIS,
+    );
   },
 
-  async setAuthSecurityApis(settings: Partial<AuthSecurityApiSettings>, updatedBy?: string): Promise<AuthSecurityApiSettings> {
+  async setAuthSecurityApis(
+    settings: Partial<AuthSecurityApiSettings>,
+    updatedBy?: string,
+  ): Promise<AuthSecurityApiSettings> {
     const current = await this.getAuthSecurityApis();
     const updated = { ...current, ...settings };
-    return this.setSetting<AuthSecurityApiSettings>("api_auth_security", updated, updatedBy);
+    return this.setSetting<AuthSecurityApiSettings>(
+      "api_auth_security",
+      updated,
+      updatedBy,
+    );
   },
 };

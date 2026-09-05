@@ -25,8 +25,12 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [activeMainTab, setActiveMainTab] = React.useState<"mentions" | "aeo">("mentions");
-  const [mentionTypeFilter, setMentionTypeFilter] = React.useState<"all" | MentionType>("all");
+  const [activeMainTab, setActiveMainTab] = React.useState<"mentions" | "aeo">(
+    "mentions",
+  );
+  const [mentionTypeFilter, setMentionTypeFilter] = React.useState<
+    "all" | MentionType
+  >("all");
   const [selectedPitch, setSelectedPitch] = React.useState<{
     mention: BrandMentionItem;
     subject: string;
@@ -51,7 +55,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
         data: { mentionId: vars.mention.id },
       }),
     onSuccess: (pitch, vars) => {
-      void queryClient.invalidateQueries({ queryKey: ["brandMentionsHub", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandMentionsHub", projectId],
+      });
       setSelectedPitch({
         mention: vars.mention,
         subject: pitch.subject,
@@ -73,7 +79,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
         },
       }),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["brandMentionsHub", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandMentionsHub", projectId],
+      });
       toast.success("Mention status updated!");
     },
     onError: (err: Error) => {
@@ -98,7 +106,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
       sessionStorage.setItem("sam_pending_prompt", prompt);
     }
 
-    toast.success(`Launching SAM AI for ${item.aiEngine.toUpperCase()} optimization...`);
+    toast.success(
+      `Launching SAM AI for ${item.aiEngine.toUpperCase()} optimization...`,
+    );
 
     void navigate({
       to: "/p/$projectId/sam",
@@ -130,13 +140,16 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary">
               Brand Credibility &amp; AEO
             </span>
-            <span className="text-xs text-slate-400 font-mono">Listening Hub</span>
+            <span className="text-xs text-slate-400 font-mono">
+              Listening Hub
+            </span>
           </div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">
             Brand Mentions &amp; AEO Listening Hub
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Claim high-authority unlinked backlinks across the web and monitor brand sentiment across conversational AI search engines.
+            Claim high-authority unlinked backlinks across the web and monitor
+            brand sentiment across conversational AI search engines.
           </p>
         </div>
 
@@ -173,7 +186,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
       {metrics ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Unlinked Claim Opportunities</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Unlinked Claim Opportunities
+            </span>
             <div className="flex items-baseline justify-between">
               <h4 className="text-lg font-bold text-slate-800 dark:text-slate-100 font-mono">
                 {metrics.unlinkedMentionsCount} Mentions
@@ -182,31 +197,45 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                 High Value
               </span>
             </div>
-            <span className="text-[11px] text-slate-400">Ready for 1-click outreach</span>
+            <span className="text-[11px] text-slate-400">
+              Ready for 1-click outreach
+            </span>
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">High Authority Sites (DA 40+)</span>
+            <span className="text-xs text-slate-400 font-medium">
+              High Authority Sites (DA 40+)
+            </span>
             <h4 className="text-lg font-bold text-indigo-600 dark:text-indigo-400 font-mono">
               {metrics.highAuthorityCount} Sites
             </h4>
-            <span className="text-[11px] text-slate-400">Prime ranking power</span>
+            <span className="text-[11px] text-slate-400">
+              Prime ranking power
+            </span>
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Recoverable Link Value</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Recoverable Link Value
+            </span>
             <h4 className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono">
               ${metrics.estimatedLinkValueUsd.toLocaleString()} USD
             </h4>
-            <span className="text-[11px] text-slate-400">Est. organic backlink value</span>
+            <span className="text-[11px] text-slate-400">
+              Est. organic backlink value
+            </span>
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Avg. AEO Search Sentiment</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Avg. AEO Search Sentiment
+            </span>
             <h4 className="text-lg font-bold text-purple-600 dark:text-purple-400 font-mono">
               {metrics.averageAeoSentimentScore} / 100
             </h4>
-            <span className="text-[11px] text-slate-400">Across 4 AI engines</span>
+            <span className="text-[11px] text-slate-400">
+              Across 4 AI engines
+            </span>
           </div>
         </div>
       ) : null}
@@ -265,9 +294,17 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
           {/* Mentions Feed */}
           {filteredMentions.length === 0 ? (
             <div className="p-12 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-2">
-              <Icon icon="solar:document-text-bold-duotone" className="h-8 w-8 mx-auto text-slate-400" />
-              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">No Mentions in this Filter</h4>
-              <p className="text-xs text-slate-400">All brand mentions are organized by link type and claim lifecycle.</p>
+              <Icon
+                icon="solar:document-text-bold-duotone"
+                className="h-8 w-8 mx-auto text-slate-400"
+              />
+              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                No Mentions in this Filter
+              </h4>
+              <p className="text-xs text-slate-400">
+                All brand mentions are organized by link type and claim
+                lifecycle.
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -287,15 +324,15 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                           m.mentionType === "unlinked"
                             ? "bg-amber-500/10 text-amber-600"
                             : m.mentionType === "ai_citation"
-                            ? "bg-purple-500/10 text-purple-600"
-                            : "bg-emerald-500/10 text-emerald-600"
+                              ? "bg-purple-500/10 text-purple-600"
+                              : "bg-emerald-500/10 text-emerald-600"
                         }`}
                       >
                         {m.mentionType === "unlinked"
                           ? "Unlinked Mention"
                           : m.mentionType === "ai_citation"
-                          ? "AI Overview Citation"
-                          : "Linked Dofollow"}
+                            ? "AI Overview Citation"
+                            : "Linked Dofollow"}
                       </span>
 
                       <span
@@ -303,8 +340,8 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                           m.sentiment === "positive"
                             ? "bg-emerald-500/10 text-emerald-600"
                             : m.sentiment === "critical"
-                            ? "bg-rose-500/10 text-rose-600"
-                            : "bg-slate-500/10 text-slate-600"
+                              ? "bg-rose-500/10 text-rose-600"
+                              : "bg-slate-500/10 text-slate-600"
                         }`}
                       >
                         {m.sentiment.toUpperCase()}
@@ -312,7 +349,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-slate-400">Claim Status:</span>
+                      <span className="text-[10px] text-slate-400">
+                        Claim Status:
+                      </span>
                       <select
                         value={m.claimStatus}
                         onChange={(e) =>
@@ -340,20 +379,28 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                       className="text-sm font-bold text-slate-800 dark:text-slate-100 hover:text-primary transition-colors inline-flex items-center gap-1"
                     >
                       <span>{m.sourceTitle}</span>
-                      <Icon icon="solar:arrow-right-up-bold" className="h-3.5 w-3.5 text-slate-400" />
+                      <Icon
+                        icon="solar:arrow-right-up-bold"
+                        className="h-3.5 w-3.5 text-slate-400"
+                      />
                     </a>
-                    <span className="text-[11px] text-slate-400 block font-mono mt-0.5">{m.sourceDomain}</span>
+                    <span className="text-[11px] text-slate-400 block font-mono mt-0.5">
+                      {m.sourceDomain}
+                    </span>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
-                    <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">Mention Context Snippet:</span>
+                    <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
+                      Mention Context Snippet:
+                    </span>
                     &ldquo;{m.mentionContext}&rdquo;
                   </div>
 
                   {/* Pitch / Action Trigger */}
                   <div className="flex items-center justify-between pt-1">
                     <span className="text-[10px] text-slate-400">
-                      Discovered: {new Date(m.discoveredAt).toLocaleDateString()}
+                      Discovered:{" "}
+                      {new Date(m.discoveredAt).toLocaleDateString()}
                     </span>
 
                     {m.mentionType === "unlinked" ? (
@@ -374,7 +421,11 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                         className="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-colors"
                       >
                         <Icon icon="solar:letter-bold" className="h-4 w-4" />
-                        <span>{m.generatedPitchBody ? "View Outreach Pitch" : "Generate Claim Pitch"}</span>
+                        <span>
+                          {m.generatedPitchBody
+                            ? "View Outreach Pitch"
+                            : "Generate Claim Pitch"}
+                        </span>
                       </button>
                     ) : null}
                   </div>
@@ -392,7 +443,8 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                 Multi-Model Conversational Search Radar
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                How LLMs and Generative Search Engines perceive, rank, and cite your brand entity.
+                How LLMs and Generative Search Engines perceive, rank, and cite
+                your brand entity.
               </p>
             </div>
 
@@ -402,8 +454,15 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
               disabled={refreshAeoMutation.isPending}
               className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 transition-colors self-start sm:self-auto shadow-sm"
             >
-              <Icon icon="solar:refresh-circle-bold" className={`h-4 w-4 ${refreshAeoMutation.isPending ? "animate-spin" : ""}`} />
-              <span>{refreshAeoMutation.isPending ? "Scanning Models..." : "Refresh Scan"}</span>
+              <Icon
+                icon="solar:refresh-circle-bold"
+                className={`h-4 w-4 ${refreshAeoMutation.isPending ? "animate-spin" : ""}`}
+              />
+              <span>
+                {refreshAeoMutation.isPending
+                  ? "Scanning Models..."
+                  : "Refresh Scan"}
+              </span>
             </button>
           </div>
 
@@ -417,13 +476,20 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                   <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
                     <div className="flex items-center gap-2">
                       <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600">
-                        <Icon icon="solar:stars-bold-duotone" className="h-5 w-5" />
+                        <Icon
+                          icon="solar:stars-bold-duotone"
+                          className="h-5 w-5"
+                        />
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide">
-                          {item.aiEngine === "google_aio" ? "Google AI Overviews" : item.aiEngine.toUpperCase()}
+                          {item.aiEngine === "google_aio"
+                            ? "Google AI Overviews"
+                            : item.aiEngine.toUpperCase()}
                         </h4>
-                        <span className="text-[10px] text-slate-400">Engine Index Signal</span>
+                        <span className="text-[10px] text-slate-400">
+                          Engine Index Signal
+                        </span>
                       </div>
                     </div>
 
@@ -431,7 +497,9 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                       <span className="text-base font-bold text-purple-600 dark:text-purple-400 font-mono">
                         {item.sentimentScore}/100
                       </span>
-                      <span className="text-[10px] text-slate-400 block">Sentiment</span>
+                      <span className="text-[10px] text-slate-400 block">
+                        Sentiment
+                      </span>
                     </div>
                   </div>
 
@@ -441,14 +509,16 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
 
                   {/* Entity Citation Status */}
                   <div className="flex items-center justify-between text-xs px-1">
-                    <span className="text-slate-400">Entity Citation Status:</span>
+                    <span className="text-slate-400">
+                      Entity Citation Status:
+                    </span>
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                         item.entityCitationStatus === "present"
                           ? "bg-emerald-500/10 text-emerald-600"
                           : item.entityCitationStatus === "ambiguous"
-                          ? "bg-amber-500/10 text-amber-600"
-                          : "bg-rose-500/10 text-rose-600"
+                            ? "bg-amber-500/10 text-amber-600"
+                            : "bg-rose-500/10 text-rose-600"
                       }`}
                     >
                       {item.entityCitationStatus.toUpperCase()}
@@ -461,8 +531,14 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                       Recognized Entity Strengths:
                     </span>
                     {item.keyStrengthsHighlighted.map((str, sIdx) => (
-                      <div key={sIdx} className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300">
-                        <Icon icon="solar:check-circle-bold-duotone" className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                      <div
+                        key={sIdx}
+                        className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300"
+                      >
+                        <Icon
+                          icon="solar:check-circle-bold-duotone"
+                          className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5"
+                        />
                         <span>{str}</span>
                       </div>
                     ))}
@@ -474,7 +550,10 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
                       Missing Entity Gaps:
                     </span>
                     {item.keyMissingGaps.map((gap, gIdx) => (
-                      <div key={gIdx} className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300">
+                      <div
+                        key={gIdx}
+                        className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-slate-300"
+                      >
                         <span className="text-amber-500 font-bold">•</span>
                         <span>{gap}</span>
                       </div>

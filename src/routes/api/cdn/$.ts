@@ -29,7 +29,9 @@ export const Route = createFileRoute("/api/cdn/$")({
           if (r2 && typeof r2.get === "function") {
             const object = await r2.get(key);
             if (!object) {
-              return new Response("Asset not found in storage", { status: 404 });
+              return new Response("Asset not found in storage", {
+                status: 404,
+              });
             }
 
             const headers = new Headers();
@@ -37,17 +39,25 @@ export const Route = createFileRoute("/api/cdn/$")({
               object.writeHttpMetadata(headers);
             }
 
-            if (!headers.has("content-type") && object.httpMetadata?.contentType) {
+            if (
+              !headers.has("content-type") &&
+              object.httpMetadata?.contentType
+            ) {
               headers.set("content-type", object.httpMetadata.contentType);
             }
 
             // If still missing content-type, infer from extension
             if (!headers.has("content-type")) {
-              if (key.endsWith(".png")) headers.set("content-type", "image/png");
-              else if (key.endsWith(".jpg") || key.endsWith(".jpeg")) headers.set("content-type", "image/jpeg");
-              else if (key.endsWith(".svg")) headers.set("content-type", "image/svg+xml");
-              else if (key.endsWith(".ico")) headers.set("content-type", "image/x-icon");
-              else if (key.endsWith(".webp")) headers.set("content-type", "image/webp");
+              if (key.endsWith(".png"))
+                headers.set("content-type", "image/png");
+              else if (key.endsWith(".jpg") || key.endsWith(".jpeg"))
+                headers.set("content-type", "image/jpeg");
+              else if (key.endsWith(".svg"))
+                headers.set("content-type", "image/svg+xml");
+              else if (key.endsWith(".ico"))
+                headers.set("content-type", "image/x-icon");
+              else if (key.endsWith(".webp"))
+                headers.set("content-type", "image/webp");
               else headers.set("content-type", "application/octet-stream");
             }
 
@@ -62,11 +72,16 @@ export const Route = createFileRoute("/api/cdn/$")({
             });
           }
 
-          return new Response("Storage bucket not available in this environment", { status: 404 });
+          return new Response(
+            "Storage bucket not available in this environment",
+            { status: 404 },
+          );
         } catch (err: unknown) {
           return new Response(
-            JSON.stringify({ error: err instanceof Error ? err.message : "Error reading asset" }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
+            JSON.stringify({
+              error: err instanceof Error ? err.message : "Error reading asset",
+            }),
+            { status: 500, headers: { "Content-Type": "application/json" } },
           );
         }
       },

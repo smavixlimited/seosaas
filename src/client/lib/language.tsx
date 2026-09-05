@@ -23,17 +23,71 @@ export interface LanguageInfo {
 }
 
 export const SUPPORTED_LANGUAGES: LanguageInfo[] = [
-  { code: "en", name: "English", nativeName: "English (US)", flag: "🇺🇸", dir: "ltr" },
-  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸", dir: "ltr" },
-  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷", dir: "ltr" },
+  {
+    code: "en",
+    name: "English",
+    nativeName: "English (US)",
+    flag: "🇺🇸",
+    dir: "ltr",
+  },
+  {
+    code: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    flag: "🇪🇸",
+    dir: "ltr",
+  },
+  {
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+    flag: "🇫🇷",
+    dir: "ltr",
+  },
   { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪", dir: "ltr" },
-  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹", dir: "ltr" },
+  {
+    code: "pt",
+    name: "Portuguese",
+    nativeName: "Português",
+    flag: "🇵🇹",
+    dir: "ltr",
+  },
   { code: "ar", name: "Arabic", nativeName: "العربية", flag: "🇦🇪", dir: "rtl" },
-  { code: "zh", name: "Chinese", nativeName: "简体中文", flag: "🇨🇳", dir: "ltr" },
-  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵", dir: "ltr" },
-  { code: "yo", name: "Yoruba", nativeName: "Èdè Yorùbá", flag: "🇳🇬", dir: "ltr" },
-  { code: "ha", name: "Hausa", nativeName: "Harshen Hausa", flag: "🇳🇬", dir: "ltr" },
-  { code: "ig", name: "Igbo", nativeName: "Asụsụ Igbo", flag: "🇳🇬", dir: "ltr" },
+  {
+    code: "zh",
+    name: "Chinese",
+    nativeName: "简体中文",
+    flag: "🇨🇳",
+    dir: "ltr",
+  },
+  {
+    code: "ja",
+    name: "Japanese",
+    nativeName: "日本語",
+    flag: "🇯🇵",
+    dir: "ltr",
+  },
+  {
+    code: "yo",
+    name: "Yoruba",
+    nativeName: "Èdè Yorùbá",
+    flag: "🇳🇬",
+    dir: "ltr",
+  },
+  {
+    code: "ha",
+    name: "Hausa",
+    nativeName: "Harshen Hausa",
+    flag: "🇳🇬",
+    dir: "ltr",
+  },
+  {
+    code: "ig",
+    name: "Igbo",
+    nativeName: "Asụsụ Igbo",
+    flag: "🇳🇬",
+    dir: "ltr",
+  },
 ];
 
 interface LanguageContextType {
@@ -54,11 +108,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = React.useState<SupportedLanguage>(() => {
     if (typeof window === "undefined") return "en";
     try {
-      const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY) as SupportedLanguage | null;
+      const stored = window.localStorage.getItem(
+        LANGUAGE_STORAGE_KEY,
+      ) as SupportedLanguage | null;
       if (stored && SUPPORTED_LANGUAGES.some((l) => l.code === stored)) {
         return stored;
       }
-      const browserLang = navigator.language?.split("-")[0] as SupportedLanguage;
+      const browserLang = navigator.language?.split(
+        "-",
+      )[0] as SupportedLanguage;
       if (SUPPORTED_LANGUAGES.some((l) => l.code === browserLang)) {
         return browserLang;
       }
@@ -83,11 +141,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const currentLanguageInfo = React.useMemo(() => {
-    return SUPPORTED_LANGUAGES.find((l) => l.code === language) || SUPPORTED_LANGUAGES[0];
+    return (
+      SUPPORTED_LANGUAGES.find((l) => l.code === language) ||
+      SUPPORTED_LANGUAGES[0]
+    );
   }, [language]);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, currentLanguageInfo }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, currentLanguageInfo }}
+    >
       {children}
     </LanguageContext.Provider>
   );
@@ -104,7 +167,10 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -113,7 +179,10 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div className={`relative inline-block text-left ${className}`} ref={dropdownRef}>
+    <div
+      className={`relative inline-block text-left ${className}`}
+      ref={dropdownRef}
+    >
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -154,7 +223,10 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
                 <span>{lang.nativeName}</span>
               </div>
               {language === lang.code && (
-                <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:check-circle-bold"
+                  className="h-4 w-4 text-primary"
+                />
               )}
             </button>
           ))}

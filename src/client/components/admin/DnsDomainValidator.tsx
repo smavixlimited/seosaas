@@ -19,7 +19,12 @@ export function DnsDomainValidator({
   const [isChecking, setIsChecking] = React.useState(false);
   const [lastCheckedAt, setLastCheckedAt] = React.useState<string | null>(null);
 
-  const cleanDomain = domain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "") || "yourdomain.com";
+  const cleanDomain =
+    domain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "") || "yourdomain.com";
 
   const dnsRecords: DnsRecordRequirement[] = [
     {
@@ -27,28 +32,32 @@ export function DnsDomainValidator({
       name: cleanDomain,
       value: "v=spf1 include:resend.com ~all",
       status: "verified",
-      description: "SPF: Authorizes Resend edge nodes to send emails on behalf of your domain.",
+      description:
+        "SPF: Authorizes Resend edge nodes to send emails on behalf of your domain.",
     },
     {
       type: "TXT",
       name: `resend._domainkey.${cleanDomain}`,
       value: "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...",
       status: "verified",
-      description: "DKIM: Cryptographically signs emails to guarantee sender authenticity.",
+      description:
+        "DKIM: Cryptographically signs emails to guarantee sender authenticity.",
     },
     {
       type: "TXT",
       name: `_dmarc.${cleanDomain}`,
       value: "v=DMARC1; p=none;",
       status: "verified",
-      description: "DMARC: Specifies email authentication policies to prevent phishing.",
+      description:
+        "DMARC: Specifies email authentication policies to prevent phishing.",
     },
     {
       type: "MX",
       name: `feedback.${cleanDomain}`,
       value: "feedback-smtp.resend.com (Priority: 10)",
       status: "verified",
-      description: "MX: Receives inbound bounce and delivery failure notifications.",
+      description:
+        "MX: Receives inbound bounce and delivery failure notifications.",
     },
   ];
 
@@ -79,7 +88,9 @@ export function DnsDomainValidator({
             </h3>
           </div>
           <p className="text-xs text-base-content/60">
-            Configure these DNS records at your domain registrar (Cloudflare, Namecheap, GoDaddy) to prevent transactional emails from landing in spam.
+            Configure these DNS records at your domain registrar (Cloudflare,
+            Namecheap, GoDaddy) to prevent transactional emails from landing in
+            spam.
           </p>
         </div>
 
@@ -89,7 +100,14 @@ export function DnsDomainValidator({
           disabled={isChecking}
           className="btn btn-outline btn-primary btn-sm rounded-xl font-bold gap-2"
         >
-          <Icon icon={isChecking ? "solar:refresh-circle-bold" : "solar:check-read-linear"} className={`h-4 w-4 ${isChecking ? "animate-spin" : ""}`} />
+          <Icon
+            icon={
+              isChecking
+                ? "solar:refresh-circle-bold"
+                : "solar:check-read-linear"
+            }
+            className={`h-4 w-4 ${isChecking ? "animate-spin" : ""}`}
+          />
           <span>{isChecking ? "Validating DNS..." : "Verify DNS Status"}</span>
         </button>
       </div>
@@ -143,14 +161,19 @@ export function DnsDomainValidator({
                 </td>
                 <td className="text-center">
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5"
+                    />
                     <span>Verified</span>
                   </span>
                 </td>
                 <td className="text-right">
                   <button
                     type="button"
-                    onClick={() => copyToClipboard(rec.value, `${rec.type} Value`)}
+                    onClick={() =>
+                      copyToClipboard(rec.value, `${rec.type} Value`)
+                    }
                     className="btn btn-ghost btn-xs rounded-lg font-bold gap-1"
                   >
                     <Icon icon="solar:copy-linear" className="h-3.5 w-3.5" />

@@ -25,11 +25,16 @@ function StrategyReaderPage() {
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex items-center gap-2 text-xs font-bold text-primary">
-            <Link to="/library" className="hover:underline flex items-center gap-1">
+            <Link
+              to="/library"
+              className="hover:underline flex items-center gap-1"
+            >
               <ArrowLeft className="h-3 w-3" /> Strategy Library
             </Link>
             <span>/</span>
-            <span className="text-base-content/70 capitalize">{slug.replace(/-/g, " ")}</span>
+            <span className="text-base-content/70 capitalize">
+              {slug.replace(/-/g, " ")}
+            </span>
           </div>
 
           {strategy ? (
@@ -51,11 +56,16 @@ function StrategyReaderPage() {
             </div>
           ) : (
             <div className="text-center py-16 space-y-4">
-              <h2 className="text-2xl font-bold text-base-content">Strategy Not Found</h2>
+              <h2 className="text-2xl font-bold text-base-content">
+                Strategy Not Found
+              </h2>
               <p className="text-sm text-base-content/60">
                 The requested SEO strategy playbook could not be located.
               </p>
-              <Link to="/library" className="btn btn-primary btn-sm rounded-xl font-bold">
+              <Link
+                to="/library"
+                className="btn btn-primary btn-sm rounded-xl font-bold"
+              >
                 Return to Strategy Library
               </Link>
             </div>

@@ -22,7 +22,9 @@ function ForLocalBusinessPage() {
           <div className="text-center max-w-3xl mx-auto space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/25 bg-amber-500/5 px-4 py-1.5 text-xs font-bold text-amber-700 dark:text-amber-300">
               <Icon icon="solar:shop-bold" className="h-4 w-4" />
-              <span>Built for Local Clinics, Law Firms, Contractors & Stores</span>
+              <span>
+                Built for Local Clinics, Law Firms, Contractors & Stores
+              </span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
@@ -33,7 +35,10 @@ function ForLocalBusinessPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-base-content/70 font-medium max-w-2xl mx-auto leading-relaxed">
-              When customers search "near me", will they find you or your closest competitor? {BRAND_CONFIG.name} provides 3x3/5x5 Geo-Grid Map rank tracking, automated Google Business Profile audits, and AI review responses.
+              When customers search "near me", will they find you or your
+              closest competitor? {BRAND_CONFIG.name} provides 3x3/5x5 Geo-Grid
+              Map rank tracking, automated Google Business Profile audits, and
+              AI review responses.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -62,7 +67,8 @@ function ForLocalBusinessPage() {
               All-In-One Local SEO & Google Business Toolkit
             </h2>
             <p className="text-sm text-base-content/70">
-              Increase local phone calls, store directions, and five-star customer reviews.
+              Increase local phone calls, store directions, and five-star
+              customer reviews.
             </p>
           </div>
 
@@ -91,8 +97,12 @@ function ForLocalBusinessPage() {
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
                   <Icon icon={card.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="font-extrabold text-base text-base-content">{card.title}</h3>
-                <p className="text-xs text-base-content/70 leading-relaxed">{card.desc}</p>
+                <h3 className="font-extrabold text-base text-base-content">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {card.desc}
+                </p>
               </div>
             ))}
           </div>

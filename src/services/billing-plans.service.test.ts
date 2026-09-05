@@ -60,7 +60,7 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
     const saved = await BillingPlansService.upsertPlan(
       customPlan,
       "usr_admin_001",
-      "admin@skorvia.com"
+      "admin@skorvia.com",
     );
 
     expect(saved.id).toBe("test-agency-plan");
@@ -75,7 +75,7 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
       "test-agency-plan",
       false,
       "usr_admin_001",
-      "admin@skorvia.com"
+      "admin@skorvia.com",
     );
     expect(isArchived).toBe(false);
 
@@ -83,7 +83,7 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
       "test-agency-plan",
       true,
       "usr_admin_001",
-      "admin@skorvia.com"
+      "admin@skorvia.com",
     );
     expect(isReactivated).toBe(true);
   });

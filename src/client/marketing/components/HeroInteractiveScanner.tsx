@@ -46,9 +46,24 @@ const PRESET_DATA: Record<string, ScanResult> = {
       },
     ],
     topKeywordGaps: [
-      { keyword: "best ai sales assistant", volume: "9,900/mo", diff: "KD 28 (Easy)", cpc: "$4.80" },
-      { keyword: "automated pipeline reporting", volume: "4,400/mo", diff: "KD 32 (Easy)", cpc: "$6.20" },
-      { keyword: "enterprise crm integrations", volume: "3,100/mo", diff: "KD 41 (Med)", cpc: "$8.50" },
+      {
+        keyword: "best ai sales assistant",
+        volume: "9,900/mo",
+        diff: "KD 28 (Easy)",
+        cpc: "$4.80",
+      },
+      {
+        keyword: "automated pipeline reporting",
+        volume: "4,400/mo",
+        diff: "KD 32 (Easy)",
+        cpc: "$6.20",
+      },
+      {
+        keyword: "enterprise crm integrations",
+        volume: "3,100/mo",
+        diff: "KD 41 (Med)",
+        cpc: "$8.50",
+      },
     ],
   },
   "ecommerce-store.com": {
@@ -75,9 +90,24 @@ const PRESET_DATA: Record<string, ScanResult> = {
       },
     ],
     topKeywordGaps: [
-      { keyword: "organic cotton hoodies", volume: "22,000/mo", diff: "KD 34 (Easy)", cpc: "$1.40" },
-      { keyword: "sustainable gym clothes", volume: "14,500/mo", diff: "KD 39 (Med)", cpc: "$2.10" },
-      { keyword: "eco friendly athletic wear", volume: "8,800/mo", diff: "KD 29 (Easy)", cpc: "$1.90" },
+      {
+        keyword: "organic cotton hoodies",
+        volume: "22,000/mo",
+        diff: "KD 34 (Easy)",
+        cpc: "$1.40",
+      },
+      {
+        keyword: "sustainable gym clothes",
+        volume: "14,500/mo",
+        diff: "KD 39 (Med)",
+        cpc: "$2.10",
+      },
+      {
+        keyword: "eco friendly athletic wear",
+        volume: "8,800/mo",
+        diff: "KD 29 (Easy)",
+        cpc: "$1.90",
+      },
     ],
   },
   "local-agency.com": {
@@ -104,18 +134,37 @@ const PRESET_DATA: Record<string, ScanResult> = {
       },
     ],
     topKeywordGaps: [
-      { keyword: "local seo agency near me", volume: "6,600/mo", diff: "KD 24 (Easy)", cpc: "$14.20" },
-      { keyword: "google maps ranking service", volume: "3,200/mo", diff: "KD 22 (Easy)", cpc: "$11.50" },
-      { keyword: "b2b lead generation agency", volume: "2,400/mo", diff: "KD 38 (Med)", cpc: "$16.80" },
+      {
+        keyword: "local seo agency near me",
+        volume: "6,600/mo",
+        diff: "KD 24 (Easy)",
+        cpc: "$14.20",
+      },
+      {
+        keyword: "google maps ranking service",
+        volume: "3,200/mo",
+        diff: "KD 22 (Easy)",
+        cpc: "$11.50",
+      },
+      {
+        keyword: "b2b lead generation agency",
+        volume: "2,400/mo",
+        diff: "KD 38 (Med)",
+        cpc: "$16.80",
+      },
     ],
   },
 };
 
 export function HeroInteractiveScanner() {
   const [domainInput, setDomainInput] = useState("saas-sample.com");
-  const [activeTab, setActiveTab] = useState<"overview" | "gaps" | "citations">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "gaps" | "citations">(
+    "overview",
+  );
   const [isScanning, setIsScanning] = useState(false);
-  const [scanResult, setScanResult] = useState<ScanResult>(PRESET_DATA["saas-sample.com"]);
+  const [scanResult, setScanResult] = useState<ScanResult>(
+    PRESET_DATA["saas-sample.com"],
+  );
 
   const handleScan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,12 +172,17 @@ export function HeroInteractiveScanner() {
 
     setIsScanning(true);
     setTimeout(() => {
-      const cleanDomain = domainInput.replace(/^https?:\/\//, "").replace(/\/.*$/, "").toLowerCase();
+      const cleanDomain = domainInput
+        .replace(/^https?:\/\//, "")
+        .replace(/\/.*$/, "")
+        .toLowerCase();
       if (PRESET_DATA[cleanDomain]) {
         setScanResult(PRESET_DATA[cleanDomain]);
       } else {
         // Generate realistic dynamic metrics for custom entered domain
-        const hash = cleanDomain.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const hash = cleanDomain
+          .split("")
+          .reduce((acc, char) => acc + char.charCodeAt(0), 0);
         const health = 65 + (hash % 26);
         const lostTraffic = 5000 + (hash % 35000);
         const revenueLeak = Math.round(lostTraffic * 1.35);
@@ -152,15 +206,31 @@ export function HeroInteractiveScanner() {
               severity: "critical",
             },
             {
-              title: "Mobile page speed score below Google's 85 recommended threshold",
+              title:
+                "Mobile page speed score below Google's 85 recommended threshold",
               impact: "Core Web Vitals penalty on mobile devices",
               severity: "warning",
             },
           ],
           topKeywordGaps: [
-            { keyword: `best ${cleanDomain.split(".")[0]} tools`, volume: "8,400/mo", diff: "KD 29 (Easy)", cpc: "$5.40" },
-            { keyword: `${cleanDomain.split(".")[0]} software comparison`, volume: "4,200/mo", diff: "KD 31 (Easy)", cpc: "$7.20" },
-            { keyword: "automated audit software", volume: "3,800/mo", diff: "KD 36 (Med)", cpc: "$9.10" },
+            {
+              keyword: `best ${cleanDomain.split(".")[0]} tools`,
+              volume: "8,400/mo",
+              diff: "KD 29 (Easy)",
+              cpc: "$5.40",
+            },
+            {
+              keyword: `${cleanDomain.split(".")[0]} software comparison`,
+              volume: "4,200/mo",
+              diff: "KD 31 (Easy)",
+              cpc: "$7.20",
+            },
+            {
+              keyword: "automated audit software",
+              volume: "3,800/mo",
+              diff: "KD 36 (Med)",
+              cpc: "$9.10",
+            },
           ],
         });
       }
@@ -189,7 +259,10 @@ export function HeroInteractiveScanner() {
           </div>
           <div className="flex items-center gap-2 text-xs font-semibold text-primary dark:text-brand-300">
             <Icon icon="solar:bolt-bold" className="h-4 w-4" />
-            <span>Analyzing: <strong className="underline">{scanResult.domain}</strong></span>
+            <span>
+              Analyzing:{" "}
+              <strong className="underline">{scanResult.domain}</strong>
+            </span>
           </div>
         </div>
 
@@ -229,7 +302,9 @@ export function HeroInteractiveScanner() {
 
         {/* 1-Click Presets */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs text-secondary/70 dark:text-accent/70">
-          <span className="font-semibold text-secondary/50 dark:text-accent/50 shrink-0 mr-1">Presets:</span>
+          <span className="font-semibold text-secondary/50 dark:text-accent/50 shrink-0 mr-1">
+            Presets:
+          </span>
           {[
             { label: "SaaS", key: "saas-sample.com" },
             { label: "E-Commerce", key: "ecommerce-store.com" },
@@ -257,28 +332,46 @@ export function HeroInteractiveScanner() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">SEO Health Score</span>
-              <Icon icon="solar:shield-check-bold" className="h-4 w-4 text-emerald-500" />
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">
+                SEO Health Score
+              </span>
+              <Icon
+                icon="solar:shield-check-bold"
+                className="h-4 w-4 text-emerald-500"
+              />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl sm:text-3xl font-black text-emerald-500">{scanResult.healthScore}</span>
-              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">/ 100</span>
+              <span className="text-2xl sm:text-3xl font-black text-emerald-500">
+                {scanResult.healthScore}
+              </span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">
+                / 100
+              </span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-              {scanResult.healthScore >= 80 ? "Solid foundation" : "High optimization headroom"}
+              {scanResult.healthScore >= 80
+                ? "Solid foundation"
+                : "High optimization headroom"}
             </div>
           </div>
 
           <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">Lost Traffic / Mo</span>
-              <Icon icon="solar:graph-down-bold" className="h-4 w-4 text-rose-500" />
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">
+                Lost Traffic / Mo
+              </span>
+              <Icon
+                icon="solar:graph-down-bold"
+                className="h-4 w-4 text-rose-500"
+              />
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-rose-500">
                 {scanResult.monthlyLostTraffic.toLocaleString()}
               </span>
-              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">visits</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">
+                visits
+              </span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-rose-600 dark:text-rose-400">
               Trapped in positions 11-20
@@ -287,14 +380,21 @@ export function HeroInteractiveScanner() {
 
           <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">Est. Monthly Leak</span>
-              <Icon icon="solar:dollar-bold" className="h-4 w-4 text-amber-500" />
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">
+                Est. Monthly Leak
+              </span>
+              <Icon
+                icon="solar:dollar-bold"
+                className="h-4 w-4 text-amber-500"
+              />
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-amber-500">
                 ${scanResult.estimatedRevenueLeak.toLocaleString()}
               </span>
-              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">/ mo</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">
+                / mo
+              </span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-amber-600 dark:text-amber-400">
               Recoverable via Top 3 rank
@@ -303,14 +403,21 @@ export function HeroInteractiveScanner() {
 
           <div className="rounded-2xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 p-4 relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">AEO Citation Share</span>
-              <Icon icon="solar:stars-bold" className="h-4 w-4 text-primary dark:text-brand-300" />
+              <span className="text-[11px] font-bold text-secondary/60 dark:text-accent/60 uppercase tracking-wider">
+                AEO Citation Share
+              </span>
+              <Icon
+                icon="solar:stars-bold"
+                className="h-4 w-4 text-primary dark:text-brand-300"
+              />
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl sm:text-3xl font-black text-primary dark:text-brand-300">
                 {scanResult.aiCitationShare}%
               </span>
-              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">in AI SERPs</span>
+              <span className="text-xs font-bold text-secondary/40 dark:text-accent/40">
+                in AI SERPs
+              </span>
             </div>
             <div className="mt-2 text-[11px] font-semibold text-primary/80 dark:text-brand-300/80">
               ChatGPT & Perplexity
@@ -322,9 +429,21 @@ export function HeroInteractiveScanner() {
         <div className="border border-stroke-3/60 rounded-2xl overflow-hidden bg-white dark:bg-secondary/40">
           <div className="flex border-b border-stroke-3/60 bg-background-2/60 dark:bg-secondary/60 overflow-x-auto">
             {[
-              { id: "overview", label: "Prioritized Fixes", icon: "solar:checklist-bold" },
-              { id: "gaps", label: "Top Keyword Gaps", icon: "solar:target-bold" },
-              { id: "citations", label: "AI Search Radar", icon: "solar:radar-bold" },
+              {
+                id: "overview",
+                label: "Prioritized Fixes",
+                icon: "solar:checklist-bold",
+              },
+              {
+                id: "gaps",
+                label: "Top Keyword Gaps",
+                icon: "solar:target-bold",
+              },
+              {
+                id: "citations",
+                label: "AI Search Radar",
+                icon: "solar:radar-bold",
+              },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -356,8 +475,8 @@ export function HeroInteractiveScanner() {
                           issue.severity === "critical"
                             ? "bg-rose-500 text-white"
                             : issue.severity === "warning"
-                            ? "bg-amber-500 text-white"
-                            : "bg-emerald-500 text-white"
+                              ? "bg-amber-500 text-white"
+                              : "bg-emerald-500 text-white"
                         }`}
                       >
                         {issue.severity.toUpperCase()}
@@ -376,17 +495,29 @@ export function HeroInteractiveScanner() {
                 <div className="relative mt-4 pt-4 border-t border-stroke-3/40 rounded-xl overflow-hidden">
                   <div className="opacity-35 blur-[1.5px] pointer-events-none space-y-2 select-none">
                     <div className="p-3 rounded-xl border border-stroke-3 bg-background-2 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-secondary">H1 tag hierarchy missing on 14 product category archives</span>
-                      <span className="text-xs font-bold text-rose-500">Critical Crawl Issue</span>
+                      <span className="text-xs font-semibold text-secondary">
+                        H1 tag hierarchy missing on 14 product category archives
+                      </span>
+                      <span className="text-xs font-bold text-rose-500">
+                        Critical Crawl Issue
+                      </span>
                     </div>
                     <div className="p-3 rounded-xl border border-stroke-3 bg-background-2 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-secondary">Canonical URL loop detected across multi-currency variants</span>
-                      <span className="text-xs font-bold text-amber-500">Indexation Bleed</span>
+                      <span className="text-xs font-semibold text-secondary">
+                        Canonical URL loop detected across multi-currency
+                        variants
+                      </span>
+                      <span className="text-xs font-bold text-amber-500">
+                        Indexation Bleed
+                      </span>
                     </div>
                   </div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 dark:bg-secondary/70 backdrop-blur-[2px] p-3 text-center rounded-xl">
                     <div className="flex items-center gap-2 text-xs font-bold text-secondary dark:text-accent mb-1">
-                      <Icon icon="solar:lock-bold" className="size-4 text-primary dark:text-brand-300" />
+                      <Icon
+                        icon="solar:lock-bold"
+                        className="size-4 text-primary dark:text-brand-300"
+                      />
                       <span>+48 More Issues & Gaps Discovered</span>
                     </div>
                     <Link
@@ -394,7 +525,10 @@ export function HeroInteractiveScanner() {
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-brand-300 hover:underline"
                     >
                       <span>Unlock full 50-page breakdown free</span>
-                      <Icon icon="solar:arrow-right-linear" className="size-3.5" />
+                      <Icon
+                        icon="solar:arrow-right-linear"
+                        className="size-3.5"
+                      />
                     </Link>
                   </div>
                 </div>
@@ -417,21 +551,30 @@ export function HeroInteractiveScanner() {
                     <tbody>
                       {scanResult.topKeywordGaps.map((gap, idx) => (
                         <tr key={idx} className="border-b border-stroke-3/30">
-                          <td className="font-bold text-secondary dark:text-accent">{gap.keyword}</td>
-                          <td className="font-semibold text-secondary/80 dark:text-accent/80">{gap.volume}</td>
+                          <td className="font-bold text-secondary dark:text-accent">
+                            {gap.keyword}
+                          </td>
+                          <td className="font-semibold text-secondary/80 dark:text-accent/80">
+                            {gap.volume}
+                          </td>
                           <td>
                             <span className="badge badge-sm border border-emerald-500/30 bg-emerald-500/10 font-bold text-emerald-600 dark:text-emerald-400">
                               {gap.diff}
                             </span>
                           </td>
-                          <td className="font-semibold text-secondary/80 dark:text-accent/80">{gap.cpc}</td>
+                          <td className="font-semibold text-secondary/80 dark:text-accent/80">
+                            {gap.cpc}
+                          </td>
                           <td>
                             <Link
                               to="/sign-up"
                               className="btn btn-ghost btn-xs text-primary dark:text-brand-300 font-bold hover:bg-primary/10 gap-1"
                             >
                               <span>Target</span>
-                              <Icon icon="solar:arrow-right-linear" className="h-3 w-3" />
+                              <Icon
+                                icon="solar:arrow-right-linear"
+                                className="h-3 w-3"
+                              />
                             </Link>
                           </td>
                         </tr>
@@ -453,7 +596,10 @@ export function HeroInteractiveScanner() {
                       to="/sign-up"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-brand-300 hover:underline"
                     >
-                      <Icon icon="solar:lock-bold" className="size-3.5 text-primary dark:text-brand-300" />
+                      <Icon
+                        icon="solar:lock-bold"
+                        className="size-3.5 text-primary dark:text-brand-300"
+                      />
                       <span>+142 More Low-Hanging Keyword Opportunities</span>
                     </Link>
                   </div>
@@ -465,25 +611,49 @@ export function HeroInteractiveScanner() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/20 text-xs font-semibold text-primary dark:text-brand-300">
                   <div className="flex items-center gap-2">
-                    <Icon icon="solar:shield-warning-bold" className="h-4 w-4" />
-                    <span>Perplexity, ChatGPT & Claude currently cite 3 of your competitors for commercial buying queries.</span>
+                    <Icon
+                      icon="solar:shield-warning-bold"
+                      className="h-4 w-4"
+                    />
+                    <span>
+                      Perplexity, ChatGPT & Claude currently cite 3 of your
+                      competitors for commercial buying queries.
+                    </span>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                   <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
-                    <div className="font-bold text-secondary/60 dark:text-accent/60">Perplexity AI</div>
-                    <div className="text-lg font-black text-rose-500 mt-1">Not Cited</div>
-                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Competitors taking 100% share</div>
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">
+                      Perplexity AI
+                    </div>
+                    <div className="text-lg font-black text-rose-500 mt-1">
+                      Not Cited
+                    </div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">
+                      Competitors taking 100% share
+                    </div>
                   </div>
                   <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
-                    <div className="font-bold text-secondary/60 dark:text-accent/60">ChatGPT Search</div>
-                    <div className="text-lg font-black text-amber-500 mt-1">1 Citation</div>
-                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Brand mention only</div>
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">
+                      ChatGPT Search
+                    </div>
+                    <div className="text-lg font-black text-amber-500 mt-1">
+                      1 Citation
+                    </div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">
+                      Brand mention only
+                    </div>
                   </div>
                   <div className="p-3 rounded-xl border border-stroke-3/60 bg-background-2/40 dark:bg-secondary/30 text-center">
-                    <div className="font-bold text-secondary/60 dark:text-accent/60">Claude Recommendations</div>
-                    <div className="text-lg font-black text-emerald-500 mt-1">2 Citations</div>
-                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">Solid technical presence</div>
+                    <div className="font-bold text-secondary/60 dark:text-accent/60">
+                      Claude Recommendations
+                    </div>
+                    <div className="text-lg font-black text-emerald-500 mt-1">
+                      2 Citations
+                    </div>
+                    <div className="text-[10px] text-secondary/50 dark:text-accent/50 mt-0.5">
+                      Solid technical presence
+                    </div>
                   </div>
                 </div>
               </div>
@@ -498,7 +668,8 @@ export function HeroInteractiveScanner() {
               See Full 50-Page Audit & Track Daily Rankings
             </h4>
             <p className="text-tagline-3 text-secondary/70 dark:text-accent/70">
-              Get competitor ad spy access, real-time rank tracking, and weekly PDF client reports.
+              Get competitor ad spy access, real-time rank tracking, and weekly
+              PDF client reports.
             </p>
           </div>
           <Link

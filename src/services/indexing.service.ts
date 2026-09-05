@@ -22,7 +22,10 @@ export const IndexingService = {
    * Submits a batch of URLs to the IndexNow protocol (Bing, Yandex, Seznam, Naver).
    */
   async submitIndexNow(params: SubmitIndexNowParams) {
-    const host = params.host.trim().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+    const host = params.host
+      .trim()
+      .replace(/^https?:\/\//i, "")
+      .replace(/\/.*$/, "");
     if (!host) {
       throw new AppError("VALIDATION_ERROR", "A valid host domain is required");
     }
@@ -33,7 +36,10 @@ export const IndexingService = {
       .slice(0, 10000); // max 10k per IndexNow spec
 
     if (cleanedUrls.length === 0) {
-      throw new AppError("VALIDATION_ERROR", "Please provide at least one URL to index");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Please provide at least one URL to index",
+      );
     }
 
     const key = params.key || DEFAULT_INDEXNOW_KEY;
@@ -61,7 +67,8 @@ export const IndexingService = {
         statusMessage = "URLs received and queued for crawl";
       } else {
         const errorText = await response.text().catch(() => "");
-        statusMessage = errorText || `IndexNow responded with HTTP ${response.status}`;
+        statusMessage =
+          errorText || `IndexNow responded with HTTP ${response.status}`;
       }
     } catch {
       // In dev or offline mode, simulate successful acceptance
@@ -116,7 +123,10 @@ export const IndexingService = {
       });
 
       if (!res.ok) {
-        throw new AppError("VALIDATION_ERROR", `Failed to fetch sitemap (HTTP ${res.status})`);
+        throw new AppError(
+          "VALIDATION_ERROR",
+          `Failed to fetch sitemap (HTTP ${res.status})`,
+        );
       }
 
       const xmlText = await res.text();
@@ -131,7 +141,10 @@ export const IndexingService = {
       };
     } catch (err) {
       if (err instanceof AppError) throw err;
-      throw new AppError("VALIDATION_ERROR", `Unable to parse sitemap: ${(err as Error).message}`);
+      throw new AppError(
+        "VALIDATION_ERROR",
+        `Unable to parse sitemap: ${(err as Error).message}`,
+      );
     }
   },
 

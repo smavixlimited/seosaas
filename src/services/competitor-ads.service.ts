@@ -1,5 +1,9 @@
 import { db } from "@/db";
-import { competitorTrackedAds, brandCompetitors, brandProfiles } from "@/db/schema";
+import {
+  competitorTrackedAds,
+  brandCompetitors,
+  brandProfiles,
+} from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
 export type AdPlatform = "meta" | "google" | "tiktok" | "linkedin";
@@ -17,7 +21,12 @@ export interface CompetitorAdItem {
   mediaType: "image" | "video" | "text_only";
   landingPageUrl?: string;
   ctaType: string;
-  angleCategory: "social_proof" | "fomo" | "discount_offer" | "problem_solution" | "educational";
+  angleCategory:
+    | "social_proof"
+    | "fomo"
+    | "discount_offer"
+    | "problem_solution"
+    | "educational";
   estimatedActiveDays: number;
   isWinningAd: boolean;
   isAiOpportunity: boolean;
@@ -63,8 +72,17 @@ export const CompetitorAdsService = {
     platform?: AdPlatform | "all";
     forceRefresh?: boolean;
   }): Promise<CompetitorAdsOverviewResult> {
-    const { projectId, competitorDomain, platform = "all", forceRefresh = false } = params;
-    const cleanDomain = competitorDomain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    const {
+      projectId,
+      competitorDomain,
+      platform = "all",
+      forceRefresh = false,
+    } = params;
+    const cleanDomain = competitorDomain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "");
 
     // 1. Check existing cached ads from DB if not force-refreshing
     if (!forceRefresh) {
@@ -75,16 +93,17 @@ export const CompetitorAdsService = {
           .where(
             and(
               eq(competitorTrackedAds.projectId, projectId),
-              eq(competitorTrackedAds.competitorDomain, cleanDomain)
-            )
+              eq(competitorTrackedAds.competitorDomain, cleanDomain),
+            ),
           )
           .orderBy(desc(competitorTrackedAds.estimatedActiveDays));
 
         if (rows.length > 0) {
           const formattedAds = rows.map((r) => this.formatDbRow(r));
-          const filteredAds = platform === "all" 
-            ? formattedAds 
-            : formattedAds.filter((a) => a.platform === platform);
+          const filteredAds =
+            platform === "all"
+              ? formattedAds
+              : formattedAds.filter((a) => a.platform === platform);
 
           if (filteredAds.length > 0) {
             return this.buildOverviewResult(cleanDomain, platform, filteredAds);
@@ -105,9 +124,13 @@ export const CompetitorAdsService = {
   async scanCompetitorAds(
     projectId: string,
     competitorDomain: string,
-    selectedPlatform: AdPlatform | "all"
+    selectedPlatform: AdPlatform | "all",
   ): Promise<CompetitorAdsOverviewResult> {
-    const cleanDomain = competitorDomain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    const cleanDomain = competitorDomain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "");
     const brandNameGuess = cleanDomain.split(".")[0].toUpperCase();
 
     // Look up competitor name if available
@@ -120,8 +143,8 @@ export const CompetitorAdsService = {
         .where(
           and(
             eq(brandCompetitors.projectId, projectId),
-            eq(brandCompetitors.domain, cleanDomain)
-          )
+            eq(brandCompetitors.domain, cleanDomain),
+          ),
         )
         .limit(1);
 
@@ -133,33 +156,54 @@ export const CompetitorAdsService = {
       // ignore
     }
 
-    const platformsToScan: AdPlatform[] = selectedPlatform === "all"
-      ? ["meta", "google", "tiktok", "linkedin"]
-      : [selectedPlatform];
+    const platformsToScan: AdPlatform[] =
+      selectedPlatform === "all"
+        ? ["meta", "google", "tiktok", "linkedin"]
+        : [selectedPlatform];
 
     const discoveredAds: CompetitorAdItem[] = [];
 
     // PLATFORM 1: Google Search Ads via DataForSEO SERP
     if (platformsToScan.includes("google")) {
-      const googleAds = await this.extractGoogleSearchAds(projectId, cleanDomain, competitorName, competitorId);
+      const googleAds = await this.extractGoogleSearchAds(
+        projectId,
+        cleanDomain,
+        competitorName,
+        competitorId,
+      );
       discoveredAds.push(...googleAds);
     }
 
     // PLATFORM 2: Meta (Facebook & Instagram) Ads
     if (platformsToScan.includes("meta")) {
-      const metaAds = await this.extractMetaAds(projectId, cleanDomain, competitorName, competitorId);
+      const metaAds = await this.extractMetaAds(
+        projectId,
+        cleanDomain,
+        competitorName,
+        competitorId,
+      );
       discoveredAds.push(...metaAds);
     }
 
     // PLATFORM 3: LinkedIn Ad Library via Firecrawl
     if (platformsToScan.includes("linkedin")) {
-      const linkedInAds = await this.extractLinkedInAds(projectId, cleanDomain, competitorName, competitorId);
+      const linkedInAds = await this.extractLinkedInAds(
+        projectId,
+        cleanDomain,
+        competitorName,
+        competitorId,
+      );
       discoveredAds.push(...linkedInAds);
     }
 
     // PLATFORM 4: TikTok Creative Center Ads
     if (platformsToScan.includes("tiktok")) {
-      const tikTokAds = await this.extractTikTokAds(projectId, cleanDomain, competitorName, competitorId);
+      const tikTokAds = await this.extractTikTokAds(
+        projectId,
+        cleanDomain,
+        competitorName,
+        competitorId,
+      );
       discoveredAds.push(...tikTokAds);
     }
 
@@ -193,7 +237,12 @@ export const CompetitorAdsService = {
       console.warn("Failed saving competitor ads to DB:", err);
     }
 
-    return this.buildOverviewResult(cleanDomain, selectedPlatform, discoveredAds, competitorName);
+    return this.buildOverviewResult(
+      cleanDomain,
+      selectedPlatform,
+      discoveredAds,
+      competitorName,
+    );
   },
 
   /**
@@ -203,7 +252,7 @@ export const CompetitorAdsService = {
     projectId: string,
     domain: string,
     competitorName: string,
-    brandCompetitorId?: string
+    brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
     return [
@@ -224,8 +273,17 @@ export const CompetitorAdsService = {
         isWinningAd: true,
         isAiOpportunity: false,
         metadata: {
-          sitelinks: ["Interactive Demo", "Pricing Plans", "Customer Case Studies", "API Documentation"],
-          targetKeywords: [`${competitorName.toLowerCase()} vs alternatives`, "best workflow automation tool", "enterprise marketing platform"],
+          sitelinks: [
+            "Interactive Demo",
+            "Pricing Plans",
+            "Customer Case Studies",
+            "API Documentation",
+          ],
+          targetKeywords: [
+            `${competitorName.toLowerCase()} vs alternatives`,
+            "best workflow automation tool",
+            "enterprise marketing platform",
+          ],
         },
         createdAt: now,
       },
@@ -261,7 +319,7 @@ export const CompetitorAdsService = {
     projectId: string,
     domain: string,
     competitorName: string,
-    brandCompetitorId?: string
+    brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
     return [
@@ -274,7 +332,8 @@ export const CompetitorAdsService = {
         platform: "meta",
         headline: `Stop Wasting Budget on Manual Processes`,
         bodyCopy: `Most teams spend 15+ hours weekly on tasks that could run automatically. See how fast-growing companies scale faster with ${competitorName}. Claim your complimentary strategy audit.`,
-        mediaUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+        mediaUrl:
+          "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
         mediaType: "image",
         landingPageUrl: `https://${domain}/special-offer`,
         ctaType: "Get Offer",
@@ -296,7 +355,8 @@ export const CompetitorAdsService = {
         platform: "meta",
         headline: `Trusted by 500+ High-Growth Tech Companies`,
         bodyCopy: `"Switching to ${competitorName} doubled our operational throughput within 30 days." — Alex V., VP Operations. See customer results.`,
-        mediaUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+        mediaUrl:
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
         mediaType: "image",
         landingPageUrl: `https://${domain}/case-study`,
         ctaType: "Learn More",
@@ -319,7 +379,7 @@ export const CompetitorAdsService = {
     projectId: string,
     domain: string,
     competitorName: string,
-    brandCompetitorId?: string
+    brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
     return [
@@ -332,7 +392,8 @@ export const CompetitorAdsService = {
         platform: "linkedin",
         headline: `2026 Executive Playbook: Scaling Digital Operations`,
         bodyCopy: `Download the definitive benchmark report based on data from 1,200+ enterprise leaders. Discover actionable cost reduction frameworks.`,
-        mediaUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+        mediaUrl:
+          "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
         mediaType: "image",
         landingPageUrl: `https://${domain}/whitepaper-2026`,
         ctaType: "Download",
@@ -341,7 +402,11 @@ export const CompetitorAdsService = {
         isWinningAd: true,
         isAiOpportunity: false,
         metadata: {
-          targetKeywords: ["VP Engineering", "Chief Technology Officer", "Director of Operations"],
+          targetKeywords: [
+            "VP Engineering",
+            "Chief Technology Officer",
+            "Director of Operations",
+          ],
         },
         createdAt: now,
       },
@@ -355,7 +420,7 @@ export const CompetitorAdsService = {
     projectId: string,
     domain: string,
     competitorName: string,
-    brandCompetitorId?: string
+    brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
     return [
@@ -368,7 +433,8 @@ export const CompetitorAdsService = {
         platform: "tiktok",
         headline: `POV: You stopped doing everything manually in 2026 🤯`,
         bodyCopy: `Secret hack that fast-growing founders use to reclaim 3 hours every single day. Link in bio to test it yourself! #productivity #tech #saas`,
-        mediaUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
+        mediaUrl:
+          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
         mediaType: "video",
         landingPageUrl: `https://${domain}/tiktok-exclusive`,
         ctaType: "Try Now",
@@ -392,20 +458,31 @@ export const CompetitorAdsService = {
     competitorDomain: string,
     selectedPlatform: AdPlatform | "all",
     ads: CompetitorAdItem[],
-    competitorName?: string
+    competitorName?: string,
   ): CompetitorAdsOverviewResult {
     const activePlatforms = Array.from(new Set(ads.map((a) => a.platform)));
-    const winningAdsCount = ads.filter((a) => a.isWinningAd || a.estimatedActiveDays >= 30).length;
-    
+    const winningAdsCount = ads.filter(
+      (a) => a.isWinningAd || a.estimatedActiveDays >= 30,
+    ).length;
+
     // Find dominant angle
     const angleCounts: Record<string, number> = {};
     for (const ad of ads) {
       angleCounts[ad.angleCategory] = (angleCounts[ad.angleCategory] || 0) + 1;
     }
-    const dominantAngle = Object.entries(angleCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "problem_solution";
+    const dominantAngle =
+      Object.entries(angleCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
+      "problem_solution";
 
-    const allPossiblePlatforms: AdPlatform[] = ["meta", "google", "tiktok", "linkedin"];
-    const untapped = allPossiblePlatforms.filter((p) => !activePlatforms.includes(p));
+    const allPossiblePlatforms: AdPlatform[] = [
+      "meta",
+      "google",
+      "tiktok",
+      "linkedin",
+    ];
+    const untapped = allPossiblePlatforms.filter(
+      (p) => !activePlatforms.includes(p),
+    );
 
     const name = competitorName || competitorDomain.split(".")[0].toUpperCase();
 
@@ -417,7 +494,8 @@ export const CompetitorAdsService = {
       winningAdsCount,
       activePlatforms,
       dominantAngle,
-      estimatedMonthlyAdBurn: ads.length > 0 ? `$${(ads.length * 1850).toLocaleString()}` : "$0",
+      estimatedMonthlyAdBurn:
+        ads.length > 0 ? `$${(ads.length * 1850).toLocaleString()}` : "$0",
       ads,
       opportunityBlueprint: {
         untappedPlatforms: untapped,
@@ -454,7 +532,8 @@ export const CompetitorAdsService = {
       projectId: row.projectId,
       brandCompetitorId: row.brandCompetitorId || undefined,
       competitorDomain: row.competitorDomain,
-      competitorName: row.competitorName || row.competitorDomain.split(".")[0].toUpperCase(),
+      competitorName:
+        row.competitorName || row.competitorDomain.split(".")[0].toUpperCase(),
       platform: row.platform as AdPlatform,
       headline: row.headline,
       bodyCopy: row.bodyCopy || "",

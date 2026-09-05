@@ -16,7 +16,14 @@ interface MenuItemLinkProps {
   onClick?: () => void;
 }
 
-function MenuItemLink({ href, title, description, icon, showDivider, onClick }: MenuItemLinkProps) {
+function MenuItemLink({
+  href,
+  title,
+  description,
+  icon,
+  showDivider,
+  onClick,
+}: MenuItemLinkProps) {
   return (
     <>
       <li className="group/item list-none">
@@ -50,21 +57,66 @@ function MenuItemLink({ href, title, description, icon, showDivider, onClick }: 
 // 1. Platform / Features Mega-Menu (3 Columns)
 function PlatformMenu({ onClose }: { onClose: () => void }) {
   const col1 = [
-    { href: "/features/competitor-page-decoder", title: "Competitor Ad Decoder", description: "4-Network ad creative spy & angle decoder", icon: "solar:eye-bold-duotone" },
-    { href: "/features/keyword-research", title: "Keyword Revenue Radar", description: "Pos 11-20 leak recovery & intent grouping", icon: "solar:target-bold-duotone" },
-    { href: "/features/ai-search-aeo", title: "AI Search & AEO Monitor", description: "ChatGPT, Claude & Perplexity citations", icon: "solar:stars-bold-duotone" },
+    {
+      href: "/features/competitor-page-decoder",
+      title: "Competitor Ad Decoder",
+      description: "4-Network ad creative spy & angle decoder",
+      icon: "solar:eye-bold-duotone",
+    },
+    {
+      href: "/features/keyword-research",
+      title: "Keyword Revenue Radar",
+      description: "Pos 11-20 leak recovery & intent grouping",
+      icon: "solar:target-bold-duotone",
+    },
+    {
+      href: "/features/ai-search-aeo",
+      title: "AI Search & AEO Monitor",
+      description: "ChatGPT, Claude & Perplexity citations",
+      icon: "solar:stars-bold-duotone",
+    },
   ];
 
   const col2 = [
-    { href: "/features/local-business", title: "Google Maps Geo-Grid", description: "GPS 7x7 coordinate map pack tracking", icon: "solar:map-point-bold-duotone" },
-    { href: "/features/site-audit", title: "Technical Site Audit", description: "Core Web Vitals & automated issue fixes", icon: "solar:shield-check-bold-duotone" },
-    { href: "/features/backlink-checker", title: "Backlink Explorer", description: "Domain authority & lost backlink reclaim", icon: "solar:link-bold-duotone" },
+    {
+      href: "/features/local-business",
+      title: "Google Maps Geo-Grid",
+      description: "GPS 7x7 coordinate map pack tracking",
+      icon: "solar:map-point-bold-duotone",
+    },
+    {
+      href: "/features/site-audit",
+      title: "Technical Site Audit",
+      description: "Core Web Vitals & automated issue fixes",
+      icon: "solar:shield-check-bold-duotone",
+    },
+    {
+      href: "/features/backlink-checker",
+      title: "Backlink Explorer",
+      description: "Domain authority & lost backlink reclaim",
+      icon: "solar:link-bold-duotone",
+    },
   ];
 
   const col3 = [
-    { href: "/features/white-label-reports", title: "Executive PDF Reports", description: "1-Click white-label client board reports", icon: "solar:document-text-bold-duotone" },
-    { href: "/free-audit", title: "Instant Free Audit", description: "Zero-commitment domain health check", icon: "solar:scanner-bold-duotone" },
-    { href: "/features/skorvia-ai-coach", title: "Autonomous AI Coach", description: "24/7 strategic SEO recommendations", icon: "solar:chat-round-line-bold-duotone" },
+    {
+      href: "/features/white-label-reports",
+      title: "Executive PDF Reports",
+      description: "1-Click white-label client board reports",
+      icon: "solar:document-text-bold-duotone",
+    },
+    {
+      href: "/free-audit",
+      title: "Instant Free Audit",
+      description: "Zero-commitment domain health check",
+      icon: "solar:scanner-bold-duotone",
+    },
+    {
+      href: "/features/skorvia-ai-coach",
+      title: "Autonomous AI Coach",
+      description: "24/7 strategic SEO recommendations",
+      icon: "solar:chat-round-line-bold-duotone",
+    },
   ];
 
   return (
@@ -76,7 +128,12 @@ function PlatformMenu({ onClose }: { onClose: () => void }) {
           </div>
           <ul className="space-y-1">
             {col1.map((item, i) => (
-              <MenuItemLink key={item.href} {...item} showDivider={i < col1.length - 1} onClick={onClose} />
+              <MenuItemLink
+                key={item.href}
+                {...item}
+                showDivider={i < col1.length - 1}
+                onClick={onClose}
+              />
             ))}
           </ul>
         </div>
@@ -87,7 +144,12 @@ function PlatformMenu({ onClose }: { onClose: () => void }) {
           </div>
           <ul className="space-y-1">
             {col2.map((item, i) => (
-              <MenuItemLink key={item.href} {...item} showDivider={i < col2.length - 1} onClick={onClose} />
+              <MenuItemLink
+                key={item.href}
+                {...item}
+                showDivider={i < col2.length - 1}
+                onClick={onClose}
+              />
             ))}
           </ul>
         </div>
@@ -98,7 +160,12 @@ function PlatformMenu({ onClose }: { onClose: () => void }) {
           </div>
           <ul className="space-y-1">
             {col3.map((item, i) => (
-              <MenuItemLink key={item.href} {...item} showDivider={i < col3.length - 1} onClick={onClose} />
+              <MenuItemLink
+                key={item.href}
+                {...item}
+                showDivider={i < col3.length - 1}
+                onClick={onClose}
+              />
             ))}
           </ul>
         </div>
@@ -110,14 +177,40 @@ function PlatformMenu({ onClose }: { onClose: () => void }) {
 // 2. Solutions Mega-Menu (2 Columns)
 function SolutionsMenu({ onClose }: { onClose: () => void }) {
   const byIndustry = [
-    { href: "/solutions/for-saas", title: "SaaS & Tech", description: "Scale MRR via high-intent bottom-funnel queries", icon: "solar:laptop-bold-duotone" },
-    { href: "/solutions/for-ecommerce", title: "E-Commerce", description: "Dominate product rich snippets & shopping ads", icon: "solar:bag-3-bold-duotone" },
-    { href: "/solutions/for-local-business", title: "Local Businesses", description: "Own Google Map Packs in your geographic radius", icon: "solar:shop-2-bold-duotone" },
+    {
+      href: "/solutions/for-saas",
+      title: "SaaS & Tech",
+      description: "Scale MRR via high-intent bottom-funnel queries",
+      icon: "solar:laptop-bold-duotone",
+    },
+    {
+      href: "/solutions/for-ecommerce",
+      title: "E-Commerce",
+      description: "Dominate product rich snippets & shopping ads",
+      icon: "solar:bag-3-bold-duotone",
+    },
+    {
+      href: "/solutions/for-local-business",
+      title: "Local Businesses",
+      description: "Own Google Map Packs in your geographic radius",
+      icon: "solar:shop-2-bold-duotone",
+    },
   ];
 
   const byRole = [
-    { href: "/solutions/for-agencies", title: "Growth Agencies", description: "Deliver 1-click white-label PDF reports with unlimited seats", icon: "solar:users-group-two-rounded-bold-duotone" },
-    { href: "/solutions/for-saas", title: "Founders & Solopreneurs", description: "Automate SEO tasks without high agency retainers", icon: "solar:rocket-2-bold-duotone" },
+    {
+      href: "/solutions/for-agencies",
+      title: "Growth Agencies",
+      description:
+        "Deliver 1-click white-label PDF reports with unlimited seats",
+      icon: "solar:users-group-two-rounded-bold-duotone",
+    },
+    {
+      href: "/solutions/for-saas",
+      title: "Founders & Solopreneurs",
+      description: "Automate SEO tasks without high agency retainers",
+      icon: "solar:rocket-2-bold-duotone",
+    },
   ];
 
   return (
@@ -129,7 +222,12 @@ function SolutionsMenu({ onClose }: { onClose: () => void }) {
           </div>
           <ul className="space-y-1">
             {byIndustry.map((item, i) => (
-              <MenuItemLink key={item.href} {...item} showDivider={i < byIndustry.length - 1} onClick={onClose} />
+              <MenuItemLink
+                key={item.href}
+                {...item}
+                showDivider={i < byIndustry.length - 1}
+                onClick={onClose}
+              />
             ))}
           </ul>
         </div>
@@ -140,7 +238,12 @@ function SolutionsMenu({ onClose }: { onClose: () => void }) {
           </div>
           <ul className="space-y-1">
             {byRole.map((item, i) => (
-              <MenuItemLink key={item.href} {...item} showDivider={i < byRole.length - 1} onClick={onClose} />
+              <MenuItemLink
+                key={item.href}
+                {...item}
+                showDivider={i < byRole.length - 1}
+                onClick={onClose}
+              />
             ))}
           </ul>
         </div>
@@ -152,11 +255,36 @@ function SolutionsMenu({ onClose }: { onClose: () => void }) {
 // 3. Resources Menu (Blog, Docs, Tutorials, FAQ, Support)
 function ResourcesMenu({ onClose }: { onClose: () => void }) {
   const resources = [
-    { href: "/blogs", title: "Blog & Playbooks", description: "Latest tactical breakdowns and case studies", icon: "solar:document-bold-duotone" },
-    { href: "/docs", title: "Documentation & MCP", description: "AI agent protocol and platform docs", icon: "solar:book-bookmark-bold-duotone" },
-    { href: "/free-audit", title: "Free Instant Scan", description: "Run instant 50-page site health checks", icon: "solar:scanner-bold-duotone" },
-    { href: "/about", title: "About & Culture", description: "Our team, vision, and mission", icon: "solar:buildings-bold-duotone" },
-    { href: "/contact", title: "Help & Support", description: "24/7 dedicated customer assistance", icon: "solar:headphones-round-bold-duotone" },
+    {
+      href: "/blogs",
+      title: "Blog & Playbooks",
+      description: "Latest tactical breakdowns and case studies",
+      icon: "solar:document-bold-duotone",
+    },
+    {
+      href: "/docs",
+      title: "Documentation & MCP",
+      description: "AI agent protocol and platform docs",
+      icon: "solar:book-bookmark-bold-duotone",
+    },
+    {
+      href: "/free-audit",
+      title: "Free Instant Scan",
+      description: "Run instant 50-page site health checks",
+      icon: "solar:scanner-bold-duotone",
+    },
+    {
+      href: "/about",
+      title: "About & Culture",
+      description: "Our team, vision, and mission",
+      icon: "solar:buildings-bold-duotone",
+    },
+    {
+      href: "/contact",
+      title: "Help & Support",
+      description: "24/7 dedicated customer assistance",
+      icon: "solar:headphones-round-bold-duotone",
+    },
   ];
 
   return (
@@ -167,7 +295,12 @@ function ResourcesMenu({ onClose }: { onClose: () => void }) {
         </div>
         <ul className="space-y-1">
           {resources.map((item, i) => (
-            <MenuItemLink key={item.href} {...item} showDivider={i < resources.length - 1} onClick={onClose} />
+            <MenuItemLink
+              key={item.href}
+              {...item}
+              showDivider={i < resources.length - 1}
+              onClick={onClose}
+            />
           ))}
         </ul>
       </div>
@@ -179,14 +312,18 @@ export function MarketingNavbar() {
   const { data: session } = useSession();
   const { themePreference, setThemePreference } = useThemePreference();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [activeDropdown, setActiveDropdown] = React.useState<"platform" | "solutions" | "resources" | null>(null);
+  const [activeDropdown, setActiveDropdown] = React.useState<
+    "platform" | "solutions" | "resources" | null
+  >(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const toggleTheme = () => {
     setThemePreference(themePreference === "dark" ? "light" : "dark");
   };
 
-  const handleMouseEnter = (dropdown: "platform" | "solutions" | "resources") => {
+  const handleMouseEnter = (
+    dropdown: "platform" | "solutions" | "resources",
+  ) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -211,7 +348,11 @@ export function MarketingNavbar() {
       <div className="border border-stroke-2 dark:border-stroke-6 bg-white/95 dark:bg-background-9/95 mx-auto flex items-center justify-between rounded-full px-3.5 sm:px-5 py-2 xl:py-2.5 shadow-xl backdrop-blur-xl">
         {/* Brand Logo */}
         <div className="flex items-center">
-          <Link to="/" className="inline-flex items-center gap-2.5" onClick={closeDropdown}>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2.5"
+            onClick={closeDropdown}
+          >
             <img
               src={BRAND_CONFIG.logoUrl}
               alt={BRAND_CONFIG.name}
@@ -235,7 +376,9 @@ export function MarketingNavbar() {
               <button
                 type="button"
                 className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
-                  activeDropdown === "platform" ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10" : ""
+                  activeDropdown === "platform"
+                    ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
+                    : ""
                 }`}
               >
                 <span>Features</span>
@@ -246,7 +389,9 @@ export function MarketingNavbar() {
                   }`}
                 />
               </button>
-              {activeDropdown === "platform" && <PlatformMenu onClose={closeDropdown} />}
+              {activeDropdown === "platform" && (
+                <PlatformMenu onClose={closeDropdown} />
+              )}
             </li>
 
             {/* 2. Solutions */}
@@ -258,7 +403,9 @@ export function MarketingNavbar() {
               <button
                 type="button"
                 className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
-                  activeDropdown === "solutions" ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10" : ""
+                  activeDropdown === "solutions"
+                    ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
+                    : ""
                 }`}
               >
                 <span>Solutions</span>
@@ -269,7 +416,9 @@ export function MarketingNavbar() {
                   }`}
                 />
               </button>
-              {activeDropdown === "solutions" && <SolutionsMenu onClose={closeDropdown} />}
+              {activeDropdown === "solutions" && (
+                <SolutionsMenu onClose={closeDropdown} />
+              )}
             </li>
 
             {/* 3. Resources (Blog, Docs, Tutorials, FAQ) */}
@@ -281,7 +430,9 @@ export function MarketingNavbar() {
               <button
                 type="button"
                 className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
-                  activeDropdown === "resources" ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10" : ""
+                  activeDropdown === "resources"
+                    ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
+                    : ""
                 }`}
               >
                 <span>Resources</span>
@@ -292,7 +443,9 @@ export function MarketingNavbar() {
                   }`}
                 />
               </button>
-              {activeDropdown === "resources" && <ResourcesMenu onClose={closeDropdown} />}
+              {activeDropdown === "resources" && (
+                <ResourcesMenu onClose={closeDropdown} />
+              )}
             </li>
 
             {/* 4. Pricing (Direct Link) */}
@@ -325,7 +478,11 @@ export function MarketingNavbar() {
             aria-label="Toggle theme"
           >
             <Icon
-              icon={themePreference === "dark" ? "solar:sun-2-bold" : "solar:moon-bold"}
+              icon={
+                themePreference === "dark"
+                  ? "solar:sun-2-bold"
+                  : "solar:moon-bold"
+              }
               className="size-4"
             />
           </button>
@@ -361,7 +518,14 @@ export function MarketingNavbar() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >
-            <Icon icon={mobileMenuOpen ? "solar:close-circle-bold" : "solar:hamburger-menu-linear"} className="size-6" />
+            <Icon
+              icon={
+                mobileMenuOpen
+                  ? "solar:close-circle-bold"
+                  : "solar:hamburger-menu-linear"
+              }
+              className="size-6"
+            />
           </button>
         </div>
       </div>
@@ -374,22 +538,46 @@ export function MarketingNavbar() {
               Features
             </p>
             <div className="grid grid-cols-1 gap-1">
-              <Link to="/features/competitor-page-decoder" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/competitor-page-decoder"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Competitor Ad Decoder
               </Link>
-              <Link to="/features/keyword-research" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/keyword-research"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Keyword Revenue Radar
               </Link>
-              <Link to="/features/ai-search-aeo" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/ai-search-aeo"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 AI Search &amp; AEO Monitor
               </Link>
-              <Link to="/features/local-business" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/local-business"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Google Maps Geo-Grid
               </Link>
-              <Link to="/features/site-audit" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/site-audit"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Technical Site Audit
               </Link>
-              <Link to="/features/white-label-reports" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/features/white-label-reports"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Executive PDF Reports
               </Link>
             </div>
@@ -400,16 +588,32 @@ export function MarketingNavbar() {
               Resources
             </p>
             <div className="grid grid-cols-1 gap-1">
-              <Link to="/blogs" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/blogs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Blog &amp; Playbooks
               </Link>
-              <Link to="/docs" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/docs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Documentation &amp; MCP
               </Link>
-              <Link to="/free-audit" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/free-audit"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Free Instant Scan
               </Link>
-              <Link to="/pricing" onClick={() => setMobileMenuOpen(false)} className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block">
+              <Link
+                to="/pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
+              >
                 Pricing Plans
               </Link>
             </div>

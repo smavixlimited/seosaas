@@ -3,8 +3,17 @@ import { viralContentItems } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { BrandCompetitorService } from "@/services/brand-competitor.service";
 
-export type ViralPlatform = "tiktok" | "instagram" | "youtube" | "x" | "linkedin";
-export type OpportunityType = "trending_format" | "hook_framework" | "competitor_viral" | "angle_gap";
+export type ViralPlatform =
+  | "tiktok"
+  | "instagram"
+  | "youtube"
+  | "x"
+  | "linkedin";
+export type OpportunityType =
+  | "trending_format"
+  | "hook_framework"
+  | "competitor_viral"
+  | "angle_gap";
 
 export interface ViralOpportunityItem {
   id: string;
@@ -25,7 +34,10 @@ export const ViralContentService = {
   /**
    * Retrieves viral content opportunities for a project.
    */
-  async getOpportunities(projectId: string, platform?: ViralPlatform): Promise<ViralOpportunityItem[]> {
+  async getOpportunities(
+    projectId: string,
+    platform?: ViralPlatform,
+  ): Promise<ViralOpportunityItem[]> {
     try {
       const rows = await db
         .select()
@@ -75,7 +87,7 @@ export const ViralContentService = {
    */
   async generateOpportunities(
     projectId: string,
-    targetPlatform?: ViralPlatform
+    targetPlatform?: ViralPlatform,
   ): Promise<ViralOpportunityItem[]> {
     const brand = await BrandCompetitorService.getBrandProfile(projectId);
     const industry = brand.industry || "SaaS / Software";
@@ -97,7 +109,8 @@ export const ViralContentService = {
         opportunityType: "hook_framework",
         viralPotentialScore: 94,
         hookText: `If you are running a ${industry} business in 2026, stop doing this one outdated strategy immediately...`,
-        scriptOutline: "1. Visual Hook: Fast text on screen + hand gesture (0-3s)\n2. Problem Agitation: Why standard approaches fail (3-12s)\n3. The Solution Breakdown: 3 step actionable framework (12-35s)\n4. CTA: Check the bio link for full cheat sheet (35-45s)",
+        scriptOutline:
+          "1. Visual Hook: Fast text on screen + hand gesture (0-3s)\n2. Problem Agitation: Why standard approaches fail (3-12s)\n3. The Solution Breakdown: 3 step actionable framework (12-35s)\n4. CTA: Check the bio link for full cheat sheet (35-45s)",
         targetAudience: "Founders, Growth Marketers & Agency Leads",
         tags: ["#growthtips", "#entrepreneur", "#businesshacks", "#viralhook"],
       },
@@ -107,7 +120,8 @@ export const ViralContentService = {
         opportunityType: "competitor_viral",
         viralPotentialScore: 91,
         hookText: `Here is why 500+ teams switched from bloated legacy tools to ${brandName} this month...`,
-        scriptOutline: "1. Hook: Show side-by-side speed/cost comparison\n2. Highlight top 2 customer pain points with traditional alternatives\n3. Demonstrate live 10-second workflow demo\n4. Offer limited-time free tier onboarding",
+        scriptOutline:
+          "1. Hook: Show side-by-side speed/cost comparison\n2. Highlight top 2 customer pain points with traditional alternatives\n3. Demonstrate live 10-second workflow demo\n4. Offer limited-time free tier onboarding",
         targetAudience: "SMB Owners & Growth Teams",
         tags: ["#software", "#saasgrowth", "#productivitytools", "#techreview"],
       },
@@ -117,7 +131,8 @@ export const ViralContentService = {
         opportunityType: "trending_format",
         viralPotentialScore: 89,
         hookText: `Do NOT use this growth tool unless you are ready to double your inbound pipeline...`,
-        scriptOutline: "1. Intense statement hook with screen recording\n2. Breakdown of the exact workflow and metrics gained\n3. Quantified ROI before and after\n4. Next step action prompt in description",
+        scriptOutline:
+          "1. Intense statement hook with screen recording\n2. Breakdown of the exact workflow and metrics gained\n3. Quantified ROI before and after\n4. Next step action prompt in description",
         targetAudience: "Digital Agencies & Solopreneurs",
         tags: ["#shorts", "#businesstips", "#aitools", "#marketing2026"],
       },
@@ -127,7 +142,8 @@ export const ViralContentService = {
         opportunityType: "angle_gap",
         viralPotentialScore: 92,
         hookText: `Most advice in ${industry} is completely backward. Here are 5 unconventional rules that generated \$100k+ with zero ad spend: 🧵👇`,
-        scriptOutline: "Tweet 1: Strong contrarian hook with curiosity loop\nTweets 2-5: Punchy 1-line tactical insights with examples\nTweet 6: The compound effect & core tool recommendation\nTweet 7: Retweet CTA & follow prompt",
+        scriptOutline:
+          "Tweet 1: Strong contrarian hook with curiosity loop\nTweets 2-5: Punchy 1-line tactical insights with examples\nTweet 6: The compound effect & core tool recommendation\nTweet 7: Retweet CTA & follow prompt",
         targetAudience: "Tech Twitter & Startup Founders",
         tags: ["#buildinpublic", "#marketing", "#saas", "#growth"],
       },
@@ -137,7 +153,8 @@ export const ViralContentService = {
         opportunityType: "trending_format",
         viralPotentialScore: 87,
         hookText: `We audited 50 top brands in ${industry}. 82% of them are failing this basic conversion check:`,
-        scriptOutline: "1. Clear statistical hook that establishes authority\n2. Key finding #1: Where money is being wasted\n3. Key finding #2: The modern AI advantage\n4. Actionable 3-point checklist\n5. Question prompt to drive comments",
+        scriptOutline:
+          "1. Clear statistical hook that establishes authority\n2. Key finding #1: Where money is being wasted\n3. Key finding #2: The modern AI advantage\n4. Actionable 3-point checklist\n5. Question prompt to drive comments",
         targetAudience: "VPs, Directors & C-Level Decision Makers",
         tags: ["#leadership", "#marketingstrategy", "#innovation", "#b2b"],
       },
@@ -195,7 +212,7 @@ export const ViralContentService = {
   async updateStatus(
     projectId: string,
     opportunityId: string,
-    status: "suggested" | "saved" | "created" | "dismissed"
+    status: "suggested" | "saved" | "created" | "dismissed",
   ) {
     await db
       .update(viralContentItems)

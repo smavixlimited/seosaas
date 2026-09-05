@@ -139,7 +139,11 @@ export function AuthPageCard({
         {children}
       </div>
 
-      {footer ? <div className="text-tagline-2 text-center text-secondary/70 dark:text-accent/70 pt-2">{footer}</div> : null}
+      {footer ? (
+        <div className="text-tagline-2 text-center text-secondary/70 dark:text-accent/70 pt-2">
+          {footer}
+        </div>
+      ) : null}
 
       {/* Legal Footer Links */}
       <div className="pt-4 text-center">
@@ -167,11 +171,8 @@ export function AuthPageShell({ children }: { children: React.ReactNode }) {
       {/* Ambient background glows */}
       <div className="absolute -top-40 -left-40 size-96 rounded-full bg-primary/5 dark:bg-brand-300/5 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -right-40 size-96 rounded-full bg-ns-green/5 blur-3xl pointer-events-none" />
-      
-      <div className="w-full relative z-10">
-        {children}
-      </div>
+
+      <div className="w-full relative z-10">{children}</div>
     </div>
   );
 }
-

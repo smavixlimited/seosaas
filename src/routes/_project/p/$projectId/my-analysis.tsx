@@ -19,17 +19,24 @@ function MyAnalysisRoute() {
               My Analysis Archive
             </h1>
             <p className="text-xs text-base-content/60">
-              Access and export all your historical Brand Analyses, Competitor Benchmarks, and Ad Readiness Reports.
+              Access and export all your historical Brand Analyses, Competitor
+              Benchmarks, and Ad Readiness Reports.
             </p>
           </div>
         </div>
       </div>
 
       <div className="rounded-3xl border border-base-300 bg-base-100 p-8 text-center space-y-4 shadow-sm">
-        <Icon icon="solar:folder-with-files-bold-duotone" className="h-12 w-12 text-primary mx-auto" />
-        <h3 className="text-lg font-bold text-base-content">Comprehensive Report Archive</h3>
+        <Icon
+          icon="solar:folder-with-files-bold-duotone"
+          className="h-12 w-12 text-primary mx-auto"
+        />
+        <h3 className="text-lg font-bold text-base-content">
+          Comprehensive Report Archive
+        </h3>
         <p className="text-xs text-base-content/60 max-w-md mx-auto">
-          View, organize in categorized tabs (Brand Analysis, Competitor Analysis, Competitor Ads), and export presentation-ready PDF reports.
+          View, organize in categorized tabs (Brand Analysis, Competitor
+          Analysis, Competitor Ads), and export presentation-ready PDF reports.
         </p>
       </div>
     </div>

@@ -136,9 +136,13 @@ export function SamChat({
         <Wrench className="size-6" />
       </div>
       <div className="space-y-1">
-        <p className="text-lg font-black text-base-content">What should we scale today?</p>
+        <p className="text-lg font-black text-base-content">
+          What should we scale today?
+        </p>
         <p className="max-w-md text-xs text-base-content/60 leading-relaxed">
-          Skorvia is your dedicated Brand Growth Coach, CMO &amp; SEO Strategist with real-time access to live search metrics, competitor decoders, local Map Pack intelligence, and conversion audit tools.
+          Skorvia is your dedicated Brand Growth Coach, CMO &amp; SEO Strategist
+          with real-time access to live search metrics, competitor decoders,
+          local Map Pack intelligence, and conversion audit tools.
         </p>
       </div>
       <button

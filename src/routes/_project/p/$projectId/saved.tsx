@@ -23,7 +23,10 @@ import {
 import { SavedKeywordsPagination } from "@/client/features/saved-keywords/SavedKeywordsPagination";
 import { SavedKeywordsStatus } from "@/client/features/saved-keywords/SavedKeywordsStatus";
 import { SavedKeywordsTable } from "@/client/features/saved-keywords/SavedKeywordsTable";
-import { CsvMigrationImporterModal, type ParsedMigrationKeyword } from "@/client/features/saved-keywords/CsvMigrationImporterModal";
+import {
+  CsvMigrationImporterModal,
+  type ParsedMigrationKeyword,
+} from "@/client/features/saved-keywords/CsvMigrationImporterModal";
 import { ProjectQuickStartEmptyState } from "@/client/features/saved-keywords/ProjectQuickStartEmptyState";
 import { compileSavedKeywordsFilters } from "@/client/features/saved-keywords/savedKeywordsFilterTypes";
 import {

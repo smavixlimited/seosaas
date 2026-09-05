@@ -20,11 +20,9 @@ function SeoApiStatusBanners({
             <div className="alert alert-warning">
               <AlertTriangle className="size-4 shrink-0" />
               <span className="text-sm">
-                System Notice: Live SEO crawler service is syncing. If data is temporarily unavailable, please{" "}
-                <Link
-                  to="/docs"
-                  className="link link-primary font-medium"
-                >
+                System Notice: Live SEO crawler service is syncing. If data is
+                temporarily unavailable, please{" "}
+                <Link to="/docs" className="link link-primary font-medium">
                   contact support
                 </Link>
                 .
@@ -40,11 +38,9 @@ function SeoApiStatusBanners({
             <div className="alert alert-info">
               <AlertTriangle className="size-4 shrink-0" />
               <span className="text-sm">
-                Live metrics synchronization in progress. If you experience delays, please{" "}
-                <Link
-                  to="/docs"
-                  className="link link-primary font-medium"
-                >
+                Live metrics synchronization in progress. If you experience
+                delays, please{" "}
+                <Link to="/docs" className="link link-primary font-medium">
                   view documentation or contact support
                 </Link>
                 .
@@ -118,13 +114,19 @@ const MissingSeoSetupModal = React.forwardRef<
               id="dataforseo-setup-description"
               className="text-xs text-base-content/75 leading-relaxed"
             >
-              Things not right? Our crawler service is currently syncing. If live data is temporarily unavailable, please contact your administrator or support team.
+              Things not right? Our crawler service is currently syncing. If
+              live data is temporarily unavailable, please contact your
+              administrator or support team.
             </p>
           </div>
         </div>
 
         <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <button type="button" className="btn btn-ghost btn-sm rounded-xl" onClick={onClose}>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm rounded-xl"
+            onClick={onClose}
+          >
             Dismiss
           </button>
           <Link

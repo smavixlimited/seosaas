@@ -24,10 +24,15 @@ function SiteAuditFeaturePage() {
               Fix Crawl Errors & Core Web Vitals Before They Hurt Rankings
             </h1>
             <p className="text-base sm:text-lg text-base-content/70">
-              High-speed cloud crawlers inspect your entire website for broken links, duplicate content, slow TTFB, missing metadata, and schema flaws.
+              High-speed cloud crawlers inspect your entire website for broken
+              links, duplicate content, slow TTFB, missing metadata, and schema
+              flaws.
             </p>
             <div className="pt-2 flex justify-center gap-3">
-              <Link to="/sign-up" className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary">
+              <Link
+                to="/sign-up"
+                className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary"
+              >
                 Run Site Audit Free
               </Link>
             </div>
@@ -38,9 +43,12 @@ function SiteAuditFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Gauge className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Lighthouse & Core Web Vitals</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Lighthouse & Core Web Vitals
+              </h3>
               <p className="text-sm text-base-content/70">
-                Measure real-world LCP, INP, and CLS performance metrics on mobile and desktop devices.
+                Measure real-world LCP, INP, and CLS performance metrics on
+                mobile and desktop devices.
               </p>
             </div>
 
@@ -48,9 +56,12 @@ function SiteAuditFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
                 <Layers className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Canonical & Metadata Check</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Canonical & Metadata Check
+              </h3>
               <p className="text-sm text-base-content/70">
-                Detect missing title tags, orphan pages, infinite redirect loops, and self-referencing canonical issues.
+                Detect missing title tags, orphan pages, infinite redirect
+                loops, and self-referencing canonical issues.
               </p>
             </div>
 
@@ -58,9 +69,12 @@ function SiteAuditFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center">
                 <Wrench className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Actionable Fix Recommendations</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Actionable Fix Recommendations
+              </h3>
               <p className="text-sm text-base-content/70">
-                Prioritized issue lists categorizing errors into Critical, Warnings, and Notices with step-by-step code fixes.
+                Prioritized issue lists categorizing errors into Critical,
+                Warnings, and Notices with step-by-step code fixes.
               </p>
             </div>
           </div>

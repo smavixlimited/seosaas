@@ -55,4 +55,3 @@ export function TemplateHero() {
     </section>
   );
 }
-export default TemplateHero;

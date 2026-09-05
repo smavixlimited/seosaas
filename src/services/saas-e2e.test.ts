@@ -27,9 +27,18 @@ describe("Skorvia SaaS End-to-End Verification Suite", () => {
 
   describe("Query Caching & Deterministic Hasher", () => {
     it("hashes normalized query parameters deterministically", async () => {
-      const hash1 = await generateQueryHash("keywords.suggestions", { keyword: "seo tools", limit: 50 });
-      const hash2 = await generateQueryHash("keywords.suggestions", { keyword: "seo tools", limit: 50 });
-      const hash3 = await generateQueryHash("keywords.suggestions", { keyword: "seo audit", limit: 50 });
+      const hash1 = await generateQueryHash("keywords.suggestions", {
+        keyword: "seo tools",
+        limit: 50,
+      });
+      const hash2 = await generateQueryHash("keywords.suggestions", {
+        keyword: "seo tools",
+        limit: 50,
+      });
+      const hash3 = await generateQueryHash("keywords.suggestions", {
+        keyword: "seo audit",
+        limit: 50,
+      });
 
       expect(hash1).toBe(hash2);
       expect(hash1).not.toBe(hash3);
@@ -40,7 +49,10 @@ describe("Skorvia SaaS End-to-End Verification Suite", () => {
   describe("HMAC Webhook Signature Verification", () => {
     it("validates authentic Paystack HMAC-SHA512 signatures", async () => {
       const secret = "sk_live_test_secret_12345";
-      const payload = JSON.stringify({ event: "charge.success", data: { id: 999 } });
+      const payload = JSON.stringify({
+        event: "charge.success",
+        data: { id: 999 },
+      });
 
       // Generate valid signature using Web Crypto
       const enc = new TextEncoder();
@@ -49,17 +61,31 @@ describe("Skorvia SaaS End-to-End Verification Suite", () => {
         enc.encode(secret),
         { name: "HMAC", hash: { name: "SHA-512" } },
         false,
-        ["sign"]
+        ["sign"],
       );
-      const sigBuffer = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+      const sigBuffer = await crypto.subtle.sign(
+        "HMAC",
+        key,
+        enc.encode(payload),
+      );
       const validSignature = Array.from(new Uint8Array(sigBuffer))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 
-      const isValid = await verifyWebhookHmacSignature(payload, validSignature, secret, "SHA-512");
+      const isValid = await verifyWebhookHmacSignature(
+        payload,
+        validSignature,
+        secret,
+        "SHA-512",
+      );
       expect(isValid).toBe(true);
 
-      const isInvalid = await verifyWebhookHmacSignature(payload, "invalid_sig", secret, "SHA-512");
+      const isInvalid = await verifyWebhookHmacSignature(
+        payload,
+        "invalid_sig",
+        secret,
+        "SHA-512",
+      );
       expect(isInvalid).toBe(false);
     });
 
@@ -73,14 +99,23 @@ describe("Skorvia SaaS End-to-End Verification Suite", () => {
         enc.encode(secret),
         { name: "HMAC", hash: { name: "SHA-256" } },
         false,
-        ["sign"]
+        ["sign"],
       );
-      const sigBuffer = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+      const sigBuffer = await crypto.subtle.sign(
+        "HMAC",
+        key,
+        enc.encode(payload),
+      );
       const validSignature = Array.from(new Uint8Array(sigBuffer))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 
-      const isValid = await verifyWebhookHmacSignature(payload, validSignature, secret, "SHA-256");
+      const isValid = await verifyWebhookHmacSignature(
+        payload,
+        validSignature,
+        secret,
+        "SHA-256",
+      );
       expect(isValid).toBe(true);
     });
   });

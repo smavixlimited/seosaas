@@ -19,12 +19,14 @@ export const getConversionReadiness = createServerFn({ method: "POST" })
   .validator(conversionQuerySchema)
   .handler(async ({ data, context }) => {
     const domain = context.project.domain || "yourdomain.com";
-    const targetUrl = data?.targetUrl || (domain.startsWith("http") ? domain : `https://${domain}`);
+    const targetUrl =
+      data?.targetUrl ||
+      (domain.startsWith("http") ? domain : `https://${domain}`);
 
     return ConversionAdReadinessService.getConversionAudit(
       context.projectId,
       targetUrl,
-      domain
+      domain,
     );
   });
 
@@ -40,6 +42,6 @@ export const runConversionReadinessAudit = createServerFn({ method: "POST" })
     return ConversionAdReadinessService.runConversionAudit(
       context.projectId,
       data.targetUrl,
-      domain
+      domain,
     );
   });

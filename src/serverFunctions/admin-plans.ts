@@ -2,7 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 import { isUserSuperAdmin } from "@/services/admin.service";
-import { BillingPlansService, type AdminPlanRecord } from "@/services/billing-plans.service";
+import {
+  BillingPlansService,
+  type AdminPlanRecord,
+} from "@/services/billing-plans.service";
 import { AppError } from "@/server/lib/errors";
 
 const planLimitsSchema = z.object({
@@ -79,7 +82,7 @@ export const upsertAdminPlanDetailServerFn = createServerFn({ method: "POST" })
     return BillingPlansService.upsertPlan(
       data as AdminPlanRecord,
       context.userId,
-      context.userEmail
+      context.userEmail,
     );
   });
 
@@ -94,7 +97,7 @@ export const toggleAdminPlanStatusServerFn = createServerFn({ method: "POST" })
       data.planId,
       data.isActive,
       context.userId,
-      context.userEmail
+      context.userEmail,
     );
   });
 
@@ -103,4 +106,3 @@ export const getPublicPlansServerFn = createServerFn({ method: "POST" })
   .handler(async () => {
     return BillingPlansService.getActivePlans();
   });
-

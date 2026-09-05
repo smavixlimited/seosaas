@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
-import { BackupService, type ProjectBackupSnapshot } from "@/services/backup.service";
+import {
+  BackupService,
+  type ProjectBackupSnapshot,
+} from "@/services/backup.service";
 
 const exportSnapshotSchema = z.object({
   projectId: z.string().min(1),
@@ -25,7 +28,6 @@ export const restoreProjectBackup = createServerFn({ method: "POST" })
     return BackupService.restoreProjectBackupSnapshot(
       data.snapshot,
       context.userId,
-      context.organizationId
+      context.organizationId,
     );
   });
-

@@ -19,7 +19,8 @@ export function ProjectQuickStartEmptyState({
           No Keywords Tracked Yet
         </h2>
         <p className="text-xs sm:text-sm text-base-content/70 font-medium leading-relaxed">
-          Supercharge your project's organic growth. Choose a quick-start action below to populate your workspace in seconds.
+          Supercharge your project's organic growth. Choose a quick-start action
+          below to populate your workspace in seconds.
         </p>
       </div>
 
@@ -35,10 +36,14 @@ export function ProjectQuickStartEmptyState({
           <div className="space-y-1">
             <div className="font-extrabold text-sm text-base-content flex items-center gap-1.5 group-hover:text-primary transition-colors">
               <span>Import Ahrefs / Semrush CSV</span>
-              <Icon icon="solar:arrow-right-linear" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
+              />
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Upload your exported keyword lists from legacy SEO suites with automatic column mapping.
+              Upload your exported keyword lists from legacy SEO suites with
+              automatic column mapping.
             </p>
           </div>
         </div>
@@ -55,10 +60,14 @@ export function ProjectQuickStartEmptyState({
           <div className="space-y-1">
             <div className="font-extrabold text-sm text-base-content flex items-center gap-1.5 group-hover:text-indigo-600 transition-colors">
               <span>Explore Top Keywords</span>
-              <Icon icon="solar:arrow-right-linear" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
+              />
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Discover high-volume, low-difficulty search queries and buyer search terms for your niche.
+              Discover high-volume, low-difficulty search queries and buyer
+              search terms for your niche.
             </p>
           </div>
         </Link>
@@ -75,10 +84,14 @@ export function ProjectQuickStartEmptyState({
           <div className="space-y-1">
             <div className="font-extrabold text-sm text-base-content flex items-center gap-1.5 group-hover:text-emerald-600 transition-colors">
               <span>Run 60s Health Audit</span>
-              <Icon icon="solar:arrow-right-linear" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
+              />
             </div>
             <p className="text-xs text-base-content/70 leading-relaxed">
-              Crawl your website for broken redirect chains, missing meta tags, and Core Web Vitals issues.
+              Crawl your website for broken redirect chains, missing meta tags,
+              and Core Web Vitals issues.
             </p>
           </div>
         </Link>

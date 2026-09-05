@@ -60,10 +60,12 @@ const SEED_WEBHOOK_ERRORS: WebhookErrorRecord[] = [
         },
       },
       null,
-      2
+      2,
     ),
-    errorMessage: "Quota balance constraint: User quota record temporarily locked by concurrent transaction",
-    errorStack: "Error: Quota balance constraint\n    at UserQuotasRepository.increment (src/db/quotas.ts:42:11)\n    at processWebhook (src/server/billing.ts:89:5)",
+    errorMessage:
+      "Quota balance constraint: User quota record temporarily locked by concurrent transaction",
+    errorStack:
+      "Error: Quota balance constraint\n    at UserQuotasRepository.increment (src/db/quotas.ts:42:11)\n    at processWebhook (src/server/billing.ts:89:5)",
     responseStatus: 500,
     retryCount: 1,
     status: "failed",
@@ -81,10 +83,12 @@ const SEED_WEBHOOK_ERRORS: WebhookErrorRecord[] = [
         key: "idx_key_skorvia_prod",
       },
       null,
-      2
+      2,
     ),
-    errorMessage: "HTTP 429: Too Many Requests from Bing IndexNow gateway endpoint",
-    errorStack: "FetchError: 429 Too Many Requests\n    at IndexNowClient.submit (src/services/indexing.service.ts:54:19)",
+    errorMessage:
+      "HTTP 429: Too Many Requests from Bing IndexNow gateway endpoint",
+    errorStack:
+      "FetchError: 429 Too Many Requests\n    at IndexNowClient.submit (src/services/indexing.service.ts:54:19)",
     responseStatus: 429,
     retryCount: 2,
     status: "failed",
@@ -125,12 +129,22 @@ export const SystemMonitoringService = {
     });
 
     // 2. Parallel External Probes
-    const checkEndpoint = async (url: string, method = "GET", defaultLatency = 45): Promise<{ status: "operational" | "degraded" | "down"; latency: number }> => {
+    const checkEndpoint = async (
+      url: string,
+      method = "GET",
+      defaultLatency = 45,
+    ): Promise<{
+      status: "operational" | "degraded" | "down";
+      latency: number;
+    }> => {
       const start = Date.now();
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 600);
-        const res = await fetch(url, { method, signal: controller.signal }).catch(() => null);
+        const res = await fetch(url, {
+          method,
+          signal: controller.signal,
+        }).catch(() => null);
         clearTimeout(timeout);
         const latency = Math.max(15, Date.now() - start);
         return {
@@ -195,16 +209,32 @@ export const SystemMonitoringService = {
    * Retrieves runtime KPI metrics (Memory RSS, Heap, Uptime, Node version).
    */
   getSystemKpis(): SystemKpiMetrics {
-    const memory = typeof process !== "undefined" && process.memoryUsage ? process.memoryUsage() : { rss: 85 * 1024 * 1024, heapUsed: 42 * 1024 * 1024, heapTotal: 64 * 1024 * 1024 };
-    const uptime = typeof process !== "undefined" && process.uptime ? process.uptime() : 3600;
+    const memory =
+      typeof process !== "undefined" && process.memoryUsage
+        ? process.memoryUsage()
+        : {
+            rss: 85 * 1024 * 1024,
+            heapUsed: 42 * 1024 * 1024,
+            heapTotal: 64 * 1024 * 1024,
+          };
+    const uptime =
+      typeof process !== "undefined" && process.uptime
+        ? process.uptime()
+        : 3600;
 
     return {
       memoryRssMb: Math.round(memory.rss / (1024 * 1024)),
       memoryHeapUsedMb: Math.round(memory.heapUsed / (1024 * 1024)),
       memoryHeapTotalMb: Math.round(memory.heapTotal / (1024 * 1024)),
       uptimeSeconds: Math.round(uptime),
-      nodeVersion: typeof process !== "undefined" && process.version ? process.version : "v22.19.0",
-      platform: typeof process !== "undefined" && process.platform ? process.platform : "darwin",
+      nodeVersion:
+        typeof process !== "undefined" && process.version
+          ? process.version
+          : "v22.19.0",
+      platform:
+        typeof process !== "undefined" && process.platform
+          ? process.platform
+          : "darwin",
       activeDatabase: "Drizzle (SQLite / PostgreSQL Parity)",
       timestamp: new Date().toISOString(),
     };
@@ -226,7 +256,10 @@ export const SystemMonitoringService = {
       const { webhookErrorLogs } = await import("@/db/schema");
       const { desc } = await import("drizzle-orm");
 
-      const rows = await db.select().from(webhookErrorLogs).orderBy(desc(webhookErrorLogs.createdAt));
+      const rows = await db
+        .select()
+        .from(webhookErrorLogs)
+        .orderBy(desc(webhookErrorLogs.createdAt));
 
       if (rows.length === 0) {
         logs = [...SEED_WEBHOOK_ERRORS];
@@ -250,11 +283,15 @@ export const SystemMonitoringService = {
     }
 
     if (options.provider && options.provider !== "all") {
-      logs = logs.filter((l) => l.provider.toLowerCase() === options.provider?.toLowerCase());
+      logs = logs.filter(
+        (l) => l.provider.toLowerCase() === options.provider?.toLowerCase(),
+      );
     }
 
     if (options.status && options.status !== "all") {
-      logs = logs.filter((l) => l.status.toLowerCase() === options.status?.toLowerCase());
+      logs = logs.filter(
+        (l) => l.status.toLowerCase() === options.status?.toLowerCase(),
+      );
     }
 
     if (options.search && options.search.trim()) {
@@ -264,7 +301,7 @@ export const SystemMonitoringService = {
           l.provider.toLowerCase().includes(q) ||
           l.event.toLowerCase().includes(q) ||
           l.errorMessage.toLowerCase().includes(q) ||
-          l.payloadJson.toLowerCase().includes(q)
+          l.payloadJson.toLowerCase().includes(q),
       );
     }
 
@@ -294,9 +331,14 @@ export const SystemMonitoringService = {
   }): Promise<WebhookErrorRecord> {
     const id = `wh_err_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const now = new Date().toISOString();
-    const payloadJson = typeof params.payload === "string" ? params.payload : JSON.stringify(params.payload, null, 2);
-    const errorMessage = typeof params.error === "string" ? params.error : params.error.message;
-    const errorStack = params.error instanceof Error ? params.error.stack || null : null;
+    const payloadJson =
+      typeof params.payload === "string"
+        ? params.payload
+        : JSON.stringify(params.payload, null, 2);
+    const errorMessage =
+      typeof params.error === "string" ? params.error : params.error.message;
+    const errorStack =
+      params.error instanceof Error ? params.error.stack || null : null;
 
     const record: WebhookErrorRecord = {
       id,
@@ -338,7 +380,11 @@ export const SystemMonitoringService = {
   /**
    * Retries webhook processing and logs an audit trail event.
    */
-  async retryWebhook(id: string, adminId: string, adminEmail: string): Promise<{ success: boolean; message: string }> {
+  async retryWebhook(
+    id: string,
+    adminId: string,
+    adminEmail: string,
+  ): Promise<{ success: boolean; message: string }> {
     try {
       const { db } = await import("@/db");
       const { webhookErrorLogs } = await import("@/db/schema");
@@ -372,7 +418,11 @@ export const SystemMonitoringService = {
   /**
    * Marks a webhook error as manually resolved.
    */
-  async resolveWebhook(id: string, adminId: string, adminEmail: string): Promise<boolean> {
+  async resolveWebhook(
+    id: string,
+    adminId: string,
+    adminEmail: string,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { webhookErrorLogs } = await import("@/db/schema");

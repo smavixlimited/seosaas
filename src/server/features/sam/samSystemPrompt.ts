@@ -9,7 +9,7 @@ type SamProjectContext = {
 };
 
 /**
- * Skorvia AI's "soul" — the identity block of the system prompt. 
+ * Skorvia AI's "soul" — the identity block of the system prompt.
  * Empowered as the user's dedicated Brand Growth Coach, Chief Marketing Strategist,
  * and SEO Co-Pilot.
  */

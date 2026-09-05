@@ -19,7 +19,7 @@ export const getCompetitorStrategy = createServerFn({ method: "POST" })
       context.projectId,
       data.domain,
       data.locationCode,
-      context
+      context,
     );
   });
 
@@ -34,6 +34,6 @@ export const regenerateCompetitorStrategy = createServerFn({ method: "POST" })
       context.projectId,
       data.domain,
       data.locationCode,
-      context
+      context,
     );
   });

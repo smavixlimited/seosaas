@@ -8,7 +8,9 @@ export const Route = createFileRoute("/api/admin/settings")({
     handlers: {
       POST: async ({ request }: { request: Request }) => {
         try {
-          const userContext = await resolveUserContextFromHeaders(request.headers);
+          const userContext = await resolveUserContextFromHeaders(
+            request.headers,
+          );
           if (!userContext.userId) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), {
               status: 401,
@@ -18,10 +20,13 @@ export const Route = createFileRoute("/api/admin/settings")({
 
           const isSuper = await isUserSuperAdmin(userContext.userId);
           if (!isSuper) {
-            return new Response(JSON.stringify({ error: "Superadmin access required" }), {
-              status: 403,
-              headers: { "Content-Type": "application/json" },
-            });
+            return new Response(
+              JSON.stringify({ error: "Superadmin access required" }),
+              {
+                status: 403,
+                headers: { "Content-Type": "application/json" },
+              },
+            );
           }
 
           const body = (await request.json()) as {
@@ -30,16 +35,19 @@ export const Route = createFileRoute("/api/admin/settings")({
           };
 
           if (!body.key || body.value === undefined) {
-            return new Response(JSON.stringify({ error: "Missing setting key or value" }), {
-              status: 400,
-              headers: { "Content-Type": "application/json" },
-            });
+            return new Response(
+              JSON.stringify({ error: "Missing setting key or value" }),
+              {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+              },
+            );
           }
 
           const saved = await SystemSettingsService.setSetting(
             body.key,
             body.value,
-            userContext.userId
+            userContext.userId,
           );
 
           return new Response(
@@ -51,17 +59,20 @@ export const Route = createFileRoute("/api/admin/settings")({
             {
               status: 200,
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         } catch (err: unknown) {
           return new Response(
             JSON.stringify({
-              error: err instanceof Error ? err.message : "Failed to persist setting",
+              error:
+                err instanceof Error
+                  ? err.message
+                  : "Failed to persist setting",
             }),
             {
               status: 500,
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         }
       },

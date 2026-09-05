@@ -39,9 +39,16 @@ interface CheckoutModalProps {
   onSuccess?: () => void;
 }
 
-export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModalProps) {
+export function CheckoutModal({
+  plan,
+  isOpen,
+  onClose,
+  onSuccess,
+}: CheckoutModalProps) {
   const { currency, formatPrice } = useCurrency();
-  const [selectedGateway, setSelectedGateway] = React.useState<"paystack" | "lemonsqueezy" | "manual">("paystack");
+  const [selectedGateway, setSelectedGateway] = React.useState<
+    "paystack" | "lemonsqueezy" | "manual"
+  >("paystack");
   const [loading, setLoading] = React.useState(false);
   const [reference, setReference] = React.useState("");
   const [receiptUrl, setReceiptUrl] = React.useState("");
@@ -51,7 +58,8 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
   // Coupon State
   const [couponCodeInput, setCouponCodeInput] = React.useState("");
   const [isValidatingCoupon, setIsValidatingCoupon] = React.useState(false);
-  const [appliedCoupon, setAppliedCoupon] = React.useState<CouponValidationResult | null>(null);
+  const [appliedCoupon, setAppliedCoupon] =
+    React.useState<CouponValidationResult | null>(null);
 
   if (!isOpen || !plan) return null;
 
@@ -60,12 +68,14 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
   const currentPrice = Math.max(0, basePrice - discountAmount);
 
   const formattedBaseAmount = formatPrice(plan.priceUsd, plan.priceNgn);
-  const formattedDiscountAmount = currency === "NGN"
-    ? `₦${discountAmount.toLocaleString()}`
-    : `$${discountAmount.toFixed(2)}`;
-  const formattedFinalAmount = currency === "NGN"
-    ? `₦${currentPrice.toLocaleString()}`
-    : `$${currentPrice.toFixed(2)}`;
+  const formattedDiscountAmount =
+    currency === "NGN"
+      ? `₦${discountAmount.toLocaleString()}`
+      : `$${discountAmount.toFixed(2)}`;
+  const formattedFinalAmount =
+    currency === "NGN"
+      ? `₦${currentPrice.toLocaleString()}`
+      : `$${currentPrice.toFixed(2)}`;
 
   const handleApplyCoupon = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -112,7 +122,8 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
       const res = await initializePaystackCheckoutServerFn({
         data: {
           planId: plan.id,
-          amountNgn: currency === "NGN" ? currentPrice : Math.round(currentPrice * 1500),
+          amountNgn:
+            currency === "NGN" ? currentPrice : Math.round(currentPrice * 1500),
           callbackUrl: window.location.origin + "/billing?status=success",
         },
       });
@@ -143,7 +154,9 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
           currency,
           transactionReference: reference.trim(),
           receiptUrl: receiptUrl.trim() || null,
-          userNotes: (userNotes.trim() ? userNotes.trim() + " " : "") + (appliedCoupon ? `[Coupon: ${appliedCoupon.coupon?.code}]` : ""),
+          userNotes:
+            (userNotes.trim() ? userNotes.trim() + " " : "") +
+            (appliedCoupon ? `[Coupon: ${appliedCoupon.coupon?.code}]` : ""),
         },
       });
       setManualSuccess(true);
@@ -182,8 +195,12 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
         <div className="rounded-2xl bg-base-200/60 p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-semibold text-base-content/70">Subscription Tier</span>
-              <div className="text-lg font-black text-base-content">{plan.name}</div>
+              <span className="text-xs font-semibold text-base-content/70">
+                Subscription Tier
+              </span>
+              <div className="text-lg font-black text-base-content">
+                {plan.name}
+              </div>
             </div>
             <span className="badge badge-primary badge-sm font-bold uppercase">
               {plan.id}
@@ -192,7 +209,9 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
 
           <div className="pt-2 border-t border-base-300/60 flex items-baseline justify-between">
             <div>
-              <span className="text-xs text-base-content/60 font-medium">Amount Due:</span>
+              <span className="text-xs text-base-content/60 font-medium">
+                Amount Due:
+              </span>
               {appliedCoupon ? (
                 <div className="flex items-baseline gap-2">
                   <span className="text-xs text-base-content/50 line-through font-mono">
@@ -211,7 +230,9 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                 </div>
               )}
             </div>
-            <span className="text-[11px] text-base-content/50 font-medium">Billed Monthly</span>
+            <span className="text-[11px] text-base-content/50 font-medium">
+              Billed Monthly
+            </span>
           </div>
         </div>
 
@@ -222,9 +243,15 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
               <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
                 <Tag className="h-4 w-4 shrink-0" />
                 <div>
-                  <span className="font-mono font-bold">{appliedCoupon.coupon.code}</span>
+                  <span className="font-mono font-bold">
+                    {appliedCoupon.coupon.code}
+                  </span>
                   <span className="text-[11px] text-emerald-600 dark:text-emerald-500 ml-1.5">
-                    ({appliedCoupon.coupon.discountType === "percentage" ? `${appliedCoupon.coupon.discountValue}% OFF` : `Saved ${formattedDiscountAmount}`})
+                    (
+                    {appliedCoupon.coupon.discountType === "percentage"
+                      ? `${appliedCoupon.coupon.discountValue}% OFF`
+                      : `Saved ${formattedDiscountAmount}`}
+                    )
                   </span>
                 </div>
               </div>
@@ -245,7 +272,9 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                   type="text"
                   placeholder="Have a promo code? (e.g. LAUNCH50)"
                   value={couponCodeInput}
-                  onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setCouponCodeInput(e.target.value.toUpperCase())
+                  }
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -272,9 +301,14 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
             <div className="h-12 w-12 rounded-full bg-success/20 text-success flex items-center justify-center mx-auto">
               <Check className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-bold text-base-content">Receipt Submitted!</h3>
+            <h3 className="text-xl font-bold text-base-content">
+              Receipt Submitted!
+            </h3>
             <p className="text-xs text-base-content/70 max-w-sm mx-auto leading-relaxed">
-              Your transfer details (Ref: <span className="font-mono font-bold">{reference}</span>) have been sent to our superadmin review team. Your subscription will activate shortly.
+              Your transfer details (Ref:{" "}
+              <span className="font-mono font-bold">{reference}</span>) have
+              been sent to our superadmin review team. Your subscription will
+              activate shortly.
             </p>
             <button
               type="button"
@@ -305,8 +339,12 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                 >
                   <CreditCard className="h-5 w-5 text-primary" />
                   <div>
-                    <div className="text-xs font-bold text-base-content">Paystack</div>
-                    <div className="text-[10px] text-base-content/60">Cards, USSD, NGN</div>
+                    <div className="text-xs font-bold text-base-content">
+                      Paystack
+                    </div>
+                    <div className="text-[10px] text-base-content/60">
+                      Cards, USSD, NGN
+                    </div>
                   </div>
                 </button>
 
@@ -322,8 +360,12 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                 >
                   <Globe className="h-5 w-5 text-blue-500" />
                   <div>
-                    <div className="text-xs font-bold text-base-content">International</div>
-                    <div className="text-[10px] text-base-content/60">Stripe / USD</div>
+                    <div className="text-xs font-bold text-base-content">
+                      International
+                    </div>
+                    <div className="text-[10px] text-base-content/60">
+                      Stripe / USD
+                    </div>
                   </div>
                 </button>
 
@@ -339,8 +381,12 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                 >
                   <Receipt className="h-5 w-5 text-emerald-500" />
                   <div>
-                    <div className="text-xs font-bold text-base-content">Bank Wire</div>
-                    <div className="text-[10px] text-base-content/60">Direct Transfer</div>
+                    <div className="text-xs font-bold text-base-content">
+                      Bank Wire
+                    </div>
+                    <div className="text-[10px] text-base-content/60">
+                      Direct Transfer
+                    </div>
                   </div>
                 </button>
               </div>
@@ -351,10 +397,13 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-primary flex items-center gap-1.5">
-                    <ShieldCheck className="h-4 w-4" /> Instant Activation with Paystack
+                    <ShieldCheck className="h-4 w-4" /> Instant Activation with
+                    Paystack
                   </div>
                   <p>
-                    Pay securely using your Nigerian Naira debit card, USSD code, or instant bank transfer. Your {plan.name} features and monthly credits activate immediately upon payment.
+                    Pay securely using your Nigerian Naira debit card, USSD
+                    code, or instant bank transfer. Your {plan.name} features
+                    and monthly credits activate immediately upon payment.
                   </p>
                 </div>
 
@@ -364,7 +413,9 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
                   onClick={handlePaystackCheckout}
                   className="btn btn-primary rounded-2xl w-full font-bold text-white shadow-md shadow-primary/25"
                 >
-                  {loading ? "Redirecting to Paystack..." : `Pay ${formattedFinalAmount} Now`}
+                  {loading
+                    ? "Redirecting to Paystack..."
+                    : `Pay ${formattedFinalAmount} Now`}
                 </button>
               </div>
             )}
@@ -373,10 +424,12 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-blue-500 flex items-center gap-1.5">
-                    <Globe className="h-4 w-4" /> International Credit Card / PayPal
+                    <Globe className="h-4 w-4" /> International Credit Card /
+                    PayPal
                   </div>
                   <p>
-                    Subscribe seamlessly via standard USD billing supporting Visa, MasterCard, Amex, and Apple Pay.
+                    Subscribe seamlessly via standard USD billing supporting
+                    Visa, MasterCard, Amex, and Apple Pay.
                   </p>
                 </div>
 
@@ -407,7 +460,8 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
 
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-base-content/70">
-                    Transaction Reference Number <span className="text-error">*</span>
+                    Transaction Reference Number{" "}
+                    <span className="text-error">*</span>
                   </label>
                   <input
                     type="text"
@@ -447,4 +501,3 @@ export function CheckoutModal({ plan, isOpen, onClose, onSuccess }: CheckoutModa
     </div>
   );
 }
-

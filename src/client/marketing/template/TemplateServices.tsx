@@ -93,4 +93,3 @@ export function TemplateServices() {
     </section>
   );
 }
-export default TemplateServices;

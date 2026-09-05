@@ -1,4 +1,7 @@
-import { SystemSettingsService, type SeoApiSettings } from "@/services/system-settings.service";
+import {
+  SystemSettingsService,
+  type SeoApiSettings,
+} from "@/services/system-settings.service";
 
 export interface FirecrawlScrapeOptions {
   formats?: Array<"markdown" | "html" | "rawHtml" | "screenshot">;
@@ -108,12 +111,16 @@ export interface CompetitorContentBlueprintResult {
 }
 
 export class FirecrawlService {
-  private static async getApiConfig(): Promise<{ apiKey: string; baseUrl: string }> {
+  private static async getApiConfig(): Promise<{
+    apiKey: string;
+    baseUrl: string;
+  }> {
     let apiKey = process.env.FIRECRAWL_API_KEY || "";
     let baseUrl = process.env.FIRECRAWL_API_URL || "https://api.firecrawl.dev";
 
     try {
-      const seoSettings = await SystemSettingsService.getSetting<SeoApiSettings>("seo_apis", {});
+      const seoSettings =
+        await SystemSettingsService.getSetting<SeoApiSettings>("seo_apis", {});
       if (seoSettings.firecrawlApiKey) {
         apiKey = seoSettings.firecrawlApiKey;
       }
@@ -135,7 +142,7 @@ export class FirecrawlService {
    */
   public static async scrapeUrl(
     url: string,
-    options: FirecrawlScrapeOptions = {}
+    options: FirecrawlScrapeOptions = {},
   ): Promise<FirecrawlScrapeResult> {
     const { apiKey, baseUrl } = await this.getApiConfig();
     const cleanUrl = url.trim();
@@ -158,7 +165,7 @@ export class FirecrawlService {
         const response = await fetch(`${baseUrl}/v1/scrape`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -193,10 +200,18 @@ export class FirecrawlService {
           const wordCount = markdown.split(/\s+/).filter(Boolean).length;
           const tokensSaved = Math.max(0, Math.round(wordCount * 1.35 * 4)); // ~75% token reduction vs raw DOM
 
-          const sanitizedMetadata: Record<string, string | number | boolean | null> = {};
+          const sanitizedMetadata: Record<
+            string,
+            string | number | boolean | null
+          > = {};
           if (json.data.metadata) {
             for (const [k, v] of Object.entries(json.data.metadata)) {
-              if (typeof v === "string" || typeof v === "number" || typeof v === "boolean" || v === null) {
+              if (
+                typeof v === "string" ||
+                typeof v === "number" ||
+                typeof v === "boolean" ||
+                v === null
+              ) {
                 sanitizedMetadata[k] = v;
               }
             }
@@ -224,7 +239,9 @@ export class FirecrawlService {
           wordCount: 0,
           tokensSaved: 0,
           statusCode: response.status,
-          error: json.error || `Firecrawl request failed with status ${response.status}`,
+          error:
+            json.error ||
+            `Firecrawl request failed with status ${response.status}`,
         };
       } catch (err: unknown) {
         return {
@@ -234,13 +251,17 @@ export class FirecrawlService {
           wordCount: 0,
           tokensSaved: 0,
           statusCode: 500,
-          error: err instanceof Error ? err.message : "Network error contacting Firecrawl",
+          error:
+            err instanceof Error
+              ? err.message
+              : "Network error contacting Firecrawl",
         };
       }
     }
 
     // Fallback Mock Parser for testing & development
-    const mockDomain = cleanUrl.replace(/^https?:\/\//, "").split("/")[0] || "example.com";
+    const mockDomain =
+      cleanUrl.replace(/^https?:\/\//, "").split("/")[0] || "example.com";
     const mockMarkdown = `# Welcome to ${mockDomain}
 
 Next-generation digital solutions, real-time analytics, and high-conversion software architecture.
@@ -273,14 +294,18 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
    */
   public static async mapDomain(domain: string): Promise<FirecrawlMapResult> {
     const { apiKey, baseUrl } = await this.getApiConfig();
-    const cleanDomain = domain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    const cleanDomain = domain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "");
 
     if (apiKey) {
       try {
         const response = await fetch(`${baseUrl}/v1/map`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -335,7 +360,9 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
   /**
    * 3. Live Web Search & Multi-Page Ingestion
    */
-  public static async searchAndScrape(query: string): Promise<FirecrawlSearchResult> {
+  public static async searchAndScrape(
+    query: string,
+  ): Promise<FirecrawlSearchResult> {
     const { apiKey, baseUrl } = await this.getApiConfig();
 
     if (apiKey) {
@@ -343,7 +370,7 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
         const response = await fetch(`${baseUrl}/v1/search`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -395,13 +422,15 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
           url: "https://stripe.com/pricing",
           title: "Stripe Pricing & Fees",
           description: "Explore pay-as-you-go pricing for online payments.",
-          markdown: "# Stripe Pricing\n2.9% + 30¢ per successful card charge. No setup or monthly fees.",
+          markdown:
+            "# Stripe Pricing\n2.9% + 30¢ per successful card charge. No setup or monthly fees.",
         },
         {
           url: "https://paystack.com/pricing",
           title: "Paystack Transparent Pricing",
           description: "Simple, fair pricing for modern payments in Africa.",
-          markdown: "# Paystack Pricing\n1.5% + ₦100 per local transaction. International payments at 3.9%.",
+          markdown:
+            "# Paystack Pricing\n1.5% + ₦100 per local transaction. International payments at 3.9%.",
         },
       ],
     };
@@ -421,9 +450,15 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
       competitorUrls.slice(0, 3).map(async (url) => {
         const scrape = await this.scrapeUrl(url);
         const lines = scrape.markdown.split("\n");
-        const h1 = lines.filter((l) => l.startsWith("# ")).map((l) => l.replace(/^#\s+/, ""));
-        const h2 = lines.filter((l) => l.startsWith("## ")).map((l) => l.replace(/^##\s+/, ""));
-        const h3 = lines.filter((l) => l.startsWith("### ")).map((l) => l.replace(/^###\s+/, ""));
+        const h1 = lines
+          .filter((l) => l.startsWith("# "))
+          .map((l) => l.replace(/^#\s+/, ""));
+        const h2 = lines
+          .filter((l) => l.startsWith("## "))
+          .map((l) => l.replace(/^##\s+/, ""));
+        const h3 = lines
+          .filter((l) => l.startsWith("### "))
+          .map((l) => l.replace(/^###\s+/, ""));
 
         return {
           url,
@@ -432,11 +467,12 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
           headings: { h1, h2, h3 },
           schemas: ["Article", "FAQPage", "BreadcrumbList"],
         };
-      })
+      }),
     );
 
     const avgWords = Math.round(
-      competitors.reduce((acc, c) => acc + c.wordCount, 0) / Math.max(1, competitors.length)
+      competitors.reduce((acc, c) => acc + c.wordCount, 0) /
+        Math.max(1, competitors.length),
     );
 
     return {
@@ -460,15 +496,27 @@ Next-generation digital solutions, real-time analytics, and high-conversion soft
         suggestedOutline: [
           {
             heading: `What is ${targetKeyword} and Why Does it Matter in 2026?`,
-            keyPoints: ["Core definition", "Industry market dynamics", "Key business benefits"],
+            keyPoints: [
+              "Core definition",
+              "Industry market dynamics",
+              "Key business benefits",
+            ],
           },
           {
             heading: `Top 5 Criteria to Evaluate Solutions`,
-            keyPoints: ["Speed & reliability", "Pricing transparency", "AI Answer Engine readiness"],
+            keyPoints: [
+              "Speed & reliability",
+              "Pricing transparency",
+              "AI Answer Engine readiness",
+            ],
           },
           {
             heading: `Frequently Asked Questions About ${targetKeyword}`,
-            keyPoints: ["Implementation time", "Cost breakdown", "Security considerations"],
+            keyPoints: [
+              "Implementation time",
+              "Cost breakdown",
+              "Security considerations",
+            ],
           },
         ],
       },
@@ -530,7 +578,7 @@ ${cleanDomain} empowers modern founders, agencies, and high-growth brands to mon
    */
   public static async testConnection(
     apiKey?: string,
-    baseUrl = "https://api.firecrawl.dev"
+    baseUrl = "https://api.firecrawl.dev",
   ): Promise<{
     success: boolean;
     latencyMs: number;
@@ -538,13 +586,17 @@ ${cleanDomain} empowers modern founders, agencies, and high-growth brands to mon
     remainingCredits?: number;
   }> {
     const keyToTest = apiKey || (await this.getApiConfig()).apiKey;
-    const urlToTest = (baseUrl || (await this.getApiConfig()).baseUrl).replace(/\/+$/, "");
+    const urlToTest = (baseUrl || (await this.getApiConfig()).baseUrl).replace(
+      /\/+$/,
+      "",
+    );
 
     if (!keyToTest) {
       return {
         success: false,
         latencyMs: 0,
-        message: "No Firecrawl API key provided. Please enter a valid key (e.g. fc-...).",
+        message:
+          "No Firecrawl API key provided. Please enter a valid key (e.g. fc-...).",
       };
     }
 
@@ -554,7 +606,7 @@ ${cleanDomain} empowers modern founders, agencies, and high-growth brands to mon
       const response = await fetch(`${urlToTest}/v1/scrape`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${keyToTest}`,
+          Authorization: `Bearer ${keyToTest}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -583,7 +635,8 @@ ${cleanDomain} empowers modern founders, agencies, and high-growth brands to mon
       return {
         success: false,
         latencyMs: Date.now() - start,
-        message: err instanceof Error ? err.message : "Failed to connect to Firecrawl",
+        message:
+          err instanceof Error ? err.message : "Failed to connect to Firecrawl",
       };
     }
   }

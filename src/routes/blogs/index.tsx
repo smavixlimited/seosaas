@@ -10,7 +10,9 @@ import type { BlogPostRecord } from "@/services/blog-cms.service";
 export const Route = createFileRoute("/blogs/")({
   loader: async () => {
     try {
-      return await getPublicBlogPostsServerFn({ data: { status: "published", limit: 50 } });
+      return await getPublicBlogPostsServerFn({
+        data: { status: "published", limit: 50 },
+      });
     } catch {
       return { posts: [], total: 0, page: 1, totalPages: 1 };
     }
@@ -25,7 +27,13 @@ function BlogIndexPage() {
   const [search, setSearch] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("all");
 
-  const categories = ["all", "AI Visibility", "Technical SEO", "SEO Guides", "Case Studies"];
+  const categories = [
+    "all",
+    "AI Visibility",
+    "Technical SEO",
+    "SEO Guides",
+    "Case Studies",
+  ];
 
   const filteredPosts = allPosts.filter((post) => {
     const matchesSearch =
@@ -53,7 +61,8 @@ function BlogIndexPage() {
               {BRAND_CONFIG.name} Engineering Blog
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
-              Technical SEO blueprints, AI search visibility breakdowns, and modern organic growth playbooks.
+              Technical SEO blueprints, AI search visibility breakdowns, and
+              modern organic growth playbooks.
             </p>
           </div>
 
@@ -96,7 +105,8 @@ function BlogIndexPage() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {filteredPosts.length === 0 ? (
               <div className="col-span-full py-20 text-center text-tagline-1 text-secondary/40 dark:text-accent/40">
-                No articles matched your search query. Try another keyword or topic.
+                No articles matched your search query. Try another keyword or
+                topic.
               </div>
             ) : (
               filteredPosts.map((blog) => (
@@ -114,7 +124,10 @@ function BlogIndexPage() {
                         </figure>
                       ) : (
                         <div className="h-[180px] bg-gradient-to-br from-primary-500/10 via-background-2 to-secondary/10 flex items-center justify-center">
-                          <Icon icon="solar:document-text-bold-duotone" className="size-16 text-primary-500/40" />
+                          <Icon
+                            icon="solar:document-text-bold-duotone"
+                            className="size-16 text-primary-500/40"
+                          />
                         </div>
                       )}
 

@@ -15,7 +15,10 @@ import {
 } from "@/serverFunctions/admin-broadcast";
 import { useImpersonation } from "@/client/components/ImpersonationBanner";
 import type { AdminUserRecord } from "@/services/user-management.service";
-import type { BroadcastAudienceTarget, BroadcastChannel } from "@/services/admin-broadcast.service";
+import type {
+  BroadcastAudienceTarget,
+  BroadcastChannel,
+} from "@/services/admin-broadcast.service";
 
 export const Route = createFileRoute("/_admin/admin/users")({
   component: AdminUsersPage,
@@ -32,24 +35,47 @@ export function AdminUsersPage() {
   const [page, setPage] = React.useState(1);
 
   // Quota edit modal state
-  const [selectedUser, setSelectedUser] = React.useState<AdminUserRecord | null>(null);
+  const [selectedUser, setSelectedUser] =
+    React.useState<AdminUserRecord | null>(null);
   const [editPlanId, setEditPlanId] = React.useState("pro");
   const [editCreditsLimit, setEditCreditsLimit] = React.useState(2500);
 
   // Broadcast & Direct Message Modal State
   const [isBroadcastModalOpen, setIsBroadcastModalOpen] = React.useState(false);
-  const [msgTargetAudience, setMsgTargetAudience] = React.useState<BroadcastAudienceTarget>("all");
-  const [msgTargetUser, setMsgTargetUser] = React.useState<AdminUserRecord | null>(null);
+  const [msgTargetAudience, setMsgTargetAudience] =
+    React.useState<BroadcastAudienceTarget>("all");
+  const [msgTargetUser, setMsgTargetUser] =
+    React.useState<AdminUserRecord | null>(null);
   const [msgTargetCountry, setMsgTargetCountry] = React.useState("ALL");
-  const [msgChannels, setMsgChannels] = React.useState<BroadcastChannel[]>(["in_app", "email"]);
-  const [msgTitle, setMsgTitle] = React.useState("Important Update: {{first_name}}");
-  const [msgBody, setMsgBody] = React.useState("Hello {{first_name}},\n\nWe have updated your {{plan}} plan with new high-performance features. You currently have {{credits}} credits remaining.\n\nBest regards,\nThe Skorvia Team");
-  const [msgCategory, setMsgCategory] = React.useState<"system" | "announcement" | "special_offer" | "warning" | "update">("announcement");
-  const [msgPriority, setMsgPriority] = React.useState<"info" | "warning" | "success" | "critical">("info");
+  const [msgChannels, setMsgChannels] = React.useState<BroadcastChannel[]>([
+    "in_app",
+    "email",
+  ]);
+  const [msgTitle, setMsgTitle] = React.useState(
+    "Important Update: {{first_name}}",
+  );
+  const [msgBody, setMsgBody] = React.useState(
+    "Hello {{first_name}},\n\nWe have updated your {{plan}} plan with new high-performance features. You currently have {{credits}} credits remaining.\n\nBest regards,\nThe Skorvia Team",
+  );
+  const [msgCategory, setMsgCategory] = React.useState<
+    "system" | "announcement" | "special_offer" | "warning" | "update"
+  >("announcement");
+  const [msgPriority, setMsgPriority] = React.useState<
+    "info" | "warning" | "success" | "critical"
+  >("info");
   const [msgActionUrl, setMsgActionUrl] = React.useState("/projects");
 
   const usersQuery = useQuery({
-    queryKey: ["adminUsersPaginated", { search, planId: planFilter, role: roleFilter, status: statusFilter, page }],
+    queryKey: [
+      "adminUsersPaginated",
+      {
+        search,
+        planId: planFilter,
+        role: roleFilter,
+        status: statusFilter,
+        page,
+      },
+    ],
     queryFn: () =>
       getAdminUsersPaginatedServerFn({
         data: {
@@ -101,7 +127,9 @@ export function AdminUsersPage() {
         },
       }),
     onSuccess: (res) => {
-      toast.success(`Broadcast sent successfully to ${res.sentCount} recipients (${res.inAppDeliveredCount} in-app, ${res.emailDeliveredCount} emails)`);
+      toast.success(
+        `Broadcast sent successfully to ${res.sentCount} recipients (${res.inAppDeliveredCount} in-app, ${res.emailDeliveredCount} emails)`,
+      );
       setIsBroadcastModalOpen(false);
       setMsgTargetUser(null);
     },
@@ -123,8 +151,11 @@ export function AdminUsersPage() {
   });
 
   const adjustQuotaMutation = useMutation({
-    mutationFn: (data: { userId: string; monthlyCreditsLimit: number; planId: string }) =>
-      adjustUserQuotaServerFn({ data }),
+    mutationFn: (data: {
+      userId: string;
+      monthlyCreditsLimit: number;
+      planId: string;
+    }) => adjustUserQuotaServerFn({ data }),
     onSuccess: () => {
       toast.success("User quota and plan updated successfully!");
       setSelectedUser(null);
@@ -136,7 +167,8 @@ export function AdminUsersPage() {
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (userId: string) => deleteUserAccountServerFn({ data: { userId } }),
+    mutationFn: (userId: string) =>
+      deleteUserAccountServerFn({ data: { userId } }),
     onSuccess: () => {
       toast.success("User account deleted successfully");
       void queryClient.invalidateQueries({ queryKey: ["adminUsersPaginated"] });
@@ -193,7 +225,8 @@ export function AdminUsersPage() {
             User Management &amp; Communications
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage subscriber accounts, quota limits, direct messaging, and targeted email/in-app broadcasts.
+            Manage subscriber accounts, quota limits, direct messaging, and
+            targeted email/in-app broadcasts.
           </p>
         </div>
 
@@ -262,7 +295,9 @@ export function AdminUsersPage() {
           <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
             Registered Customers ({total})
           </h5>
-          <span className="text-xs text-slate-400">Page {page} of {totalPages}</span>
+          <span className="text-xs text-slate-400">
+            Page {page} of {totalPages}
+          </span>
         </div>
 
         <div className="overflow-x-auto">
@@ -280,21 +315,35 @@ export function AdminUsersPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
-                    {usersQuery.isLoading ? "Loading customer list..." : "No users match the search filter."}
+                  <td
+                    colSpan={6}
+                    className="px-6 py-12 text-center text-slate-400"
+                  >
+                    {usersQuery.isLoading
+                      ? "Loading customer list..."
+                      : "No users match the search filter."}
                   </td>
                 </tr>
               ) : (
                 users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={u.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
-                          {u.name ? u.name.slice(0, 2).toUpperCase() : u.email.slice(0, 2).toUpperCase()}
+                          {u.name
+                            ? u.name.slice(0, 2).toUpperCase()
+                            : u.email.slice(0, 2).toUpperCase()}
                         </div>
                         <div>
-                          <p className="font-bold text-slate-800 dark:text-slate-100">{u.name || "Customer"}</p>
-                          <p className="text-[11px] text-slate-400">{u.email}</p>
+                          <p className="font-bold text-slate-800 dark:text-slate-100">
+                            {u.name || "Customer"}
+                          </p>
+                          <p className="text-[11px] text-slate-400">
+                            {u.email}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -304,7 +353,8 @@ export function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-3.5 font-mono text-slate-700 dark:text-slate-200">
-                      {u.creditsUsed.toLocaleString()} / {u.monthlyCreditsLimit.toLocaleString()}
+                      {u.creditsUsed.toLocaleString()} /{" "}
+                      {u.monthlyCreditsLimit.toLocaleString()}
                     </td>
                     <td className="px-6 py-3.5">
                       <span
@@ -332,7 +382,10 @@ export function AdminUsersPage() {
                         className="px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/30 text-blue-600 hover:bg-blue-100 text-xs font-semibold inline-flex items-center gap-1"
                         title="Send Direct Message"
                       >
-                        <Icon icon="solar:letter-bold" className="h-3.5 w-3.5" />
+                        <Icon
+                          icon="solar:letter-bold"
+                          className="h-3.5 w-3.5"
+                        />
                         <span>Message</span>
                       </button>
 
@@ -342,7 +395,10 @@ export function AdminUsersPage() {
                         className="px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 inline-flex items-center gap-1"
                         title="Adjust Plan & Quota"
                       >
-                        <Icon icon="solar:tuning-square-2-bold-duotone" className="h-3.5 w-3.5 text-primary" />
+                        <Icon
+                          icon="solar:tuning-square-2-bold-duotone"
+                          className="h-3.5 w-3.5 text-primary"
+                        />
                         <span>Quota</span>
                       </button>
 
@@ -353,7 +409,10 @@ export function AdminUsersPage() {
                         className="px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-xs font-bold inline-flex items-center gap-1"
                         title="Magic Impersonate"
                       >
-                        <Icon icon="solar:user-speak-rounded-bold-duotone" className="h-3.5 w-3.5" />
+                        <Icon
+                          icon="solar:user-speak-rounded-bold-duotone"
+                          className="h-3.5 w-3.5"
+                        />
                         <span>Impersonate</span>
                       </button>
 
@@ -368,7 +427,10 @@ export function AdminUsersPage() {
                           className="p-1 rounded text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 inline-flex"
                           title="Delete User"
                         >
-                          <Icon icon="solar:trash-bin-2-bold-duotone" className="h-4 w-4" />
+                          <Icon
+                            icon="solar:trash-bin-2-bold-duotone"
+                            className="h-4 w-4"
+                          />
                         </button>
                       )}
                     </td>
@@ -412,14 +474,20 @@ export function AdminUsersPage() {
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
               <div className="flex items-center gap-2.5">
                 <div className="size-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                  <Icon icon="solar:letter-unread-bold-duotone" className="h-6 w-6" />
+                  <Icon
+                    icon="solar:letter-unread-bold-duotone"
+                    className="h-6 w-6"
+                  />
                 </div>
                 <div>
                   <h4 className="font-black text-base text-slate-800 dark:text-slate-100">
-                    {msgTargetUser ? `Direct Message: ${msgTargetUser.name || msgTargetUser.email}` : "Targeted Customer Broadcast"}
+                    {msgTargetUser
+                      ? `Direct Message: ${msgTargetUser.name || msgTargetUser.email}`
+                      : "Targeted Customer Broadcast"}
                   </h4>
                   <p className="text-xs text-slate-400">
-                    Send personalized in-app notifications and email updates with dynamic merge variables.
+                    Send personalized in-app notifications and email updates
+                    with dynamic merge variables.
                   </p>
                 </div>
               </div>
@@ -438,23 +506,37 @@ export function AdminUsersPage() {
               {!msgTargetUser && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-slate-300">Target Audience Group</label>
+                    <label className="font-bold text-slate-700 dark:text-slate-300">
+                      Target Audience Group
+                    </label>
                     <select
                       value={msgTargetAudience}
-                      onChange={(e) => setMsgTargetAudience(e.target.value as any)}
+                      onChange={(e) =>
+                        setMsgTargetAudience(e.target.value as any)
+                      }
                       className="select select-bordered select-sm w-full rounded-xl font-bold bg-white dark:bg-slate-800"
                     >
                       <option value="all">All Registered Users</option>
-                      <option value="free_only">Free / Starter Users Only</option>
-                      <option value="paid_only">All Subscribed (Pro &amp; Agency)</option>
-                      <option value="starter_plan">Starter Plan Subscribers</option>
+                      <option value="free_only">
+                        Free / Starter Users Only
+                      </option>
+                      <option value="paid_only">
+                        All Subscribed (Pro &amp; Agency)
+                      </option>
+                      <option value="starter_plan">
+                        Starter Plan Subscribers
+                      </option>
                       <option value="pro_plan">Pro Growth Subscribers</option>
-                      <option value="agency_plan">Agency Plan Subscribers</option>
+                      <option value="agency_plan">
+                        Agency Plan Subscribers
+                      </option>
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-slate-300">Country / Region Filter</label>
+                    <label className="font-bold text-slate-700 dark:text-slate-300">
+                      Country / Region Filter
+                    </label>
                     <select
                       value={msgTargetCountry}
                       onChange={(e) => setMsgTargetCountry(e.target.value)}
@@ -473,7 +555,9 @@ export function AdminUsersPage() {
 
               {/* Delivery Channels */}
               <div className="flex items-center justify-between gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                <span className="font-bold text-slate-700 dark:text-slate-300">Delivery Channels:</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300">
+                  Delivery Channels:
+                </span>
                 <div className="flex items-center gap-4">
                   <label className="flex items-center gap-2 cursor-pointer font-bold">
                     <input
@@ -500,9 +584,13 @@ export function AdminUsersPage() {
               {/* Template Dynamic Merge Variables helper tags */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-slate-600 dark:text-slate-400">Dynamic Merge Tags (Click to insert):</span>
+                  <span className="font-bold text-slate-600 dark:text-slate-400">
+                    Dynamic Merge Tags (Click to insert):
+                  </span>
                   <span className="text-primary font-mono font-bold">
-                    {previewQuery.data ? `Will reach ${previewQuery.data.targetUserCount} users` : "Calculating..."}
+                    {previewQuery.data
+                      ? `Will reach ${previewQuery.data.targetUserCount} users`
+                      : "Calculating..."}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -527,7 +615,9 @@ export function AdminUsersPage() {
 
               {/* Subject / Title */}
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 dark:text-slate-300">Message Subject / Notification Title</label>
+                <label className="font-bold text-slate-700 dark:text-slate-300">
+                  Message Subject / Notification Title
+                </label>
                 <input
                   type="text"
                   value={msgTitle}
@@ -539,7 +629,9 @@ export function AdminUsersPage() {
 
               {/* Message Body */}
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 dark:text-slate-300">Message Content</label>
+                <label className="font-bold text-slate-700 dark:text-slate-300">
+                  Message Content
+                </label>
                 <textarea
                   rows={4}
                   value={msgBody}
@@ -552,7 +644,9 @@ export function AdminUsersPage() {
               {/* Action Link & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Action URL (Optional)</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300">
+                    Action URL (Optional)
+                  </label>
                   <input
                     type="text"
                     value={msgActionUrl}
@@ -563,14 +657,18 @@ export function AdminUsersPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Notification Category</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300">
+                    Notification Category
+                  </label>
                   <select
                     value={msgCategory}
                     onChange={(e) => setMsgCategory(e.target.value as any)}
                     className="select select-bordered select-sm w-full rounded-xl font-bold bg-white dark:bg-slate-800"
                   >
                     <option value="announcement">Announcement</option>
-                    <option value="special_offer">Special Offer / Upgrade Discount</option>
+                    <option value="special_offer">
+                      Special Offer / Upgrade Discount
+                    </option>
                     <option value="system">System Notice</option>
                     <option value="update">Feature Update</option>
                     <option value="warning">Account Warning</option>
@@ -582,8 +680,13 @@ export function AdminUsersPage() {
               {previewQuery.data && (
                 <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="badge badge-primary badge-xs text-white font-bold">Live Recipient Preview</span>
-                    <span className="text-[10px] text-slate-400">Sample for: {previewQuery.data.sampleUsers[0]?.email || "Customer"}</span>
+                    <span className="badge badge-primary badge-xs text-white font-bold">
+                      Live Recipient Preview
+                    </span>
+                    <span className="text-[10px] text-slate-400">
+                      Sample for:{" "}
+                      {previewQuery.data.sampleUsers[0]?.email || "Customer"}
+                    </span>
                   </div>
                   <h5 className="font-black text-slate-800 dark:text-slate-100 text-xs">
                     {previewQuery.data.renderedTitleSample}
@@ -606,12 +709,21 @@ export function AdminUsersPage() {
               </button>
               <button
                 type="button"
-                disabled={sendBroadcastMutation.isPending || !msgTitle || !msgBody}
+                disabled={
+                  sendBroadcastMutation.isPending || !msgTitle || !msgBody
+                }
                 onClick={() => sendBroadcastMutation.mutate()}
                 className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-2"
               >
-                <Icon icon="solar:plain-bold" className={`h-4 w-4 ${sendBroadcastMutation.isPending ? "animate-spin" : ""}`} />
-                <span>{sendBroadcastMutation.isPending ? "Dispatching..." : "Send Message"}</span>
+                <Icon
+                  icon="solar:plain-bold"
+                  className={`h-4 w-4 ${sendBroadcastMutation.isPending ? "animate-spin" : ""}`}
+                />
+                <span>
+                  {sendBroadcastMutation.isPending
+                    ? "Dispatching..."
+                    : "Send Message"}
+                </span>
               </button>
             </div>
           </div>
@@ -647,7 +759,9 @@ export function AdminUsersPage() {
               className="space-y-4 text-xs"
             >
               <div className="space-y-1">
-                <label className="font-semibold text-slate-700 dark:text-slate-300">Assign Plan Tier</label>
+                <label className="font-semibold text-slate-700 dark:text-slate-300">
+                  Assign Plan Tier
+                </label>
                 <select
                   value={editPlanId}
                   onChange={(e) => setEditPlanId(e.target.value)}
@@ -660,7 +774,9 @@ export function AdminUsersPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-semibold text-slate-700 dark:text-slate-300">Monthly AI &amp; Crawl Credit Allowance</label>
+                <label className="font-semibold text-slate-700 dark:text-slate-300">
+                  Monthly AI &amp; Crawl Credit Allowance
+                </label>
                 <input
                   type="number"
                   min={100}

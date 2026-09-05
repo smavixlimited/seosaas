@@ -13,7 +13,9 @@ function AdminAuditLogsPage() {
   const [search, setSearch] = React.useState("");
   const [actionFilter, setActionFilter] = React.useState("all");
   const [page, setPage] = React.useState(1);
-  const [selectedLog, setSelectedLog] = React.useState<AuditLogEntry | null>(null);
+  const [selectedLog, setSelectedLog] = React.useState<AuditLogEntry | null>(
+    null,
+  );
 
   const logsQuery = useQuery({
     queryKey: ["adminAuditLogs", { search, action: actionFilter, page }],
@@ -28,16 +30,22 @@ function AdminAuditLogsPage() {
       }),
   });
 
-  const data = logsQuery.data as { logs: AuditLogEntry[]; total: number; totalPages: number } | undefined;
+  const data = logsQuery.data as
+    | { logs: AuditLogEntry[]; total: number; totalPages: number }
+    | undefined;
   const logs: AuditLogEntry[] = data?.logs ?? [];
   const total = data?.total ?? 0;
   const totalPages = data?.totalPages ?? 1;
 
   const getActionBadgeColor = (action: string) => {
-    if (action.includes("DELETED") || action.includes("BANNED")) return "bg-rose-500/10 text-rose-600";
-    if (action.includes("UPDATED") || action.includes("ADJUSTED")) return "bg-indigo-500/10 text-indigo-600";
-    if (action.includes("APPROVED")) return "bg-emerald-500/10 text-emerald-600";
-    if (action.includes("IMPERSONATION")) return "bg-amber-500/10 text-amber-600";
+    if (action.includes("DELETED") || action.includes("BANNED"))
+      return "bg-rose-500/10 text-rose-600";
+    if (action.includes("UPDATED") || action.includes("ADJUSTED"))
+      return "bg-indigo-500/10 text-indigo-600";
+    if (action.includes("APPROVED"))
+      return "bg-emerald-500/10 text-emerald-600";
+    if (action.includes("IMPERSONATION"))
+      return "bg-amber-500/10 text-amber-600";
     return "bg-primary/10 text-primary";
   };
 
@@ -50,7 +58,8 @@ function AdminAuditLogsPage() {
             System Audit &amp; Activity Trail
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Immutable log of all administrative actions, quota updates, security changes, and customer impersonations.
+            Immutable log of all administrative actions, quota updates, security
+            changes, and customer impersonations.
           </p>
         </div>
       </div>
@@ -59,7 +68,10 @@ function AdminAuditLogsPage() {
       <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="relative sm:col-span-2">
-            <Icon icon="solar:minimalistic-magnifer-line-duotone" className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Icon
+              icon="solar:minimalistic-magnifer-line-duotone"
+              className="absolute left-3 top-2.5 h-4 w-4 text-slate-400"
+            />
             <input
               type="text"
               placeholder="Search by admin email, action, target ID..."
@@ -84,10 +96,14 @@ function AdminAuditLogsPage() {
             <option value="USER_QUOTA_ADJUSTED">USER_QUOTA_ADJUSTED</option>
             <option value="USER_DELETED">USER_DELETED</option>
             <option value="IMPERSONATION_STARTED">IMPERSONATION_STARTED</option>
-            <option value="SECURITY_POLICY_UPDATED">SECURITY_POLICY_UPDATED</option>
+            <option value="SECURITY_POLICY_UPDATED">
+              SECURITY_POLICY_UPDATED
+            </option>
             <option value="API_KEY_UPDATED">API_KEY_UPDATED</option>
             <option value="BRANDING_UPDATED">BRANDING_UPDATED</option>
-            <option value="MANUAL_PAYMENT_APPROVED">MANUAL_PAYMENT_APPROVED</option>
+            <option value="MANUAL_PAYMENT_APPROVED">
+              MANUAL_PAYMENT_APPROVED
+            </option>
           </select>
         </div>
       </div>
@@ -98,7 +114,9 @@ function AdminAuditLogsPage() {
           <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
             Recorded Audit Trail ({total})
           </h5>
-          <span className="text-xs text-slate-400">Page {page} of {totalPages}</span>
+          <span className="text-xs text-slate-400">
+            Page {page} of {totalPages}
+          </span>
         </div>
 
         <div className="overflow-x-auto">
@@ -116,18 +134,28 @@ function AdminAuditLogsPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {logs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
-                    {logsQuery.isLoading ? "Loading audit trail..." : "No matching audit logs found."}
+                  <td
+                    colSpan={6}
+                    className="px-6 py-12 text-center text-slate-400"
+                  >
+                    {logsQuery.isLoading
+                      ? "Loading audit trail..."
+                      : "No matching audit logs found."}
                   </td>
                 </tr>
               ) : (
                 logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={log.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
                       {log.adminEmail}
                     </td>
                     <td className="px-6 py-3.5">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getActionBadgeColor(log.action)}`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${getActionBadgeColor(log.action)}`}
+                      >
                         {log.action}
                       </span>
                     </td>
@@ -148,7 +176,10 @@ function AdminAuditLogsPage() {
                           className="p-1.5 rounded text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-700 inline-flex"
                           title="View JSON Payload"
                         >
-                          <Icon icon="solar:eye-bold-duotone" className="h-4 w-4" />
+                          <Icon
+                            icon="solar:eye-bold-duotone"
+                            className="h-4 w-4"
+                          />
                         </button>
                       ) : (
                         <span className="text-slate-300">—</span>

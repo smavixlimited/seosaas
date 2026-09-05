@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { BackupService, type ProjectBackupSnapshot } from "@/services/backup.service";
+import {
+  BackupService,
+  type ProjectBackupSnapshot,
+} from "@/services/backup.service";
 
 describe("Automated Backup & Disaster Recovery Service", () => {
   beforeEach(() => {
@@ -7,10 +10,13 @@ describe("Automated Backup & Disaster Recovery Service", () => {
   });
 
   it("validates backup snapshot structure and throws on malformed payloads", async () => {
-    // @ts-expect-error test malformed input
-    await expect(BackupService.restoreProjectBackupSnapshot({}, "usr_test", "org_test")).rejects.toThrow(
-      "Invalid backup snapshot payload structure"
-    );
+    await expect(
+      BackupService.restoreProjectBackupSnapshot(
+        {} as unknown as ProjectBackupSnapshot,
+        "usr_test",
+        "org_test",
+      ),
+    ).rejects.toThrow("Invalid backup snapshot payload structure");
   });
 
   it("accepts a well-formed project backup snapshot schema", () => {
@@ -25,10 +31,18 @@ describe("Automated Backup & Disaster Recovery Service", () => {
         languageCode: "en",
       },
       contextSections: [
-        { key: "business_overview", title: "Overview", content: "AI SEO growth engine" },
+        {
+          key: "business_overview",
+          title: "Overview",
+          content: "AI SEO growth engine",
+        },
       ],
       keyPages: [
-        { url: "https://acme.com/pricing", role: "money", topic: "SaaS Pricing" },
+        {
+          url: "https://acme.com/pricing",
+          role: "money",
+          topic: "SaaS Pricing",
+        },
       ],
       uptimeMonitors: [{ url: "https://acme.com", status: "up" }],
     };

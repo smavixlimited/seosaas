@@ -1,13 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireProjectContext } from "@/serverFunctions/middleware";
-import { FirecrawlService, type FirecrawlScrapeOptions } from "@/services/firecrawl.service";
+import {
+  FirecrawlService,
+  type FirecrawlScrapeOptions,
+} from "@/services/firecrawl.service";
 import { CreditGuardService } from "@/services/credit-guard.service";
 
 const scrapeWebpageSchema = z.object({
   projectId: z.string().min(1),
   url: z.string().url(),
-  formats: z.array(z.enum(["markdown", "html", "rawHtml", "screenshot"])).optional(),
+  formats: z
+    .array(z.enum(["markdown", "html", "rawHtml", "screenshot"]))
+    .optional(),
   onlyMainContent: z.boolean().optional(),
 });
 
@@ -78,7 +83,9 @@ export const mapDomainServerFn = createServerFn({ method: "POST" })
     return FirecrawlService.mapDomain(data.domain);
   });
 
-export const generateCompetitorBlueprintServerFn = createServerFn({ method: "POST" })
+export const generateCompetitorBlueprintServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireProjectContext)
   .validator(competitorBlueprintSchema)
   .handler(async ({ data, context }) => {
@@ -106,7 +113,9 @@ export const generateLlmsTxtServerFn = createServerFn({ method: "POST" })
     return FirecrawlService.generateLlmsTxt(data.domain);
   });
 
-export const testFirecrawlConnectionServerFn = createServerFn({ method: "POST" })
+export const testFirecrawlConnectionServerFn = createServerFn({
+  method: "POST",
+})
   .validator(testConnectionSchema)
   .handler(async ({ data }) => {
     return FirecrawlService.testConnection(data.apiKey, data.apiUrl);

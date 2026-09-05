@@ -33,7 +33,8 @@ function WhiteLabelPage() {
   });
 
   const planId = (creditUsageQuery.data?.planId || "").toLowerCase();
-  const isAgency = planId === "agency" || planId === "scale" || planId === "enterprise";
+  const isAgency =
+    planId === "agency" || planId === "scale" || planId === "enterprise";
 
   const configQuery = useQuery({
     queryKey: ["white-label-config"],
@@ -54,7 +55,7 @@ function WhiteLabelPage() {
       setCustomDomain(configQuery.data.customDomain || "");
       setReportFooterNotes(
         configQuery.data.reportFooterNotes ||
-          "Prepared exclusively for our client. Confidential and proprietary."
+          "Prepared exclusively for our client. Confidential and proprietary.",
       );
     }
   }, [configQuery.data]);
@@ -95,7 +96,13 @@ function WhiteLabelPage() {
               White-Label Client Reports
             </h1>
             <p className="text-sm text-base-content/70 max-w-lg mx-auto leading-relaxed">
-              White-Label Reports, custom logo branding, client-facing PDF delivery, and custom domain CNAMEs are exclusively available to subscribers on the <span className="font-bold text-base-content">Agency &amp; Scale Plan</span>.
+              White-Label Reports, custom logo branding, client-facing PDF
+              delivery, and custom domain CNAMEs are exclusively available to
+              subscribers on the{" "}
+              <span className="font-bold text-base-content">
+                Agency &amp; Scale Plan
+              </span>
+              .
             </p>
           </div>
 
@@ -106,19 +113,28 @@ function WhiteLabelPage() {
             <ul className="space-y-2 text-xs font-medium text-base-content/80">
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-success shrink-0" />
-                <span>Custom logo and agency primary brand color on all audits</span>
+                <span>
+                  Custom logo and agency primary brand color on all audits
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-success shrink-0" />
-                <span>Unbranded white-label client PDF exports &amp; executive summaries</span>
+                <span>
+                  Unbranded white-label client PDF exports &amp; executive
+                  summaries
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-success shrink-0" />
-                <span>Custom confidentiality disclaimers &amp; report footer notes</span>
+                <span>
+                  Custom confidentiality disclaimers &amp; report footer notes
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-success shrink-0" />
-                <span>10,000 keywords &amp; unlimited tracked brand domains</span>
+                <span>
+                  10,000 keywords &amp; unlimited tracked brand domains
+                </span>
               </li>
             </ul>
           </div>
@@ -150,7 +166,8 @@ function WhiteLabelPage() {
               </h1>
             </div>
             <p className="mt-1 text-xs text-base-content/60">
-              Customize client audit deliverables with your agency branding, logo, colors, and executive disclaimers.
+              Customize client audit deliverables with your agency branding,
+              logo, colors, and executive disclaimers.
             </p>
           </div>
 
@@ -169,11 +186,14 @@ function WhiteLabelPage() {
           <div className="lg:col-span-5 space-y-5">
             <div className="rounded-3xl border border-base-300 bg-base-200/40 p-6 space-y-4">
               <h2 className="text-sm font-bold uppercase tracking-wider text-base-content/70 flex items-center gap-2">
-                <Palette className="h-4 w-4 text-primary" /> Brand Assets & Identity
+                <Palette className="h-4 w-4 text-primary" /> Brand Assets &
+                Identity
               </h2>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/70">Agency / Company Name</label>
+                <label className="text-xs font-bold text-base-content/70">
+                  Agency / Company Name
+                </label>
                 <input
                   type="text"
                   required
@@ -185,7 +205,9 @@ function WhiteLabelPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/70">Agency Logo URL</label>
+                <label className="text-xs font-bold text-base-content/70">
+                  Agency Logo URL
+                </label>
                 <input
                   type="url"
                   placeholder="https://youragency.com/logo.png"
@@ -196,7 +218,9 @@ function WhiteLabelPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/70">Brand Primary Hex Color</label>
+                <label className="text-xs font-bold text-base-content/70">
+                  Brand Primary Hex Color
+                </label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
@@ -214,7 +238,9 @@ function WhiteLabelPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/70">Custom Domain / Portal CNAME</label>
+                <label className="text-xs font-bold text-base-content/70">
+                  Custom Domain / Portal CNAME
+                </label>
                 <input
                   type="text"
                   placeholder="seo.youragency.com"
@@ -225,7 +251,9 @@ function WhiteLabelPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/70">Report Disclaimer / Footer</label>
+                <label className="text-xs font-bold text-base-content/70">
+                  Report Disclaimer / Footer
+                </label>
                 <textarea
                   rows={3}
                   className="textarea textarea-bordered textarea-sm w-full rounded-xl text-xs"
@@ -240,7 +268,10 @@ function WhiteLabelPage() {
                 onClick={() => saveMutation.mutate()}
                 className="btn btn-primary rounded-2xl w-full font-bold text-white shadow-md shadow-primary/20 gap-2 mt-2"
               >
-                <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving Changes..." : "Save Agency Branding"}
+                <Save className="h-4 w-4" />{" "}
+                {saveMutation.isPending
+                  ? "Saving Changes..."
+                  : "Save Agency Branding"}
               </button>
             </div>
           </div>
@@ -249,9 +280,12 @@ function WhiteLabelPage() {
           <div className="lg:col-span-7 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold text-base-content/70 px-2">
               <span className="flex items-center gap-1.5">
-                <Eye className="h-4 w-4 text-primary" /> Live Client Deliverable Preview
+                <Eye className="h-4 w-4 text-primary" /> Live Client Deliverable
+                Preview
               </span>
-              <span className="text-[11px] text-base-content/50">Confidential Client Audit</span>
+              <span className="text-[11px] text-base-content/50">
+                Confidential Client Audit
+              </span>
             </div>
 
             {/* Printable Document Sheet */}
@@ -264,7 +298,11 @@ function WhiteLabelPage() {
               <div className="flex items-center justify-between border-b border-base-300/80 pb-5">
                 <div>
                   {logoUrl ? (
-                    <img src={logoUrl} alt={companyName} className="h-9 object-contain" />
+                    <img
+                      src={logoUrl}
+                      alt={companyName}
+                      className="h-9 object-contain"
+                    />
                   ) : (
                     <div
                       className="text-xl font-black tracking-tight"
@@ -279,8 +317,12 @@ function WhiteLabelPage() {
                 </div>
 
                 <div className="text-right">
-                  <span className="text-xs font-bold text-base-content">Date: {new Date().toLocaleDateString()}</span>
-                  <div className="text-[11px] text-base-content/60">Target: client-domain.com</div>
+                  <span className="text-xs font-bold text-base-content">
+                    Date: {new Date().toLocaleDateString()}
+                  </span>
+                  <div className="text-[11px] text-base-content/60">
+                    Target: client-domain.com
+                  </div>
                 </div>
               </div>
 
@@ -291,22 +333,39 @@ function WhiteLabelPage() {
                 </h3>
                 <div className="rounded-2xl bg-base-200/50 p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                   <div>
-                    <div className="text-2xl font-black" style={{ color: primaryColor }}>
+                    <div
+                      className="text-2xl font-black"
+                      style={{ color: primaryColor }}
+                    >
                       92/100
                     </div>
-                    <div className="text-[10px] font-bold text-base-content/60 uppercase">SEO Health</div>
+                    <div className="text-[10px] font-bold text-base-content/60 uppercase">
+                      SEO Health
+                    </div>
                   </div>
                   <div>
-                    <div className="text-2xl font-black text-emerald-600">1,420</div>
-                    <div className="text-[10px] font-bold text-base-content/60 uppercase">Ranked Terms</div>
+                    <div className="text-2xl font-black text-emerald-600">
+                      1,420
+                    </div>
+                    <div className="text-[10px] font-bold text-base-content/60 uppercase">
+                      Ranked Terms
+                    </div>
                   </div>
                   <div>
-                    <div className="text-2xl font-black text-blue-600">8,920</div>
-                    <div className="text-[10px] font-bold text-base-content/60 uppercase">Backlinks</div>
+                    <div className="text-2xl font-black text-blue-600">
+                      8,920
+                    </div>
+                    <div className="text-[10px] font-bold text-base-content/60 uppercase">
+                      Backlinks
+                    </div>
                   </div>
                   <div>
-                    <div className="text-2xl font-black text-indigo-600">99.9%</div>
-                    <div className="text-[10px] font-bold text-base-content/60 uppercase">Uptime</div>
+                    <div className="text-2xl font-black text-indigo-600">
+                      99.9%
+                    </div>
+                    <div className="text-[10px] font-bold text-base-content/60 uppercase">
+                      Uptime
+                    </div>
                   </div>
                 </div>
               </div>
@@ -320,22 +379,31 @@ function WhiteLabelPage() {
                   <div className="flex items-start gap-2.5 rounded-xl bg-base-200/30 p-3">
                     <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-base-content">Technical Foundation: </strong>
-                      Zero critical crawl errors detected. Core Web Vitals meet Google good thresholds.
+                      <strong className="text-base-content">
+                        Technical Foundation:{" "}
+                      </strong>
+                      Zero critical crawl errors detected. Core Web Vitals meet
+                      Google good thresholds.
                     </div>
                   </div>
                   <div className="flex items-start gap-2.5 rounded-xl bg-base-200/30 p-3">
                     <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-base-content">High-Intent Keywords: </strong>
-                      Identified 42 untapped high-intent clusters with low keyword difficulty.
+                      <strong className="text-base-content">
+                        High-Intent Keywords:{" "}
+                      </strong>
+                      Identified 42 untapped high-intent clusters with low
+                      keyword difficulty.
                     </div>
                   </div>
                   <div className="flex items-start gap-2.5 rounded-xl bg-base-200/30 p-3">
                     <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-base-content">Backlink Profile: </strong>
-                      Acquired 18 new referring domains in the past 30 days with strong domain authority.
+                      <strong className="text-base-content">
+                        Backlink Profile:{" "}
+                      </strong>
+                      Acquired 18 new referring domains in the past 30 days with
+                      strong domain authority.
                     </div>
                   </div>
                 </div>

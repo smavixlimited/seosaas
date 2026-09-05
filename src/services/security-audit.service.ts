@@ -12,7 +12,13 @@ export type AuditAction =
   | "MANUAL_PAYMENT_APPROVED"
   | "MANUAL_PAYMENT_REJECTED";
 
-export type JsonValue = string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonValue }
+  | JsonValue[];
 
 export interface AuditLogEntry {
   id: string;
@@ -65,7 +71,9 @@ export const SecurityAuditService = {
   }): Promise<AuditLogEntry> {
     const id = `aud_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     const now = new Date().toISOString();
-    const metadataJson = params.metadata ? JSON.stringify(params.metadata) : null;
+    const metadataJson = params.metadata
+      ? JSON.stringify(params.metadata)
+      : null;
 
     try {
       const { db } = await import("@/db");
@@ -115,7 +123,11 @@ export const SecurityAuditService = {
       const { auditLogs } = await import("@/db/schema");
       const { desc } = await import("drizzle-orm");
 
-      const rows = await db.select().from(auditLogs).orderBy(desc(auditLogs.createdAt)).limit(500);
+      const rows = await db
+        .select()
+        .from(auditLogs)
+        .orderBy(desc(auditLogs.createdAt))
+        .limit(500);
 
       allLogs = rows.map((r) => {
         let metadata = null;
@@ -134,7 +146,9 @@ export const SecurityAuditService = {
           targetType: r.targetType,
           ipAddress: r.ipAddress,
           metadata,
-          createdAt: r.createdAt ? String(r.createdAt) : new Date().toISOString(),
+          createdAt: r.createdAt
+            ? String(r.createdAt)
+            : new Date().toISOString(),
         };
       });
     } catch {
@@ -149,7 +163,7 @@ export const SecurityAuditService = {
           l.adminEmail.toLowerCase().includes(q) ||
           l.action.toLowerCase().includes(q) ||
           (l.targetId && l.targetId.toLowerCase().includes(q)) ||
-          (l.targetType && l.targetType.toLowerCase().includes(q))
+          (l.targetType && l.targetType.toLowerCase().includes(q)),
       );
     }
 
@@ -160,7 +174,9 @@ export const SecurityAuditService = {
 
     // 3. Admin Email Filter
     if (options.adminEmail && options.adminEmail !== "all") {
-      allLogs = allLogs.filter((l) => l.adminEmail.toLowerCase() === options.adminEmail?.toLowerCase());
+      allLogs = allLogs.filter(
+        (l) => l.adminEmail.toLowerCase() === options.adminEmail?.toLowerCase(),
+      );
     }
 
     const total = allLogs.length;
@@ -183,7 +199,7 @@ export const SecurityAuditService = {
   async getSecurityPolicies(): Promise<SecurityPolicies> {
     return SystemSettingsService.getSetting<SecurityPolicies>(
       "security_policies",
-      DEFAULT_SECURITY_POLICIES
+      DEFAULT_SECURITY_POLICIES,
     );
   },
 
@@ -193,7 +209,7 @@ export const SecurityAuditService = {
   async setSecurityPolicies(
     policies: Partial<SecurityPolicies>,
     adminId: string,
-    adminEmail: string
+    adminEmail: string,
   ): Promise<SecurityPolicies> {
     const current = await this.getSecurityPolicies();
     const updated = { ...current, ...policies };
@@ -201,7 +217,7 @@ export const SecurityAuditService = {
     await SystemSettingsService.setSetting<SecurityPolicies>(
       "security_policies",
       updated,
-      adminId
+      adminId,
     );
 
     // Audit log

@@ -17,3 +17,7 @@ drizzle-pg/
 planning/
 worker-configuration.d.ts
 web/
+src/content/
+dashboard/
+template/
+analytics-reporting/

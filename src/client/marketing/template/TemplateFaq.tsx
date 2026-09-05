@@ -140,4 +140,3 @@ export function TemplateFaq() {
     </section>
   );
 }
-export default TemplateFaq;

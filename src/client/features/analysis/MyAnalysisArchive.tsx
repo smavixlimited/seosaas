@@ -4,7 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import { BRAND_CONFIG } from "@/config/brand";
-import { getBrandProfile, listBrandCompetitors } from "@/serverFunctions/brand-competitor";
+import {
+  getBrandProfile,
+  listBrandCompetitors,
+} from "@/serverFunctions/brand-competitor";
 import { getConversionReadiness } from "@/serverFunctions/conversion-readiness";
 import { getAudienceTrustAudit } from "@/serverFunctions/audience-trust";
 
@@ -13,8 +16,12 @@ interface MyAnalysisArchiveProps {
 }
 
 export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
-  const [activeTab, setActiveTab] = React.useState<"brand" | "competitors" | "ads">("brand");
-  const [selectedReportForPrint, setSelectedReportForPrint] = React.useState<any | null>(null);
+  const [activeTab, setActiveTab] = React.useState<
+    "brand" | "competitors" | "ads"
+  >("brand");
+  const [selectedReportForPrint, setSelectedReportForPrint] = React.useState<
+    any | null
+  >(null);
 
   const brandQuery = useQuery({
     queryKey: ["brandProfile", projectId],
@@ -54,14 +61,18 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
       <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <Icon icon="solar:folder-with-files-bold-duotone" className="h-7 w-7" />
+            <Icon
+              icon="solar:folder-with-files-bold-duotone"
+              className="h-7 w-7"
+            />
           </div>
           <div>
             <h2 className="text-base font-black text-base-content">
               Intelligence Reports &amp; PDF Export Hub
             </h2>
             <p className="text-xs text-base-content/60 mt-0.5">
-              Access your historical Brand Audits, Competitor Intelligence Teardowns, and Ad-Readiness Reports.
+              Access your historical Brand Audits, Competitor Intelligence
+              Teardowns, and Ad-Readiness Reports.
             </p>
           </div>
         </div>
@@ -87,9 +98,21 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
       {/* Categorized Tabs */}
       <div className="flex flex-wrap items-center gap-2 border-b border-base-300 pb-3">
         {[
-          { id: "brand", label: "Brand Analysis & Ad Readiness", icon: "solar:shield-check-bold-duotone" },
-          { id: "competitors", label: "Competitor Strategy Teardowns", icon: "solar:swords-bold-duotone" },
-          { id: "ads", label: "Competitor Ads & Creative Angles", icon: "solar:videocamera-bold-duotone" },
+          {
+            id: "brand",
+            label: "Brand Analysis & Ad Readiness",
+            icon: "solar:shield-check-bold-duotone",
+          },
+          {
+            id: "competitors",
+            label: "Competitor Strategy Teardowns",
+            icon: "solar:swords-bold-duotone",
+          },
+          {
+            id: "ads",
+            label: "Competitor Ads & Creative Angles",
+            icon: "solar:videocamera-bold-duotone",
+          },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -130,7 +153,10 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
                       className="text-xs text-primary font-medium hover:underline inline-flex items-center gap-1"
                     >
                       <span>{conversionAudit.targetUrl}</span>
-                      <Icon icon="solar:arrow-right-up-linear" className="h-3 w-3" />
+                      <Icon
+                        icon="solar:arrow-right-up-linear"
+                        className="h-3 w-3"
+                      />
                     </a>
                   </div>
                 </div>
@@ -148,16 +174,41 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
               {/* 6 Sub-scores overview */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
                 {[
-                  { label: "Credibility", score: conversionAudit.trustAndCredibilityScore },
-                  { label: "CTA Clarity", score: conversionAudit.ctaAndOfferClarityScore },
-                  { label: "Mobile Speed", score: conversionAudit.pageSpeedAndMobileScore },
-                  { label: "Social Proof", score: conversionAudit.socialProofAndReviewsScore },
-                  { label: "Form Friction", score: conversionAudit.frictionAndFormLengthScore },
-                  { label: "Ad Pixels", score: conversionAudit.trackingPixelScore },
+                  {
+                    label: "Credibility",
+                    score: conversionAudit.trustAndCredibilityScore,
+                  },
+                  {
+                    label: "CTA Clarity",
+                    score: conversionAudit.ctaAndOfferClarityScore,
+                  },
+                  {
+                    label: "Mobile Speed",
+                    score: conversionAudit.pageSpeedAndMobileScore,
+                  },
+                  {
+                    label: "Social Proof",
+                    score: conversionAudit.socialProofAndReviewsScore,
+                  },
+                  {
+                    label: "Form Friction",
+                    score: conversionAudit.frictionAndFormLengthScore,
+                  },
+                  {
+                    label: "Ad Pixels",
+                    score: conversionAudit.trackingPixelScore,
+                  },
                 ].map((item, idx) => (
-                  <div key={idx} className="p-3 rounded-2xl bg-base-200/40 border border-base-300/60 text-center space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-base-content/50 block">{item.label}</span>
-                    <span className="text-base font-black font-mono text-base-content block">{item.score}/100</span>
+                  <div
+                    key={idx}
+                    className="p-3 rounded-2xl bg-base-200/40 border border-base-300/60 text-center space-y-1"
+                  >
+                    <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                      {item.label}
+                    </span>
+                    <span className="text-base font-black font-mono text-base-content block">
+                      {item.score}/100
+                    </span>
                   </div>
                 ))}
               </div>
@@ -165,12 +216,19 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
               {/* Action Buttons */}
               <div className="flex items-center justify-between pt-2 border-t border-base-200">
                 <span className="text-[11px] text-base-content/50 font-mono">
-                  Audited: {new Date(conversionAudit.auditedAt).toLocaleDateString()}
+                  Audited:{" "}
+                  {new Date(conversionAudit.auditedAt).toLocaleDateString()}
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => handlePrintPdf({ type: "Brand Analysis Audit", conversionAudit, brand })}
+                    onClick={() =>
+                      handlePrintPdf({
+                        type: "Brand Analysis Audit",
+                        conversionAudit,
+                        brand,
+                      })
+                    }
                     className="btn btn-outline btn-sm rounded-xl font-bold text-xs gap-1.5"
                   >
                     <Icon icon="solar:printer-bold" className="h-4 w-4" />
@@ -188,7 +246,9 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
             </div>
           ) : (
             <div className="rounded-3xl border border-base-300 bg-base-100 p-8 text-center space-y-3">
-              <p className="text-xs text-base-content/60">No brand analysis generated yet.</p>
+              <p className="text-xs text-base-content/60">
+                No brand analysis generated yet.
+              </p>
               <Link
                 to="/p/$projectId/brand-analysis"
                 params={{ projectId }}
@@ -208,7 +268,9 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
         <div className="space-y-4 animate-in fade-in duration-150">
           {competitors.length === 0 ? (
             <div className="rounded-3xl border border-base-300 bg-base-100 p-8 text-center space-y-3">
-              <p className="text-xs text-base-content/60">No competitors added to directory yet.</p>
+              <p className="text-xs text-base-content/60">
+                No competitors added to directory yet.
+              </p>
               <Link
                 to="/p/$projectId/competitors"
                 params={{ projectId }}
@@ -226,8 +288,12 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-black text-base-content">{comp.name || comp.domain}</span>
-                      <span className="badge badge-neutral badge-xs font-mono">{comp.domain}</span>
+                      <span className="text-sm font-black text-base-content">
+                        {comp.name || comp.domain}
+                      </span>
+                      <span className="badge badge-neutral badge-xs font-mono">
+                        {comp.domain}
+                      </span>
                     </div>
                     {comp.notes && (
                       <p className="text-xs text-base-content/70 line-clamp-2 bg-base-200/40 p-2 rounded-xl">
@@ -239,7 +305,13 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
                   <div className="pt-2 border-t border-base-200 flex items-center justify-between gap-2">
                     <button
                       type="button"
-                      onClick={() => handlePrintPdf({ type: "Competitor Strategy Teardown", competitor: comp, brand })}
+                      onClick={() =>
+                        handlePrintPdf({
+                          type: "Competitor Strategy Teardown",
+                          competitor: comp,
+                          brand,
+                        })
+                      }
                       className="btn btn-ghost btn-xs rounded-lg text-base-content/70 font-bold gap-1"
                     >
                       <Icon icon="solar:printer-bold" className="h-3.5 w-3.5" />
@@ -272,12 +344,19 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
                 Competitor Ad Messaging &amp; Creative Angles
               </h3>
               <p className="text-xs text-base-content/60">
-                Extracted value drivers, headline formulas, and offer structures from rival ad campaigns.
+                Extracted value drivers, headline formulas, and offer structures
+                from rival ad campaigns.
               </p>
             </div>
             <button
               type="button"
-              onClick={() => handlePrintPdf({ type: "Competitor Ads Dossier", brand, competitors })}
+              onClick={() =>
+                handlePrintPdf({
+                  type: "Competitor Ads Dossier",
+                  brand,
+                  competitors,
+                })
+              }
               className="btn btn-outline btn-sm rounded-xl font-bold text-xs gap-1.5"
             >
               <Icon icon="solar:printer-bold" className="h-4 w-4" />
@@ -290,36 +369,54 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
               {
                 competitor: "Top Industry Rival",
                 angle: "Speed & Elimination of Manual Spreadsheets",
-                headline: "Stop spending 10 hours a week on manual SEO audits. Let AI automate it.",
+                headline:
+                  "Stop spending 10 hours a week on manual SEO audits. Let AI automate it.",
                 cta: "Start 14-Day Free Trial",
                 channels: ["Meta", "Google Search", "YouTube"],
               },
               {
                 competitor: "Legacy Software Competitor",
                 angle: "Cost Reduction / All-In-One Consolidation",
-                headline: "Replace 5 expensive tools with 1 platform. Cut your software bill by 60%.",
+                headline:
+                  "Replace 5 expensive tools with 1 platform. Cut your software bill by 60%.",
                 cta: "Calculate Your Savings",
                 channels: ["LinkedIn", "Meta Ads"],
               },
             ].map((ad, idx) => (
-              <div key={idx} className="rounded-2xl border border-base-300 bg-base-200/30 p-4 space-y-2.5 text-xs">
+              <div
+                key={idx}
+                className="rounded-2xl border border-base-300 bg-base-200/30 p-4 space-y-2.5 text-xs"
+              >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-base-content">{ad.competitor}</span>
+                  <span className="font-bold text-base-content">
+                    {ad.competitor}
+                  </span>
                   <div className="flex gap-1">
                     {ad.channels.map((ch, cIdx) => (
-                      <span key={cIdx} className="badge badge-xs badge-outline font-mono">
+                      <span
+                        key={cIdx}
+                        className="badge badge-xs badge-outline font-mono"
+                      >
                         {ch}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div className="bg-base-100 p-3 rounded-xl border border-base-300/60 font-medium space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-primary block">Ad Copy Hook:</span>
-                  <p className="font-bold text-base-content">&ldquo;{ad.headline}&rdquo;</p>
+                  <span className="text-[10px] uppercase font-bold text-primary block">
+                    Ad Copy Hook:
+                  </span>
+                  <p className="font-bold text-base-content">
+                    &ldquo;{ad.headline}&rdquo;
+                  </p>
                 </div>
                 <div className="flex items-center justify-between text-[11px] text-base-content/70">
-                  <span>Angle: <strong>{ad.angle}</strong></span>
-                  <span className="badge badge-xs badge-neutral font-bold">{ad.cta}</span>
+                  <span>
+                    Angle: <strong>{ad.angle}</strong>
+                  </span>
+                  <span className="badge badge-xs badge-neutral font-bold">
+                    {ad.cta}
+                  </span>
                 </div>
               </div>
             ))}
@@ -340,31 +437,50 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
                   {BRAND_CONFIG.name} Intelligence Report
                 </h1>
                 <p className="text-sm text-slate-600 font-medium">
-                  {selectedReportForPrint.type || "Executive Audit"} &bull; Generated on {new Date().toLocaleDateString()}
+                  {selectedReportForPrint.type || "Executive Audit"} &bull;
+                  Generated on {new Date().toLocaleDateString()}
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-sm font-bold block">{brand?.brandName || "Active Brand"}</span>
-                <span className="text-xs text-slate-500 font-mono">{brand?.websiteUrl || ""}</span>
+                <span className="text-sm font-bold block">
+                  {brand?.brandName || "Active Brand"}
+                </span>
+                <span className="text-xs text-slate-500 font-mono">
+                  {brand?.websiteUrl || ""}
+                </span>
               </div>
             </div>
 
             {/* Scorecard Box */}
             {conversionAudit && (
               <div className="rounded-2xl border-2 border-slate-200 p-5 space-y-4">
-                <h2 className="text-lg font-black text-slate-900">Brand Credibility &amp; Ad-Readiness Scorecard</h2>
+                <h2 className="text-lg font-black text-slate-900">
+                  Brand Credibility &amp; Ad-Readiness Scorecard
+                </h2>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="p-3 bg-slate-50 rounded-xl">
-                    <span className="text-xs font-bold uppercase text-slate-500 block">Overall Score</span>
-                    <span className="text-2xl font-black text-indigo-600">{conversionAudit.overallScore}/100</span>
+                    <span className="text-xs font-bold uppercase text-slate-500 block">
+                      Overall Score
+                    </span>
+                    <span className="text-2xl font-black text-indigo-600">
+                      {conversionAudit.overallScore}/100
+                    </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl">
-                    <span className="text-xs font-bold uppercase text-slate-500 block">Letter Grade</span>
-                    <span className="text-2xl font-black text-emerald-600">{conversionAudit.grade}</span>
+                    <span className="text-xs font-bold uppercase text-slate-500 block">
+                      Letter Grade
+                    </span>
+                    <span className="text-2xl font-black text-emerald-600">
+                      {conversionAudit.grade}
+                    </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl">
-                    <span className="text-xs font-bold uppercase text-slate-500 block">Ad Spend Risk</span>
-                    <span className="text-2xl font-black uppercase text-amber-600">{conversionAudit.adWastedSpendRisk}</span>
+                    <span className="text-xs font-bold uppercase text-slate-500 block">
+                      Ad Spend Risk
+                    </span>
+                    <span className="text-2xl font-black uppercase text-amber-600">
+                      {conversionAudit.adWastedSpendRisk}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -373,21 +489,31 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
             {/* Recommendations */}
             {conversionAudit?.recommendedFixes && (
               <div className="space-y-3">
-                <h3 className="text-base font-black text-slate-900">Priority Optimization Roadmap</h3>
+                <h3 className="text-base font-black text-slate-900">
+                  Priority Optimization Roadmap
+                </h3>
                 <div className="space-y-2">
-                  {conversionAudit.recommendedFixes.map((fix: any, idx: number) => (
-                    <div key={idx} className="p-3 rounded-xl border border-slate-200 text-xs">
-                      <div className="font-bold text-sm text-slate-900">{idx + 1}. {fix.title} ({fix.priority} Priority)</div>
-                      <p className="text-slate-600 mt-1">{fix.action}</p>
-                    </div>
-                  ))}
+                  {conversionAudit.recommendedFixes.map(
+                    (fix: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-xl border border-slate-200 text-xs"
+                      >
+                        <div className="font-bold text-sm text-slate-900">
+                          {idx + 1}. {fix.title} ({fix.priority} Priority)
+                        </div>
+                        <p className="text-slate-600 mt-1">{fix.action}</p>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             )}
 
             {/* Footer */}
             <div className="pt-6 border-t border-slate-300 text-center text-xs text-slate-400">
-              Confidential Client Report &bull; Powered by Skorvia Enterprise SEO &amp; Brand Intelligence Platform
+              Confidential Client Report &bull; Powered by Skorvia Enterprise
+              SEO &amp; Brand Intelligence Platform
             </div>
           </div>
         </div>

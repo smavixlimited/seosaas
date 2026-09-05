@@ -39,7 +39,7 @@ export const CreditGuardService = {
         if (amount > initialLimit) {
           throw new AppError(
             "INSUFFICIENT_CREDITS",
-            `Action requires ${amount} credits, but initial balance is ${initialLimit}. Please upgrade your plan.`
+            `Action requires ${amount} credits, but initial balance is ${initialLimit}. Please upgrade your plan.`,
           );
         }
 
@@ -48,7 +48,9 @@ export const CreditGuardService = {
           planId: "free-trial",
           monthlyCreditsLimit: initialLimit,
           creditsUsed: amount,
-          resetAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          resetAt: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
         });
 
         return {
@@ -69,7 +71,7 @@ export const CreditGuardService = {
         const remaining = Math.max(0, monthlyLimit - currentUsed);
         throw new AppError(
           "INSUFFICIENT_CREDITS",
-          `Insufficient credits: Action requires ${amount} credits, but you only have ${remaining} remaining this billing cycle.`
+          `Insufficient credits: Action requires ${amount} credits, but you only have ${remaining} remaining this billing cycle.`,
         );
       }
 
@@ -83,8 +85,8 @@ export const CreditGuardService = {
         .where(
           and(
             eq(userQuotas.userId, params.userId),
-            sql`(${userQuotas.creditsUsed} + ${amount}) <= ${userQuotas.monthlyCreditsLimit}`
-          )
+            sql`(${userQuotas.creditsUsed} + ${amount}) <= ${userQuotas.monthlyCreditsLimit}`,
+          ),
         );
 
       const updatedUsed = currentUsed + amount;
@@ -113,7 +115,9 @@ export const CreditGuardService = {
   /**
    * Checks real-time available credit balance without deducting.
    */
-  async checkBalance(userId: string): Promise<{ available: number; limit: number; used: number }> {
+  async checkBalance(
+    userId: string,
+  ): Promise<{ available: number; limit: number; used: number }> {
     try {
       const { db } = await import("@/db");
       const { userQuotas } = await import("@/db/schema");

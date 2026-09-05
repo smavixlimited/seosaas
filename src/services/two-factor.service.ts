@@ -54,7 +54,10 @@ async function sha256Hash(text: string): Promise<string> {
 /**
  * Computes 6-digit TOTP code for a given timestamp and secret using Web Crypto HMAC-SHA1.
  */
-async function computeTOTP(secretBase32: string, timeStepWindow: number): Promise<string> {
+async function computeTOTP(
+  secretBase32: string,
+  timeStepWindow: number,
+): Promise<string> {
   const keyBytes = base32Decode(secretBase32);
   const counterBuffer = new ArrayBuffer(8);
   const view = new DataView(counterBuffer);
@@ -65,7 +68,7 @@ async function computeTOTP(secretBase32: string, timeStepWindow: number): Promis
     keyBytes as unknown as BufferSource,
     { name: "HMAC", hash: { name: "SHA-1" } },
     false,
-    ["sign"]
+    ["sign"],
   );
 
   const signature = await crypto.subtle.sign("HMAC", cryptoKey, counterBuffer);
@@ -131,14 +134,22 @@ function generateQrSvgDataUri(text: string): string {
 }
 
 // In-Memory fallback for testing and setup state before completion
-const pendingSetups = new Map<string, { secret: string; backupCodes: string[]; backupCodesHashed: string[] }>();
-const inMemory2FA = new Map<string, { secret: string; backupCodesHashed: string[]; isEnabled: boolean }>();
+const pendingSetups = new Map<
+  string,
+  { secret: string; backupCodes: string[]; backupCodesHashed: string[] }
+>();
+const inMemory2FA = new Map<
+  string,
+  { secret: string; backupCodesHashed: string[]; isEnabled: boolean }
+>();
 
 export const TwoFactorService = {
   /**
    * Checks if 2FA is active on an account.
    */
-  async get2FAStatus(userId: string): Promise<{ isEnabled: boolean; backupCodesCount: number }> {
+  async get2FAStatus(
+    userId: string,
+  ): Promise<{ isEnabled: boolean; backupCodesCount: number }> {
     try {
       const { db } = await import("@/db");
       const { userTwoFactor } = await import("@/db/schema");
@@ -172,7 +183,10 @@ export const TwoFactorService = {
   /**
    * Initializes a 2FA setup session. Generates secret, otpauth URL, QR Code, and 8 backup codes.
    */
-  async setup2FA(userId: string, email: string): Promise<{
+  async setup2FA(
+    userId: string,
+    email: string,
+  ): Promise<{
     secret: string;
     otpauthUrl: string;
     qrCodeDataUri: string;
@@ -236,7 +250,11 @@ export const TwoFactorService = {
   /**
    * Verifies the 6-digit TOTP code and activates 2FA.
    */
-  async verifyAndEnable2FA(userId: string, code: string, userEmail?: string): Promise<boolean> {
+  async verifyAndEnable2FA(
+    userId: string,
+    code: string,
+    userEmail?: string,
+  ): Promise<boolean> {
     let pendingSecret = "";
     let pendingBackupCodesHashed: string[] = [];
 
@@ -254,7 +272,9 @@ export const TwoFactorService = {
       if (pendingRow && new Date(pendingRow.expiresAt).getTime() > Date.now()) {
         pendingSecret = pendingRow.secret;
         try {
-          pendingBackupCodesHashed = JSON.parse(pendingRow.backupCodesHashedJson);
+          pendingBackupCodesHashed = JSON.parse(
+            pendingRow.backupCodesHashedJson,
+          );
         } catch {}
       }
     } catch {}
@@ -268,12 +288,18 @@ export const TwoFactorService = {
     }
 
     if (!pendingSecret) {
-      throw new AppError("VALIDATION_ERROR", "No active 2FA setup session found. Please click Enable 2FA again.");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "No active 2FA setup session found. Please click Enable 2FA again.",
+      );
     }
 
     const isValid = await this.verifyTOTPCode(pendingSecret, code);
     if (!isValid) {
-      throw new AppError("VALIDATION_ERROR", "Invalid 6-digit authentication code. Please check your authenticator app.");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Invalid 6-digit authentication code. Please check your authenticator app.",
+      );
     }
 
     const now = new Date().toISOString();
@@ -313,7 +339,9 @@ export const TwoFactorService = {
       }
 
       const { userTwoFactorPending } = await import("@/db/schema");
-      await db.delete(userTwoFactorPending).where(eq(userTwoFactorPending.userId, userId));
+      await db
+        .delete(userTwoFactorPending)
+        .where(eq(userTwoFactorPending.userId, userId));
     } catch (err) {
       console.warn("Failed to persist 2FA record to DB:", err);
     }
@@ -341,14 +369,21 @@ export const TwoFactorService = {
   /**
    * Disables 2FA on an account.
    */
-  async disable2FA(userId: string, code: string, userEmail?: string): Promise<boolean> {
+  async disable2FA(
+    userId: string,
+    code: string,
+    userEmail?: string,
+  ): Promise<boolean> {
     const status = await this.get2FAStatus(userId);
     if (!status.isEnabled) return true;
 
     // Verify current code
     const isLoginValid = await this.verifyLogin2FA(userId, code);
     if (!isLoginValid) {
-      throw new AppError("VALIDATION_ERROR", "Invalid 6-digit code or emergency backup code.");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Invalid 6-digit code or emergency backup code.",
+      );
     }
 
     try {

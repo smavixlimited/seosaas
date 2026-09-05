@@ -36,13 +36,17 @@ const SEED_BLOGS: BlogPostRecord[] = [
     description:
       "How to optimize your brand for Perplexity, ChatGPT Search, and Google Gemini citations with schema markup and semantic authority.",
     category: "AI Visibility",
-    coverImageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
+    coverImageUrl:
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
     authorName: "Skorvia SEO Intelligence Team",
     authorRole: "Senior AI Visibility Strategist",
     metaTitle: "The Complete 2026 AEO Guide — Rank in AI Search Engines",
-    metaDescription: "Master AI Engine Optimization (AEO). Learn how Perplexity, Gemini, and ChatGPT index and cite websites.",
-    focusKeywords: "AEO, AI Engine Optimization, ChatGPT Search, Perplexity SEO",
-    canonicalUrl: "https://skorvia.com/blogs/guide-to-ai-engine-optimization-aeo",
+    metaDescription:
+      "Master AI Engine Optimization (AEO). Learn how Perplexity, Gemini, and ChatGPT index and cite websites.",
+    focusKeywords:
+      "AEO, AI Engine Optimization, ChatGPT Search, Perplexity SEO",
+    canonicalUrl:
+      "https://skorvia.com/blogs/guide-to-ai-engine-optimization-aeo",
     status: "published",
     readingTimeMinutes: 7,
     publishedAt: "2026-05-15T09:00:00.000Z",
@@ -74,13 +78,17 @@ With Skorvia's built-in **AI Search Visibility Tracker**, you can simulate real-
     description:
       "A step-by-step blueprint for building database-driven landing pages that dominate long-tail search queries.",
     category: "Technical SEO",
-    coverImageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80",
+    coverImageUrl:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80",
     authorName: "Rasheed Tech",
     authorRole: "Founder & Lead Architect",
     metaTitle: "Programmatic SEO Architecture: 0 to 100K Monthly Traffic",
-    metaDescription: "Learn the exact database schema, indexation strategies, and internal linking models for programmatic SEO.",
-    focusKeywords: "Programmatic SEO, Long-tail Keywords, Database SEO, IndexNow",
-    canonicalUrl: "https://skorvia.com/blogs/scaling-programmatic-seo-100k-traffic",
+    metaDescription:
+      "Learn the exact database schema, indexation strategies, and internal linking models for programmatic SEO.",
+    focusKeywords:
+      "Programmatic SEO, Long-tail Keywords, Database SEO, IndexNow",
+    canonicalUrl:
+      "https://skorvia.com/blogs/scaling-programmatic-seo-100k-traffic",
     status: "published",
     readingTimeMinutes: 5,
     publishedAt: "2026-06-01T10:30:00.000Z",
@@ -137,7 +145,10 @@ export const BlogCmsService = {
       const { blogPosts } = await import("@/db/schema");
       const { desc } = await import("drizzle-orm");
 
-      const rows = await db.select().from(blogPosts).orderBy(desc(blogPosts.publishedAt));
+      const rows = await db
+        .select()
+        .from(blogPosts)
+        .orderBy(desc(blogPosts.publishedAt));
 
       if (rows.length === 0) {
         posts = [...SEED_BLOGS];
@@ -158,8 +169,12 @@ export const BlogCmsService = {
           canonicalUrl: r.canonicalUrl,
           status: r.status as "published" | "draft" | "scheduled",
           readingTimeMinutes: r.readingTimeMinutes,
-          publishedAt: r.publishedAt ? String(r.publishedAt) : new Date().toISOString(),
-          updatedAt: r.updatedAt ? String(r.updatedAt) : new Date().toISOString(),
+          publishedAt: r.publishedAt
+            ? String(r.publishedAt)
+            : new Date().toISOString(),
+          updatedAt: r.updatedAt
+            ? String(r.updatedAt)
+            : new Date().toISOString(),
         }));
       }
     } catch {
@@ -173,13 +188,15 @@ export const BlogCmsService = {
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q)
+          p.category.toLowerCase().includes(q),
       );
     }
 
     // Filter by category
     if (options.category && options.category !== "all") {
-      posts = posts.filter((p) => p.category.toLowerCase() === options.category?.toLowerCase());
+      posts = posts.filter(
+        (p) => p.category.toLowerCase() === options.category?.toLowerCase(),
+      );
     }
 
     // Filter by status
@@ -233,8 +250,12 @@ export const BlogCmsService = {
           canonicalUrl: row.canonicalUrl,
           status: row.status as "published" | "draft" | "scheduled",
           readingTimeMinutes: row.readingTimeMinutes,
-          publishedAt: row.publishedAt ? String(row.publishedAt) : new Date().toISOString(),
-          updatedAt: row.updatedAt ? String(row.updatedAt) : new Date().toISOString(),
+          publishedAt: row.publishedAt
+            ? String(row.publishedAt)
+            : new Date().toISOString(),
+          updatedAt: row.updatedAt
+            ? String(row.updatedAt)
+            : new Date().toISOString(),
         };
       }
     } catch {}
@@ -247,12 +268,17 @@ export const BlogCmsService = {
    * Upserts a blog post (Create or Edit) and logs an audit trail event.
    */
   async upsertBlogPost(
-    post: Partial<BlogPostRecord> & { title: string; content: string; description: string },
+    post: Partial<BlogPostRecord> & {
+      title: string;
+      content: string;
+      description: string;
+    },
     adminId: string,
-    adminEmail: string
+    adminEmail: string,
   ): Promise<BlogPostRecord> {
     const slug = post.slug || this.generateSlug(post.title);
-    const id = post.id || `post_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id =
+      post.id || `post_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const readingTime = this.calculateReadingTime(post.content);
     const now = new Date().toISOString();
 
@@ -353,7 +379,11 @@ export const BlogCmsService = {
   /**
    * Deletes a blog post and records an audit log.
    */
-  async deleteBlogPost(id: string, adminId: string, adminEmail: string): Promise<boolean> {
+  async deleteBlogPost(
+    id: string,
+    adminId: string,
+    adminEmail: string,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { blogPosts } = await import("@/db/schema");

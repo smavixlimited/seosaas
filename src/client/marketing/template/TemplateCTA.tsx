@@ -74,4 +74,3 @@ export function TemplateCTA() {
     </section>
   );
 }
-export default TemplateCTA;

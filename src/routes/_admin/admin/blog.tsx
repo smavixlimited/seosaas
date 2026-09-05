@@ -24,11 +24,16 @@ function AdminBlogPage() {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [page, setPage] = React.useState(1);
 
-  const [editingPost, setEditingPost] = React.useState<BlogPostRecord | null>(null);
+  const [editingPost, setEditingPost] = React.useState<BlogPostRecord | null>(
+    null,
+  );
   const [isCreating, setIsCreating] = React.useState(false);
 
   const blogsQuery = useQuery({
-    queryKey: ["adminBlogPosts", { search, category: categoryFilter, status: statusFilter, page }],
+    queryKey: [
+      "adminBlogPosts",
+      { search, category: categoryFilter, status: statusFilter, page },
+    ],
     queryFn: () =>
       getAdminBlogPostsListServerFn({
         data: {
@@ -72,9 +77,11 @@ function AdminBlogPage() {
       title: "",
       slug: "",
       description: "",
-      content: "<h2>Introduction</h2><p>Write your in-depth SEO guide or product update here...</p><h3>Key Takeaways:</h3><ul><li>Point 1</li><li>Point 2</li></ul>",
+      content:
+        "<h2>Introduction</h2><p>Write your in-depth SEO guide or product update here...</p><h3>Key Takeaways:</h3><ul><li>Point 1</li><li>Point 2</li></ul>",
       category: "SEO Guides",
-      coverImageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80",
+      coverImageUrl:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80",
       authorName: "Skorvia SEO Editorial",
       authorRole: "Senior SEO Strategist",
       metaTitle: "",
@@ -115,7 +122,9 @@ function AdminBlogPage() {
     upsertMutation.mutate(editingPost);
   };
 
-  const data = blogsQuery.data as { posts: BlogPostRecord[]; total: number; totalPages: number } | undefined;
+  const data = blogsQuery.data as
+    | { posts: BlogPostRecord[]; total: number; totalPages: number }
+    | undefined;
   const posts: BlogPostRecord[] = data?.posts ?? [];
   const total = data?.total ?? 0;
   const totalPages = data?.totalPages ?? 1;
@@ -143,10 +152,14 @@ function AdminBlogPage() {
             <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
             <div>
               <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">
-                {isCreating ? "Drafting New Article" : `Editing: ${editingPost.title || "Untitled"}`}
+                {isCreating
+                  ? "Drafting New Article"
+                  : `Editing: ${editingPost.title || "Untitled"}`}
               </h4>
               <p className="text-xs text-slate-400 font-mono">
-                {editingPost.slug ? `/blogs/${editingPost.slug}` : "Unpublished Draft"}
+                {editingPost.slug
+                  ? `/blogs/${editingPost.slug}`
+                  : "Unpublished Draft"}
               </p>
             </div>
           </div>
@@ -155,7 +168,10 @@ function AdminBlogPage() {
             <select
               value={editingPost.status}
               onChange={(e) =>
-                setEditingPost({ ...editingPost, status: e.target.value as "published" | "draft" | "scheduled" })
+                setEditingPost({
+                  ...editingPost,
+                  status: e.target.value as "published" | "draft" | "scheduled",
+                })
               }
               className="h-9 rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-3 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none"
             >
@@ -171,7 +187,9 @@ function AdminBlogPage() {
               className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all"
             >
               <Icon icon="solar:disk-bold-duotone" className="h-4 w-4" />
-              <span>{upsertMutation.isPending ? "Saving..." : "Save & Publish"}</span>
+              <span>
+                {upsertMutation.isPending ? "Saving..." : "Save & Publish"}
+              </span>
             </button>
           </div>
         </div>
@@ -183,13 +201,17 @@ function AdminBlogPage() {
             {/* Title & Slug Box */}
             <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-6 shadow-2xs space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Article Title</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Article Title
+                </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     required
                     value={editingPost.title}
-                    onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
+                    onChange={(e) =>
+                      setEditingPost({ ...editingPost, title: e.target.value })
+                    }
                     placeholder="e.g. Master Guide: Dominating Answer Engine Optimization (AEO) in 2026"
                     className="h-11 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-4 text-sm font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                   />
@@ -205,21 +227,32 @@ function AdminBlogPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-600 dark:text-slate-400">URL Slug</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400">
+                    URL Slug
+                  </label>
                   <input
                     type="text"
                     value={editingPost.slug}
-                    onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
+                    onChange={(e) =>
+                      setEditingPost({ ...editingPost, slug: e.target.value })
+                    }
                     placeholder="article-slug"
                     className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-semibold text-slate-600 dark:text-slate-400">Short Teaser Description</label>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400">
+                    Short Teaser Description
+                  </label>
                   <input
                     type="text"
                     value={editingPost.description}
-                    onChange={(e) => setEditingPost({ ...editingPost, description: e.target.value })}
+                    onChange={(e) =>
+                      setEditingPost({
+                        ...editingPost,
+                        description: e.target.value,
+                      })
+                    }
                     placeholder="Quick summary shown on blog feed..."
                     className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs focus:outline-none"
                   />
@@ -231,15 +264,22 @@ function AdminBlogPage() {
             <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-6 shadow-2xs space-y-3">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                  <Icon icon="solar:pen-bold-duotone" className="h-4 w-4 text-primary" />
+                  <Icon
+                    icon="solar:pen-bold-duotone"
+                    className="h-4 w-4 text-primary"
+                  />
                   <span>Rich Article Body &amp; Media</span>
                 </label>
-                <span className="text-[11px] text-slate-400">Full HTML / Visual WYSIWYG</span>
+                <span className="text-[11px] text-slate-400">
+                  Full HTML / Visual WYSIWYG
+                </span>
               </div>
 
               <RichTextEditor
                 value={editingPost.content}
-                onChange={(content) => setEditingPost({ ...editingPost, content })}
+                onChange={(content) =>
+                  setEditingPost({ ...editingPost, content })
+                }
                 placeholder="Write your article content with formatting, tables, images, and quotes..."
                 minHeight="520px"
               />
@@ -251,7 +291,10 @@ function AdminBlogPage() {
             {/* Cover Image */}
             <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-5 shadow-2xs space-y-3">
               <h5 className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <Icon icon="solar:gallery-bold-duotone" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:gallery-bold-duotone"
+                  className="h-4 w-4 text-primary"
+                />
                 <span>Featured Cover Image</span>
               </h5>
 
@@ -259,23 +302,34 @@ function AdminBlogPage() {
                 folder="blog/covers"
                 label="Upload Cover Image"
                 currentUrl={editingPost.coverImageUrl || undefined}
-                onUploadComplete={(url: string) => setEditingPost({ ...editingPost, coverImageUrl: url })}
-                onRemove={() => setEditingPost({ ...editingPost, coverImageUrl: "" })}
+                onUploadComplete={(url: string) =>
+                  setEditingPost({ ...editingPost, coverImageUrl: url })
+                }
+                onRemove={() =>
+                  setEditingPost({ ...editingPost, coverImageUrl: "" })
+                }
               />
             </div>
 
             {/* Post Metadata & Author */}
             <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-5 shadow-2xs space-y-4 text-xs">
               <h5 className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-2">
-                <Icon icon="solar:tag-bold-duotone" className="h-4 w-4 text-indigo-500" />
+                <Icon
+                  icon="solar:tag-bold-duotone"
+                  className="h-4 w-4 text-indigo-500"
+                />
                 <span>Category &amp; Editorial Attribution</span>
               </h5>
 
               <div className="space-y-1">
-                <label className="font-semibold text-slate-600 dark:text-slate-400">Category</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Category
+                </label>
                 <select
                   value={editingPost.category}
-                  onChange={(e) => setEditingPost({ ...editingPost, category: e.target.value })}
+                  onChange={(e) =>
+                    setEditingPost({ ...editingPost, category: e.target.value })
+                  }
                   className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-semibold focus:outline-none"
                 >
                   <option value="AI Visibility">AI Visibility &amp; AEO</option>
@@ -286,22 +340,36 @@ function AdminBlogPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="font-semibold text-slate-600 dark:text-slate-400">Author Name</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Author Name
+                </label>
                 <input
                   type="text"
                   value={editingPost.authorName}
-                  onChange={(e) => setEditingPost({ ...editingPost, authorName: e.target.value })}
+                  onChange={(e) =>
+                    setEditingPost({
+                      ...editingPost,
+                      authorName: e.target.value,
+                    })
+                  }
                   className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs focus:outline-none"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="font-semibold text-slate-600 dark:text-slate-400">Reading Time (Minutes)</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Reading Time (Minutes)
+                </label>
                 <input
                   type="number"
                   min={1}
                   value={editingPost.readingTimeMinutes}
-                  onChange={(e) => setEditingPost({ ...editingPost, readingTimeMinutes: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setEditingPost({
+                      ...editingPost,
+                      readingTimeMinutes: Number(e.target.value),
+                    })
+                  }
                   className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
                 />
               </div>
@@ -310,31 +378,52 @@ function AdminBlogPage() {
             {/* Google SERP SEO Meta Box */}
             <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-5 shadow-2xs space-y-4 text-xs">
               <h5 className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-2">
-                <Icon icon="solar:magnifer-bold-duotone" className="h-4 w-4 text-emerald-500" />
+                <Icon
+                  icon="solar:magnifer-bold-duotone"
+                  className="h-4 w-4 text-emerald-500"
+                />
                 <span>SEO Meta &amp; SERP Preview</span>
               </h5>
 
               {/* SERP Preview Card */}
               <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Google Search Preview</span>
-                <p className="text-[11px] text-slate-500 font-mono truncate">https://skorvia.com &gt; blogs &gt; {editingPost.slug || "slug"}</p>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Google Search Preview
+                </span>
+                <p className="text-[11px] text-slate-500 font-mono truncate">
+                  https://skorvia.com &gt; blogs &gt;{" "}
+                  {editingPost.slug || "slug"}
+                </p>
                 <h6 className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline truncate">
-                  {editingPost.metaTitle || editingPost.title || "Article Title Placeholder"}
+                  {editingPost.metaTitle ||
+                    editingPost.title ||
+                    "Article Title Placeholder"}
                 </h6>
                 <p className="text-[11px] text-slate-600 dark:text-slate-300 line-clamp-2">
-                  {editingPost.metaDescription || editingPost.description || "Meta description preview for search engines..."}
+                  {editingPost.metaDescription ||
+                    editingPost.description ||
+                    "Meta description preview for search engines..."}
                 </p>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between">
-                  <label className="font-semibold text-slate-600 dark:text-slate-400">Meta Title</label>
-                  <span className="text-[10px] text-slate-400">{(editingPost.metaTitle || "").length}/60</span>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400">
+                    Meta Title
+                  </label>
+                  <span className="text-[10px] text-slate-400">
+                    {(editingPost.metaTitle || "").length}/60
+                  </span>
                 </div>
                 <input
                   type="text"
                   value={editingPost.metaTitle || ""}
-                  onChange={(e) => setEditingPost({ ...editingPost, metaTitle: e.target.value })}
+                  onChange={(e) =>
+                    setEditingPost({
+                      ...editingPost,
+                      metaTitle: e.target.value,
+                    })
+                  }
                   placeholder="Primary search title..."
                   className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs focus:outline-none"
                 />
@@ -342,24 +431,40 @@ function AdminBlogPage() {
 
               <div className="space-y-1">
                 <div className="flex justify-between">
-                  <label className="font-semibold text-slate-600 dark:text-slate-400">Meta Description</label>
-                  <span className="text-[10px] text-slate-400">{(editingPost.metaDescription || "").length}/160</span>
+                  <label className="font-semibold text-slate-600 dark:text-slate-400">
+                    Meta Description
+                  </label>
+                  <span className="text-[10px] text-slate-400">
+                    {(editingPost.metaDescription || "").length}/160
+                  </span>
                 </div>
                 <textarea
                   rows={2}
                   value={editingPost.metaDescription || ""}
-                  onChange={(e) => setEditingPost({ ...editingPost, metaDescription: e.target.value })}
+                  onChange={(e) =>
+                    setEditingPost({
+                      ...editingPost,
+                      metaDescription: e.target.value,
+                    })
+                  }
                   placeholder="Compelling SERP description..."
                   className="w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 text-xs focus:outline-none"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="font-semibold text-slate-600 dark:text-slate-400">Target Keywords</label>
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Target Keywords
+                </label>
                 <input
                   type="text"
                   value={editingPost.focusKeywords || ""}
-                  onChange={(e) => setEditingPost({ ...editingPost, focusKeywords: e.target.value })}
+                  onChange={(e) =>
+                    setEditingPost({
+                      ...editingPost,
+                      focusKeywords: e.target.value,
+                    })
+                  }
                   placeholder="AEO, SEO SaaS, AI Search"
                   className="h-9 w-full rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs focus:outline-none"
                 />
@@ -383,7 +488,8 @@ function AdminBlogPage() {
             Blog CMS &amp; Editorial Publishing Hub
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Write, edit, and publish search-optimized articles with CKEditor 5, R2 image manager, and Google SERP simulator.
+            Write, edit, and publish search-optimized articles with CKEditor 5,
+            R2 image manager, and Google SERP simulator.
           </p>
         </div>
 
@@ -401,7 +507,10 @@ function AdminBlogPage() {
       <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="relative">
-            <Icon icon="solar:minimalistic-magnifer-line-duotone" className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Icon
+              icon="solar:minimalistic-magnifer-line-duotone"
+              className="absolute left-3 top-2.5 h-4 w-4 text-slate-400"
+            />
             <input
               type="text"
               placeholder="Search title, category, description..."
@@ -451,7 +560,9 @@ function AdminBlogPage() {
           <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
             Published &amp; Draft Articles ({total})
           </h5>
-          <span className="text-xs text-slate-400">Page {page} of {totalPages}</span>
+          <span className="text-xs text-slate-400">
+            Page {page} of {totalPages}
+          </span>
         </div>
 
         <div className="overflow-x-auto">
@@ -469,13 +580,21 @@ function AdminBlogPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {posts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
-                    {blogsQuery.isLoading ? "Loading blog posts..." : "No articles found."}
+                  <td
+                    colSpan={6}
+                    className="px-6 py-12 text-center text-slate-400"
+                  >
+                    {blogsQuery.isLoading
+                      ? "Loading blog posts..."
+                      : "No articles found."}
                   </td>
                 </tr>
               ) : (
                 posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={post.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
                         <img
@@ -484,8 +603,12 @@ function AdminBlogPage() {
                           className="h-10 w-14 rounded-md object-cover bg-slate-100 border border-slate-200 dark:border-slate-700 shrink-0"
                         />
                         <div className="min-w-0">
-                          <p className="font-bold text-slate-800 dark:text-slate-100 truncate max-w-md">{post.title}</p>
-                          <p className="font-mono text-[10px] text-slate-400 truncate">/blogs/{post.slug}</p>
+                          <p className="font-bold text-slate-800 dark:text-slate-100 truncate max-w-md">
+                            {post.title}
+                          </p>
+                          <p className="font-mono text-[10px] text-slate-400 truncate">
+                            /blogs/{post.slug}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -510,8 +633,8 @@ function AdminBlogPage() {
                           post.status === "published"
                             ? "bg-emerald-500/10 text-emerald-600"
                             : post.status === "draft"
-                            ? "bg-slate-100 dark:bg-slate-700 text-slate-500"
-                            : "bg-amber-500/10 text-amber-600"
+                              ? "bg-slate-100 dark:bg-slate-700 text-slate-500"
+                              : "bg-amber-500/10 text-amber-600"
                         }`}
                       >
                         {post.status.toUpperCase()}
@@ -526,7 +649,10 @@ function AdminBlogPage() {
                         className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 inline-flex"
                         title="Edit Article"
                       >
-                        <Icon icon="solar:pen-bold-duotone" className="h-4 w-4" />
+                        <Icon
+                          icon="solar:pen-bold-duotone"
+                          className="h-4 w-4"
+                        />
                       </button>
 
                       <button
@@ -539,7 +665,10 @@ function AdminBlogPage() {
                         className="p-1.5 rounded-md hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-500 inline-flex"
                         title="Delete Article"
                       >
-                        <Icon icon="solar:trash-bin-2-bold-duotone" className="h-4 w-4" />
+                        <Icon
+                          icon="solar:trash-bin-2-bold-duotone"
+                          className="h-4 w-4"
+                        />
                       </button>
                     </td>
                   </tr>

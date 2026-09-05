@@ -8,7 +8,10 @@ describe("Phase 26: Weekly SEO Digests & Universal CSV Exporter Suite", () => {
 
   describe("1. Weekly SEO Performance Metrics & Digest Calculation", () => {
     it("computes user digest metrics including keywords, backlinks, and health scores", async () => {
-      const metrics = await WeeklyDigestService.computeUserDigestMetrics(testUserId, testEmail);
+      const metrics = await WeeklyDigestService.computeUserDigestMetrics(
+        testUserId,
+        testEmail,
+      );
 
       expect(metrics.userId).toBe(testUserId);
       expect(metrics.email).toBe(testEmail);
@@ -20,7 +23,10 @@ describe("Phase 26: Weekly SEO Digests & Universal CSV Exporter Suite", () => {
     });
 
     it("dispatches automated weekly digest email", async () => {
-      const result = await WeeklyDigestService.sendDigestToUser(testUserId, testEmail);
+      const result = await WeeklyDigestService.sendDigestToUser(
+        testUserId,
+        testEmail,
+      );
       expect(result.success).toBe(true);
       expect(result.id).toBeDefined();
     });
@@ -35,19 +41,43 @@ describe("Phase 26: Weekly SEO Digests & Universal CSV Exporter Suite", () => {
   describe("2. Universal CSV Exporter & Security Sanitization", () => {
     it("formats tabular data into compliant RFC 4180 CSV strings", () => {
       const data = [
-        { keyword: "seo tools", volume: 14000, difficulty: 45, isTracked: true },
-        { keyword: "backlink checker", volume: 8200, difficulty: 60, isTracked: false },
+        {
+          keyword: "seo tools",
+          volume: 14000,
+          difficulty: 45,
+          isTracked: true,
+        },
+        {
+          keyword: "backlink checker",
+          volume: 8200,
+          difficulty: 60,
+          isTracked: false,
+        },
       ];
 
       const columns = [
-        { header: "Search Keyword", accessor: (r: typeof data[0]) => r.keyword },
-        { header: "Search Volume", accessor: (r: typeof data[0]) => r.volume },
-        { header: "Keyword Difficulty", accessor: (r: typeof data[0]) => `${r.difficulty}%` },
-        { header: "Tracked", accessor: (r: typeof data[0]) => (r.isTracked ? "YES" : "NO") },
+        {
+          header: "Search Keyword",
+          accessor: (r: (typeof data)[0]) => r.keyword,
+        },
+        {
+          header: "Search Volume",
+          accessor: (r: (typeof data)[0]) => r.volume,
+        },
+        {
+          header: "Keyword Difficulty",
+          accessor: (r: (typeof data)[0]) => `${r.difficulty}%`,
+        },
+        {
+          header: "Tracked",
+          accessor: (r: (typeof data)[0]) => (r.isTracked ? "YES" : "NO"),
+        },
       ];
 
       const csv = generateCsvString(data, columns);
-      expect(csv).toContain("Search Keyword,Search Volume,Keyword Difficulty,Tracked");
+      expect(csv).toContain(
+        "Search Keyword,Search Volume,Keyword Difficulty,Tracked",
+      );
       expect(csv).toContain("seo tools,14000,45%,YES");
       expect(csv).toContain("backlink checker,8200,60%,NO");
     });
@@ -58,9 +88,9 @@ describe("Phase 26: Weekly SEO Digests & Universal CSV Exporter Suite", () => {
       ];
 
       const columns = [
-        { header: "Name", accessor: (r: typeof maliciousData[0]) => r.name },
-        { header: "Role", accessor: (r: typeof maliciousData[0]) => r.role },
-        { header: "Note", accessor: (r: typeof maliciousData[0]) => r.note },
+        { header: "Name", accessor: (r: (typeof maliciousData)[0]) => r.name },
+        { header: "Role", accessor: (r: (typeof maliciousData)[0]) => r.role },
+        { header: "Note", accessor: (r: (typeof maliciousData)[0]) => r.note },
       ];
 
       const csv = generateCsvString(maliciousData, columns);

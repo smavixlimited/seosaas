@@ -5,11 +5,15 @@
 @custom-variant dark (&:where([data-theme="skorvia-dark"], [data-theme="skorvia-dark"] *, .dark, .dark *));
 
 @theme {
-  --font-sans: "Inter Tight", "Plus Jakarta Sans", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans:
+    "Inter Tight", "Plus Jakarta Sans", "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
   --font-inter-tight: "Inter Tight", sans-serif;
   --container-8xl: 88rem;
-  
+
   --color-primary: #17199b;
   --color-primary-50: #f4f2fe;
   --color-primary-100: #ece8ff;
@@ -54,7 +58,7 @@
   --color-ns-green-light: #e8fbc6;
   --color-ns-cyan-light: #cdf5f8;
   --color-ns-yellow-light: #fdf7bc;
-  
+
   --color-brand-50: #eef0ff;
   --color-brand-100: #dce1fe;
   --color-brand-200: #bfc8fc;

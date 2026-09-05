@@ -51,7 +51,13 @@ describe("Phase 30: Async Task Queues & Deep Crawl Resilience Suite", () => {
       id: taskRecord?.taskId,
       status_code: 20000,
       status_message: "Ok.",
-      result: [{ keyword: "best enterprise seo", rank_absolute: 1, domain: "skorvia.com" }],
+      result: [
+        {
+          keyword: "best enterprise seo",
+          rank_absolute: 1,
+          domain: "skorvia.com",
+        },
+      ],
     });
 
     expect(postbackResult.handled).toBe(true);

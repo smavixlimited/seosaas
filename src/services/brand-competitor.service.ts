@@ -104,14 +104,23 @@ export const BrandCompetitorService = {
         .update(brandProfiles)
         .set({
           brandName: input.brandName || existing.brandName,
-          websiteUrl: input.websiteUrl !== undefined ? input.websiteUrl : existing.websiteUrl,
+          websiteUrl:
+            input.websiteUrl !== undefined
+              ? input.websiteUrl
+              : existing.websiteUrl,
           industry: input.industry || existing.industry,
           companySize: input.companySize || existing.companySize,
           targetCountry: input.targetCountry || existing.targetCountry,
           targetLanguage: input.targetLanguage || existing.targetLanguage,
           socialLinksJson: socialJson,
-          brandDescription: input.brandDescription !== undefined ? input.brandDescription : existing.brandDescription,
-          valueProposition: input.valueProposition !== undefined ? input.valueProposition : existing.valueProposition,
+          brandDescription:
+            input.brandDescription !== undefined
+              ? input.brandDescription
+              : existing.brandDescription,
+          valueProposition:
+            input.valueProposition !== undefined
+              ? input.valueProposition
+              : existing.valueProposition,
           updatedAt: now,
         })
         .where(eq(brandProfiles.projectId, input.projectId));
@@ -180,8 +189,8 @@ export const BrandCompetitorService = {
         .where(
           and(
             eq(brandCompetitors.projectId, projectId),
-            eq(brandCompetitors.domain, cleanDomain)
-          )
+            eq(brandCompetitors.domain, cleanDomain),
+          ),
         )
         .limit(1);
 
@@ -223,8 +232,8 @@ export const BrandCompetitorService = {
       .where(
         and(
           eq(brandCompetitors.projectId, projectId),
-          eq(brandCompetitors.id, competitorId)
-        )
+          eq(brandCompetitors.id, competitorId),
+        ),
       );
     return { ok: true };
   },
@@ -235,7 +244,7 @@ export const BrandCompetitorService = {
   async updateCompetitor(
     projectId: string,
     competitorId: string,
-    data: Partial<CompetitorInput>
+    data: Partial<CompetitorInput>,
   ) {
     const now = new Date().toISOString();
     const updatePayload: Record<string, unknown> = { updatedAt: now };
@@ -248,7 +257,8 @@ export const BrandCompetitorService = {
         .replace(/\/.*$/, "");
     }
     if (data.name !== undefined) updatePayload.name = data.name;
-    if (data.websiteUrl !== undefined) updatePayload.websiteUrl = data.websiteUrl;
+    if (data.websiteUrl !== undefined)
+      updatePayload.websiteUrl = data.websiteUrl;
     if (data.notes !== undefined) updatePayload.notes = data.notes;
     if (data.socialHandles) {
       updatePayload.socialHandlesJson = JSON.stringify(data.socialHandles);
@@ -260,8 +270,8 @@ export const BrandCompetitorService = {
       .where(
         and(
           eq(brandCompetitors.projectId, projectId),
-          eq(brandCompetitors.id, competitorId)
-        )
+          eq(brandCompetitors.id, competitorId),
+        ),
       );
 
     return { ok: true };
@@ -289,7 +299,11 @@ export const BrandCompetitorService = {
     // 1. Update Project Domain & Name if provided
     if (brand.websiteUrl || brand.brandName) {
       const cleanDom = brand.websiteUrl
-        ? brand.websiteUrl.trim().toLowerCase().replace(/^https?:\/\//i, "").replace(/\/.*$/, "")
+        ? brand.websiteUrl
+            .trim()
+            .toLowerCase()
+            .replace(/^https?:\/\//i, "")
+            .replace(/\/.*$/, "")
         : null;
 
       await db
@@ -318,7 +332,11 @@ export const BrandCompetitorService = {
       .values({
         userId,
         organizationId,
-        interestedFeatures: JSON.stringify(["brand_analysis", "competitors", "ad_readiness"]),
+        interestedFeatures: JSON.stringify([
+          "brand_analysis",
+          "competitors",
+          "ad_readiness",
+        ]),
         workFor: brand.industry || "SaaS",
         clientWebsiteCount: brand.companySize || "1-5",
         completedAt: now,

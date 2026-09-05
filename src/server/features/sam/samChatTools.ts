@@ -341,10 +341,14 @@ export function buildSamMcpTools(
       description:
         "Browse and extract clean, token-efficient Markdown from any live URL or competitor page using Firecrawl.",
       inputSchema: z.object({
-        url: z.string().url().describe("The URL of the webpage to browse and scrape"),
+        url: z
+          .string()
+          .url()
+          .describe("The URL of the webpage to browse and scrape"),
       }),
       execute: async ({ url }) => {
-        const { FirecrawlService } = await import("@/services/firecrawl.service");
+        const { FirecrawlService } =
+          await import("@/services/firecrawl.service");
         const res = await FirecrawlService.scrapeUrl(url);
         return {
           url: res.url,
@@ -361,7 +365,8 @@ export function buildSamMcpTools(
         query: z.string().describe("The search query or keyword to look up"),
       }),
       execute: async ({ query }) => {
-        const { FirecrawlService } = await import("@/services/firecrawl.service");
+        const { FirecrawlService } =
+          await import("@/services/firecrawl.service");
         const res = await FirecrawlService.searchAndScrape(query);
         return {
           query: res.query,

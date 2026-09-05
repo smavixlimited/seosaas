@@ -51,14 +51,19 @@ function AdminLoginPage() {
       });
 
       if (result.error) {
-        setErrorMessage(result.error.message || "Invalid administrator credentials. Access denied.");
+        setErrorMessage(
+          result.error.message ||
+            "Invalid administrator credentials. Access denied.",
+        );
         toast.error("Authentication failed. Invalid admin credentials.");
       } else {
         toast.success("Administrator authenticated successfully!");
         void navigate({ to: redirectTo as any });
       }
     } catch {
-      setErrorMessage("An unexpected authentication error occurred. Please verify your credentials.");
+      setErrorMessage(
+        "An unexpected authentication error occurred. Please verify your credentials.",
+      );
       toast.error("Authentication error.");
     } finally {
       setIsAuthenticating(false);
@@ -75,13 +80,17 @@ function AdminLoginPage() {
         {/* Brand Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center size-16 rounded-2xl bg-primary text-white shadow-xl shadow-primary/25 border border-primary/40 mb-1">
-            <Icon icon="solar:shield-star-bold-duotone" className="size-8 text-brand-300" />
+            <Icon
+              icon="solar:shield-star-bold-duotone"
+              className="size-8 text-brand-300"
+            />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-white">
             {BRAND_CONFIG.name} Control Plane
           </h1>
           <p className="text-xs text-slate-400 font-medium">
-            Authorized administrator credentials required to access the control plane.
+            Authorized administrator credentials required to access the control
+            plane.
           </p>
         </div>
 
@@ -134,7 +143,9 @@ function AdminLoginPage() {
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
                 >
                   <Icon
-                    icon={showPassword ? "solar:eye-bold" : "solar:eye-closed-bold"}
+                    icon={
+                      showPassword ? "solar:eye-bold" : "solar:eye-closed-bold"
+                    }
                     className="size-5"
                   />
                 </button>
@@ -143,7 +154,10 @@ function AdminLoginPage() {
 
             {errorMessage ? (
               <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-400 font-medium flex items-center gap-2">
-                <Icon icon="solar:danger-triangle-bold" className="size-4 shrink-0" />
+                <Icon
+                  icon="solar:danger-triangle-bold"
+                  className="size-4 shrink-0"
+                />
                 <span>{errorMessage}</span>
               </div>
             ) : null}
@@ -160,7 +174,10 @@ function AdminLoginPage() {
                 </>
               ) : (
                 <>
-                  <Icon icon="solar:key-minimalistic-bold-duotone" className="size-4" />
+                  <Icon
+                    icon="solar:key-minimalistic-bold-duotone"
+                    className="size-4"
+                  />
                   <span>Authenticate & Enter Control Plane</span>
                 </>
               )}
@@ -169,7 +186,8 @@ function AdminLoginPage() {
 
           <div className="pt-3 text-center border-t border-slate-800/80 space-y-3">
             <p className="text-[11px] text-slate-500">
-              Security Notice: All administrative logins and IP addresses are strictly audited.
+              Security Notice: All administrative logins and IP addresses are
+              strictly audited.
             </p>
             <div>
               <Link

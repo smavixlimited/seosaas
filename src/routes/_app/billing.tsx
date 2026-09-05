@@ -13,7 +13,10 @@ import { BillingUsageChart } from "@/client/features/billing/BillingUsageChart";
 import { BillingFeatureBreakdown } from "@/client/features/billing/BillingFeatureBreakdown";
 import { parseTopUpAmount } from "@/client/features/billing/HostedBillingContentUtils";
 import { getCustomerPlanStatus } from "@/client/features/billing/plan-detection";
-import { submitCancellationSurveyServerFn, getUserCreditUsageServerFn } from "@/serverFunctions/retention";
+import {
+  submitCancellationSurveyServerFn,
+  getUserCreditUsageServerFn,
+} from "@/serverFunctions/retention";
 import { getPublicPlansServerFn } from "@/serverFunctions/admin-plans";
 import {
   AUTUMN_PAID_PLAN_ID,
@@ -39,7 +42,9 @@ function BillingPage() {
   const [topUpAmount, setTopUpAmount] = useState("10");
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [billingInterval, setBillingInterval] = useState<"month" | "year">("month");
+  const [billingInterval, setBillingInterval] = useState<"month" | "year">(
+    "month",
+  );
   const [currency, setCurrency] = useState<"USD" | "NGN">("USD");
 
   // Cancellation Retention State
@@ -64,10 +69,12 @@ function BillingPage() {
   const isFreePlan = planStatus === "free";
 
   const monthlyRemaining = autumnSeoDataCreditsToUsd(
-    customerQuery.data?.balances?.[AUTUMN_SEO_DATA_BALANCE_FEATURE_ID]?.remaining ?? 0,
+    customerQuery.data?.balances?.[AUTUMN_SEO_DATA_BALANCE_FEATURE_ID]
+      ?.remaining ?? 0,
   );
   const topUpRemaining = autumnSeoDataCreditsToUsd(
-    customerQuery.data?.balances?.[AUTUMN_SEO_DATA_TOPUP_BALANCE_FEATURE_ID]?.remaining ?? 0,
+    customerQuery.data?.balances?.[AUTUMN_SEO_DATA_TOPUP_BALANCE_FEATURE_ID]
+      ?.remaining ?? 0,
   );
   const totalRemaining = monthlyRemaining + topUpRemaining;
 
@@ -78,12 +85,18 @@ function BillingPage() {
   });
 
   const dbCredits = creditUsageQuery.data;
-  const liveCreditsRemaining = dbCredits ? dbCredits.creditsRemaining : (totalRemaining > 0 ? totalRemaining * AUTUMN_SEO_DATA_CREDITS_PER_USD : 500);
+  const liveCreditsRemaining = dbCredits
+    ? dbCredits.creditsRemaining
+    : totalRemaining > 0
+      ? totalRemaining * AUTUMN_SEO_DATA_CREDITS_PER_USD
+      : 500;
   const liveCreditsLimit = dbCredits ? dbCredits.monthlyCreditsLimit : 500;
   const liveCreditsUsed = dbCredits ? dbCredits.creditsUsed : 0;
-  const liveBalanceUsd = totalRemaining > 0 ? totalRemaining : (liveCreditsRemaining / 100);
+  const liveBalanceUsd =
+    totalRemaining > 0 ? totalRemaining : liveCreditsRemaining / 100;
 
-  const { isValid: isValidTopUp, parsed: parsedTopUpAmount } = parseTopUpAmount(topUpAmount);
+  const { isValid: isValidTopUp, parsed: parsedTopUpAmount } =
+    parseTopUpAmount(topUpAmount);
 
   async function handlePlanCheckout(planId: string) {
     captureClientEvent("billing:checkout_start", { planId });
@@ -100,7 +113,10 @@ function BillingPage() {
         toast.success(`Redirecting to ${planId.toUpperCase()} checkout...`);
       }
     } catch (err) {
-      const msg = getStandardErrorMessage(err, "Failed to start plan checkout. Please try again.");
+      const msg = getStandardErrorMessage(
+        err,
+        "Failed to start plan checkout. Please try again.",
+      );
       setError(msg);
       toast.error(msg);
     } finally {
@@ -115,7 +131,9 @@ function BillingPage() {
     }
 
     if (isFreePlan) {
-      toast.error("Credit refills are only available for active paid subscribers. Please upgrade your plan first.");
+      toast.error(
+        "Credit refills are only available for active paid subscribers. Please upgrade your plan first.",
+      );
       return;
     }
 
@@ -137,10 +155,15 @@ function BillingPage() {
           successUrl: buildCheckoutSuccessUrl(BILLING_ROUTE),
         });
       } else {
-        toast.success(`Purchased $${parsedTopUpAmount} (${creditsToAdd.toLocaleString()} credits) refill!`);
+        toast.success(
+          `Purchased $${parsedTopUpAmount} (${creditsToAdd.toLocaleString()} credits) refill!`,
+        );
       }
     } catch (err) {
-      const msg = getStandardErrorMessage(err, "Failed to initiate top-up checkout.");
+      const msg = getStandardErrorMessage(
+        err,
+        "Failed to initiate top-up checkout.",
+      );
       setError(msg);
       toast.error(msg);
     } finally {
@@ -158,7 +181,9 @@ function BillingPage() {
         toast.info("Customer portal is active.");
       }
     } catch (err) {
-      toast.error(getStandardErrorMessage(err, "Could not open customer portal"));
+      toast.error(
+        getStandardErrorMessage(err, "Could not open customer portal"),
+      );
     } finally {
       setIsPending(false);
     }
@@ -170,7 +195,12 @@ function BillingPage() {
       name: "Starter",
       priceUsd: 49,
       priceNgn: 49000,
-      limits: { maxDomains: 5, monthlyCredits: 500, auditPages: 5000, uptimeMonitors: 1 },
+      limits: {
+        maxDomains: 5,
+        monthlyCredits: 500,
+        auditPages: 5000,
+        uptimeMonitors: 1,
+      },
       features: {
         keyword_research: true,
         rank_tracker: true,
@@ -186,7 +216,12 @@ function BillingPage() {
       name: "Pro Growth",
       priceUsd: 149,
       priceNgn: 149000,
-      limits: { maxDomains: 20, monthlyCredits: 2500, auditPages: 50000, uptimeMonitors: 5 },
+      limits: {
+        maxDomains: 20,
+        monthlyCredits: 2500,
+        auditPages: 50000,
+        uptimeMonitors: 5,
+      },
       features: {
         keyword_research: true,
         rank_tracker: true,
@@ -202,7 +237,12 @@ function BillingPage() {
       name: "Agency & Enterprise",
       priceUsd: 349,
       priceNgn: 349000,
-      limits: { maxDomains: 100, monthlyCredits: 10000, auditPages: 250000, uptimeMonitors: 50 },
+      limits: {
+        maxDomains: 100,
+        monthlyCredits: 10000,
+        auditPages: 250000,
+        uptimeMonitors: 50,
+      },
       features: {
         keyword_research: true,
         rank_tracker: true,
@@ -224,13 +264,16 @@ function BillingPage() {
             <span className="badge badge-primary badge-sm font-bold text-xs uppercase tracking-wider">
               Subscription &amp; Credits
             </span>
-            <span className="text-xs text-base-content/50 font-mono">Billing Center</span>
+            <span className="text-xs text-base-content/50 font-mono">
+              Billing Center
+            </span>
           </div>
           <h1 className="text-2xl font-black tracking-tight text-base-content mt-1">
             Plans, Usage &amp; Credit Refills
           </h1>
           <p className="text-xs text-base-content/60">
-            Manage your subscription tiers, monitor data usage, and top up credits on demand.
+            Manage your subscription tiers, monitor data usage, and top up
+            credits on demand.
           </p>
         </div>
 
@@ -261,9 +304,15 @@ function BillingPage() {
         {/* Card 1: Active Tier Status */}
         <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">Current Plan</span>
-            <span className={`badge font-bold text-xs ${isFreePlan ? "badge-warning" : "badge-success text-white"}`}>
-              {isFreePlan ? "FREE TIER" : `${planStatus.toUpperCase()} SUBSCRIBER`}
+            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">
+              Current Plan
+            </span>
+            <span
+              className={`badge font-bold text-xs ${isFreePlan ? "badge-warning" : "badge-success text-white"}`}
+            >
+              {isFreePlan
+                ? "FREE TIER"
+                : `${planStatus.toUpperCase()} SUBSCRIBER`}
             </span>
           </div>
 
@@ -291,7 +340,11 @@ function BillingPage() {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-base-content/60 font-medium">Status</span>
                 <span className="text-emerald-600 font-bold flex items-center gap-1">
-                  <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" /> Active &amp; Verified
+                  <Icon
+                    icon="solar:check-circle-bold"
+                    className="h-3.5 w-3.5"
+                  />{" "}
+                  Active &amp; Verified
                 </span>
               </div>
             )}
@@ -301,7 +354,9 @@ function BillingPage() {
         {/* Card 2: Credit Balance */}
         <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">Available Balance</span>
+            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">
+              Available Balance
+            </span>
             <div className="h-8 w-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               <Icon icon="solar:database-bold-duotone" className="h-5 w-5" />
             </div>
@@ -312,18 +367,24 @@ function BillingPage() {
               ${liveBalanceUsd.toFixed(2)}
             </div>
             <div className="text-xs text-base-content/60 font-semibold font-mono">
-              {liveCreditsRemaining.toLocaleString()} / {liveCreditsLimit.toLocaleString()} Credits Remaining
+              {liveCreditsRemaining.toLocaleString()} /{" "}
+              {liveCreditsLimit.toLocaleString()} Credits Remaining
             </div>
           </div>
 
           <div className="pt-2 border-t border-base-200 text-xs space-y-1 text-base-content/70">
             <div className="flex justify-between">
               <span>Monthly Allowance:</span>
-              <span className="font-mono font-bold">{liveCreditsLimit.toLocaleString()} Credits (~${(liveCreditsLimit / 100).toFixed(2)})</span>
+              <span className="font-mono font-bold">
+                {liveCreditsLimit.toLocaleString()} Credits (~$
+                {(liveCreditsLimit / 100).toFixed(2)})
+              </span>
             </div>
             <div className="flex justify-between">
               <span>Credits Used This Month:</span>
-              <span className="font-mono font-bold text-primary">{liveCreditsUsed.toLocaleString()} Credits</span>
+              <span className="font-mono font-bold text-primary">
+                {liveCreditsUsed.toLocaleString()} Credits
+              </span>
             </div>
           </div>
         </div>
@@ -331,17 +392,23 @@ function BillingPage() {
         {/* Card 3: Instant Credit Refill ($5 Minimum) */}
         <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">Credit Refill Top-up</span>
-            <span className="badge badge-sm badge-ghost text-[10px] font-bold">Paid Feature</span>
+            <span className="text-xs font-black uppercase tracking-wider text-base-content/60">
+              Credit Refill Top-up
+            </span>
+            <span className="badge badge-sm badge-ghost text-[10px] font-bold">
+              Paid Feature
+            </span>
           </div>
 
           <p className="text-xs text-base-content/60">
-            Running low on credits? Add extra capacity instantly starting from <strong>$5 (500 credits)</strong>.
+            Running low on credits? Add extra capacity instantly starting from{" "}
+            <strong>$5 (500 credits)</strong>.
           </p>
 
           {isFreePlan ? (
             <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 font-medium">
-              Refill credits are reserved for active paid subscribers. Please choose a plan below to enable refills.
+              Refill credits are reserved for active paid subscribers. Please
+              choose a plan below to enable refills.
             </div>
           ) : (
             <div className="space-y-3">
@@ -395,7 +462,8 @@ function BillingPage() {
               Select Your Subscription Plan
             </h2>
             <p className="text-xs text-base-content/60">
-              Upgrade, downgrade, or switch billing cycles anytime with prorated billing.
+              Upgrade, downgrade, or switch billing cycles anytime with prorated
+              billing.
             </p>
           </div>
 
@@ -406,7 +474,9 @@ function BillingPage() {
                 type="button"
                 onClick={() => setCurrency("USD")}
                 className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  currency === "USD" ? "bg-primary text-white" : "text-base-content/70 hover:text-base-content"
+                  currency === "USD"
+                    ? "bg-primary text-white"
+                    : "text-base-content/70 hover:text-base-content"
                 }`}
               >
                 USD ($)
@@ -415,7 +485,9 @@ function BillingPage() {
                 type="button"
                 onClick={() => setCurrency("NGN")}
                 className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  currency === "NGN" ? "bg-primary text-white" : "text-base-content/70 hover:text-base-content"
+                  currency === "NGN"
+                    ? "bg-primary text-white"
+                    : "text-base-content/70 hover:text-base-content"
                 }`}
               >
                 NGN (₦)
@@ -428,7 +500,9 @@ function BillingPage() {
                 type="button"
                 onClick={() => setBillingInterval("month")}
                 className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  billingInterval === "month" ? "bg-primary text-white" : "text-base-content/70 hover:text-base-content"
+                  billingInterval === "month"
+                    ? "bg-primary text-white"
+                    : "text-base-content/70 hover:text-base-content"
                 }`}
               >
                 Monthly
@@ -437,10 +511,15 @@ function BillingPage() {
                 type="button"
                 onClick={() => setBillingInterval("year")}
                 className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  billingInterval === "year" ? "bg-primary text-white" : "text-base-content/70 hover:text-base-content"
+                  billingInterval === "year"
+                    ? "bg-primary text-white"
+                    : "text-base-content/70 hover:text-base-content"
                 }`}
               >
-                Yearly <span className="badge badge-success badge-xs text-[9px] text-white font-bold ml-1">SAVE 20%</span>
+                Yearly{" "}
+                <span className="badge badge-success badge-xs text-[9px] text-white font-bold ml-1">
+                  SAVE 20%
+                </span>
               </button>
             </div>
           </div>
@@ -450,9 +529,14 @@ function BillingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan: any) => {
             const isCurrent = planStatus === plan.id;
-            const price = currency === "USD"
-              ? billingInterval === "year" ? Math.round(plan.priceUsd * 0.8) : plan.priceUsd
-              : billingInterval === "year" ? Math.round(plan.priceNgn * 0.8) : plan.priceNgn;
+            const price =
+              currency === "USD"
+                ? billingInterval === "year"
+                  ? Math.round(plan.priceUsd * 0.8)
+                  : plan.priceUsd
+                : billingInterval === "year"
+                  ? Math.round(plan.priceNgn * 0.8)
+                  : plan.priceNgn;
             const symbol = currency === "USD" ? "$" : "₦";
 
             return (
@@ -467,9 +551,15 @@ function BillingPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-black text-base-content">{plan.name}</h3>
+                      <h3 className="text-lg font-black text-base-content">
+                        {plan.name}
+                      </h3>
                       <span className="text-xs text-base-content/60">
-                        {plan.id === "starter" ? "For founders & boutique sites" : plan.id === "pro" ? "For growing teams & brands" : "For agencies & scale-ups"}
+                        {plan.id === "starter"
+                          ? "For founders & boutique sites"
+                          : plan.id === "pro"
+                            ? "For growing teams & brands"
+                            : "For agencies & scale-ups"}
                       </span>
                     </div>
                     {plan.id === "pro" && (
@@ -481,55 +571,95 @@ function BillingPage() {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-3xl font-black text-base-content font-mono">
-                      {symbol}{price.toLocaleString()}
+                      {symbol}
+                      {price.toLocaleString()}
                     </span>
-                    <span className="text-xs text-base-content/50 font-medium">/ month</span>
+                    <span className="text-xs text-base-content/50 font-medium">
+                      / month
+                    </span>
                   </div>
 
                   {/* Limits List */}
                   <div className="p-4 rounded-2xl bg-base-200/40 space-y-2 text-xs">
                     <div className="flex justify-between font-medium">
-                      <span className="text-base-content/70">Connected Brands:</span>
-                      <span className="font-bold font-mono text-base-content">{plan.limits.maxDomains}</span>
+                      <span className="text-base-content/70">
+                        Connected Brands:
+                      </span>
+                      <span className="font-bold font-mono text-base-content">
+                        {plan.limits.maxDomains}
+                      </span>
                     </div>
                     <div className="flex justify-between font-medium">
-                      <span className="text-base-content/70">Monthly Credits:</span>
-                      <span className="font-bold font-mono text-base-content">{plan.limits.monthlyCredits.toLocaleString()}</span>
+                      <span className="text-base-content/70">
+                        Monthly Credits:
+                      </span>
+                      <span className="font-bold font-mono text-base-content">
+                        {plan.limits.monthlyCredits.toLocaleString()}
+                      </span>
                     </div>
                     <div className="flex justify-between font-medium">
-                      <span className="text-base-content/70">Site Audit Pages:</span>
-                      <span className="font-bold font-mono text-base-content">{plan.limits.auditPages.toLocaleString()}</span>
+                      <span className="text-base-content/70">
+                        Site Audit Pages:
+                      </span>
+                      <span className="font-bold font-mono text-base-content">
+                        {plan.limits.auditPages.toLocaleString()}
+                      </span>
                     </div>
                     <div className="flex justify-between font-medium">
-                      <span className="text-base-content/70">Uptime &amp; SSL Monitors:</span>
-                      <span className="font-bold font-mono text-base-content">{plan.limits.uptimeMonitors}</span>
+                      <span className="text-base-content/70">
+                        Uptime &amp; SSL Monitors:
+                      </span>
+                      <span className="font-bold font-mono text-base-content">
+                        {plan.limits.uptimeMonitors}
+                      </span>
                     </div>
                   </div>
 
                   {/* Features Checklist */}
                   <div className="space-y-2 text-xs pt-1">
                     <div className="flex items-center gap-2 text-base-content">
-                      <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-4 w-4 text-emerald-500 shrink-0"
+                      />
                       <span>Keyword Research &amp; SERP Analysis</span>
                     </div>
                     <div className="flex items-center gap-2 text-base-content">
-                      <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-4 w-4 text-emerald-500 shrink-0"
+                      />
                       <span>Local Business &amp; Geo-Grid Map Tracker</span>
                     </div>
                     <div className="flex items-center gap-2 text-base-content">
-                      <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-4 w-4 text-emerald-500 shrink-0"
+                      />
                       <span>Conversion &amp; Ad Readiness Audit (0–100)</span>
                     </div>
-                    <div className={`flex items-center gap-2 ${plan.features.ai_visibility ? "text-base-content" : "text-base-content/40"}`}>
+                    <div
+                      className={`flex items-center gap-2 ${plan.features.ai_visibility ? "text-base-content" : "text-base-content/40"}`}
+                    >
                       <Icon
-                        icon={plan.features.ai_visibility ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                        icon={
+                          plan.features.ai_visibility
+                            ? "solar:check-circle-bold"
+                            : "solar:close-circle-bold"
+                        }
                         className={`h-4 w-4 shrink-0 ${plan.features.ai_visibility ? "text-emerald-500" : "text-base-content/30"}`}
                       />
                       <span>AEO AI Search Radar &amp; Brand Mentions</span>
                     </div>
-                    <div className={`flex items-center gap-2 ${plan.features.white_label_pdf ? "text-base-content" : "text-base-content/40"}`}>
+                    <div
+                      className={`flex items-center gap-2 ${plan.features.white_label_pdf ? "text-base-content" : "text-base-content/40"}`}
+                    >
                       <Icon
-                        icon={plan.features.white_label_pdf ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                        icon={
+                          plan.features.white_label_pdf
+                            ? "solar:check-circle-bold"
+                            : "solar:close-circle-bold"
+                        }
                         className={`h-4 w-4 shrink-0 ${plan.features.white_label_pdf ? "text-emerald-500" : "text-base-content/30"}`}
                       />
                       <span>White-Label Client PDF Reports</span>
@@ -545,8 +675,8 @@ function BillingPage() {
                     isCurrent
                       ? "btn-outline btn-disabled"
                       : plan.id === "pro"
-                      ? "btn-primary text-white shadow-md shadow-primary/20"
-                      : "btn-outline"
+                        ? "btn-primary text-white shadow-md shadow-primary/20"
+                        : "btn-outline"
                   }`}
                 >
                   {isCurrent ? "Current Active Plan" : `Select ${plan.name}`}

@@ -26,31 +26,45 @@ export function parseUserAgent(userAgent: string): {
   // Browser detection
   let browser = "Web Browser";
   if (ua.includes("edg/")) browser = "Microsoft Edge";
-  else if (ua.includes("chrome") && !ua.includes("edg")) browser = "Google Chrome";
-  else if (ua.includes("safari") && !ua.includes("chrome")) browser = "Apple Safari";
+  else if (ua.includes("chrome") && !ua.includes("edg"))
+    browser = "Google Chrome";
+  else if (ua.includes("safari") && !ua.includes("chrome"))
+    browser = "Apple Safari";
   else if (ua.includes("firefox")) browser = "Mozilla Firefox";
   else if (ua.includes("opera") || ua.includes("opr/")) browser = "Opera";
   else if (ua.includes("brave")) browser = "Brave";
 
   // OS detection
   let os = "Desktop OS";
-  if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod")) os = "iOS";
+  if (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod"))
+    os = "iOS";
   else if (ua.includes("android")) os = "Android";
   else if (ua.includes("macintosh") || ua.includes("mac os x")) os = "macOS";
-  else if (ua.includes("windows nt 10.0") || ua.includes("windows nt 11.0")) os = "Windows 11";
+  else if (ua.includes("windows nt 10.0") || ua.includes("windows nt 11.0"))
+    os = "Windows 11";
   else if (ua.includes("windows nt")) os = "Windows";
   else if (ua.includes("linux")) os = "Linux";
 
   // Device type
   let deviceType: "desktop" | "mobile" | "tablet" = "desktop";
   if (ua.includes("ipad") || ua.includes("tablet")) deviceType = "tablet";
-  else if (ua.includes("mobile") || ua.includes("iphone") || ua.includes("android")) deviceType = "mobile";
+  else if (
+    ua.includes("mobile") ||
+    ua.includes("iphone") ||
+    ua.includes("android")
+  )
+    deviceType = "mobile";
 
   return { browser, os, deviceType };
 }
 
 export function resolveLocationFromIp(ip: string): string {
-  if (ip === "127.0.0.1" || ip === "::1" || ip.startsWith("192.168.") || ip.startsWith("10.")) {
+  if (
+    ip === "127.0.0.1" ||
+    ip === "::1" ||
+    ip.startsWith("192.168.") ||
+    ip.startsWith("10.")
+  ) {
     return "Local Dev Environment";
   }
   // Simplified deterministic geo-representation for privacy
@@ -72,17 +86,20 @@ export const SessionManagerService = {
     currentSessionId?: string;
   }): Promise<UserSessionRecord> {
     const ip = params.ipAddress || "127.0.0.1";
-    const ua = params.userAgent || "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)";
+    const ua =
+      params.userAgent || "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)";
     const { browser, os, deviceType } = parseUserAgent(ua);
     const location = resolveLocationFromIp(ip);
     const now = new Date().toISOString();
-    const sessionId = params.currentSessionId || `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const sessionId =
+      params.currentSessionId ||
+      `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
     const existingSessions = await this.getUserSessions(params.userId);
 
     // Check if this IP or Browser+OS has been seen before
     const isKnownDevice = existingSessions.some(
-      (s) => s.ipAddress === ip || (s.browser === browser && s.os === os)
+      (s) => s.ipAddress === ip || (s.browser === browser && s.os === os),
     );
 
     const record: UserSessionRecord = {
@@ -155,7 +172,12 @@ export const SessionManagerService = {
       const rows = await db
         .select()
         .from(userDevicesSessions)
-        .where(and(eq(userDevicesSessions.userId, userId), eq(userDevicesSessions.isRevoked, false)))
+        .where(
+          and(
+            eq(userDevicesSessions.userId, userId),
+            eq(userDevicesSessions.isRevoked, false),
+          ),
+        )
         .orderBy(desc(userDevicesSessions.lastActiveAt));
 
       if (rows.length > 0) {
@@ -177,7 +199,7 @@ export const SessionManagerService = {
     } catch {}
 
     const list = Array.from(inMemorySessions.values()).filter(
-      (s) => s.userId === userId && !s.isRevoked
+      (s) => s.userId === userId && !s.isRevoked,
     );
 
     if (list.length === 0) {
@@ -206,7 +228,11 @@ export const SessionManagerService = {
   /**
    * Revokes a specific session (logs user out of that device).
    */
-  async revokeSession(sessionId: string, userId: string, userEmail?: string): Promise<boolean> {
+  async revokeSession(
+    sessionId: string,
+    userId: string,
+    userEmail?: string,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { userDevicesSessions } = await import("@/db/schema");
@@ -215,7 +241,12 @@ export const SessionManagerService = {
       await db
         .update(userDevicesSessions)
         .set({ isRevoked: true })
-        .where(and(eq(userDevicesSessions.id, sessionId), eq(userDevicesSessions.userId, userId)));
+        .where(
+          and(
+            eq(userDevicesSessions.id, sessionId),
+            eq(userDevicesSessions.userId, userId),
+          ),
+        );
     } catch {}
 
     const mem = inMemorySessions.get(sessionId);
@@ -238,7 +269,11 @@ export const SessionManagerService = {
   /**
    * Revokes all other sessions except the current one.
    */
-  async revokeAllOtherSessions(currentSessionId: string, userId: string, userEmail?: string): Promise<number> {
+  async revokeAllOtherSessions(
+    currentSessionId: string,
+    userId: string,
+    userEmail?: string,
+  ): Promise<number> {
     let count = 0;
     try {
       const { db } = await import("@/db");
@@ -251,13 +286,17 @@ export const SessionManagerService = {
         .where(
           and(
             eq(userDevicesSessions.userId, userId),
-            ne(userDevicesSessions.id, currentSessionId)
-          )
+            ne(userDevicesSessions.id, currentSessionId),
+          ),
         );
     } catch {}
 
     for (const [id, sess] of inMemorySessions.entries()) {
-      if (sess.userId === userId && id !== currentSessionId && !sess.isRevoked) {
+      if (
+        sess.userId === userId &&
+        id !== currentSessionId &&
+        !sess.isRevoked
+      ) {
         sess.isRevoked = true;
         count++;
       }

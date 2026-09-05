@@ -25,13 +25,17 @@ function SkillsDirectoryPage() {
                 Docs
               </Link>
               <span className="text-secondary/30 dark:text-accent/30">/</span>
-              <span className="text-secondary/60 dark:text-accent/60">Agent Skills</span>
+              <span className="text-secondary/60 dark:text-accent/60">
+                Agent Skills
+              </span>
             </div>
             <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               Autonomous SEO Agent Skills
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
-              Pre-built specialized agent workflows designed for Claude Code, Cursor, and custom autonomous LLM agents to execute complex multi-step SEO tasks.
+              Pre-built specialized agent workflows designed for Claude Code,
+              Cursor, and custom autonomous LLM agents to execute complex
+              multi-step SEO tasks.
             </p>
           </div>
 
@@ -45,19 +49,26 @@ function SkillsDirectoryPage() {
               >
                 <div className="space-y-4">
                   <div className="h-12 w-12 rounded-2xl bg-primary-500/10 text-primary-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Icon icon="solar:magic-stick-3-bold-duotone" className="size-6 text-primary-500" />
+                    <Icon
+                      icon="solar:magic-stick-3-bold-duotone"
+                      className="size-6 text-primary-500"
+                    />
                   </div>
                   <h3 className="text-heading-6 font-bold font-interTight text-secondary dark:text-accent group-hover:text-primary-500 transition-colors">
                     {skill.title}
                   </h3>
                   <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 leading-relaxed line-clamp-3">
-                    {skill.description || "Comprehensive autonomous agent workflow definition."}
+                    {skill.description ||
+                      "Comprehensive autonomous agent workflow definition."}
                   </p>
                 </div>
 
                 <div className="pt-6 flex items-center text-tagline-3 font-bold text-primary-500">
                   <span>View Skill Instructions</span>
-                  <Icon icon="solar:arrow-right-linear" className="size-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+                  <Icon
+                    icon="solar:arrow-right-linear"
+                    className="size-4 ml-1.5 transition-transform group-hover:translate-x-1"
+                  />
                 </div>
               </Link>
             ))}

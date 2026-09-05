@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { TwoFactorService } from "@/services/two-factor.service";
-import { SessionManagerService, parseUserAgent, resolveLocationFromIp } from "@/services/session-manager.service";
+import {
+  SessionManagerService,
+  parseUserAgent,
+  resolveLocationFromIp,
+} from "@/services/session-manager.service";
 
 describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", () => {
   const testUserId = "usr_tfa_test_01";
@@ -20,7 +24,10 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
     });
 
     it("rejects invalid TOTP codes", async () => {
-      const isInvalid = await TwoFactorService.verifyTOTPCode("JBSWY3DPEHPK3PXP", "000000");
+      const isInvalid = await TwoFactorService.verifyTOTPCode(
+        "JBSWY3DPEHPK3PXP",
+        "000000",
+      );
       expect(isInvalid).toBe(false);
     });
 
@@ -32,7 +39,8 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
 
   describe("2. User-Agent Parsing & Geo-Location Resolution", () => {
     it("correctly identifies macOS and Google Chrome on desktop", () => {
-      const ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+      const ua =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
       const parsed = parseUserAgent(ua);
       expect(parsed.browser).toBe("Google Chrome");
       expect(parsed.os).toBe("macOS");
@@ -40,7 +48,8 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
     });
 
     it("correctly identifies iPhone / iOS mobile device", () => {
-      const ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+      const ua =
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
       const parsed = parseUserAgent(ua);
       expect(parsed.os).toBe("iOS");
       expect(parsed.deviceType).toBe("mobile");
@@ -48,8 +57,12 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
 
     it("resolves local IP addresses safely", () => {
       expect(resolveLocationFromIp("127.0.0.1")).toBe("Local Dev Environment");
-      expect(resolveLocationFromIp("192.168.1.50")).toBe("Local Dev Environment");
-      expect(resolveLocationFromIp("102.89.43.12")).toBe("Detected via Public IP");
+      expect(resolveLocationFromIp("192.168.1.50")).toBe(
+        "Local Dev Environment",
+      );
+      expect(resolveLocationFromIp("102.89.43.12")).toBe(
+        "Detected via Public IP",
+      );
     });
   });
 
@@ -59,7 +72,8 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
         userId: testUserId,
         email: testEmail,
         ipAddress: "192.168.1.100",
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        userAgent:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       });
 
       expect(session.id).toBeDefined();
@@ -77,7 +91,10 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
         ipAddress: "192.168.1.105",
       });
 
-      const revoked = await SessionManagerService.revokeSession(session.id, testUserId);
+      const revoked = await SessionManagerService.revokeSession(
+        session.id,
+        testUserId,
+      );
       expect(revoked).toBe(true);
     });
 
@@ -94,7 +111,10 @@ describe("Phase 23: Two-Factor Authentication (2FA) & Session Manager Suite", ()
         ipAddress: "10.0.0.2",
       });
 
-      const count = await SessionManagerService.revokeAllOtherSessions(current.id, testUserId);
+      const count = await SessionManagerService.revokeAllOtherSessions(
+        current.id,
+        testUserId,
+      );
       expect(count).toBeGreaterThanOrEqual(0);
     });
   });

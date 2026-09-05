@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
-import { TeamManagementService, type TeamRole } from "@/services/team-management.service";
+import {
+  TeamManagementService,
+  type TeamRole,
+} from "@/services/team-management.service";
 
 const inviteSchema = z.object({
   email: z.string().trim().email(),
@@ -65,7 +68,7 @@ export const updateMemberRoleServerFn = createServerFn({ method: "POST" })
       data.memberId,
       data.role as TeamRole,
       data.assignedProjectIds,
-      context.userEmail
+      context.userEmail,
     );
   });
 
@@ -76,7 +79,11 @@ export const removeMemberServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(memberIdSchema)
   .handler(async ({ data, context }) => {
-    return TeamManagementService.removeMember(context.userId, data.memberId, context.userEmail);
+    return TeamManagementService.removeMember(
+      context.userId,
+      data.memberId,
+      context.userEmail,
+    );
   });
 
 /**
@@ -86,7 +93,11 @@ export const revokeInvitationServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(inviteIdSchema)
   .handler(async ({ data, context }) => {
-    return TeamManagementService.revokeInvitation(context.userId, data.inviteId, context.userEmail);
+    return TeamManagementService.revokeInvitation(
+      context.userId,
+      data.inviteId,
+      context.userEmail,
+    );
   });
 
 /**

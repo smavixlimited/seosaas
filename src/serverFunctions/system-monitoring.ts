@@ -20,7 +20,9 @@ const webhookActionSchema = z.object({
 /**
  * Superadmin server function to fetch live dependency latencies and runtime KPIs.
  */
-export const getLiveSystemMonitoringServerFn = createServerFn({ method: "POST" })
+export const getLiveSystemMonitoringServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireAuthenticatedContext)
   .handler(async ({ context }) => {
     const isSuper = await isUserSuperAdmin(context.userId);
@@ -58,7 +60,11 @@ export const retryWebhookDeliveryServerFn = createServerFn({ method: "POST" })
     const isSuper = await isUserSuperAdmin(context.userId);
     if (!isSuper) throw new AppError("FORBIDDEN", "Superadmin access required");
 
-    return SystemMonitoringService.retryWebhook(data.id, context.userId, context.userEmail);
+    return SystemMonitoringService.retryWebhook(
+      data.id,
+      context.userId,
+      context.userEmail,
+    );
   });
 
 /**
@@ -71,5 +77,9 @@ export const resolveWebhookErrorServerFn = createServerFn({ method: "POST" })
     const isSuper = await isUserSuperAdmin(context.userId);
     if (!isSuper) throw new AppError("FORBIDDEN", "Superadmin access required");
 
-    return SystemMonitoringService.resolveWebhook(data.id, context.userId, context.userEmail);
+    return SystemMonitoringService.resolveWebhook(
+      data.id,
+      context.userId,
+      context.userEmail,
+    );
   });

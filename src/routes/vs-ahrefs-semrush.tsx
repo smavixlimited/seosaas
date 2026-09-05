@@ -96,7 +96,8 @@ function ComparisonPage() {
               {BRAND_CONFIG.name} vs. Ahrefs vs. Semrush
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
-              Why fast-growing founders, marketing directors, and modern agencies are switching from legacy tools to {BRAND_CONFIG.name}.
+              Why fast-growing founders, marketing directors, and modern
+              agencies are switching from legacy tools to {BRAND_CONFIG.name}.
             </p>
           </div>
 
@@ -104,13 +105,18 @@ function ComparisonPage() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-4">
               <div className="size-12 rounded-2xl bg-primary/10 dark:bg-primary/20 text-primary dark:text-brand-300 flex items-center justify-center">
-                <Icon icon="solar:wallet-money-bold-duotone" className="size-6" />
+                <Icon
+                  icon="solar:wallet-money-bold-duotone"
+                  className="size-6"
+                />
               </div>
               <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
                 Flat-Rate Zero Seat Tax
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Legacy tools charge $1,500–$5,000+/year and charge extra for every single team seat. {BRAND_CONFIG.name} provides flat-rate pricing with unlimited team collaboration.
+                Legacy tools charge $1,500–$5,000+/year and charge extra for
+                every single team seat. {BRAND_CONFIG.name} provides flat-rate
+                pricing with unlimited team collaboration.
               </p>
             </div>
 
@@ -122,7 +128,9 @@ function ComparisonPage() {
                 Native AI &amp; AEO Citation Radar
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Track your brand’s citation share across ChatGPT, Perplexity, and Claude search responses—crucial capabilities that legacy platforms still completely ignore.
+                Track your brand’s citation share across ChatGPT, Perplexity,
+                and Claude search responses—crucial capabilities that legacy
+                platforms still completely ignore.
               </p>
             </div>
 
@@ -134,20 +142,26 @@ function ComparisonPage() {
                 Autonomous AI &amp; MCP Native
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Connect Claude Code, Cursor, or your internal AI agents directly to live SERP and backlink pipelines via our built-in Model Context Protocol (MCP) server.
+                Connect Claude Code, Cursor, or your internal AI agents directly
+                to live SERP and backlink pipelines via our built-in Model
+                Context Protocol (MCP) server.
               </p>
             </div>
           </div>
 
           {/* Comparison Matrix Table */}
-          <div id="feature-matrix" className="mt-16 max-w-5xl mx-auto rounded-[28px] border border-stroke-3/80 dark:border-stroke-7 bg-white dark:bg-background-6 shadow-2xl overflow-hidden">
+          <div
+            id="feature-matrix"
+            className="mt-16 max-w-5xl mx-auto rounded-[28px] border border-stroke-3/80 dark:border-stroke-7 bg-white dark:bg-background-6 shadow-2xl overflow-hidden"
+          >
             <div className="p-6 sm:p-8 border-b border-stroke-3/60 dark:border-stroke-7 bg-background-2/50 dark:bg-secondary/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-heading-4 font-bold text-secondary dark:text-accent font-interTight">
                   Comprehensive Feature &amp; Pricing Matrix
                 </h3>
                 <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
-                  Verified platform feature comparison based on current publicly published tier limits.
+                  Verified platform feature comparison based on current publicly
+                  published tier limits.
                 </p>
               </div>
               <Link
@@ -172,7 +186,10 @@ function ComparisonPage() {
                 </thead>
                 <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
                   {comparisonData.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors"
+                    >
                       <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
                         {row.metric}
                       </td>
@@ -180,11 +197,17 @@ function ComparisonPage() {
                         {typeof row.skorvia === "boolean" ? (
                           row.skorvia ? (
                             <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
-                              <Icon icon="solar:check-circle-bold" className="size-5" />
+                              <Icon
+                                icon="solar:check-circle-bold"
+                                className="size-5"
+                              />
                               <span>Included</span>
                             </span>
                           ) : (
-                            <Icon icon="solar:close-circle-bold" className="size-5 text-rose-500" />
+                            <Icon
+                              icon="solar:close-circle-bold"
+                              className="size-5 text-rose-500"
+                            />
                           )
                         ) : (
                           <span className="font-extrabold">{row.skorvia}</span>
@@ -193,10 +216,16 @@ function ComparisonPage() {
                       <td className="py-4 px-6 text-secondary/70 dark:text-accent/70">
                         {typeof row.ahrefs === "boolean" ? (
                           row.ahrefs ? (
-                            <Icon icon="solar:check-circle-bold" className="size-5 text-emerald-500" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-emerald-500"
+                            />
                           ) : (
                             <span className="inline-flex items-center gap-1 text-secondary/40 dark:text-accent/40 font-medium">
-                              <Icon icon="solar:close-circle-bold" className="size-4" />
+                              <Icon
+                                icon="solar:close-circle-bold"
+                                className="size-4"
+                              />
                               <span>Not Available</span>
                             </span>
                           )
@@ -207,10 +236,16 @@ function ComparisonPage() {
                       <td className="py-4 px-6 text-secondary/70 dark:text-accent/70">
                         {typeof row.semrush === "boolean" ? (
                           row.semrush ? (
-                            <Icon icon="solar:check-circle-bold" className="size-5 text-emerald-500" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-emerald-500"
+                            />
                           ) : (
                             <span className="inline-flex items-center gap-1 text-secondary/40 dark:text-accent/40 font-medium">
-                              <Icon icon="solar:close-circle-bold" className="size-4" />
+                              <Icon
+                                icon="solar:close-circle-bold"
+                                className="size-4"
+                              />
                               <span>Not Available</span>
                             </span>
                           )
@@ -228,12 +263,15 @@ function ComparisonPage() {
           {/* Bottom Conversion CTA */}
           <div className="mt-16 max-w-4xl mx-auto rounded-[28px] bg-gradient-to-r from-primary via-indigo-900 to-secondary p-8 sm:p-12 text-center text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10 space-y-4">
-              <span className="badge badge-green text-xs font-bold">Zero-Risk 14-Day Free Access</span>
+              <span className="badge badge-green text-xs font-bold">
+                Zero-Risk 14-Day Free Access
+              </span>
               <h2 className="text-heading-3 font-bold text-white font-interTight">
                 Ready to replace expensive legacy SEO suites?
               </h2>
               <p className="text-tagline-1 text-white/80 max-w-xl mx-auto">
-                Start tracking competitor ad variations, keyword revenue leaks, and AI citations in under 60 seconds.
+                Start tracking competitor ad variations, keyword revenue leaks,
+                and AI citations in under 60 seconds.
               </p>
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link

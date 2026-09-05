@@ -16,7 +16,8 @@ export async function getWhiteLabelConfig(userId: string) {
       logoUrl: "",
       primaryColor: "#17199b",
       customDomain: "",
-      reportFooterNotes: "Prepared exclusively for our client. Confidential and proprietary.",
+      reportFooterNotes:
+        "Prepared exclusively for our client. Confidential and proprietary.",
     };
   }
 
@@ -31,7 +32,7 @@ export async function upsertWhiteLabelConfig(
     primaryColor: string;
     customDomain?: string | null;
     reportFooterNotes?: string | null;
-  }
+  },
 ) {
   const now = new Date().toISOString();
 

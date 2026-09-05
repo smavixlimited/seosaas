@@ -22,7 +22,9 @@ function AdminAutomaticPaymentsPage() {
   const initialGateways = Route.useLoaderData();
   const [gateways, setGateways] = React.useState(initialGateways);
   const [savingId, setSavingId] = React.useState<string | null>(null);
-  const [activeTab, setActiveTab] = React.useState<"transactions" | "channels">("transactions");
+  const [activeTab, setActiveTab] = React.useState<"transactions" | "channels">(
+    "transactions",
+  );
   const [gatewayFilter, setGatewayFilter] = React.useState("all");
   const [search, setSearch] = React.useState("");
 
@@ -39,15 +41,24 @@ function AdminAutomaticPaymentsPage() {
         },
       });
       setGateways((prev) =>
-        prev.map((g) => (g.gatewayId === gw.gatewayId ? { ...g, isEnabled: updated } : g))
+        prev.map((g) =>
+          g.gatewayId === gw.gatewayId ? { ...g, isEnabled: updated } : g,
+        ),
       );
-      toast.success(`${gw.gatewayId.toUpperCase()} gateway ${updated ? "enabled" : "disabled"}`);
+      toast.success(
+        `${gw.gatewayId.toUpperCase()} gateway ${updated ? "enabled" : "disabled"}`,
+      );
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to toggle gateway");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to toggle gateway",
+      );
     }
   };
 
-  const handleUpdate = async (gw: (typeof gateways)[0], e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdate = async (
+    gw: (typeof gateways)[0],
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const pub = formData.get("publicKey") as string;
@@ -68,13 +79,22 @@ function AdminAutomaticPaymentsPage() {
       setGateways((prev) =>
         prev.map((g) =>
           g.gatewayId === gw.gatewayId
-            ? { ...g, publicKey: pub, secretKey: sec, manualInstructions: manualInst }
-            : g
-        )
+            ? {
+                ...g,
+                publicKey: pub,
+                secretKey: sec,
+                manualInstructions: manualInst,
+              }
+            : g,
+        ),
       );
-      toast.success(`${gw.gatewayId.toUpperCase()} settings saved successfully!`);
+      toast.success(
+        `${gw.gatewayId.toUpperCase()} settings saved successfully!`,
+      );
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to update gateway");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to update gateway",
+      );
     } finally {
       setSavingId(null);
     }
@@ -82,12 +102,19 @@ function AdminAutomaticPaymentsPage() {
 
   const gatewayMeta: Record<
     string,
-    { name: string; currency: string; description: string; badge: string; icon: string }
+    {
+      name: string;
+      currency: string;
+      description: string;
+      badge: string;
+      icon: string;
+    }
   > = {
     paystack: {
       name: "Paystack (Nigeria / Africa)",
       currency: "NGN (₦)",
-      description: "Direct Nigerian Debit Cards, USSD, Bank Transfers, and Apple Pay.",
+      description:
+        "Direct Nigerian Debit Cards, USSD, Bank Transfers, and Apple Pay.",
       badge: "Local NGN",
       icon: "solar:card-2-bold-duotone",
     },
@@ -101,14 +128,16 @@ function AdminAutomaticPaymentsPage() {
     lemonsqueezy: {
       name: "LemonSqueezy / Stripe (Global)",
       currency: "USD ($)",
-      description: "International recurring subscription billing, VAT compliance, and cards.",
+      description:
+        "International recurring subscription billing, VAT compliance, and cards.",
       badge: "Global USD",
       icon: "solar:global-bold-duotone",
     },
     manual: {
       name: "Direct Bank Transfer & Wire",
       currency: "NGN / USD / GBP",
-      description: "Allow users to upload payment receipts for manual admin verification.",
+      description:
+        "Allow users to upload payment receipts for manual admin verification.",
       badge: "Manual Verification",
       icon: "solar:bill-list-bold-duotone",
     },
@@ -201,7 +230,8 @@ function AdminAutomaticPaymentsPage() {
             Automatic Payment &amp; Gateway Processing
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Monitor real-time payment gateway transactions across Paystack, Flutterwave, and LemonSqueezy, and manage API keys.
+            Monitor real-time payment gateway transactions across Paystack,
+            Flutterwave, and LemonSqueezy, and manage API keys.
           </p>
         </div>
 
@@ -237,8 +267,12 @@ function AdminAutomaticPaymentsPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
-          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Total USD Volume</span>
-          <p className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">$48,920.00</p>
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Total USD Volume
+          </span>
+          <p className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">
+            $48,920.00
+          </p>
           <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 mt-0.5">
             <Icon icon="solar:arrow-up-bold-duotone" className="h-3 w-3" />
             +24% vs last mo
@@ -246,8 +280,12 @@ function AdminAutomaticPaymentsPage() {
         </div>
 
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
-          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Total NGN Volume</span>
-          <p className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">₦14,250,000</p>
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Total NGN Volume
+          </span>
+          <p className="text-xl font-bold text-slate-800 dark:text-slate-100 font-mono mt-1">
+            ₦14,250,000
+          </p>
           <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-0.5 mt-0.5">
             <Icon icon="solar:arrow-up-bold-duotone" className="h-3 w-3" />
             +31% vs last mo
@@ -255,17 +293,27 @@ function AdminAutomaticPaymentsPage() {
         </div>
 
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
-          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Active Automated Gateways</span>
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Active Automated Gateways
+          </span>
           <p className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-1">
             {gateways.filter((g) => g.isEnabled).length} of {gateways.length}
           </p>
-          <span className="text-[10px] text-emerald-600 font-bold mt-0.5 block">100% Operational</span>
+          <span className="text-[10px] text-emerald-600 font-bold mt-0.5 block">
+            100% Operational
+          </span>
         </div>
 
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-4 shadow-2xs">
-          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Webhook Success Rate</span>
-          <p className="text-xl font-bold text-emerald-600 font-mono mt-1">99.8%</p>
-          <span className="text-[10px] text-slate-400 mt-0.5 block">Real-time settlement sync</span>
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Webhook Success Rate
+          </span>
+          <p className="text-xl font-bold text-emerald-600 font-mono mt-1">
+            99.8%
+          </p>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">
+            Real-time settlement sync
+          </span>
         </div>
       </div>
 
@@ -313,21 +361,32 @@ function AdminAutomaticPaymentsPage() {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
                 {filteredTransactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={tx.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5">
-                      <p className="font-bold text-slate-800 dark:text-slate-100">{tx.customerName}</p>
-                      <p className="text-[11px] text-slate-400">{tx.customerEmail}</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">
+                        {tx.customerName}
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        {tx.customerEmail}
+                      </p>
                     </td>
-                    <td className="px-6 py-3.5 font-medium text-slate-700 dark:text-slate-200">{tx.planName}</td>
-                    <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100 font-mono">{tx.amount}</td>
+                    <td className="px-6 py-3.5 font-medium text-slate-700 dark:text-slate-200">
+                      {tx.planName}
+                    </td>
+                    <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100 font-mono">
+                      {tx.amount}
+                    </td>
                     <td className="px-6 py-3.5">
                       <span
                         className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                           tx.gateway === "paystack"
                             ? "bg-emerald-500/10 text-emerald-600"
                             : tx.gateway === "flutterwave"
-                            ? "bg-amber-500/10 text-amber-600"
-                            : "bg-indigo-500/10 text-indigo-600"
+                              ? "bg-amber-500/10 text-amber-600"
+                              : "bg-indigo-500/10 text-indigo-600"
                         }`}
                       >
                         {tx.gateway}
@@ -339,7 +398,10 @@ function AdminAutomaticPaymentsPage() {
                     <td className="px-6 py-3.5 text-slate-400">{tx.date}</td>
                     <td className="px-6 py-3.5 text-right">
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600">
-                        <Icon icon="solar:check-circle-bold" className="h-3 w-3" />
+                        <Icon
+                          icon="solar:check-circle-bold"
+                          className="h-3 w-3"
+                        />
                         Completed
                       </span>
                     </td>
@@ -375,12 +437,16 @@ function AdminAutomaticPaymentsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">{meta.name}</h5>
+                        <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+                          {meta.name}
+                        </h5>
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
                           {meta.badge}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{meta.description}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {meta.description}
+                      </p>
                     </div>
                   </div>
 
@@ -404,11 +470,16 @@ function AdminAutomaticPaymentsPage() {
                 </div>
 
                 {/* Gateway Form */}
-                <form onSubmit={(e) => handleUpdate(gw, e)} className="space-y-4 text-xs pt-1">
+                <form
+                  onSubmit={(e) => handleUpdate(gw, e)}
+                  className="space-y-4 text-xs pt-1"
+                >
                   {gw.gatewayId !== "manual" ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="font-semibold text-slate-700 dark:text-slate-300">Public Key</label>
+                        <label className="font-semibold text-slate-700 dark:text-slate-300">
+                          Public Key
+                        </label>
                         <input
                           type="text"
                           name="publicKey"
@@ -419,7 +490,9 @@ function AdminAutomaticPaymentsPage() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="font-semibold text-slate-700 dark:text-slate-300">Secret Key</label>
+                        <label className="font-semibold text-slate-700 dark:text-slate-300">
+                          Secret Key
+                        </label>
                         <input
                           type="password"
                           name="secretKey"
@@ -432,7 +505,8 @@ function AdminAutomaticPaymentsPage() {
                   ) : (
                     <div className="space-y-1">
                       <label className="font-semibold text-slate-700 dark:text-slate-300">
-                        Bank Transfer Instructions &amp; Account Details (Displayed at Checkout)
+                        Bank Transfer Instructions &amp; Account Details
+                        (Displayed at Checkout)
                       </label>
                       <textarea
                         name="manualInstructions"
@@ -450,8 +524,15 @@ function AdminAutomaticPaymentsPage() {
                       disabled={savingId === gw.gatewayId}
                       className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold shadow-sm flex items-center gap-1.5"
                     >
-                      <Icon icon="solar:disk-bold-duotone" className="h-4 w-4" />
-                      <span>{savingId === gw.gatewayId ? "Saving..." : "Save Configuration"}</span>
+                      <Icon
+                        icon="solar:disk-bold-duotone"
+                        className="h-4 w-4"
+                      />
+                      <span>
+                        {savingId === gw.gatewayId
+                          ? "Saving..."
+                          : "Save Configuration"}
+                      </span>
                     </button>
                   </div>
                 </form>

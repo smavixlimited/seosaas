@@ -18,8 +18,12 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = React.useState("");
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
-  const [editingCompetitor, setEditingCompetitor] = React.useState<any | null>(null);
-  const [deletingCompetitor, setDeletingCompetitor] = React.useState<any | null>(null);
+  const [editingCompetitor, setEditingCompetitor] = React.useState<any | null>(
+    null,
+  );
+  const [deletingCompetitor, setDeletingCompetitor] = React.useState<
+    any | null
+  >(null);
 
   // Add/Edit Form State
   const [formData, setFormData] = React.useState({
@@ -42,7 +46,11 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
 
   const addMutation = useMutation({
     mutationFn: async () => {
-      const cleanDomain = formData.domain.trim().toLowerCase().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+      const cleanDomain = formData.domain
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\//i, "")
+        .replace(/\/.*$/, "");
       if (!cleanDomain) throw new Error("Domain is required");
 
       return syncBrandCompetitors({
@@ -52,7 +60,8 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
             {
               domain: cleanDomain,
               name: formData.name.trim() || cleanDomain,
-              websiteUrl: formData.websiteUrl.trim() || `https://${cleanDomain}`,
+              websiteUrl:
+                formData.websiteUrl.trim() || `https://${cleanDomain}`,
               socialHandles: {
                 instagram: formData.instagram.trim() || undefined,
                 linkedin: formData.linkedin.trim() || undefined,
@@ -66,7 +75,9 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
       });
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["brandCompetitors", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandCompetitors", projectId],
+      });
       toast.success("Competitor added successfully!");
       setIsAddModalOpen(false);
       resetForm();
@@ -79,7 +90,11 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
   const updateMutation = useMutation({
     mutationFn: async () => {
       if (!editingCompetitor) return;
-      const cleanDomain = formData.domain.trim().toLowerCase().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+      const cleanDomain = formData.domain
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\//i, "")
+        .replace(/\/.*$/, "");
 
       return updateBrandCompetitor({
         data: {
@@ -101,7 +116,9 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
       });
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["brandCompetitors", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandCompetitors", projectId],
+      });
       toast.success("Competitor updated successfully!");
       setEditingCompetitor(null);
       resetForm();
@@ -118,7 +135,9 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
       });
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["brandCompetitors", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandCompetitors", projectId],
+      });
       toast.success("Competitor removed from directory");
       setDeletingCompetitor(null);
     },
@@ -204,14 +223,20 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
       ) : filteredCompetitors.length === 0 ? (
         <div className="rounded-3xl border border-base-300 bg-base-100 p-10 text-center space-y-4 shadow-xs">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-            <Icon icon="solar:users-group-two-rounded-bold-duotone" className="h-7 w-7" />
+            <Icon
+              icon="solar:users-group-two-rounded-bold-duotone"
+              className="h-7 w-7"
+            />
           </div>
           <div>
             <h3 className="text-base font-bold text-base-content">
-              {searchQuery ? "No matching competitors found" : "No competitors added yet"}
+              {searchQuery
+                ? "No matching competitors found"
+                : "No competitors added yet"}
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
-              Add your industry rivals to track keyword overlaps, monitor backlink shifts, and run 1-on-1 strategy teardowns.
+              Add your industry rivals to track keyword overlaps, monitor
+              backlink shifts, and run 1-on-1 strategy teardowns.
             </p>
           </div>
           {!searchQuery && (
@@ -247,7 +272,9 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-2xl bg-base-200/80 border border-base-300 flex items-center justify-center font-black text-sm text-primary uppercase shadow-2xs">
-                        {comp.name ? comp.name.slice(0, 2) : comp.domain.slice(0, 2)}
+                        {comp.name
+                          ? comp.name.slice(0, 2)
+                          : comp.domain.slice(0, 2)}
                       </div>
                       <div>
                         <h4 className="text-sm font-black text-base-content leading-snug">
@@ -260,7 +287,10 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                           className="text-xs text-primary hover:underline font-medium inline-flex items-center gap-1"
                         >
                           <span>{comp.domain}</span>
-                          <Icon icon="solar:arrow-right-up-linear" className="h-3 w-3" />
+                          <Icon
+                            icon="solar:arrow-right-up-linear"
+                            className="h-3 w-3"
+                          />
                         </a>
                       </div>
                     </div>
@@ -277,8 +307,14 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                         className="dropdown-content z-20 menu p-1.5 shadow-xl bg-base-100 rounded-2xl w-36 border border-base-300 text-xs"
                       >
                         <li>
-                          <button onClick={() => openEditModal(comp)} className="gap-2 font-semibold">
-                            <Icon icon="solar:pen-bold" className="h-3.5 w-3.5" />
+                          <button
+                            onClick={() => openEditModal(comp)}
+                            className="gap-2 font-semibold"
+                          >
+                            <Icon
+                              icon="solar:pen-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             Edit Details
                           </button>
                         </li>
@@ -287,7 +323,10 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                             onClick={() => setDeletingCompetitor(comp)}
                             className="text-error gap-2 font-semibold hover:bg-error/10"
                           >
-                            <Icon icon="solar:trash-bin-trash-bold" className="h-3.5 w-3.5" />
+                            <Icon
+                              icon="solar:trash-bin-trash-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             Delete
                           </button>
                         </li>
@@ -361,7 +400,10 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                           rel="noreferrer"
                           className="badge badge-sm badge-outline gap-1 text-[10px] text-blue-500 hover:bg-blue-500/10"
                         >
-                          <Icon icon="solar:users-group-rounded-bold" className="h-3 w-3" />
+                          <Icon
+                            icon="solar:users-group-rounded-bold"
+                            className="h-3 w-3"
+                          />
                           FB
                         </a>
                       )}
@@ -377,7 +419,10 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                     search={{ domain: comp.domain }}
                     className="btn btn-primary btn-outline btn-sm w-full rounded-2xl font-bold text-xs gap-1.5 hover:text-white"
                   >
-                    <Icon icon="solar:swords-bold-duotone" className="h-4 w-4" />
+                    <Icon
+                      icon="solar:swords-bold-duotone"
+                      className="h-4 w-4"
+                    />
                     <span>Run Head-to-Head Comparison &rarr;</span>
                   </Link>
                 </div>
@@ -395,7 +440,9 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
           <div className="w-full max-w-lg rounded-3xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-2xl space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-black text-base-content tracking-tight">
-                {editingCompetitor ? "Edit Competitor Profile" : "Add New Competitor"}
+                {editingCompetitor
+                  ? "Edit Competitor Profile"
+                  : "Add New Competitor"}
               </h3>
               <button
                 type="button"
@@ -423,23 +470,31 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-base-content/80">Domain / Website *</label>
+                  <label className="text-xs font-bold text-base-content/80">
+                    Domain / Website *
+                  </label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. competitor.com"
                     value={formData.domain}
-                    onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, domain: e.target.value })
+                    }
                     className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-base-content/80">Brand / Company Name</label>
+                  <label className="text-xs font-bold text-base-content/80">
+                    Brand / Company Name
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g. Competitor Inc"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
                   />
                 </div>
@@ -455,28 +510,36 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
                     type="text"
                     placeholder="Instagram URL / @handle"
                     value={formData.instagram}
-                    onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, instagram: e.target.value })
+                    }
                     className="input input-bordered input-xs w-full rounded-xl text-xs bg-base-200/40"
                   />
                   <input
                     type="text"
                     placeholder="LinkedIn Company URL"
                     value={formData.linkedin}
-                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, linkedin: e.target.value })
+                    }
                     className="input input-bordered input-xs w-full rounded-xl text-xs bg-base-200/40"
                   />
                   <input
                     type="text"
                     placeholder="X / Twitter Handle"
                     value={formData.twitter}
-                    onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, twitter: e.target.value })
+                    }
                     className="input input-bordered input-xs w-full rounded-xl text-xs bg-base-200/40"
                   />
                   <input
                     type="text"
                     placeholder="Facebook Page URL"
                     value={formData.facebook}
-                    onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, facebook: e.target.value })
+                    }
                     className="input input-bordered input-xs w-full rounded-xl text-xs bg-base-200/40"
                   />
                 </div>
@@ -484,11 +547,15 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
 
               {/* Notes */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-base-content/80">Strategy Notes</label>
+                <label className="text-xs font-bold text-base-content/80">
+                  Strategy Notes
+                </label>
                 <textarea
                   placeholder="Key threats, product overlap, or pricing notes..."
                   value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
                   rows={2}
                   className="textarea textarea-bordered w-full rounded-2xl text-xs bg-base-200/40"
                 />
@@ -535,9 +602,15 @@ export function CompetitorsDirectory({ projectId }: CompetitorsDirectoryProps) {
               <Icon icon="solar:trash-bin-trash-bold" className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-base-content">Delete Competitor?</h3>
+              <h3 className="text-base font-bold text-base-content">
+                Delete Competitor?
+              </h3>
               <p className="text-xs text-base-content/60 mt-1">
-                Are you sure you want to remove <strong className="text-base-content">{deletingCompetitor.domain}</strong> from your directory?
+                Are you sure you want to remove{" "}
+                <strong className="text-base-content">
+                  {deletingCompetitor.domain}
+                </strong>{" "}
+                from your directory?
               </p>
             </div>
             <div className="flex items-center justify-center gap-2 pt-2">

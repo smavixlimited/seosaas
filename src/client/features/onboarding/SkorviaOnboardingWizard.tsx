@@ -4,7 +4,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import { BRAND_CONFIG } from "@/config/brand";
-import { INDUSTRIES, COMPANY_SIZES, TARGET_COUNTRIES, Industry, CompanySize } from "@/config/industries";
+import {
+  INDUSTRIES,
+  COMPANY_SIZES,
+  TARGET_COUNTRIES,
+  Industry,
+  CompanySize,
+} from "@/config/industries";
 import { completeBrandOnboarding } from "@/serverFunctions/brand-competitor";
 
 interface SkorviaOnboardingWizardProps {
@@ -54,9 +60,19 @@ export function SkorviaOnboardingWizard({
 
   // Step 3: Competitor Directory (up to 3)
   const [competitors, setCompetitors] = React.useState<CompetitorFormItem[]>([
-    { domain: "", name: "", instagram: "", linkedin: "", twitter: "", facebook: "", notes: "" },
+    {
+      domain: "",
+      name: "",
+      instagram: "",
+      linkedin: "",
+      twitter: "",
+      facebook: "",
+      notes: "",
+    },
   ]);
-  const [expandedCompetitorIdx, setExpandedCompetitorIdx] = React.useState<number | null>(0);
+  const [expandedCompetitorIdx, setExpandedCompetitorIdx] = React.useState<
+    number | null
+  >(0);
 
   // Suggested competitors
   const competitorSuggestions = [
@@ -68,10 +84,15 @@ export function SkorviaOnboardingWizard({
   ];
 
   const cleanDomain = (d: string) =>
-    d.trim().replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+    d
+      .trim()
+      .replace(/^https?:\/\//i, "")
+      .replace(/\/.*$/, "");
 
   const completeMutation = useMutation({
-    mutationFn: async (targetDestination: "dashboard" | "brand-analysis" | "competitor-analysis") => {
+    mutationFn: async (
+      targetDestination: "dashboard" | "brand-analysis" | "competitor-analysis",
+    ) => {
       const validCompetitors = competitors
         .filter((c) => c.domain.trim().length > 0)
         .map((c) => ({
@@ -94,7 +115,9 @@ export function SkorviaOnboardingWizard({
           projectId,
           brand: {
             projectId,
-            brandName: brandName.trim() || (cleanSite ? cleanSite.split(".")[0] : "My Brand"),
+            brandName:
+              brandName.trim() ||
+              (cleanSite ? cleanSite.split(".")[0] : "My Brand"),
             websiteUrl: cleanSite ? `https://${cleanSite}` : undefined,
             industry,
             companySize,
@@ -117,21 +140,33 @@ export function SkorviaOnboardingWizard({
     onSuccess: (target) => {
       void queryClient.invalidateQueries({ queryKey: ["onboardingAnswers"] });
       void queryClient.invalidateQueries({ queryKey: ["projects"] });
-      void queryClient.invalidateQueries({ queryKey: ["brandProfile", projectId] });
-      void queryClient.invalidateQueries({ queryKey: ["brandCompetitors", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandProfile", projectId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ["brandCompetitors", projectId],
+      });
 
       toast.success("Brand setup saved successfully!");
 
       if (target === "brand-analysis") {
-        void navigate({ to: "/p/$projectId/brand-analysis", params: { projectId } });
+        void navigate({
+          to: "/p/$projectId/brand-analysis",
+          params: { projectId },
+        });
       } else if (target === "competitor-analysis") {
-        void navigate({ to: "/p/$projectId/competitor-analysis", params: { projectId } });
+        void navigate({
+          to: "/p/$projectId/competitor-analysis",
+          params: { projectId },
+        });
       } else {
         void navigate({ to: "/p/$projectId", params: { projectId } });
       }
     },
     onError: (err) => {
-      toast.error(err instanceof Error ? err.message : "Failed to finalize setup.");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to finalize setup.",
+      );
     },
   });
 
@@ -158,7 +193,15 @@ export function SkorviaOnboardingWizard({
 
     if (competitors.length === 1 && !competitors[0].domain) {
       setCompetitors([
-        { domain: cleaned, name, instagram: "", linkedin: "", twitter: "", facebook: "", notes: "" },
+        {
+          domain: cleaned,
+          name,
+          instagram: "",
+          linkedin: "",
+          twitter: "",
+          facebook: "",
+          notes: "",
+        },
       ]);
       return;
     }
@@ -166,7 +209,15 @@ export function SkorviaOnboardingWizard({
     if (competitors.length < 3) {
       setCompetitors((prev) => [
         ...prev,
-        { domain: cleaned, name, instagram: "", linkedin: "", twitter: "", facebook: "", notes: "" },
+        {
+          domain: cleaned,
+          name,
+          instagram: "",
+          linkedin: "",
+          twitter: "",
+          facebook: "",
+          notes: "",
+        },
       ]);
     }
   };
@@ -200,8 +251,16 @@ export function SkorviaOnboardingWizard({
         <div className="grid grid-cols-4 gap-2">
           {[
             { num: 1, label: "Business", icon: "solar:shop-2-bold-duotone" },
-            { num: 2, label: "Social", icon: "solar:share-circle-bold-duotone" },
-            { num: 3, label: "Competitors", icon: "solar:users-group-two-rounded-bold-duotone" },
+            {
+              num: 2,
+              label: "Social",
+              icon: "solar:share-circle-bold-duotone",
+            },
+            {
+              num: 3,
+              label: "Competitors",
+              icon: "solar:users-group-two-rounded-bold-duotone",
+            },
             { num: 4, label: "Launch", icon: "solar:rocket-bold-duotone" },
           ].map((s) => (
             <div
@@ -210,8 +269,8 @@ export function SkorviaOnboardingWizard({
                 step === s.num
                   ? "bg-primary text-white shadow-md shadow-primary/20"
                   : step > s.num
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                  : "bg-base-200/60 text-base-content/40"
+                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                    : "bg-base-200/60 text-base-content/40"
               }`}
             >
               <Icon icon={s.icon} className="h-4 w-4 shrink-0" />
@@ -232,7 +291,8 @@ export function SkorviaOnboardingWizard({
                 Tell us about your brand
               </h2>
               <p className="text-xs text-base-content/60">
-                We calibrate SEO, conversion benchmarks, and brand scoring based on your industry and market.
+                We calibrate SEO, conversion benchmarks, and brand scoring based
+                on your industry and market.
               </p>
             </div>
             <button
@@ -248,7 +308,9 @@ export function SkorviaOnboardingWizard({
             {/* Brand Name & Website */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-base-content/80">Brand Name</label>
+                <label className="text-xs font-bold text-base-content/80">
+                  Brand Name
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Acme Corp"
@@ -259,7 +321,9 @@ export function SkorviaOnboardingWizard({
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-base-content/80">Website URL / Domain</label>
+                <label className="text-xs font-bold text-base-content/80">
+                  Website URL / Domain
+                </label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-mono font-bold text-base-content/40">
                     https://
@@ -277,7 +341,9 @@ export function SkorviaOnboardingWizard({
 
             {/* Industry Selection */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-base-content/80">Industry / Niche</label>
+              <label className="text-xs font-bold text-base-content/80">
+                Industry / Niche
+              </label>
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value as Industry)}
@@ -293,7 +359,9 @@ export function SkorviaOnboardingWizard({
 
             {/* Company Size */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-base-content/80">Company Size (Employees)</label>
+              <label className="text-xs font-bold text-base-content/80">
+                Company Size (Employees)
+              </label>
               <div className="grid grid-cols-4 gap-2">
                 {COMPANY_SIZES.map((size) => (
                   <button
@@ -314,7 +382,9 @@ export function SkorviaOnboardingWizard({
 
             {/* Target Country */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-base-content/80">Primary Target Market / Country</label>
+              <label className="text-xs font-bold text-base-content/80">
+                Primary Target Market / Country
+              </label>
               <select
                 value={targetCountry}
                 onChange={(e) => setTargetCountry(e.target.value)}
@@ -361,7 +431,8 @@ export function SkorviaOnboardingWizard({
                 Connect your social handles
               </h2>
               <p className="text-xs text-base-content/60">
-                We monitor cross-channel brand mentions, sentiment trust scores, and viral hook opportunities.
+                We monitor cross-channel brand mentions, sentiment trust scores,
+                and viral hook opportunities.
               </p>
             </div>
             <button
@@ -377,14 +448,19 @@ export function SkorviaOnboardingWizard({
             {/* Instagram */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:camera-bold-duotone" className="h-4 w-4 text-pink-500" />
+                <Icon
+                  icon="solar:camera-bold-duotone"
+                  className="h-4 w-4 text-pink-500"
+                />
                 Instagram Profile
               </label>
               <input
                 type="text"
                 placeholder="instagram.com/yourbrand or @handle"
                 value={socialLinks.instagram}
-                onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, instagram: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -392,14 +468,19 @@ export function SkorviaOnboardingWizard({
             {/* LinkedIn */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:case-bold-duotone" className="h-4 w-4 text-blue-600" />
+                <Icon
+                  icon="solar:case-bold-duotone"
+                  className="h-4 w-4 text-blue-600"
+                />
                 LinkedIn Company Page
               </label>
               <input
                 type="text"
                 placeholder="linkedin.com/company/yourbrand"
                 value={socialLinks.linkedin}
-                onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, linkedin: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -407,14 +488,19 @@ export function SkorviaOnboardingWizard({
             {/* X / Twitter */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:hashtag-bold-duotone" className="h-4 w-4 text-slate-800 dark:text-slate-200" />
+                <Icon
+                  icon="solar:hashtag-bold-duotone"
+                  className="h-4 w-4 text-slate-800 dark:text-slate-200"
+                />
                 X (Twitter) Profile
               </label>
               <input
                 type="text"
                 placeholder="x.com/yourbrand or @handle"
                 value={socialLinks.twitter}
-                onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, twitter: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -422,14 +508,19 @@ export function SkorviaOnboardingWizard({
             {/* Facebook */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:users-group-rounded-bold-duotone" className="h-4 w-4 text-blue-500" />
+                <Icon
+                  icon="solar:users-group-rounded-bold-duotone"
+                  className="h-4 w-4 text-blue-500"
+                />
                 Facebook Page
               </label>
               <input
                 type="text"
                 placeholder="facebook.com/yourbrand"
                 value={socialLinks.facebook}
-                onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, facebook: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -437,14 +528,19 @@ export function SkorviaOnboardingWizard({
             {/* YouTube */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:videocamera-bold-duotone" className="h-4 w-4 text-red-500" />
+                <Icon
+                  icon="solar:videocamera-bold-duotone"
+                  className="h-4 w-4 text-red-500"
+                />
                 YouTube Channel
               </label>
               <input
                 type="text"
                 placeholder="youtube.com/@yourbrand"
                 value={socialLinks.youtube}
-                onChange={(e) => setSocialLinks({ ...socialLinks, youtube: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, youtube: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -452,14 +548,19 @@ export function SkorviaOnboardingWizard({
             {/* TikTok */}
             <div className="space-y-1">
               <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-                <Icon icon="solar:music-notes-bold-duotone" className="h-4 w-4 text-purple-500" />
+                <Icon
+                  icon="solar:music-notes-bold-duotone"
+                  className="h-4 w-4 text-purple-500"
+                />
                 TikTok Handle
               </label>
               <input
                 type="text"
                 placeholder="tiktok.com/@yourbrand"
                 value={socialLinks.tiktok}
-                onChange={(e) => setSocialLinks({ ...socialLinks, tiktok: e.target.value })}
+                onChange={(e) =>
+                  setSocialLinks({ ...socialLinks, tiktok: e.target.value })
+                }
                 className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
               />
             </div>
@@ -506,7 +607,9 @@ export function SkorviaOnboardingWizard({
                 Add up to 3 competitors
               </h2>
               <p className="text-xs text-base-content/60">
-                These competitors will be saved in your Competitor Directory for ongoing keyword overlap, ad analysis, and share of voice tracking.
+                These competitors will be saved in your Competitor Directory for
+                ongoing keyword overlap, ad analysis, and share of voice
+                tracking.
               </p>
             </div>
             <button
@@ -540,11 +643,17 @@ export function SkorviaOnboardingWizard({
                     <div className="flex items-center gap-1.5">
                       <button
                         type="button"
-                        onClick={() => setExpandedCompetitorIdx(isExpanded ? null : idx)}
+                        onClick={() =>
+                          setExpandedCompetitorIdx(isExpanded ? null : idx)
+                        }
                         className="btn btn-ghost btn-xs rounded-lg text-primary font-bold gap-1"
                       >
                         <Icon
-                          icon={isExpanded ? "solar:alt-arrow-up-linear" : "solar:alt-arrow-down-linear"}
+                          icon={
+                            isExpanded
+                              ? "solar:alt-arrow-up-linear"
+                              : "solar:alt-arrow-down-linear"
+                          }
                           className="h-3.5 w-3.5"
                         />
                         {isExpanded ? "Collapse" : "Add Socials"}
@@ -554,11 +663,16 @@ export function SkorviaOnboardingWizard({
                         <button
                           type="button"
                           onClick={() => {
-                            setCompetitors((prev) => prev.filter((_, i) => i !== idx));
+                            setCompetitors((prev) =>
+                              prev.filter((_, i) => i !== idx),
+                            );
                           }}
                           className="btn btn-ghost btn-xs text-error p-1"
                         >
-                          <Icon icon="solar:trash-bin-trash-bold" className="h-3.5 w-3.5" />
+                          <Icon
+                            icon="solar:trash-bin-trash-bold"
+                            className="h-3.5 w-3.5"
+                          />
                         </button>
                       )}
                     </div>
@@ -653,7 +767,15 @@ export function SkorviaOnboardingWizard({
                 onClick={() => {
                   setCompetitors((prev) => [
                     ...prev,
-                    { domain: "", name: "", instagram: "", linkedin: "", twitter: "", facebook: "", notes: "" },
+                    {
+                      domain: "",
+                      name: "",
+                      instagram: "",
+                      linkedin: "",
+                      twitter: "",
+                      facebook: "",
+                      notes: "",
+                    },
                   ]);
                   setExpandedCompetitorIdx(competitors.length);
                 }}
@@ -721,30 +843,42 @@ export function SkorviaOnboardingWizard({
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="text-center space-y-2">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 shadow-md shadow-emerald-500/10 ring-4 ring-emerald-500/20">
-              <Icon icon="solar:check-circle-bold-duotone" className="h-8 w-8" />
+              <Icon
+                icon="solar:check-circle-bold-duotone"
+                className="h-8 w-8"
+              />
             </div>
             <h2 className="text-2xl font-black text-base-content tracking-tight">
               Your Brand is Ready to Launch!
             </h2>
             <p className="text-xs text-base-content/60 max-w-md mx-auto">
-              Choose your primary starting action. All saved competitors and brand data are stored in your database.
+              Choose your primary starting action. All saved competitors and
+              brand data are stored in your database.
             </p>
           </div>
 
           {/* Quick Summary Pill Bar */}
           <div className="grid grid-cols-3 gap-2 rounded-2xl bg-base-200/50 p-3 text-center text-xs">
             <div>
-              <span className="text-[10px] uppercase font-bold text-base-content/50 block">Brand</span>
+              <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                Brand
+              </span>
               <span className="font-extrabold text-base-content truncate block">
                 {brandName || websiteUrl || "My Brand"}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold text-base-content/50 block">Industry</span>
-              <span className="font-extrabold text-primary truncate block">{industry}</span>
+              <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                Industry
+              </span>
+              <span className="font-extrabold text-primary truncate block">
+                {industry}
+              </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold text-base-content/50 block">Competitors</span>
+              <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                Competitors
+              </span>
               <span className="font-extrabold text-indigo-600 dark:text-indigo-400 block">
                 {competitors.filter((c) => c.domain.trim()).length} Saved
               </span>
@@ -762,19 +896,28 @@ export function SkorviaOnboardingWizard({
             >
               <div className="flex items-center gap-3.5">
                 <div className="h-11 w-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <Icon icon="solar:chart-square-bold-duotone" className="h-6 w-6" />
+                  <Icon
+                    icon="solar:chart-square-bold-duotone"
+                    className="h-6 w-6"
+                  />
                 </div>
                 <div>
                   <div className="text-sm font-black text-base-content group-hover:text-primary transition-colors flex items-center gap-1.5">
                     <span>Go to Dashboard</span>
-                    <span className="badge badge-primary badge-xs font-bold">Standard</span>
+                    <span className="badge badge-primary badge-xs font-bold">
+                      Standard
+                    </span>
                   </div>
                   <p className="text-xs text-base-content/60 font-medium">
-                    Explore your main overview, executive KPIs, score trends, and quick health meters.
+                    Explore your main overview, executive KPIs, score trends,
+                    and quick health meters.
                   </p>
                 </div>
               </div>
-              <Icon icon="solar:arrow-right-linear" className="h-5 w-5 text-base-content/40 group-hover:text-primary transition-colors shrink-0" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-5 w-5 text-base-content/40 group-hover:text-primary transition-colors shrink-0"
+              />
             </button>
 
             {/* Action 2: Run Brand Analysis */}
@@ -786,19 +929,28 @@ export function SkorviaOnboardingWizard({
             >
               <div className="flex items-center gap-3.5">
                 <div className="h-11 w-11 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <Icon icon="solar:shield-check-bold-duotone" className="h-6 w-6" />
+                  <Icon
+                    icon="solar:shield-check-bold-duotone"
+                    className="h-6 w-6"
+                  />
                 </div>
                 <div>
                   <div className="text-sm font-black text-base-content group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
                     <span>Run Brand Analysis</span>
-                    <span className="badge badge-success badge-xs text-white font-bold">Recommended</span>
+                    <span className="badge badge-success badge-xs text-white font-bold">
+                      Recommended
+                    </span>
                   </div>
                   <p className="text-xs text-base-content/60 font-medium">
-                    Perform a full 6-dimension credibility, trust signals, and conversion ad-readiness audit.
+                    Perform a full 6-dimension credibility, trust signals, and
+                    conversion ad-readiness audit.
                   </p>
                 </div>
               </div>
-              <Icon icon="solar:arrow-right-linear" className="h-5 w-5 text-base-content/40 group-hover:text-emerald-600 transition-colors shrink-0" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-5 w-5 text-base-content/40 group-hover:text-emerald-600 transition-colors shrink-0"
+              />
             </button>
 
             {/* Action 3: Run Competitor Analysis */}
@@ -815,21 +967,29 @@ export function SkorviaOnboardingWizard({
                 <div>
                   <div className="text-sm font-black text-base-content group-hover:text-indigo-600 transition-colors flex items-center gap-1.5">
                     <span>Run Competitor Analysis</span>
-                    <span className="badge badge-secondary badge-xs font-bold">Deep Dive</span>
+                    <span className="badge badge-secondary badge-xs font-bold">
+                      Deep Dive
+                    </span>
                   </div>
                   <p className="text-xs text-base-content/60 font-medium">
-                    Analyze ranking overlap, paid ad keywords, content gaps, and traffic shares vs competitors.
+                    Analyze ranking overlap, paid ad keywords, content gaps, and
+                    traffic shares vs competitors.
                   </p>
                 </div>
               </div>
-              <Icon icon="solar:arrow-right-linear" className="h-5 w-5 text-base-content/40 group-hover:text-indigo-600 transition-colors shrink-0" />
+              <Icon
+                icon="solar:arrow-right-linear"
+                className="h-5 w-5 text-base-content/40 group-hover:text-indigo-600 transition-colors shrink-0"
+              />
             </button>
           </div>
 
           {completeMutation.isPending && (
             <div className="text-center py-2">
               <span className="loading loading-spinner loading-md text-primary" />
-              <p className="text-xs text-base-content/60 font-medium mt-1">Configuring brand workspace...</p>
+              <p className="text-xs text-base-content/60 font-medium mt-1">
+                Configuring brand workspace...
+              </p>
             </div>
           )}
         </div>

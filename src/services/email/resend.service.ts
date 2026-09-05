@@ -18,9 +18,13 @@ export function getResendApiKey(): string | null {
   return null;
 }
 
-export async function sendResendEmail(options: SendEmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
+export async function sendResendEmail(
+  options: SendEmailOptions,
+): Promise<{ success: boolean; id?: string; error?: string }> {
   const apiKey = getResendApiKey();
-  const fromAddress = options.from || `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
+  const fromAddress =
+    options.from ||
+    `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
 
   if (!apiKey) {
     console.info("[Resend Email Mock/Dev]", {
@@ -50,7 +54,9 @@ export async function sendResendEmail(options: SendEmailOptions): Promise<{ succ
 
     if (!response.ok) {
       const errJson = await response.json().catch(() => ({}));
-      const errMsg = (errJson as { message?: string }).message || `Resend HTTP error ${response.status}`;
+      const errMsg =
+        (errJson as { message?: string }).message ||
+        `Resend HTTP error ${response.status}`;
       console.error("Resend send email error:", errMsg);
       return { success: false, error: errMsg };
     }
@@ -120,7 +126,7 @@ export async function sendAccountVerificationEmail(params: {
     <p style="font-size:13px;color:#64748b;">Or paste this link into your browser:<br><a href="${params.confirmationUrl}" style="color:#17199b;word-break:break-all;">${params.confirmationUrl}</a></p>
     <p style="font-size:13px;color:#64748b;margin-top:24px;">If you didn't create this account, you can safely ignore this email.</p>
     `,
-    "Verify your Skorvia account"
+    "Verify your Skorvia account",
   );
 
   return sendResendEmail({
@@ -147,7 +153,7 @@ export async function sendPasswordResetEmail(params: {
     </div>
     <p style="font-size:13px;color:#64748b;">This password reset link is valid for <strong>60 minutes</strong>. If you didn't request a password reset, no action is needed.</p>
     `,
-    "Reset your Skorvia password"
+    "Reset your Skorvia password",
   );
 
   return sendResendEmail({
@@ -178,7 +184,7 @@ export async function sendSiteAuditCompletedEmail(params: {
       <a href="${params.reportUrl}" class="btn">View Full Audit Report</a>
     </div>
     `,
-    `Audit results for ${params.domain}: Score ${params.healthScore}/100`
+    `Audit results for ${params.domain}: Score ${params.healthScore}/100`,
   );
 
   return sendResendEmail({
@@ -215,7 +221,7 @@ export async function sendUptimeDowntimeAlertEmail(params: {
       <a href="${BRAND_CONFIG.url}/uptime" class="btn">Open Uptime Dashboard</a>
     </div>
     `,
-    title
+    title,
   );
 
   return sendResendEmail({
@@ -248,7 +254,7 @@ export async function sendBillingInvoiceReceiptEmail(params: {
       <a href="${BRAND_CONFIG.url}/projects" class="btn">Go to My Dashboard</a>
     </div>
     `,
-    `Receipt for your ${BRAND_CONFIG.name} ${params.planName} subscription`
+    `Receipt for your ${BRAND_CONFIG.name} ${params.planName} subscription`,
   );
 
   return sendResendEmail({
@@ -269,7 +275,8 @@ export async function sendNewDeviceLoginAlertEmail(params: {
   lockAccountUrl?: string;
 }) {
   const time = params.timestamp || new Date().toUTCString();
-  const lockUrl = params.lockAccountUrl || `${BRAND_CONFIG.url}/dashboard/settings/security`;
+  const lockUrl =
+    params.lockAccountUrl || `${BRAND_CONFIG.url}/dashboard/settings/security`;
 
   const html = wrapEmailHtml(
     `
@@ -287,7 +294,7 @@ export async function sendNewDeviceLoginAlertEmail(params: {
       <a href="${lockUrl}" class="btn" style="background-color:#dc2626;">Secure My Account</a>
     </div>
     `,
-    `Security Alert: New sign-in detected on your ${BRAND_CONFIG.name} account`
+    `Security Alert: New sign-in detected on your ${BRAND_CONFIG.name} account`,
   );
 
   return sendResendEmail({
@@ -325,7 +332,7 @@ export async function sendTeamInviteEmail(params: {
     </div>
     <p style="font-size:11px;color:#94a3b8;text-align:center;">Or copy this URL into your browser: <br><span style="word-break:break-all;">${inviteUrl}</span></p>
     `,
-    `You've been invited to join ${BRAND_CONFIG.name} by ${params.inviterName || params.inviterEmail}`
+    `You've been invited to join ${BRAND_CONFIG.name} by ${params.inviterName || params.inviterEmail}`,
   );
 
   return sendResendEmail({
@@ -389,7 +396,7 @@ export async function sendWeeklySeoDigestEmail(params: {
       <a href="${projectUrl}" class="btn">View Full SEO Report</a>
     </div>
     `,
-    `Weekly SEO Performance Digest for ${params.domain}: +${params.keywordsGained} Keywords, +${params.newBacklinks} Backlinks`
+    `Weekly SEO Performance Digest for ${params.domain}: +${params.keywordsGained} Keywords, +${params.newBacklinks} Backlinks`,
   );
 
   return sendResendEmail({
@@ -398,6 +405,3 @@ export async function sendWeeklySeoDigestEmail(params: {
     html,
   });
 }
-
-
-

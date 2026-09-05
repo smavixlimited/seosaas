@@ -6,7 +6,7 @@ describe("ConversionAdReadinessService (0-100 Conversion & Ad Readiness Scorecar
     const report = await ConversionAdReadinessService.runConversionAudit(
       "test-proj-999",
       "https://example.com/pricing",
-      "example.com"
+      "example.com",
     );
 
     expect(report).toBeDefined();
@@ -14,7 +14,9 @@ describe("ConversionAdReadinessService (0-100 Conversion & Ad Readiness Scorecar
     expect(report.overallScore).toBeGreaterThanOrEqual(0);
     expect(report.overallScore).toBeLessThanOrEqual(100);
     expect(["A+", "A", "B+", "B", "C", "D", "F"]).toContain(report.grade);
-    expect(["low", "moderate", "high", "critical"]).toContain(report.adWastedSpendRisk);
+    expect(["low", "moderate", "high", "critical"]).toContain(
+      report.adWastedSpendRisk,
+    );
 
     // 5 Sub-Pillars
     expect(report.trustAndCredibilityScore).toBeGreaterThanOrEqual(0);

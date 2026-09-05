@@ -50,6 +50,6 @@ export const updateSecurityPoliciesServerFn = createServerFn({ method: "POST" })
     return SecurityAuditService.setSecurityPolicies(
       data,
       context.userId,
-      context.userEmail
+      context.userEmail,
     );
   });

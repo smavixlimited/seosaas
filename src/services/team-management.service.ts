@@ -30,11 +30,11 @@ export interface TeamInviteRecord {
 
 export const PLAN_SEAT_LIMITS: Record<string, number> = {
   "free-trial": 1,
-  "free": 1,
-  "starter": 2,
-  "pro": 5,
-  "agency": 15,
-  "enterprise": 50,
+  free: 1,
+  starter: 2,
+  pro: 5,
+  agency: 15,
+  enterprise: 50,
 };
 
 // In-Memory store for tests / dev
@@ -133,7 +133,10 @@ export const TeamManagementService = {
         .where(eq(teamInvitations.ownerId, ownerId));
 
       for (const inv of dbInvites) {
-        if (inv.status === "pending" && new Date(inv.expiresAt).getTime() > Date.now()) {
+        if (
+          inv.status === "pending" &&
+          new Date(inv.expiresAt).getTime() > Date.now()
+        ) {
           let assigned: string[] = [];
           try {
             assigned = JSON.parse(inv.assignedProjectIdsJson);
@@ -145,7 +148,11 @@ export const TeamManagementService = {
             role: inv.role as TeamRole,
             assignedProjectIds: assigned,
             token: inv.token,
-            status: inv.status as "pending" | "accepted" | "expired" | "revoked",
+            status: inv.status as
+              | "pending"
+              | "accepted"
+              | "expired"
+              | "revoked",
             expiresAt: String(inv.expiresAt),
             createdAt: String(inv.createdAt),
           });
@@ -161,7 +168,11 @@ export const TeamManagementService = {
     }
     if (invitations.length === 0) {
       for (const inv of inMemoryInvites.values()) {
-        if (inv.ownerId === ownerId && inv.status === "pending" && new Date(inv.expiresAt).getTime() > Date.now()) {
+        if (
+          inv.ownerId === ownerId &&
+          inv.status === "pending" &&
+          new Date(inv.expiresAt).getTime() > Date.now()
+        ) {
           invitations.push(inv);
         }
       }
@@ -199,22 +210,34 @@ export const TeamManagementService = {
     if (summary.seatsUsed >= summary.seatLimit) {
       throw new AppError(
         "FORBIDDEN",
-        `Your current ${summary.planId.toUpperCase()} plan allows up to ${summary.seatLimit} team seats. Please upgrade to invite more members.`
+        `Your current ${summary.planId.toUpperCase()} plan allows up to ${summary.seatLimit} team seats. Please upgrade to invite more members.`,
       );
     }
 
     // Check if user is already a member
     if (summary.members.some((m) => m.memberEmail.toLowerCase() === email)) {
-      throw new AppError("VALIDATION_ERROR", "This user is already a member of your team.");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "This user is already a member of your team.",
+      );
     }
 
     // Check if there is already a pending invite
-    if (summary.invitations.some((inv) => inv.email.toLowerCase() === email && inv.status === "pending")) {
-      throw new AppError("VALIDATION_ERROR", "An invitation is already pending for this email.");
+    if (
+      summary.invitations.some(
+        (inv) => inv.email.toLowerCase() === email && inv.status === "pending",
+      )
+    ) {
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "An invitation is already pending for this email.",
+      );
     }
 
     const now = new Date();
-    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+    const expiresAt = new Date(
+      now.getTime() + 7 * 24 * 60 * 60 * 1000,
+    ).toISOString(); // 7 days
     const id = `inv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const token = `invtok_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
 
@@ -285,7 +308,7 @@ export const TeamManagementService = {
     memberId: string,
     role: TeamRole,
     assignedProjectIds?: string[],
-    ownerEmail?: string
+    ownerEmail?: string,
   ): Promise<boolean> {
     const now = new Date().toISOString();
     const assignedJson = JSON.stringify(assignedProjectIds || []);
@@ -299,10 +322,14 @@ export const TeamManagementService = {
         .update(teamMembers)
         .set({
           role,
-          ...(assignedProjectIds ? { assignedProjectIdsJson: assignedJson } : {}),
+          ...(assignedProjectIds
+            ? { assignedProjectIdsJson: assignedJson }
+            : {}),
           updatedAt: now,
         })
-        .where(and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)));
+        .where(
+          and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
+        );
     } catch {}
 
     const mem = inMemoryMembers.get(memberId);
@@ -327,7 +354,11 @@ export const TeamManagementService = {
   /**
    * Removes a member from the team.
    */
-  async removeMember(ownerId: string, memberId: string, ownerEmail?: string): Promise<boolean> {
+  async removeMember(
+    ownerId: string,
+    memberId: string,
+    ownerEmail?: string,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { teamMembers } = await import("@/db/schema");
@@ -335,7 +366,9 @@ export const TeamManagementService = {
 
       await db
         .delete(teamMembers)
-        .where(and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)));
+        .where(
+          and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
+        );
     } catch {}
 
     inMemoryMembers.delete(memberId);
@@ -355,7 +388,11 @@ export const TeamManagementService = {
   /**
    * Revokes a pending invitation.
    */
-  async revokeInvitation(ownerId: string, inviteId: string, ownerEmail?: string): Promise<boolean> {
+  async revokeInvitation(
+    ownerId: string,
+    inviteId: string,
+    ownerEmail?: string,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { teamInvitations } = await import("@/db/schema");
@@ -364,7 +401,12 @@ export const TeamManagementService = {
       await db
         .update(teamInvitations)
         .set({ status: "revoked" })
-        .where(and(eq(teamInvitations.id, inviteId), eq(teamInvitations.ownerId, ownerId)));
+        .where(
+          and(
+            eq(teamInvitations.id, inviteId),
+            eq(teamInvitations.ownerId, ownerId),
+          ),
+        );
     } catch {}
 
     const inv = inMemoryInvites.get(inviteId);
@@ -430,10 +472,16 @@ export const TeamManagementService = {
       throw new AppError("NOT_FOUND", "Invitation token not found.");
     }
     if (invite.status !== "pending") {
-      throw new AppError("VALIDATION_ERROR", `This invitation has already been ${invite.status}.`);
+      throw new AppError(
+        "VALIDATION_ERROR",
+        `This invitation has already been ${invite.status}.`,
+      );
     }
     if (new Date(invite.expiresAt).getTime() < Date.now()) {
-      throw new AppError("VALIDATION_ERROR", "This invitation token has expired.");
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "This invitation token has expired.",
+      );
     }
 
     const now = new Date().toISOString();

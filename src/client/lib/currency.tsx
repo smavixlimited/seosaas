@@ -26,20 +26,98 @@ export interface CurrencyConfig {
 }
 
 export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
-  { code: "USD", name: "US Dollar", symbol: "$", flag: "🇺🇸", rateAgainstUsd: 1.0 },
-  { code: "NGN", name: "Nigerian Naira", symbol: "₦", flag: "🇳🇬", rateAgainstUsd: 1550 },
+  {
+    code: "USD",
+    name: "US Dollar",
+    symbol: "$",
+    flag: "🇺🇸",
+    rateAgainstUsd: 1.0,
+  },
+  {
+    code: "NGN",
+    name: "Nigerian Naira",
+    symbol: "₦",
+    flag: "🇳🇬",
+    rateAgainstUsd: 1550,
+  },
   { code: "EUR", name: "Euro", symbol: "€", flag: "🇪🇺", rateAgainstUsd: 0.92 },
-  { code: "GBP", name: "British Pound", symbol: "£", flag: "🇬🇧", rateAgainstUsd: 0.78 },
-  { code: "GHS", name: "Ghanaian Cedi", symbol: "GH₵", flag: "🇬🇭", rateAgainstUsd: 15.2 },
-  { code: "KES", name: "Kenyan Shilling", symbol: "KSh", flag: "🇰🇪", rateAgainstUsd: 129.0 },
-  { code: "ZAR", name: "South African Rand", symbol: "R", flag: "🇿🇦", rateAgainstUsd: 18.4 },
-  { code: "CAD", name: "Canadian Dollar", symbol: "CA$", flag: "🇨🇦", rateAgainstUsd: 1.36 },
-  { code: "AUD", name: "Australian Dollar", symbol: "AU$", flag: "🇦🇺", rateAgainstUsd: 1.52 },
-  { code: "UGX", name: "Ugandan Shilling", symbol: "USh", flag: "🇺🇬", rateAgainstUsd: 3700 },
-  { code: "TZS", name: "Tanzanian Shilling", symbol: "TSh", flag: "🇹🇿", rateAgainstUsd: 2600 },
-  { code: "RWF", name: "Rwandan Franc", symbol: "RF", flag: "🇷🇼", rateAgainstUsd: 1350 },
-  { code: "XOF", name: "West African CFA", symbol: "CFA", flag: "🇸🇳", rateAgainstUsd: 600 },
-  { code: "XAF", name: "Central African CFA", symbol: "FCFA", flag: "🇨🇲", rateAgainstUsd: 600 },
+  {
+    code: "GBP",
+    name: "British Pound",
+    symbol: "£",
+    flag: "🇬🇧",
+    rateAgainstUsd: 0.78,
+  },
+  {
+    code: "GHS",
+    name: "Ghanaian Cedi",
+    symbol: "GH₵",
+    flag: "🇬🇭",
+    rateAgainstUsd: 15.2,
+  },
+  {
+    code: "KES",
+    name: "Kenyan Shilling",
+    symbol: "KSh",
+    flag: "🇰🇪",
+    rateAgainstUsd: 129.0,
+  },
+  {
+    code: "ZAR",
+    name: "South African Rand",
+    symbol: "R",
+    flag: "🇿🇦",
+    rateAgainstUsd: 18.4,
+  },
+  {
+    code: "CAD",
+    name: "Canadian Dollar",
+    symbol: "CA$",
+    flag: "🇨🇦",
+    rateAgainstUsd: 1.36,
+  },
+  {
+    code: "AUD",
+    name: "Australian Dollar",
+    symbol: "AU$",
+    flag: "🇦🇺",
+    rateAgainstUsd: 1.52,
+  },
+  {
+    code: "UGX",
+    name: "Ugandan Shilling",
+    symbol: "USh",
+    flag: "🇺🇬",
+    rateAgainstUsd: 3700,
+  },
+  {
+    code: "TZS",
+    name: "Tanzanian Shilling",
+    symbol: "TSh",
+    flag: "🇹🇿",
+    rateAgainstUsd: 2600,
+  },
+  {
+    code: "RWF",
+    name: "Rwandan Franc",
+    symbol: "RF",
+    flag: "🇷🇼",
+    rateAgainstUsd: 1350,
+  },
+  {
+    code: "XOF",
+    name: "West African CFA",
+    symbol: "CFA",
+    flag: "🇸🇳",
+    rateAgainstUsd: 600,
+  },
+  {
+    code: "XAF",
+    name: "Central African CFA",
+    symbol: "FCFA",
+    flag: "🇨🇲",
+    rateAgainstUsd: 600,
+  },
 ];
 
 interface CurrencyContextType {
@@ -64,20 +142,30 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = React.useState<Currency>(() => {
     if (typeof window === "undefined") return "USD";
     try {
-      const stored = window.localStorage.getItem(CURRENCY_STORAGE_KEY) as Currency | null;
+      const stored = window.localStorage.getItem(
+        CURRENCY_STORAGE_KEY,
+      ) as Currency | null;
       if (stored && SUPPORTED_CURRENCIES.some((c) => c.code === stored)) {
         return stored;
       }
 
       // Detect user time zone / locale
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-      if (timeZone.includes("Lagos") || timeZone.includes("Africa/Lagos") || navigator.language.includes("NG")) {
+      if (
+        timeZone.includes("Lagos") ||
+        timeZone.includes("Africa/Lagos") ||
+        navigator.language.includes("NG")
+      ) {
         return "NGN";
       }
       if (timeZone.includes("London") || timeZone.includes("Europe/London")) {
         return "GBP";
       }
-      if (timeZone.includes("Europe") || timeZone.includes("Paris") || timeZone.includes("Berlin")) {
+      if (
+        timeZone.includes("Europe") ||
+        timeZone.includes("Paris") ||
+        timeZone.includes("Berlin")
+      ) {
         return "EUR";
       }
       if (timeZone.includes("Accra")) {
@@ -105,7 +193,10 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const currentCurrencyInfo = React.useMemo(() => {
-    return SUPPORTED_CURRENCIES.find((c) => c.code === currency) || SUPPORTED_CURRENCIES[0];
+    return (
+      SUPPORTED_CURRENCIES.find((c) => c.code === currency) ||
+      SUPPORTED_CURRENCIES[0]
+    );
   }, [currency]);
 
   const formatPrice = React.useCallback(
@@ -114,21 +205,32 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
         return `$${amountUSD.toLocaleString()}`;
       }
       if (currency === "NGN") {
-        const ngnVal = amountNGN != null ? amountNGN : Math.round(amountUSD * 1550);
+        const ngnVal =
+          amountNGN != null ? amountNGN : Math.round(amountUSD * 1550);
         return `₦${ngnVal.toLocaleString()}`;
       }
 
-      const info = SUPPORTED_CURRENCIES.find((c) => c.code === currency) || SUPPORTED_CURRENCIES[0];
+      const info =
+        SUPPORTED_CURRENCIES.find((c) => c.code === currency) ||
+        SUPPORTED_CURRENCIES[0];
       const converted = Math.round(amountUSD * info.rateAgainstUsd);
       return `${info.symbol}${converted.toLocaleString()}`;
     },
-    [currency]
+    [currency],
   );
 
   const symbol = currentCurrencyInfo.symbol;
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, formatPrice, symbol, currentCurrencyInfo }}>
+    <CurrencyContext.Provider
+      value={{
+        currency,
+        setCurrency,
+        formatPrice,
+        symbol,
+        currentCurrencyInfo,
+      }}
+    >
       {children}
     </CurrencyContext.Provider>
   );
@@ -149,7 +251,10 @@ export function CurrencyDropdown({ className = "" }: { className?: string }) {
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -158,7 +263,10 @@ export function CurrencyDropdown({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div className={`relative inline-block text-left ${className}`} ref={dropdownRef}>
+    <div
+      className={`relative inline-block text-left ${className}`}
+      ref={dropdownRef}
+    >
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -166,7 +274,9 @@ export function CurrencyDropdown({ className = "" }: { className?: string }) {
         aria-expanded={isOpen}
       >
         <span>{currentCurrencyInfo.flag}</span>
-        <span className="font-extrabold text-[11px]">{currentCurrencyInfo.code} ({currentCurrencyInfo.symbol})</span>
+        <span className="font-extrabold text-[11px]">
+          {currentCurrencyInfo.code} ({currentCurrencyInfo.symbol})
+        </span>
         <Icon
           icon="solar:alt-arrow-down-linear"
           className={`h-3 w-3 transition-transform duration-200 opacity-60 ${isOpen ? "rotate-180" : ""}`}
@@ -194,11 +304,18 @@ export function CurrencyDropdown({ className = "" }: { className?: string }) {
             >
               <div className="flex items-center gap-2">
                 <span className="text-sm">{c.flag}</span>
-                <span>{c.code} ({c.symbol})</span>
-                <span className="text-[10px] text-base-content/50 font-normal">{c.name}</span>
+                <span>
+                  {c.code} ({c.symbol})
+                </span>
+                <span className="text-[10px] text-base-content/50 font-normal">
+                  {c.name}
+                </span>
               </div>
               {currency === c.code && (
-                <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:check-circle-bold"
+                  className="h-4 w-4 text-primary"
+                />
               )}
             </button>
           ))}

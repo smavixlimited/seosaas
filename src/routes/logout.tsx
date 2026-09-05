@@ -28,13 +28,17 @@ function LogoutPage() {
         <div className="space-y-6">
           <div className="flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/15">
             <div className="size-16 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20 mb-3">
-              <Icon icon="solar:shield-keyhole-bold-duotone" className="size-8" />
+              <Icon
+                icon="solar:shield-keyhole-bold-duotone"
+                className="size-8"
+              />
             </div>
             <h4 className="text-tagline-1 font-bold text-secondary dark:text-accent">
               Session Terminated
             </h4>
             <p className="mt-1 text-xs text-secondary/70 dark:text-accent/70 max-w-xs">
-              All active security tokens and cookies have been safely cleared from this browser session.
+              All active security tokens and cookies have been safely cleared
+              from this browser session.
             </p>
           </div>
 

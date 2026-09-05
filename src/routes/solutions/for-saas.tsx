@@ -33,7 +33,10 @@ function ForSaaSPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-base-content/70 font-medium max-w-2xl mx-auto leading-relaxed">
-              B2B buyers are searching on Google and asking ChatGPT for software recommendations. {BRAND_CONFIG.name} gives your SaaS team continuous rank tracking, competitor keyword gap analysis, and AEO citation tools.
+              B2B buyers are searching on Google and asking ChatGPT for software
+              recommendations. {BRAND_CONFIG.name} gives your SaaS team
+              continuous rank tracking, competitor keyword gap analysis, and AEO
+              citation tools.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -62,7 +65,8 @@ function ForSaaSPage() {
               Engineered for Product-Led & High-Intent Acquisition
             </h2>
             <p className="text-sm text-base-content/70">
-              Transform your engineering documentation and marketing blogs into continuous inbound demos.
+              Transform your engineering documentation and marketing blogs into
+              continuous inbound demos.
             </p>
           </div>
 
@@ -91,8 +95,12 @@ function ForSaaSPage() {
                 <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center">
                   <Icon icon={card.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="font-extrabold text-base text-base-content">{card.title}</h3>
-                <p className="text-xs text-base-content/70 leading-relaxed">{card.desc}</p>
+                <h3 className="font-extrabold text-base text-base-content">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {card.desc}
+                </p>
               </div>
             ))}
           </div>

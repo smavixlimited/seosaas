@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { LocalBusinessService } from "@/services/local-business.service";
-import { requireProjectContext, requireAuthenticatedContext } from "@/serverFunctions/middleware";
+import {
+  requireProjectContext,
+  requireAuthenticatedContext,
+} from "@/serverFunctions/middleware";
 
 const localBusinessEmptySchema = z.object({}).passthrough().optional();
 
@@ -9,7 +12,9 @@ export const getLocalBusinessDashboard = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
   .validator(localBusinessEmptySchema)
   .handler(async ({ context }) => {
-    return await LocalBusinessService.getLocalBusinessDashboard(context.projectId);
+    return await LocalBusinessService.getLocalBusinessDashboard(
+      context.projectId,
+    );
   });
 
 export const runLocalGeoGridScan = createServerFn({ method: "POST" })
@@ -64,7 +69,9 @@ export const publishReviewReplyServerFn = createServerFn({ method: "POST" })
     });
   });
 
-export const connectGoogleBusinessProfileServerFn = createServerFn({ method: "POST" })
+export const connectGoogleBusinessProfileServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireProjectContext)
   .validator(
     z.object({
@@ -130,7 +137,10 @@ export const getReviewCampaignKitServerFn = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    return LocalBusinessService.getReviewCampaignKit(data.businessName, data.locationId);
+    return LocalBusinessService.getReviewCampaignKit(
+      data.businessName,
+      data.locationId,
+    );
   });
 
 export const detectGoogleProfilesServerFn = createServerFn({ method: "POST" })
@@ -141,7 +151,9 @@ export const detectGoogleProfilesServerFn = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    return await LocalBusinessService.detectGoogleBusinessProfiles(data.userEmail);
+    return await LocalBusinessService.detectGoogleBusinessProfiles(
+      data.userEmail,
+    );
   });
 
 export const connectDetectedProfileServerFn = createServerFn({ method: "POST" })

@@ -69,10 +69,15 @@ export function RichTextEditor({
       if (!res.ok) throw new Error("Image upload failed");
       const data = (await res.json()) as { success: boolean; url: string };
 
-      execCommand("insertHTML", `<img src="${data.url}" alt="${file.name}" class="rounded-2xl max-w-full my-4 shadow-md" />`);
+      execCommand(
+        "insertHTML",
+        `<img src="${data.url}" alt="${file.name}" class="rounded-2xl max-w-full my-4 shadow-md" />`,
+      );
       toast.success("Image uploaded to Cloudflare R2 and inserted!");
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to upload image");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to upload image",
+      );
     } finally {
       setIsUploadingImage(false);
     }
@@ -133,7 +138,9 @@ export function RichTextEditor({
             className="select select-bordered select-xs rounded-lg font-bold text-xs h-7 min-h-0 bg-base-100"
             defaultValue=""
           >
-            <option value="" disabled>Format</option>
+            <option value="" disabled>
+              Format
+            </option>
             <option value="p">Paragraph</option>
             <option value="h2">Heading 2 (H2)</option>
             <option value="h3">Heading 3 (H3)</option>
@@ -198,7 +205,10 @@ export function RichTextEditor({
             className="btn btn-ghost btn-xs rounded-lg px-2 h-7 hover:bg-base-300"
             title="Numbered List"
           >
-            <Icon icon="solar:list-heart-minimalistic-bold" className="h-4 w-4" />
+            <Icon
+              icon="solar:list-heart-minimalistic-bold"
+              className="h-4 w-4"
+            />
           </button>
 
           <div className="divider divider-horizontal mx-1 my-1"></div>
@@ -210,7 +220,10 @@ export function RichTextEditor({
             className="btn btn-ghost btn-xs rounded-lg px-2 h-7 hover:bg-base-300 gap-1 font-bold text-xs"
             title="Insert Link"
           >
-            <Icon icon="solar:link-bold-duotone" className="h-4 w-4 text-primary" />
+            <Icon
+              icon="solar:link-bold-duotone"
+              className="h-4 w-4 text-primary"
+            />
             <span>Link</span>
           </button>
 
@@ -221,7 +234,10 @@ export function RichTextEditor({
             className="btn btn-ghost btn-xs rounded-lg px-2 h-7 hover:bg-base-300 gap-1 font-bold text-xs"
             title="Upload R2 Image"
           >
-            <Icon icon="solar:gallery-send-bold-duotone" className="h-4 w-4 text-emerald-500" />
+            <Icon
+              icon="solar:gallery-send-bold-duotone"
+              className="h-4 w-4 text-emerald-500"
+            />
             <span>{isUploadingImage ? "Uploading..." : "Image (R2)"}</span>
           </button>
 
@@ -231,7 +247,10 @@ export function RichTextEditor({
             className="btn btn-ghost btn-xs rounded-lg px-2 h-7 hover:bg-base-300 gap-1 font-bold text-xs"
             title="Insert Table"
           >
-            <Icon icon="solar:table-bold-duotone" className="h-4 w-4 text-indigo-500" />
+            <Icon
+              icon="solar:table-bold-duotone"
+              className="h-4 w-4 text-indigo-500"
+            />
             <span>Table</span>
           </button>
 
@@ -241,7 +260,10 @@ export function RichTextEditor({
             className="btn btn-ghost btn-xs rounded-lg px-2 h-7 hover:bg-base-300 gap-1 font-bold text-xs"
             title="Insert Pro-Tip Callout"
           >
-            <Icon icon="solar:lightbulb-bold-duotone" className="h-4 w-4 text-amber-500" />
+            <Icon
+              icon="solar:lightbulb-bold-duotone"
+              className="h-4 w-4 text-amber-500"
+            />
             <span>Callout</span>
           </button>
         </div>

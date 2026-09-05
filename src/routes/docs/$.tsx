@@ -24,7 +24,10 @@ function DynamicDocPage() {
       <section className="pt-[140px] sm:pt-[170px] pb-16 sm:pb-24">
         <div className="main-container max-w-4xl space-y-8">
           <div className="flex items-center gap-2 text-tagline-3 font-semibold text-primary-500">
-            <Link to="/docs" className="hover:underline flex items-center gap-1.5">
+            <Link
+              to="/docs"
+              className="hover:underline flex items-center gap-1.5"
+            >
               <Icon icon="solar:arrow-left-linear" className="size-4" /> Docs
             </Link>
             <span className="text-secondary/30 dark:text-accent/30">/</span>
@@ -58,7 +61,10 @@ function DynamicDocPage() {
               <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
                 The requested documentation page could not be located.
               </p>
-              <Link to="/docs" className="btn btn-primary btn-md rounded-full font-bold">
+              <Link
+                to="/docs"
+                className="btn btn-primary btn-md rounded-full font-bold"
+              >
                 Return to Docs Hub
               </Link>
             </div>

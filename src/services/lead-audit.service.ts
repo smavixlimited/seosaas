@@ -25,7 +25,10 @@ export interface LeadAuditResult {
   };
 }
 
-export async function runFreeLeadAudit(url: string, email: string): Promise<LeadAuditResult> {
+export async function runFreeLeadAudit(
+  url: string,
+  email: string,
+): Promise<LeadAuditResult> {
   let targetUrl = url.trim();
   if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
     targetUrl = `https://${targetUrl}`;
@@ -65,14 +68,20 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
   const title = titleMatch ? titleMatch[1].trim() : null;
 
-  const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i) ||
-                    html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*name=["']description["']/i);
+  const descMatch =
+    html.match(
+      /<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i,
+    ) ||
+    html.match(
+      /<meta[^>]*content=["']([^"']*)["'][^>]*name=["']description["']/i,
+    );
   const description = descMatch ? descMatch[1].trim() : null;
 
   const h1Matches = html.match(/<h1[^>]*>[\s\S]*?<\/h1>/gi) || [];
   const h1Count = h1Matches.length;
 
-  const imgWithoutAlt = (html.match(/<img(?![^>]*\balt=)[^>]*>/gi) || []).length;
+  const imgWithoutAlt = (html.match(/<img(?![^>]*\balt=)[^>]*>/gi) || [])
+    .length;
   const canonicalPresent = /<link[^>]*rel=["']canonical["']/i.test(html);
   const viewportPresent = /<meta[^>]*name=["']viewport["']/i.test(html);
   const ogTitlePresent = /<meta[^>]*property=["']og:title["']/i.test(html);
@@ -85,8 +94,12 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "HTTPS & SSL Encryption",
       passed: hasSsl && statusCode === 200,
       score: hasSsl ? 100 : 0,
-      details: hasSsl ? "Website is served securely over HTTPS." : "Missing SSL certificate.",
-      recommendation: hasSsl ? "Maintain current SSL certificate." : "Install a free Let's Encrypt SSL certificate immediately.",
+      details: hasSsl
+        ? "Website is served securely over HTTPS."
+        : "Missing SSL certificate.",
+      recommendation: hasSsl
+        ? "Maintain current SSL certificate."
+        : "Install a free Let's Encrypt SSL certificate immediately.",
     },
     {
       id: "title",
@@ -94,17 +107,29 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "Page Title Tag",
       passed: Boolean(title && title.length >= 20 && title.length <= 65),
       score: title ? (title.length >= 20 && title.length <= 65 ? 100 : 60) : 0,
-      details: title ? `Title found (${title.length} chars): "${title}"` : "No <title> tag detected.",
-      recommendation: "Keep titles between 30 and 60 characters with high-intent keywords.",
+      details: title
+        ? `Title found (${title.length} chars): "${title}"`
+        : "No <title> tag detected.",
+      recommendation:
+        "Keep titles between 30 and 60 characters with high-intent keywords.",
     },
     {
       id: "description",
       category: "content",
       title: "Meta Description",
-      passed: Boolean(description && description.length >= 50 && description.length <= 160),
-      score: description ? (description.length >= 50 && description.length <= 160 ? 100 : 50) : 0,
-      details: description ? `Meta description found (${description.length} chars).` : "Missing meta description.",
-      recommendation: "Write an engaging 120-155 character meta description to boost click-through rates.",
+      passed: Boolean(
+        description && description.length >= 50 && description.length <= 160,
+      ),
+      score: description
+        ? description.length >= 50 && description.length <= 160
+          ? 100
+          : 50
+        : 0,
+      details: description
+        ? `Meta description found (${description.length} chars).`
+        : "Missing meta description.",
+      recommendation:
+        "Write an engaging 120-155 character meta description to boost click-through rates.",
     },
     {
       id: "headings",
@@ -113,7 +138,8 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       passed: h1Count === 1,
       score: h1Count === 1 ? 100 : h1Count > 1 ? 70 : 0,
       details: `Found ${h1Count} <h1> tag(s) on the page.`,
-      recommendation: "Ensure exactly one unique H1 tag per page to clearly state the topic.",
+      recommendation:
+        "Ensure exactly one unique H1 tag per page to clearly state the topic.",
     },
     {
       id: "performance",
@@ -122,7 +148,8 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       passed: responseTimeMs < 800,
       score: responseTimeMs < 500 ? 100 : responseTimeMs < 1200 ? 70 : 30,
       details: `Initial server response time was ${responseTimeMs}ms.`,
-      recommendation: "Optimize server cache and CDN edge caching to keep TTFB under 400ms.",
+      recommendation:
+        "Optimize server cache and CDN edge caching to keep TTFB under 400ms.",
     },
     {
       id: "mobile",
@@ -130,8 +157,11 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "Mobile Viewport Configuration",
       passed: viewportPresent,
       score: viewportPresent ? 100 : 0,
-      details: viewportPresent ? "Mobile viewport meta tag is present." : "Missing mobile viewport tag.",
-      recommendation: "Include <meta name='viewport' content='width=device-width, initial-scale=1'> for responsive layouts.",
+      details: viewportPresent
+        ? "Mobile viewport meta tag is present."
+        : "Missing mobile viewport tag.",
+      recommendation:
+        "Include <meta name='viewport' content='width=device-width, initial-scale=1'> for responsive layouts.",
     },
     {
       id: "canonical",
@@ -139,8 +169,11 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "Canonical Link Tag",
       passed: canonicalPresent,
       score: canonicalPresent ? 100 : 0,
-      details: canonicalPresent ? "Canonical link is specified." : "No canonical tag found.",
-      recommendation: "Add rel='canonical' tags to prevent duplicate content indexation.",
+      details: canonicalPresent
+        ? "Canonical link is specified."
+        : "No canonical tag found.",
+      recommendation:
+        "Add rel='canonical' tags to prevent duplicate content indexation.",
     },
     {
       id: "social",
@@ -148,8 +181,11 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "OpenGraph Social Meta Tags",
       passed: ogTitlePresent,
       score: ogTitlePresent ? 100 : 40,
-      details: ogTitlePresent ? "OpenGraph tags detected for rich sharing." : "Missing OpenGraph meta tags.",
-      recommendation: "Add og:title, og:description, and og:image to improve social media sharing preview cards.",
+      details: ogTitlePresent
+        ? "OpenGraph tags detected for rich sharing."
+        : "Missing OpenGraph meta tags.",
+      recommendation:
+        "Add og:title, og:description, and og:image to improve social media sharing preview cards.",
     },
     {
       id: "images",
@@ -157,12 +193,18 @@ export async function runFreeLeadAudit(url: string, email: string): Promise<Lead
       title: "Image Alt Accessibility",
       passed: imgWithoutAlt === 0,
       score: imgWithoutAlt === 0 ? 100 : Math.max(20, 100 - imgWithoutAlt * 15),
-      details: imgWithoutAlt === 0 ? "All detected images have descriptive alt attributes." : `Found ${imgWithoutAlt} image(s) missing alt text.`,
-      recommendation: "Add descriptive alt text to all images to help search engines understand visual content.",
+      details:
+        imgWithoutAlt === 0
+          ? "All detected images have descriptive alt attributes."
+          : `Found ${imgWithoutAlt} image(s) missing alt text.`,
+      recommendation:
+        "Add descriptive alt text to all images to help search engines understand visual content.",
     },
   ];
 
-  const totalScore = Math.round(checks.reduce((acc, c) => acc + c.score, 0) / checks.length);
+  const totalScore = Math.round(
+    checks.reduce((acc, c) => acc + c.score, 0) / checks.length,
+  );
 
   // Record Lead
   try {

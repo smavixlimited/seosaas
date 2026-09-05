@@ -26,7 +26,11 @@ export function PromptExplorerFeaturePage() {
               Win Recommendations in ChatGPT, Perplexity &amp; Claude
             </h1>
             <p className="text-base sm:text-lg text-base-content/70 leading-relaxed">
-              When buyers ask AI models for recommendations in your industry, does your Brand show up—or does your competitor get the sale? Prompt Explorer simulates prompts across 4 major AI models side-by-side and reveals the exact citations that drive their answers.
+              When buyers ask AI models for recommendations in your industry,
+              does your Brand show up—or does your competitor get the sale?
+              Prompt Explorer simulates prompts across 4 major AI models
+              side-by-side and reveals the exact citations that drive their
+              answers.
             </p>
             <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -52,8 +56,13 @@ export function PromptExplorerFeaturePage() {
                   <Icon icon="solar:magnifer-bug-bold" className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-base-content">Prompt Explorer Simulation</h3>
-                  <p className="text-xs text-base-content/60 italic">&ldquo;What is the best SEO and AEO platform for growth teams?&rdquo;</p>
+                  <h3 className="text-sm font-black text-base-content">
+                    Prompt Explorer Simulation
+                  </h3>
+                  <p className="text-xs text-base-content/60 italic">
+                    &ldquo;What is the best SEO and AEO platform for growth
+                    teams?&rdquo;
+                  </p>
                 </div>
               </div>
               <span className="badge badge-success badge-sm font-bold text-white text-xs gap-1">
@@ -65,19 +74,52 @@ export function PromptExplorerFeaturePage() {
             {/* 4 Models Columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { name: "ChatGPT (GPT-4o)", brand: "Mentioned #1", source: "Cited: Forbes & G2", icon: "logos:openai-icon", badge: "badge-success text-white" },
-                { name: "Perplexity AI", brand: "Mentioned in Top 3", source: "Cited: Reddit & TechRadar", icon: "solar:compass-bold", badge: "badge-success text-white" },
-                { name: "Claude 3.5 Sonnet", brand: "Mentioned #2", source: "Cited: ProductHunt", icon: "solar:cpu-bolt-bold", badge: "badge-success text-white" },
-                { name: "Google Gemini 2.0", brand: "Not Mentioned", source: "Cited: Wikipedia & G2", icon: "logos:google-icon", badge: "badge-warning text-white" },
+                {
+                  name: "ChatGPT (GPT-4o)",
+                  brand: "Mentioned #1",
+                  source: "Cited: Forbes & G2",
+                  icon: "logos:openai-icon",
+                  badge: "badge-success text-white",
+                },
+                {
+                  name: "Perplexity AI",
+                  brand: "Mentioned in Top 3",
+                  source: "Cited: Reddit & TechRadar",
+                  icon: "solar:compass-bold",
+                  badge: "badge-success text-white",
+                },
+                {
+                  name: "Claude 3.5 Sonnet",
+                  brand: "Mentioned #2",
+                  source: "Cited: ProductHunt",
+                  icon: "solar:cpu-bolt-bold",
+                  badge: "badge-success text-white",
+                },
+                {
+                  name: "Google Gemini 2.0",
+                  brand: "Not Mentioned",
+                  source: "Cited: Wikipedia & G2",
+                  icon: "logos:google-icon",
+                  badge: "badge-warning text-white",
+                },
               ].map((m, i) => (
-                <div key={i} className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2 flex flex-col justify-between">
+                <div
+                  key={i}
+                  className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2 flex flex-col justify-between"
+                >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-black text-xs text-base-content">{m.name}</span>
+                      <span className="font-black text-xs text-base-content">
+                        {m.name}
+                      </span>
                     </div>
-                    <span className={`badge badge-xs font-bold ${m.badge}`}>{m.brand}</span>
+                    <span className={`badge badge-xs font-bold ${m.badge}`}>
+                      {m.brand}
+                    </span>
                     <p className="text-[11px] text-base-content/70 leading-relaxed font-sans">
-                      &ldquo;{BRAND_CONFIG.name} stands out for integrating traditional technical SEO with automated AEO citation tracking...&rdquo;
+                      &ldquo;{BRAND_CONFIG.name} stands out for integrating
+                      traditional technical SEO with automated AEO citation
+                      tracking...&rdquo;
                     </p>
                   </div>
                   <div className="pt-2 border-t border-base-300/60 text-[10px] font-mono text-primary font-bold">
@@ -94,9 +136,13 @@ export function PromptExplorerFeaturePage() {
       <section className="py-16 bg-base-200/50 border-y border-base-300">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-3xl font-black text-base-content">Why AEO is the Future of Organic Search</h2>
+            <h2 className="text-3xl font-black text-base-content">
+              Why AEO is the Future of Organic Search
+            </h2>
             <p className="text-sm text-base-content/70">
-              Users are shifting from traditional search query boxes to conversational AI assistants. Here is how Prompt Explorer keeps your brand winning.
+              Users are shifting from traditional search query boxes to
+              conversational AI assistants. Here is how Prompt Explorer keeps
+              your brand winning.
             </p>
           </div>
 
@@ -105,9 +151,13 @@ export function PromptExplorerFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
                 <Icon icon="solar:columns-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">Simultaneous 4-Model Benchmarking</h3>
+              <h3 className="text-lg font-black text-base-content">
+                Simultaneous 4-Model Benchmarking
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Run single prompts simultaneously across OpenAI ChatGPT, Anthropic Claude, Perplexity AI, and Google Gemini without switching tabs or juggling API keys.
+                Run single prompts simultaneously across OpenAI ChatGPT,
+                Anthropic Claude, Perplexity AI, and Google Gemini without
+                switching tabs or juggling API keys.
               </p>
             </div>
 
@@ -115,9 +165,13 @@ export function PromptExplorerFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                 <Icon icon="solar:link-circle-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">Cited Sources Reverse-Engineering</h3>
+              <h3 className="text-lg font-black text-base-content">
+                Cited Sources Reverse-Engineering
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Identify the exact websites, publications, and forum discussions each AI model relied upon to build its answer, giving you an exact roadmap for outreach.
+                Identify the exact websites, publications, and forum discussions
+                each AI model relied upon to build its answer, giving you an
+                exact roadmap for outreach.
               </p>
             </div>
 
@@ -125,9 +179,13 @@ export function PromptExplorerFeaturePage() {
               <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
                 <Icon icon="solar:pie-chart-2-bold" className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-black text-base-content">Brand Share of Voice in AI</h3>
+              <h3 className="text-lg font-black text-base-content">
+                Brand Share of Voice in AI
+              </h3>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Monitor your Brand&apos;s visibility percentage versus direct competitors when high-intent commercial questions are posed to LLMs.
+                Monitor your Brand&apos;s visibility percentage versus direct
+                competitors when high-intent commercial questions are posed to
+                LLMs.
               </p>
             </div>
           </div>

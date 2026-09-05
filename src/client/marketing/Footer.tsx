@@ -24,10 +24,14 @@ export function MarketingFooter() {
               </span>
             </Link>
             <p className="text-tagline-2 text-white/60 max-w-[280px] leading-relaxed">
-              The modern search intelligence workspace. Flat-rate search data, multi-network competitor ad spying, and AI citation radar with zero user seat taxes.
+              The modern search intelligence workspace. Flat-rate search data,
+              multi-network competitor ad spying, and AI citation radar with
+              zero user seat taxes.
             </p>
             <div className="flex items-center gap-2 pt-1">
-              <span className="badge badge-green text-xs font-bold">100% Data Transparency</span>
+              <span className="badge badge-green text-xs font-bold">
+                100% Data Transparency
+              </span>
             </div>
           </div>
 
@@ -38,32 +42,50 @@ export function MarketingFooter() {
             </h4>
             <ul className="space-y-2.5 text-tagline-2 text-white/70">
               <li>
-                <Link to="/features/competitor-page-decoder" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/competitor-page-decoder"
+                  className="hover:text-white transition-colors"
+                >
                   Ad Spy Tool
                 </Link>
               </li>
               <li>
-                <Link to="/features/keyword-research" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/keyword-research"
+                  className="hover:text-white transition-colors"
+                >
                   Keyword Radar
                 </Link>
               </li>
               <li>
-                <Link to="/features/ai-search-aeo" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/ai-search-aeo"
+                  className="hover:text-white transition-colors"
+                >
                   AI &amp; AEO Monitor
                 </Link>
               </li>
               <li>
-                <Link to="/features/local-business" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/local-business"
+                  className="hover:text-white transition-colors"
+                >
                   Local Maps Radar
                 </Link>
               </li>
               <li>
-                <Link to="/features/site-audit" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/site-audit"
+                  className="hover:text-white transition-colors"
+                >
                   Technical Audit
                 </Link>
               </li>
               <li>
-                <Link to="/features/white-label-reports" className="hover:text-white transition-colors">
+                <Link
+                  to="/features/white-label-reports"
+                  className="hover:text-white transition-colors"
+                >
                   1-Click PDF Reports
                 </Link>
               </li>
@@ -77,27 +99,42 @@ export function MarketingFooter() {
             </h4>
             <ul className="space-y-2.5 text-tagline-2 text-white/70">
               <li>
-                <Link to="/solutions/for-agencies" className="hover:text-white transition-colors">
+                <Link
+                  to="/solutions/for-agencies"
+                  className="hover:text-white transition-colors"
+                >
                   For Agencies
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/for-saas" className="hover:text-white transition-colors">
+                <Link
+                  to="/solutions/for-saas"
+                  className="hover:text-white transition-colors"
+                >
                   For SaaS Brands
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/for-ecommerce" className="hover:text-white transition-colors">
+                <Link
+                  to="/solutions/for-ecommerce"
+                  className="hover:text-white transition-colors"
+                >
                   For E-Commerce
                 </Link>
               </li>
               <li>
-                <Link to="/solutions/for-local-business" className="hover:text-white transition-colors">
+                <Link
+                  to="/solutions/for-local-business"
+                  className="hover:text-white transition-colors"
+                >
                   For Local Stores
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="hover:text-white transition-colors">
+                <Link
+                  to="/pricing"
+                  className="hover:text-white transition-colors"
+                >
                   Pricing Plans
                 </Link>
               </li>
@@ -111,27 +148,42 @@ export function MarketingFooter() {
             </h4>
             <ul className="space-y-2.5 text-tagline-2 text-white/70">
               <li>
-                <Link to="/vs-ahrefs-semrush" className="hover:text-white transition-colors">
+                <Link
+                  to="/vs-ahrefs-semrush"
+                  className="hover:text-white transition-colors"
+                >
                   vs Semrush
                 </Link>
               </li>
               <li>
-                <Link to="/vs/ahrefs" className="hover:text-white transition-colors">
+                <Link
+                  to="/vs/ahrefs"
+                  className="hover:text-white transition-colors"
+                >
                   vs Ahrefs
                 </Link>
               </li>
               <li>
-                <Link to="/vs/moz" className="hover:text-white transition-colors">
+                <Link
+                  to="/vs/moz"
+                  className="hover:text-white transition-colors"
+                >
                   vs Moz Pro
                 </Link>
               </li>
               <li>
-                <Link to="/vs/se-ranking" className="hover:text-white transition-colors">
+                <Link
+                  to="/vs/se-ranking"
+                  className="hover:text-white transition-colors"
+                >
                   vs SE Ranking
                 </Link>
               </li>
               <li>
-                <Link to="/vs-ahrefs-semrush" className="hover:text-white transition-colors">
+                <Link
+                  to="/vs-ahrefs-semrush"
+                  className="hover:text-white transition-colors"
+                >
                   Feature Matrix
                 </Link>
               </li>
@@ -145,12 +197,18 @@ export function MarketingFooter() {
             </h4>
             <ul className="space-y-2.5 text-tagline-2 text-white/70">
               <li>
-                <Link to="/blogs" className="hover:text-white transition-colors">
+                <Link
+                  to="/blogs"
+                  className="hover:text-white transition-colors"
+                >
                   Research Blog
                 </Link>
               </li>
               <li>
-                <Link to="/free-audit" className="hover:text-white transition-colors">
+                <Link
+                  to="/free-audit"
+                  className="hover:text-white transition-colors"
+                >
                   Free Scanner
                 </Link>
               </li>
@@ -160,7 +218,10 @@ export function MarketingFooter() {
                 </Link>
               </li>
               <li>
-                <Link to="/library" className="hover:text-white transition-colors">
+                <Link
+                  to="/library"
+                  className="hover:text-white transition-colors"
+                >
                   SEO Playbooks
                 </Link>
               </li>
@@ -174,22 +235,34 @@ export function MarketingFooter() {
             </h4>
             <ul className="space-y-2.5 text-tagline-2 text-white/70">
               <li>
-                <Link to="/about" className="hover:text-white transition-colors">
+                <Link
+                  to="/about"
+                  className="hover:text-white transition-colors"
+                >
                   About Skorvia
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="hover:text-white transition-colors">
+                <Link
+                  to="/privacy"
+                  className="hover:text-white transition-colors"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="hover:text-white transition-colors">
+                <Link
+                  to="/terms"
+                  className="hover:text-white transition-colors"
+                >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-white transition-colors">
+                <Link
+                  to="/contact"
+                  className="hover:text-white transition-colors"
+                >
                   Contact Support
                 </Link>
               </li>
@@ -199,18 +272,41 @@ export function MarketingFooter() {
 
         {/* Footer Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <p>© {new Date().getFullYear()} {BRAND_CONFIG.name}. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {BRAND_CONFIG.name}. All rights
+            reserved.
+          </p>
           <div className="flex items-center gap-6">
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              href="https://x.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
               𝕏
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
               GitHub
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
               LinkedIn
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
               YouTube
             </a>
           </div>

@@ -55,7 +55,8 @@ function SkorviaVsSeRankingPage() {
               {BRAND_CONFIG.name} vs. SE Ranking
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
-              Why high-velocity brands and modern marketing teams choose {BRAND_CONFIG.name} for multi-channel search & ad intelligence.
+              Why high-velocity brands and modern marketing teams choose{" "}
+              {BRAND_CONFIG.name} for multi-channel search & ad intelligence.
             </p>
           </div>
 
@@ -68,7 +69,8 @@ function SkorviaVsSeRankingPage() {
                 4-Network Ad Spying
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Decode competitor creatives and copy angles across TikTok, Meta, LinkedIn, and Google simultaneously.
+                Decode competitor creatives and copy angles across TikTok, Meta,
+                LinkedIn, and Google simultaneously.
               </p>
             </div>
 
@@ -80,19 +82,24 @@ function SkorviaVsSeRankingPage() {
                 AEO &amp; LLM Citations
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Optimize for the modern search landscape by tracking how AI chat engines recommend your product.
+                Optimize for the modern search landscape by tracking how AI chat
+                engines recommend your product.
               </p>
             </div>
 
             <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
               <div className="size-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                <Icon icon="solar:users-group-rounded-bold-duotone" className="size-6" />
+                <Icon
+                  icon="solar:users-group-rounded-bold-duotone"
+                  className="size-6"
+                />
               </div>
               <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
                 Zero Seat Taxes
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Collaborate with unlimited team members and clients without per-user licensing fees.
+                Collaborate with unlimited team members and clients without
+                per-user licensing fees.
               </p>
             </div>
           </div>
@@ -104,7 +111,8 @@ function SkorviaVsSeRankingPage() {
                   SE Ranking vs. {BRAND_CONFIG.name} Matrix
                 </h3>
                 <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
-                  Comparing search intelligence scope, pricing predictability, and modern AI capabilities.
+                  Comparing search intelligence scope, pricing predictability,
+                  and modern AI capabilities.
                 </p>
               </div>
               <Link
@@ -128,7 +136,10 @@ function SkorviaVsSeRankingPage() {
                 </thead>
                 <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
                   {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors"
+                    >
                       <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
                         {row.feature}
                       </td>

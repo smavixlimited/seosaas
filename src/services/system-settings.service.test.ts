@@ -23,10 +23,13 @@ describe("SystemSettingsService (Dynamic Branding & Categorized API Manager)", (
 
       const updated = await SystemSettingsService.getBranding();
       expect(updated.siteTitle).toBe("Skorvia Pro SEO");
-      expect(updated.lightLogoUrl).toBe("https://cdn.example.com/logo-light.svg");
+      expect(updated.lightLogoUrl).toBe(
+        "https://cdn.example.com/logo-light.svg",
+      );
       expect(updated.publicRegistrationEnabled).toBe(false);
 
-      const isRegOpen = await SystemSettingsService.isPublicRegistrationEnabled();
+      const isRegOpen =
+        await SystemSettingsService.isPublicRegistrationEnabled();
       expect(isRegOpen).toBe(false);
     });
   });
@@ -93,7 +96,9 @@ describe("SystemSettingsService (Dynamic Branding & Categorized API Manager)", (
       expect(payments.paystackPublicKey).toBe("pk_live_custom");
       expect(payments.manualPaymentBankName).toBe("Guaranty Trust Bank");
       expect(payments.manualPaymentAccountNumber).toBe("0987654321");
-      expect(payments.manualPaymentAccountName).toBe("Skorvia Enterprise NG Ltd");
+      expect(payments.manualPaymentAccountName).toBe(
+        "Skorvia Enterprise NG Ltd",
+      );
     });
   });
 });

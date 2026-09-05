@@ -67,7 +67,7 @@ export const startUserImpersonationServerFn = createServerFn({ method: "POST" })
     return UserManagementService.startImpersonation(
       data.targetUserId,
       context.userId,
-      context.userEmail
+      context.userEmail,
     );
   });
 

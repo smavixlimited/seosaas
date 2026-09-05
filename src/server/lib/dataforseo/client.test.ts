@@ -56,7 +56,9 @@ vi.mock("@/server/lib/posthog", () => ({
 vi.mock("@/services/caching-guardrails.service", () => ({
   getCachedQuery: vi.fn().mockResolvedValue(null),
   setCachedQuery: vi.fn().mockResolvedValue(undefined),
-  assertUserQuotaGuardrail: vi.fn().mockResolvedValue({ remaining: 500, planId: "pro" }),
+  assertUserQuotaGuardrail: vi
+    .fn()
+    .mockResolvedValue({ remaining: 500, planId: "pro" }),
   consumeUserQuotaCredits: vi.fn().mockResolvedValue(undefined),
   generateQueryHash: vi.fn().mockResolvedValue("hash123"),
 }));

@@ -19,7 +19,8 @@ describe("Phase 29: Distributed Edge Hardening & Concurrency Suite", () => {
     });
 
     it("checks real-time balance cleanly", async () => {
-      const balance = await CreditGuardService.checkBalance("usr_atomic_test_01");
+      const balance =
+        await CreditGuardService.checkBalance("usr_atomic_test_01");
       expect(balance.limit).toBeGreaterThanOrEqual(1);
       expect(balance.available).toBeGreaterThanOrEqual(0);
     });
@@ -27,7 +28,10 @@ describe("Phase 29: Distributed Edge Hardening & Concurrency Suite", () => {
 
   describe("2. Cryptographic Webhook Signatures & Idempotency Lock", () => {
     const testSecret = "sk_live_paystack_test_secret_key_123";
-    const testPayload = JSON.stringify({ event: "charge.success", data: { reference: "ref_pay_001", amount: 5000 } });
+    const testPayload = JSON.stringify({
+      event: "charge.success",
+      data: { reference: "ref_pay_001", amount: 5000 },
+    });
 
     it("verifies Paystack HMAC-SHA512 signature", async () => {
       // Generate signature
@@ -37,23 +41,45 @@ describe("Phase 29: Distributed Edge Hardening & Concurrency Suite", () => {
         encoder.encode(testSecret),
         { name: "HMAC", hash: "SHA-512" },
         false,
-        ["sign"]
+        ["sign"],
       );
-      const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(testPayload));
+      const signed = await crypto.subtle.sign(
+        "HMAC",
+        key,
+        encoder.encode(testPayload),
+      );
       const validSig = Array.from(new Uint8Array(signed))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 
-      const isValid = await WebhookIdempotencyService.verifyPaystackSignature(testPayload, validSig, testSecret);
+      const isValid = await WebhookIdempotencyService.verifyPaystackSignature(
+        testPayload,
+        validSig,
+        testSecret,
+      );
       expect(isValid).toBe(true);
 
-      const isInvalid = await WebhookIdempotencyService.verifyPaystackSignature(testPayload, "invalid_sig_abc", testSecret);
+      const isInvalid = await WebhookIdempotencyService.verifyPaystackSignature(
+        testPayload,
+        "invalid_sig_abc",
+        testSecret,
+      );
       expect(isInvalid).toBe(false);
     });
 
     it("verifies Flutterwave secret hash", () => {
-      expect(WebhookIdempotencyService.verifyFlutterwaveSignature("flw_hash_123", "flw_hash_123")).toBe(true);
-      expect(WebhookIdempotencyService.verifyFlutterwaveSignature("wrong_hash", "flw_hash_123")).toBe(false);
+      expect(
+        WebhookIdempotencyService.verifyFlutterwaveSignature(
+          "flw_hash_123",
+          "flw_hash_123",
+        ),
+      ).toBe(true);
+      expect(
+        WebhookIdempotencyService.verifyFlutterwaveSignature(
+          "wrong_hash",
+          "flw_hash_123",
+        ),
+      ).toBe(false);
     });
 
     it("claims webhook events with atomic duplicate prevention", async () => {
@@ -79,7 +105,10 @@ describe("Phase 29: Distributed Edge Hardening & Concurrency Suite", () => {
 
   describe("3. Zero-Loss 2FA & Retention State Persistence", () => {
     it("initializes 2FA and sets up pending record", async () => {
-      const setup = await TwoFactorService.setup2FA("usr_edge_2fa_01", "edge@skorvia.com");
+      const setup = await TwoFactorService.setup2FA(
+        "usr_edge_2fa_01",
+        "edge@skorvia.com",
+      );
       expect(setup.secret).toBeDefined();
       expect(setup.backupCodes).toHaveLength(8);
       expect(setup.qrCodeDataUri).toContain("data:image/svg+xml");
@@ -96,7 +125,9 @@ describe("Phase 29: Distributed Edge Hardening & Concurrency Suite", () => {
 
       expect(res.discountApplied).toBe(true);
 
-      const status = await RetentionService.hasActiveDiscountAsync("usr_edge_retention_01");
+      const status = await RetentionService.hasActiveDiscountAsync(
+        "usr_edge_retention_01",
+      );
       expect(status.hasDiscount).toBe(true);
       expect(status.discountPercent).toBe(30);
     });

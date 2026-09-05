@@ -38,7 +38,8 @@ const projectNavItems = [
   {
     to: "/p/$projectId" as const,
     label: "Main Dashboard",
-    benefit: "See your entire growth trajectory at a glance—spot traffic wins, score trends, and know your #1 priority task this week.",
+    benefit:
+      "See your entire growth trajectory at a glance—spot traffic wins, score trends, and know your #1 priority task this week.",
     icon: LayoutDashboard,
     solarIcon: "solar:widget-6-bold-duotone",
     activeOptions: { exact: true, includeSearch: false },
@@ -46,14 +47,16 @@ const projectNavItems = [
   {
     to: "/p/$projectId/roadmap" as const,
     label: "Action Roadmap",
-    benefit: "Get prioritized, step-by-step action items engineered to deliver the fastest organic traffic & conversion gains for your Brand.",
+    benefit:
+      "Get prioritized, step-by-step action items engineered to deliver the fastest organic traffic & conversion gains for your Brand.",
     icon: CheckSquare,
     solarIcon: "solar:checklist-minimalistic-bold-duotone",
   },
   {
     to: "/p/$projectId/my-analysis" as const,
     label: "My Analysis",
-    benefit: "Access and export all your historical Brand Analyses, Competitor Benchmarks, and Ad Readiness Reports with PDF download.",
+    benefit:
+      "Access and export all your historical Brand Analyses, Competitor Benchmarks, and Ad Readiness Reports with PDF download.",
     icon: FileText,
     solarIcon: "solar:document-text-bold-duotone",
   },
@@ -62,21 +65,24 @@ const projectNavItems = [
   {
     to: "/p/$projectId/brand-analysis" as const,
     label: "Brand Analysis",
-    benefit: "Full 6-dimension credibility & conversion readiness audit. Get graded with actionable solutions and 1-click export to your Roadmap.",
+    benefit:
+      "Full 6-dimension credibility & conversion readiness audit. Get graded with actionable solutions and 1-click export to your Roadmap.",
     icon: Gauge,
     solarIcon: "solar:shield-star-bold-duotone",
   },
   {
     to: "/p/$projectId/trust-sentiment" as const,
     label: "Audience Trust & Sentiment",
-    benefit: "Pre-Ad Gate: Verify customer sentiment, review credibility, and social trust before spending paid ad budget.",
+    benefit:
+      "Pre-Ad Gate: Verify customer sentiment, review credibility, and social trust before spending paid ad budget.",
     icon: ShieldCheck,
     solarIcon: "solar:heart-bold-duotone",
   },
   {
     to: "/p/$projectId/viral-detector" as const,
     label: "Viral Content & Detector",
-    benefit: "Discover trending angles, high-performing competitor hooks, and viral social patterns tailored to your niche.",
+    benefit:
+      "Discover trending angles, high-performing competitor hooks, and viral social patterns tailored to your niche.",
     icon: Flame,
     solarIcon: "solar:fire-bold-duotone",
   },
@@ -85,14 +91,16 @@ const projectNavItems = [
   {
     to: "/p/$projectId/competitors" as const,
     label: "Competitors Directory",
-    benefit: "Directory of tracked competitors with website URLs and social media links. Add, edit, or delete rivals anytime.",
+    benefit:
+      "Directory of tracked competitors with website URLs and social media links. Add, edit, or delete rivals anytime.",
     icon: Users,
     solarIcon: "solar:users-group-two-rounded-bold-duotone",
   },
   {
     to: "/p/$projectId/competitor-analysis" as const,
     label: "Competitor Analysis & Decoder",
-    benefit: "Compare your Brand 1-on-1 head-to-head against any competitor to uncover keyword gaps, ad copy hooks, and attack plays.",
+    benefit:
+      "Compare your Brand 1-on-1 head-to-head against any competitor to uncover keyword gaps, ad copy hooks, and attack plays.",
     icon: Swords,
     solarIcon: "solar:swords-bold-duotone",
   },
@@ -101,42 +109,48 @@ const projectNavItems = [
   {
     to: "/p/$projectId/keywords" as const,
     label: "Keyword Research",
-    benefit: "Find easy-to-rank keywords with real search volume that bring paying customers to your website instead of high-competition dead ends.",
+    benefit:
+      "Find easy-to-rank keywords with real search volume that bring paying customers to your website instead of high-competition dead ends.",
     icon: Search,
     solarIcon: "solar:minimalistic-magnifer-bold-duotone",
   },
   {
     to: "/p/$projectId/saved" as const,
     label: "Saved Keywords",
-    benefit: "Organize target keywords into high-value clusters, track seasonal demand, and assign them directly to content briefs.",
+    benefit:
+      "Organize target keywords into high-value clusters, track seasonal demand, and assign them directly to content briefs.",
     icon: Bookmark,
     solarIcon: "solar:bookmark-opened-bold-duotone",
   },
   {
     to: "/p/$projectId/search-performance" as const,
     label: "GSC Insights",
-    benefit: "Turn raw Google data into revenue. Spot high-impression keywords where quick title tweaks can immediately double your organic clicks.",
+    benefit:
+      "Turn raw Google data into revenue. Spot high-impression keywords where quick title tweaks can immediately double your organic clicks.",
     icon: GoogleGlyphMuted,
     solarIcon: "solar:chart-2-bold-duotone",
   },
   {
     to: "/p/$projectId/rank-tracking" as const,
     label: "Rank Tracker",
-    benefit: "Never guess your Google positions. Track daily rank movements on mobile & desktop, and get alerted the moment you hit page #1.",
+    benefit:
+      "Never guess your Google positions. Track daily rank movements on mobile & desktop, and get alerted the moment you hit page #1.",
     icon: TrendingUp,
     solarIcon: "solar:chart-square-bold-duotone",
   },
   {
     to: "/p/$projectId/backlinks" as const,
     label: "Backlinks & Site Health",
-    benefit: "Build domain authority that Google respects. Find out who links to your competitors and claim high-impact backlinks to outrank them.",
+    benefit:
+      "Build domain authority that Google respects. Find out who links to your competitors and claim high-impact backlinks to outrank them.",
     icon: Link2,
     solarIcon: "solar:link-circle-bold-duotone",
   },
   {
     to: "/p/$projectId/audit" as const,
     label: "Technical Site Audit",
-    benefit: "Prevent silent ranking penalties. Automatically find and fix broken links, slow pages, and technical crawl blockers before Google demotes you.",
+    benefit:
+      "Prevent silent ranking penalties. Automatically find and fix broken links, slow pages, and technical crawl blockers before Google demotes you.",
     icon: ClipboardCheck,
     solarIcon: "solar:shield-check-bold-duotone",
   },
@@ -145,7 +159,8 @@ const projectNavItems = [
   {
     to: "/p/$projectId/local-business" as const,
     label: "Local Business Hub",
-    benefit: "Listing Management, Google Business Profile (GBP) Optimization, Unified Review Inbox, and Map Rank Tracker Geo-Grid Heatmap.",
+    benefit:
+      "Listing Management, Google Business Profile (GBP) Optimization, Unified Review Inbox, and Map Rank Tracker Geo-Grid Heatmap.",
     icon: Store,
     solarIcon: "solar:shop-2-bold-duotone",
   },
@@ -154,21 +169,24 @@ const projectNavItems = [
   {
     to: "/p/$projectId/brand-lookup" as const,
     label: "Brand Lookup",
-    benefit: "Evaluate brand perception and identity signals across digital channels to strengthen overall brand authority and search trust.",
+    benefit:
+      "Evaluate brand perception and identity signals across digital channels to strengthen overall brand authority and search trust.",
     icon: Sparkles,
     solarIcon: "solar:stars-bold-duotone",
   },
   {
     to: "/p/$projectId/brand-mentions" as const,
     label: "Brand Mentions & AEO",
-    benefit: "Protect your brand authority 24/7. Get alerted when blogs, forums, or AI engines talk about your brand or your competitors.",
+    benefit:
+      "Protect your brand authority 24/7. Get alerted when blogs, forums, or AI engines talk about your brand or your competitors.",
     icon: MessageSquare,
     solarIcon: "solar:chat-round-line-bold-duotone",
   },
   {
     to: "/p/$projectId/prompt-explorer" as const,
     label: "Prompt Explorer",
-    benefit: "Get recommended by ChatGPT, Perplexity & Claude. Find the exact articles AI models cite so you can get featured and win AI buyers.",
+    benefit:
+      "Get recommended by ChatGPT, Perplexity & Claude. Find the exact articles AI models cite so you can get featured and win AI buyers.",
     icon: MessageSquare,
     solarIcon: "solar:magnifer-bug-bold-duotone",
   },
@@ -177,7 +195,8 @@ const projectNavItems = [
 export const indexingNavItem = linkOptions({
   to: "/indexing" as const,
   label: "Instant Indexing",
-  benefit: "Get Google & Bing to index your new articles in hours rather than weeks, so you capture traffic and rankings ahead of everyone else.",
+  benefit:
+    "Get Google & Bing to index your new articles in hours rather than weeks, so you capture traffic and rankings ahead of everyone else.",
   icon: Sparkles,
   solarIcon: "solar:bolt-bold-duotone",
 });
@@ -185,7 +204,8 @@ export const indexingNavItem = linkOptions({
 export const uptimeNavItem = linkOptions({
   to: "/uptime" as const,
   label: "Uptime & SSL",
-  benefit: "Never lose sales to silent website outages or expired SSL warnings with 24/7 proactive monitoring before customers bounce.",
+  benefit:
+    "Never lose sales to silent website outages or expired SSL warnings with 24/7 proactive monitoring before customers bounce.",
   icon: Activity,
   solarIcon: "solar:radar-bold-duotone",
 });
@@ -193,7 +213,8 @@ export const uptimeNavItem = linkOptions({
 export const aiNavItem = linkOptions({
   to: "/ai" as const,
   label: "Skorvia AI & MCP",
-  benefit: "Supercharge your workflow with your personal 24/7 CMO agent and Model Context Protocol server that turns data into instant growth plays.",
+  benefit:
+    "Supercharge your workflow with your personal 24/7 CMO agent and Model Context Protocol server that turns data into instant growth plays.",
   icon: Bot,
   solarIcon: "solar:cpu-bolt-bold-duotone",
 });
@@ -201,7 +222,8 @@ export const aiNavItem = linkOptions({
 export const billingNavItem = linkOptions({
   to: "/billing" as const,
   label: "Billing & Plans",
-  benefit: "Manage your subscription, credit usage balance, auto-recharge settings, and upgrade to unlock advanced agency tiers.",
+  benefit:
+    "Manage your subscription, credit usage balance, auto-recharge settings, and upgrade to unlock advanced agency tiers.",
   icon: CreditCard,
   solarIcon: "solar:card-2-bold-duotone",
 });
@@ -216,7 +238,8 @@ export const settingsNavItem = linkOptions({
 export const helpNavItem = linkOptions({
   to: "/help/dataforseo-api-key" as const,
   label: "Help & Documentation",
-  benefit: "Guides, API credentials setup, and step-by-step tutorials to get the most out of Skorvia.",
+  benefit:
+    "Guides, API credentials setup, and step-by-step tutorials to get the most out of Skorvia.",
   icon: FileText,
   solarIcon: "solar:question-circle-bold-duotone",
 });
@@ -224,12 +247,7 @@ export const helpNavItem = linkOptions({
 export function getGrowthToolsNavGroup(isAgency = false) {
   return {
     label: "Growth & Platform Tools",
-    items: [
-      indexingNavItem,
-      uptimeNavItem,
-      aiNavItem,
-      helpNavItem,
-    ],
+    items: [indexingNavItem, uptimeNavItem, aiNavItem, helpNavItem],
   };
 }
 
@@ -293,9 +311,7 @@ export function getProjectNavGroups(projectId: string) {
     {
       label: "Local Business",
       solarIcon: "solar:shop-2-bold-duotone",
-      items: [
-        byPath("/p/$projectId/local-business"),
-      ],
+      items: [byPath("/p/$projectId/local-business")],
     },
     {
       label: "AI Search & Radar",

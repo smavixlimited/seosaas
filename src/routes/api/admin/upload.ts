@@ -9,7 +9,9 @@ export const Route = createFileRoute("/api/admin/upload")({
       POST: async ({ request }: { request: Request }) => {
         try {
           // 1. Authenticate user context and superadmin authorization
-          const userContext = await resolveUserContextFromHeaders(request.headers);
+          const userContext = await resolveUserContextFromHeaders(
+            request.headers,
+          );
           if (!userContext.userId) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), {
               status: 401,
@@ -19,10 +21,13 @@ export const Route = createFileRoute("/api/admin/upload")({
 
           const isSuper = await isUserSuperAdmin(userContext.userId);
           if (!isSuper) {
-            return new Response(JSON.stringify({ error: "Superadmin privileges required" }), {
-              status: 403,
-              headers: { "Content-Type": "application/json" },
-            });
+            return new Response(
+              JSON.stringify({ error: "Superadmin privileges required" }),
+              {
+                status: 403,
+                headers: { "Content-Type": "application/json" },
+              },
+            );
           }
 
           // 2. Parse multipart/form-data
@@ -44,11 +49,23 @@ export const Route = createFileRoute("/api/admin/upload")({
           // 3. Store in Cloudflare R2 if available, or generate persistent Base64 Data URL for local dev
           let publicUrl = "";
 
-          const r2 = (env as unknown as { R2?: { put: (key: string, data: ArrayBuffer, opts: { httpMetadata: { contentType: string } }) => Promise<unknown> } }).R2;
+          const r2 = (
+            env as unknown as {
+              R2?: {
+                put: (
+                  key: string,
+                  data: ArrayBuffer,
+                  opts: { httpMetadata: { contentType: string } },
+                ) => Promise<unknown>;
+              };
+            }
+          ).R2;
 
           if (r2 && typeof r2.put === "function") {
             await r2.put(key, arrayBuffer, {
-              httpMetadata: { contentType: file.type || "application/octet-stream" },
+              httpMetadata: {
+                contentType: file.type || "application/octet-stream",
+              },
             });
             publicUrl = `/api/cdn/${key}`;
           } else {
@@ -69,7 +86,7 @@ export const Route = createFileRoute("/api/admin/upload")({
             {
               status: 200,
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         } catch (err: unknown) {
           return new Response(
@@ -79,7 +96,7 @@ export const Route = createFileRoute("/api/admin/upload")({
             {
               status: 500,
               headers: { "Content-Type": "application/json" },
-            }
+            },
           );
         }
       },

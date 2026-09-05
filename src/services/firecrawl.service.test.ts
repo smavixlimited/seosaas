@@ -3,7 +3,9 @@ import { FirecrawlService } from "@/services/firecrawl.service";
 
 describe("FirecrawlService", () => {
   it("should scrape a URL and calculate word count and token savings", async () => {
-    const result = await FirecrawlService.scrapeUrl("https://example.com/pricing");
+    const result = await FirecrawlService.scrapeUrl(
+      "https://example.com/pricing",
+    );
     expect(result.success).toBe(true);
     expect(result.url).toBe("https://example.com/pricing");
     expect(result.markdown).toContain("Pricing");
@@ -28,7 +30,9 @@ describe("FirecrawlService", () => {
   });
 
   it("should perform live web search and return structured markdown results", async () => {
-    const result = await FirecrawlService.searchAndScrape("best b2b seo software 2026");
+    const result = await FirecrawlService.searchAndScrape(
+      "best b2b seo software 2026",
+    );
     expect(result.success).toBe(true);
     expect(result.query).toBe("best b2b seo software 2026");
     expect(result.results.length).toBeGreaterThan(0);
@@ -46,10 +50,14 @@ describe("FirecrawlService", () => {
     expect(blueprint.targetKeyword).toBe("saas billing platform");
     expect(blueprint.competitors.length).toBe(2);
     expect(blueprint.wordCountGap.averageCompetitor).toBeGreaterThan(0);
-    expect(blueprint.wordCountGap.recommendedMin).toBeGreaterThan(blueprint.wordCountGap.averageCompetitor);
+    expect(blueprint.wordCountGap.recommendedMin).toBeGreaterThan(
+      blueprint.wordCountGap.averageCompetitor,
+    );
     expect(blueprint.missingSubtopics.length).toBeGreaterThan(0);
     expect(blueprint.missingSchemas).toContain("FAQPage");
-    expect(blueprint.aiContentBrief.recommendedTitle).toContain("saas billing platform");
+    expect(blueprint.aiContentBrief.recommendedTitle).toContain(
+      "saas billing platform",
+    );
     expect(blueprint.aiContentBrief.suggestedOutline.length).toBeGreaterThan(0);
   });
 

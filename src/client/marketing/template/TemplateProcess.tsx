@@ -87,4 +87,3 @@ export function TemplateProcess() {
     </section>
   );
 }
-export default TemplateProcess;

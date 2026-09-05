@@ -43,7 +43,12 @@ export interface Pillar4Vulnerabilities {
 export interface AttackPlayItem {
   id: string;
   title: string;
-  category: "comparison_page" | "keyword_steal" | "content_upgrade" | "programmatic" | "conversion_hijack";
+  category:
+    | "comparison_page"
+    | "keyword_steal"
+    | "content_upgrade"
+    | "programmatic"
+    | "conversion_hijack";
   priority: "HIGH" | "MEDIUM" | "QUICK_WIN";
   estimatedEffort: string;
   potentialImpact: string;
@@ -89,9 +94,13 @@ export const CompetitorStrategyService = {
     projectId: string,
     targetDomain: string,
     locationCode = 2840,
-    billingCustomer?: BillingCustomerContext
+    billingCustomer?: BillingCustomerContext,
   ): Promise<CompetitorStrategyTeardown> {
-    const cleanDomain = targetDomain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    const cleanDomain = targetDomain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "");
 
     // 1. Check existing DB cache
     try {
@@ -106,8 +115,8 @@ export const CompetitorStrategyService = {
           and(
             eq(competitorStrategyReports.projectId, projectId),
             eq(competitorStrategyReports.targetDomain, cleanDomain),
-            eq(competitorStrategyReports.locationCode, locationCode)
-          )
+            eq(competitorStrategyReports.locationCode, locationCode),
+          ),
         )
         .orderBy(desc(competitorStrategyReports.updatedAt))
         .limit(1);
@@ -125,7 +134,14 @@ export const CompetitorStrategyService = {
             contentMoat: JSON.parse(existing.contentMoatJson),
             vulnerabilities: JSON.parse(existing.vulnerabilitiesJson),
             attackPlaybook: JSON.parse(existing.attackPlaybookJson),
-            rawMetricsSummary: existing.rawMetricsSummaryJson ? JSON.parse(existing.rawMetricsSummaryJson) : { organicTraffic: 0, organicKeywords: 0, backlinks: 0, referringDomains: 0 },
+            rawMetricsSummary: existing.rawMetricsSummaryJson
+              ? JSON.parse(existing.rawMetricsSummaryJson)
+              : {
+                  organicTraffic: 0,
+                  organicKeywords: 0,
+                  backlinks: 0,
+                  referringDomains: 0,
+                },
             modelUsed: existing.modelUsed || "ai-strategy-engine",
             createdAt: existing.createdAt,
             updatedAt: existing.updatedAt,
@@ -137,7 +153,12 @@ export const CompetitorStrategyService = {
     }
 
     // 2. Generate fresh report
-    return this.generateTeardown(projectId, cleanDomain, locationCode, billingCustomer);
+    return this.generateTeardown(
+      projectId,
+      cleanDomain,
+      locationCode,
+      billingCustomer,
+    );
   },
 
   /**
@@ -147,9 +168,13 @@ export const CompetitorStrategyService = {
     projectId: string,
     targetDomain: string,
     locationCode = 2840,
-    billingCustomer?: BillingCustomerContext
+    billingCustomer?: BillingCustomerContext,
   ): Promise<CompetitorStrategyTeardown> {
-    const cleanDomain = targetDomain.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    const cleanDomain = targetDomain
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "");
     const now = new Date().toISOString();
     const id = crypto.randomUUID();
 
@@ -158,12 +183,19 @@ export const CompetitorStrategyService = {
     let organicKeywords = 4500;
     let backlinks = 12000;
     let referringDomains = 850;
-    let topKeywordsSample: Array<{ keyword: string; rank: number; volume: number; cpc: number; url?: string }> = [];
+    let topKeywordsSample: Array<{
+      keyword: string;
+      rank: number;
+      volume: number;
+      cpc: number;
+      url?: string;
+    }> = [];
     let topPagesSample: Array<{ page: string; traffic: number }> = [];
 
     try {
       if (billingCustomer) {
-        const { DomainService } = await import("@/server/features/domain/services/DomainService");
+        const { DomainService } =
+          await import("@/server/features/domain/services/DomainService");
         const overview = await DomainService.getOverview(
           {
             projectId,
@@ -171,7 +203,7 @@ export const CompetitorStrategyService = {
             locationCode,
             languageCode: "en",
           },
-          billingCustomer
+          billingCustomer,
         );
 
         organicTraffic = overview.organicTraffic ?? organicTraffic;
@@ -187,7 +219,7 @@ export const CompetitorStrategyService = {
             locationCode,
             languageCode: "en",
           },
-          billingCustomer
+          billingCustomer,
         );
 
         if (Array.isArray(suggestions) && suggestions.length > 0) {
@@ -212,7 +244,7 @@ export const CompetitorStrategyService = {
             sortOrder: "desc",
             filters: {},
           },
-          billingCustomer
+          billingCustomer,
         );
 
         if (pagesPage?.pages && Array.isArray(pagesPage.pages)) {
@@ -255,7 +287,8 @@ export const CompetitorStrategyService = {
         "Instant free domain audit scanner",
         "Gated state-of-search benchmarking reports",
       ],
-      estimatedFunnelType: "Product-Led Growth with High-Touch Enterprise Upsell",
+      estimatedFunnelType:
+        "Product-Led Growth with High-Touch Enterprise Upsell",
     };
 
     let contentMoat: Pillar3ContentMoat = {
@@ -263,19 +296,28 @@ export const CompetitorStrategyService = {
         {
           theme: "Authoritative Industry Glossaries & Definitions",
           trafficSharePct: 40,
-          coreKeywords: topKeywordsSample.slice(0, 3).map((k) => k.keyword) || ["seo metrics", "backlink audit"],
+          coreKeywords: topKeywordsSample.slice(0, 3).map((k) => k.keyword) || [
+            "seo metrics",
+            "backlink audit",
+          ],
           intentDistribution: "75% Informational, 25% Commercial",
         },
         {
           theme: "Deep-Dive Feature Comparison & Alternative Guides",
           trafficSharePct: 35,
-          coreKeywords: topKeywordsSample.slice(3, 6).map((k) => k.keyword) || ["competitor analysis tools", "rank tracker"],
+          coreKeywords: topKeywordsSample.slice(3, 6).map((k) => k.keyword) || [
+            "competitor analysis tools",
+            "rank tracker",
+          ],
           intentDistribution: "85% Commercial Investigation",
         },
         {
           theme: "Technical Implementation & API Documentation",
           trafficSharePct: 25,
-          coreKeywords: topKeywordsSample.slice(6, 9).map((k) => k.keyword) || ["serp api docs", "crawler webhook"],
+          coreKeywords: topKeywordsSample.slice(6, 9).map((k) => k.keyword) || [
+            "serp api docs",
+            "crawler webhook",
+          ],
           intentDistribution: "50% Navigational, 50% Informational",
         },
       ],
@@ -283,15 +325,20 @@ export const CompetitorStrategyService = {
     };
 
     let vulnerabilities: Pillar4Vulnerabilities = {
-      strikingDistanceKeywords: topKeywordsSample.filter((k) => k.rank > 10 && k.rank <= 30).slice(0, 5).map((k) => ({
-        keyword: k.keyword,
-        rank: k.rank,
-        searchVolume: k.volume,
-        cpc: k.cpc,
-        difficulty: 48,
-        url: k.url || `https://${cleanDomain}/blog/${k.keyword.replace(/\s+/g, "-")}`,
-        gapOpportunity: `Rival currently ranks #${k.rank}. A focused, structured landing page with comparison matrices can capture page 1 position.`,
-      })),
+      strikingDistanceKeywords: topKeywordsSample
+        .filter((k) => k.rank > 10 && k.rank <= 30)
+        .slice(0, 5)
+        .map((k) => ({
+          keyword: k.keyword,
+          rank: k.rank,
+          searchVolume: k.volume,
+          cpc: k.cpc,
+          difficulty: 48,
+          url:
+            k.url ||
+            `https://${cleanDomain}/blog/${k.keyword.replace(/\s+/g, "-")}`,
+          gapOpportunity: `Rival currently ranks #${k.rank}. A focused, structured landing page with comparison matrices can capture page 1 position.`,
+        })),
       contentWeaknesses: [
         "Outdated 2023/2024 benchmarks that have not been refreshed for AEO search engines.",
         "Lack of interactive calculators and downloadable checklists on high-traffic guide pages.",
@@ -314,7 +361,8 @@ export const CompetitorStrategyService = {
           cpc: 4.5,
           difficulty: 42,
           url: `https://${cleanDomain}/pricing`,
-          gapOpportunity: "Users actively looking for cost alternatives. Creating a transparent comparison page can easily outrank them.",
+          gapOpportunity:
+            "Users actively looking for cost alternatives. Creating a transparent comparison page can easily outrank them.",
         },
         {
           keyword: `best ${cleanDomain} alternatives`,
@@ -323,7 +371,8 @@ export const CompetitorStrategyService = {
           cpc: 6.2,
           difficulty: 51,
           url: `https://${cleanDomain}/features`,
-          gapOpportunity: "High buyer intent query. A direct comparison page will convert high-intent switchers immediately.",
+          gapOpportunity:
+            "High buyer intent query. A direct comparison page will convert high-intent switchers immediately.",
         },
         {
           keyword: `${cleanDomain} enterprise review`,
@@ -332,7 +381,8 @@ export const CompetitorStrategyService = {
           cpc: 3.8,
           difficulty: 38,
           url: `https://${cleanDomain}/about`,
-          gapOpportunity: "Rival lacks comprehensive social proof and verified customer teardowns on this term.",
+          gapOpportunity:
+            "Rival lacks comprehensive social proof and verified customer teardowns on this term.",
         },
       ];
     }
@@ -362,10 +412,14 @@ export const CompetitorStrategyService = {
           category: "keyword_steal",
           priority: "QUICK_WIN",
           estimatedEffort: "30 mins",
-          potentialImpact: "Fast top-3 ranking gains on high-CPC commercial queries",
+          potentialImpact:
+            "Fast top-3 ranking gains on high-CPC commercial queries",
           objective: `Target keywords where ${cleanDomain} ranks on page 2 (#11-#25) by creating 10x content with embedded interactive elements and modern AEO structure.`,
           actionSteps: [
-            `Extract their top striking distance queries (${vulnerabilities.strikingDistanceKeywords.slice(0, 2).map((k) => `"${k.keyword}"`).join(", ")}).`,
+            `Extract their top striking distance queries (${vulnerabilities.strikingDistanceKeywords
+              .slice(0, 2)
+              .map((k) => `"${k.keyword}"`)
+              .join(", ")}).`,
             "Write comprehensive guides structured specifically for Perplexity, ChatGPT Search, and Google AI Overviews.",
             "Embed dynamic calculators or quick checklists to maximize user dwell time.",
           ],
@@ -394,7 +448,8 @@ export const CompetitorStrategyService = {
     try {
       const { getChatAgentModel } = await import("@/server/lib/openrouter");
       const model = await getChatAgentModel();
-      modelName = (model as unknown as { modelId?: string }).modelId || modelName;
+      modelName =
+        (model as unknown as { modelId?: string }).modelId || modelName;
 
       const systemPrompt = `You are a Principal SaaS Growth Strategist and Competitor Intelligence Architect. 
 Analyze the provided competitor domain metrics and generate an executive-level, sharp 5-Pillar Competitor Strategy Teardown in strict JSON format.
@@ -463,7 +518,10 @@ Generate the complete, high-leverage 5-pillar strategic teardown with 3 prioriti
         temperature: 0.3,
       });
 
-      const cleanJson = aiResponse.text.replace(/^```json\s*/, "").replace(/```\s*$/, "").trim();
+      const cleanJson = aiResponse.text
+        .replace(/^```json\s*/, "")
+        .replace(/```\s*$/, "")
+        .trim();
       const parsed = JSON.parse(cleanJson) as {
         positioning: Pillar1PositioningHook;
         funnelAngles: Pillar2FunnelAngles;
@@ -472,7 +530,13 @@ Generate the complete, high-leverage 5-pillar strategic teardown with 3 prioriti
         attackPlaybook: Pillar5AttackPlaybook;
       };
 
-      if (parsed.positioning && parsed.funnelAngles && parsed.contentMoat && parsed.vulnerabilities && parsed.attackPlaybook) {
+      if (
+        parsed.positioning &&
+        parsed.funnelAngles &&
+        parsed.contentMoat &&
+        parsed.vulnerabilities &&
+        parsed.attackPlaybook
+      ) {
         positioning = parsed.positioning;
         funnelAngles = parsed.funnelAngles;
         contentMoat = parsed.contentMoat;
@@ -480,7 +544,10 @@ Generate the complete, high-leverage 5-pillar strategic teardown with 3 prioriti
         attackPlaybook = parsed.attackPlaybook;
       }
     } catch (aiErr) {
-      console.warn("LLM generation fallback used for competitor teardown:", aiErr);
+      console.warn(
+        "LLM generation fallback used for competitor teardown:",
+        aiErr,
+      );
     }
 
     // 3. Save / Upsert to Database
@@ -503,8 +570,8 @@ Generate the complete, high-leverage 5-pillar strategic teardown with 3 prioriti
           and(
             eq(competitorStrategyReports.projectId, projectId),
             eq(competitorStrategyReports.targetDomain, cleanDomain),
-            eq(competitorStrategyReports.locationCode, locationCode)
-          )
+            eq(competitorStrategyReports.locationCode, locationCode),
+          ),
         )
         .limit(1);
 

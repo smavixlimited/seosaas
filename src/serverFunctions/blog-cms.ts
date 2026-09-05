@@ -2,7 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 import { isUserSuperAdmin } from "@/services/admin.service";
-import { BlogCmsService, type BlogPostRecord } from "@/services/blog-cms.service";
+import {
+  BlogCmsService,
+  type BlogPostRecord,
+} from "@/services/blog-cms.service";
 import { AppError } from "@/server/lib/errors";
 
 const filterBlogsSchema = z.object({
@@ -50,7 +53,9 @@ export const getPublicBlogPostsServerFn = createServerFn({ method: "POST" })
 /**
  * Public server function to retrieve a single blog post by slug.
  */
-export const getPublicBlogPostBySlugServerFn = createServerFn({ method: "POST" })
+export const getPublicBlogPostBySlugServerFn = createServerFn({
+  method: "POST",
+})
   .validator(getBySlugSchema)
   .handler(async ({ data }) => {
     return BlogCmsService.getBlogPostBySlug(data.slug);
@@ -80,9 +85,13 @@ export const upsertAdminBlogPostServerFn = createServerFn({ method: "POST" })
     if (!isSuper) throw new AppError("FORBIDDEN", "Superadmin access required");
 
     return BlogCmsService.upsertBlogPost(
-      data as Partial<BlogPostRecord> & { title: string; content: string; description: string },
+      data as Partial<BlogPostRecord> & {
+        title: string;
+        content: string;
+        description: string;
+      },
       context.userId,
-      context.userEmail
+      context.userEmail,
     );
   });
 
@@ -96,5 +105,9 @@ export const deleteAdminBlogPostServerFn = createServerFn({ method: "POST" })
     const isSuper = await isUserSuperAdmin(context.userId);
     if (!isSuper) throw new AppError("FORBIDDEN", "Superadmin access required");
 
-    return BlogCmsService.deleteBlogPost(data.id, context.userId, context.userEmail);
+    return BlogCmsService.deleteBlogPost(
+      data.id,
+      context.userId,
+      context.userEmail,
+    );
   });

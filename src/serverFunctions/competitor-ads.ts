@@ -1,10 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireProjectContext } from "./middleware";
-import { CompetitorAdsService, AdPlatform } from "@/services/competitor-ads.service";
+import {
+  CompetitorAdsService,
+  AdPlatform,
+} from "@/services/competitor-ads.service";
 import { RoadmapService } from "@/services/roadmap.service";
 
-const adPlatformSchema = z.enum(["meta", "google", "tiktok", "linkedin", "all"]);
+const adPlatformSchema = z.enum([
+  "meta",
+  "google",
+  "tiktok",
+  "linkedin",
+  "all",
+]);
 
 export const getCompetitorAdsServerFn = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
@@ -14,7 +23,7 @@ export const getCompetitorAdsServerFn = createServerFn({ method: "POST" })
       competitorDomain: z.string().min(1),
       platform: adPlatformSchema.optional(),
       forceRefresh: z.boolean().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     return CompetitorAdsService.getCompetitorAds({
@@ -35,7 +44,7 @@ export const exportAdAngleToRoadmapServerFn = createServerFn({ method: "POST" })
       suggestedHook: z.string().min(1),
       counterPlaySummary: z.string().min(1),
       recommendedCta: z.string().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const task = await RoadmapService.createCustomTask(data.projectId, {

@@ -51,7 +51,11 @@ export const Route = createFileRoute("/_auth/sign-up")({
   component: SignUpPage,
 });
 
-function calculatePasswordStrength(pass: string): { score: number; label: string; color: string } {
+function calculatePasswordStrength(pass: string): {
+  score: number;
+  label: string;
+  color: string;
+} {
   if (!pass) return { score: 0, label: "Empty", color: "bg-stroke-3" };
   let score = 0;
   if (pass.length >= 8) score += 1;
@@ -105,9 +109,12 @@ function SignUpPage() {
           <div className="mx-auto size-12 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center">
             <Lock className="size-6" />
           </div>
-          <h3 className="text-tagline-1 font-bold text-secondary dark:text-accent">Sign-ups are by Invitation Only</h3>
+          <h3 className="text-tagline-1 font-bold text-secondary dark:text-accent">
+            Sign-ups are by Invitation Only
+          </h3>
           <p className="text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed">
-            Public registration is currently locked. If you are an enterprise client or hold an invitation token, please reach out to our team.
+            Public registration is currently locked. If you are an enterprise
+            client or hold an invitation token, please reach out to our team.
           </p>
           <div className="pt-2">
             <a

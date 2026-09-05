@@ -3,7 +3,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
-import { exportProjectBackup, restoreProjectBackup } from "@/serverFunctions/backup";
+import {
+  exportProjectBackup,
+  restoreProjectBackup,
+} from "@/serverFunctions/backup";
 import type { ProjectBackupSnapshot } from "@/services/backup.service";
 
 export const Route = createFileRoute("/_project/p/$projectId/settings/backup")({
@@ -39,7 +42,9 @@ function ProjectBackupSettingsPage() {
     mutationFn: (snapshot: ProjectBackupSnapshot) =>
       restoreProjectBackup({ data: { snapshot } }),
     onSuccess: (res) => {
-      toast.success(`Successfully restored "${res.projectName}"! Redirecting...`);
+      toast.success(
+        `Successfully restored "${res.projectName}"! Redirecting...`,
+      );
       void navigate({
         to: "/p/$projectId",
         params: { projectId: res.restoredProjectId },
@@ -75,14 +80,19 @@ function ProjectBackupSettingsPage() {
     <div className="space-y-6 max-w-4xl">
       <div>
         <div className="flex items-center gap-2">
-          <span className="badge badge-primary badge-sm font-bold text-xs">Zero Data Loss</span>
-          <span className="text-xs text-base-content/50">Portable JSON Schema v1.0</span>
+          <span className="badge badge-primary badge-sm font-bold text-xs">
+            Zero Data Loss
+          </span>
+          <span className="text-xs text-base-content/50">
+            Portable JSON Schema v1.0
+          </span>
         </div>
         <h1 className="text-2xl font-black tracking-tight text-base-content mt-1">
           Backup & Disaster Recovery
         </h1>
         <p className="text-xs text-base-content/60">
-          Export full portable snapshots of your project metadata, context sections, key pages, and uptime monitors.
+          Export full portable snapshots of your project metadata, context
+          sections, key pages, and uptime monitors.
         </p>
       </div>
 
@@ -92,15 +102,24 @@ function ProjectBackupSettingsPage() {
           <div>
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-xl bg-primary/10 text-primary">
-                <Icon icon="solar:download-square-bold-duotone" className="h-6 w-6" />
+                <Icon
+                  icon="solar:download-square-bold-duotone"
+                  className="h-6 w-6"
+                />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-base-content">Export Project Snapshot</h3>
-                <p className="text-xs text-base-content/60">Download complete project JSON bundle</p>
+                <h3 className="text-sm font-bold text-base-content">
+                  Export Project Snapshot
+                </h3>
+                <p className="text-xs text-base-content/60">
+                  Download complete project JSON bundle
+                </p>
               </div>
             </div>
             <p className="text-xs text-base-content/70 mt-4 leading-relaxed">
-              Includes domain setup, AI context memory, key target URLs, uptime configurations, and indexing logs. Portable across any Skorvia deployment.
+              Includes domain setup, AI context memory, key target URLs, uptime
+              configurations, and indexing logs. Portable across any Skorvia
+              deployment.
             </p>
           </div>
 
@@ -111,7 +130,11 @@ function ProjectBackupSettingsPage() {
             className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/20 gap-2 mt-6 w-full"
           >
             <Icon icon="solar:disk-bold-duotone" className="h-4 w-4" />
-            <span>{exportMutation.isPending ? "Generating Snapshot..." : "Download Backup Snapshot (.json)"}</span>
+            <span>
+              {exportMutation.isPending
+                ? "Generating Snapshot..."
+                : "Download Backup Snapshot (.json)"}
+            </span>
           </button>
         </div>
 
@@ -120,15 +143,23 @@ function ProjectBackupSettingsPage() {
           <div>
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600">
-                <Icon icon="solar:upload-square-bold-duotone" className="h-6 w-6" />
+                <Icon
+                  icon="solar:upload-square-bold-duotone"
+                  className="h-6 w-6"
+                />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-base-content">Restore from Snapshot</h3>
-                <p className="text-xs text-base-content/60">Import a previously exported JSON backup</p>
+                <h3 className="text-sm font-bold text-base-content">
+                  Restore from Snapshot
+                </h3>
+                <p className="text-xs text-base-content/60">
+                  Import a previously exported JSON backup
+                </p>
               </div>
             </div>
             <p className="text-xs text-base-content/70 mt-4 leading-relaxed">
-              Upload a `.json` snapshot to recover project settings, context memory, and URL configurations into your active workspace.
+              Upload a `.json` snapshot to recover project settings, context
+              memory, and URL configurations into your active workspace.
             </p>
           </div>
 
@@ -147,7 +178,11 @@ function ProjectBackupSettingsPage() {
               className="btn btn-outline rounded-2xl font-bold gap-2 mt-6 w-full hover:bg-base-200"
             >
               <Icon icon="solar:restart-bold-duotone" className="h-4 w-4" />
-              <span>{restoreMutation.isPending ? "Restoring Snapshot..." : "Upload & Restore Snapshot"}</span>
+              <span>
+                {restoreMutation.isPending
+                  ? "Restoring Snapshot..."
+                  : "Upload & Restore Snapshot"}
+              </span>
             </button>
           </div>
         </div>
@@ -156,11 +191,17 @@ function ProjectBackupSettingsPage() {
       {/* Disaster Recovery Architecture Notice */}
       <div className="rounded-2xl border border-base-300 bg-base-200/40 p-6">
         <h4 className="text-xs font-bold text-base-content uppercase tracking-wider flex items-center gap-2">
-          <Icon icon="solar:shield-check-bold-duotone" className="h-4 w-4 text-emerald-500" />
+          <Icon
+            icon="solar:shield-check-bold-duotone"
+            className="h-4 w-4 text-emerald-500"
+          />
           <span>Automated Cloud Disaster Recovery</span>
         </h4>
         <p className="text-xs text-base-content/70 mt-2 leading-relaxed">
-          Skorvia Cloud automatically persists transactional write-ahead logs (WAL) and dual database replicas (Cloudflare D1 + PostgreSQL). Manual snapshots provide full air-gapped data portability and independent compliance archives.
+          Skorvia Cloud automatically persists transactional write-ahead logs
+          (WAL) and dual database replicas (Cloudflare D1 + PostgreSQL). Manual
+          snapshots provide full air-gapped data portability and independent
+          compliance archives.
         </p>
       </div>
     </div>

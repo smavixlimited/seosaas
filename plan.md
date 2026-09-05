@@ -87,20 +87,21 @@ flowchart TD
 
 ## 📜 PHASES 1 TO 39 (COMPLETED & PRESERVED)
 
-* **Phases 1 to 15:** Core branding, Drizzle schemas, multi-gateway billing, caching layer, growth features, user dashboard, auth, onboarding, notifications, translation, Local SEO, AI visibility, and reports.
-* **Phases 16 to 22:** Global system settings, user management, impersonation, RBAC, dynamic pricing, blog CMS base, monitoring logs.
-* **Phases 23 to 26:** 2FA TOTP, device alerts, hierarchical team management, monetization meters, cancellation retention, and Monday digests.
-* **Phases 27 to 33:** Public marketing website elevation, Semrush-grade mega-menus, currency dropdown, solution pages, and verification suites.
-* **Phase 34:** Complete Venix UI alignment, rich-text Blog CMS, real file uploads, granular plan feature matrix, and dynamic model selector.
-* **Phases 35 to 39:** Promotional Coupon Engine, Competitor Strategy Decoder base, Action Roadmap base, Brand Mentions Listening Hub, and Ad Readiness Audit base.
+- **Phases 1 to 15:** Core branding, Drizzle schemas, multi-gateway billing, caching layer, growth features, user dashboard, auth, onboarding, notifications, translation, Local SEO, AI visibility, and reports.
+- **Phases 16 to 22:** Global system settings, user management, impersonation, RBAC, dynamic pricing, blog CMS base, monitoring logs.
+- **Phases 23 to 26:** 2FA TOTP, device alerts, hierarchical team management, monetization meters, cancellation retention, and Monday digests.
+- **Phases 27 to 33:** Public marketing website elevation, Semrush-grade mega-menus, currency dropdown, solution pages, and verification suites.
+- **Phase 34:** Complete Venix UI alignment, rich-text Blog CMS, real file uploads, granular plan feature matrix, and dynamic model selector.
+- **Phases 35 to 39:** Promotional Coupon Engine, Competitor Strategy Decoder base, Action Roadmap base, Brand Mentions Listening Hub, and Ad Readiness Audit base.
 
 ---
 
 ### 🔹 Phase 40: Terminology & Navigation Overhaul & Security Clean-Up
+
 - **Objective:** Replace every instance of "Project" with **"Brand"** across the entire UI, align the sidebar to the 7 pillars, and remove privileged Admin links from user menus.
 - **Key Tasks:**
-  1. Update user profile dropdown (`VenixTopBar.tsx`): Change *"Switch Project"* $\rightarrow$ **"Switch Brand"**, *"My Projects"* $\rightarrow$ **"My Brands"**, *"Active Project"* $\rightarrow$ **"Active Brand"**, *"Create Project"* $\rightarrow$ **"Add New Brand"**.
-  2. **Security Polish:** Remove the direct *"Super-Admin Portal"* link from the standard user profile dropdown menu.
+  1. Update user profile dropdown (`VenixTopBar.tsx`): Change _"Switch Project"_ $\rightarrow$ **"Switch Brand"**, _"My Projects"_ $\rightarrow$ **"My Brands"**, _"Active Project"_ $\rightarrow$ **"Active Brand"**, _"Create Project"_ $\rightarrow$ **"Add New Brand"**.
+  2. **Security Polish:** Remove the direct _"Super-Admin Portal"_ link from the standard user profile dropdown menu.
   3. Update breadcrumbs, modals, tooltips, and page headers from Project $\rightarrow$ Brand.
   4. Reorganize `src/client/navigation/items.ts` to match the 7 new navigation pillars.
 - **Verification:** UI inspection of sidebar, header, and profile dropdown menu.
@@ -108,11 +109,12 @@ flowchart TD
 ---
 
 ### 🔹 Phase 41: Auth Suite Elevation, Admin Login & 20-Min Inactivity Lock Screen
+
 - **Objective:** Redesign Login, Register, Logout, and Inactivity Lock Screen with exact fidelity to the Venix template design (`dashboard/auth-*.html`), enforce registration disable toggles, and add a dedicated Admin Login page.
 - **Key Tasks:**
   1. **Login Page (`/login`):** Match `dashboard/auth-login.html` (Left testimonial slider + Right login card with Google auth, remember me, forgot password, and legal footer).
   2. **Register Page (`/register`):** Match `dashboard/auth-register.html` (Username, email, password, repeat password, terms checkbox, and Google signup).
-  3. **Enforce Disable Registration:** When registration is disabled in Admin settings (`allowRegistration: false`), block new signups immediately on both the `/register` UI and the registration API endpoint with a clean *"Registration is currently closed"* notice.
+  3. **Enforce Disable Registration:** When registration is disabled in Admin settings (`allowRegistration: false`), block new signups immediately on both the `/register` UI and the registration API endpoint with a clean _"Registration is currently closed"_ notice.
   4. **Dedicated Admin Login (`/admin/login`):** Separate, secure admin authentication screen requiring password validation before granting access to `/admin` routes.
   5. **Logout Page (`/logout`):** Match `dashboard/auth-logout.html` (Logged out card, user avatar badge, and "Back to Login" action).
   6. **20-Minute Inactivity Lock Screen (`/lock-screen` & Modal):** Match `dashboard/auth-lock-screen.html` (Triggers automatically after 20 minutes of idle mouse/keyboard time, displays user avatar/name, and unlocks with password).
@@ -121,6 +123,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 42: Responsive Onboarding & Competitor Sync (With Company Size & Industry)
+
 - **Objective:** Rebuild the onboarding wizard into a fully responsive, skippable flow that collects Company Size, Industry, Brand details, and 3 Competitors directly into the database.
 - **Key Tasks:**
   1. **Mobile-Responsive Steps** with **"Skip Step"** option on every card.
@@ -136,6 +139,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 43: Competitors Directory & 1-on-1 Competitor Analysis
+
 - **Objective:** Build a dedicated directory to manage competitors and a 1-on-1 comparative intelligence engine.
 - **Key Tasks:**
   1. **Competitors Directory (`/competitors`):** Card/table view of all saved competitors with website, social links, date added, and Full CRUD (Add / Edit / Delete).
@@ -148,6 +152,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 44: Brand Analysis & Ad-Readiness Engine
+
 - **Objective:** Full 6-dimension credibility & conversion readiness audit with direct export to Action Roadmap.
 - **Key Tasks:**
   1. **Brand Analysis Engine (`/brand-analysis`):**
@@ -162,10 +167,11 @@ flowchart TD
 ---
 
 ### 🔹 Phase 45: Audience Trust ("Pre-Ad Gate") & Viral Content Detector
+
 - **Objective:** Provide a pre-ad campaign sentiment validator and a high-CTR viral content discovery tool.
 - **Key Tasks:**
   1. **Audience Trust & Sentiment (`/trust-sentiment`):**
-     - Positioned as the *"Pre-Ad Gate"*: Checks review sentiment and brand trust before spending ad dollars.
+     - Positioned as the _"Pre-Ad Gate"_: Checks review sentiment and brand trust before spending ad dollars.
      - Output: Ad-Ready status badge (Ready / Needs Attention / High Friction) + Trust Index.
   2. **Viral Content & Opportunity Detector (`/viral-detector`):**
      - Scans industry trends, high-performing competitor hooks, and viral social patterns.
@@ -175,6 +181,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 46: Action Roadmap & My Analysis Suite
+
 - **Objective:** Deliver the gamified Action Roadmap and a centralized analysis repository with PDF export.
 - **Key Tasks:**
   1. **Action Roadmap (`/roadmap`):**
@@ -189,6 +196,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 47: Local Business Suite (Listings, GBP, Reviews, Geo-Grid Heatmap)
+
 - **Objective:** Complete local SEO ecosystem for multi-location and brick-and-mortar brands.
 - **Key Tasks:**
   1. **Listing Management (`/local/listings`):** Enter NAP (Name, Address, Phone) once $\rightarrow$ simulated/live push to 70+ directories with duplicate listing finder.
@@ -200,6 +208,7 @@ flowchart TD
 ---
 
 ### 🔹 Phase 48: Polish, Global Verification & Deployment
+
 - **Objective:** End-to-end integration testing, type-safety checks, Docker build optimization, and server deployment.
 - **Key Tasks:**
   1. Run `pnpm types:check` and linting to ensure zero TypeScript errors.
@@ -210,19 +219,21 @@ flowchart TD
 ---
 
 ### 🔹 Phase 49: Competitor Ad Spying & Multi-Platform Creative Intelligence
+
 - **Objective:** Multi-network ad spy explorer (Meta, Google, TikTok, LinkedIn) without requiring users to connect their own ad accounts, with single-platform selection, live vs. opportunity 2-tier engine, and 1-click export to Action Roadmap.
 - **Key Tasks:**
-  1. **Platform Selector:** Allow users to choose which platform(s) to check (*Meta Only*, *Google Ads Only*, *TikTok Only*, *LinkedIn Only*, or *All*).
+  1. **Platform Selector:** Allow users to choose which platform(s) to check (_Meta Only_, _Google Ads Only_, _TikTok Only_, _LinkedIn Only_, or _All_).
   2. **Database Schema:** Create `competitorTrackedAds` schema storing ad creatives, headlines, copy, CTA, platform, longevity days, and angle categories.
   3. **Data Pipeline & Services:** Create `competitor-ads.service.ts` integrating Meta Ad Library API, DataForSEO Google Ads SERP API, Firecrawl LinkedIn crawler, and TikTok Creative Center.
   4. **Transparent 2-Tier Results:** Return verified real live ads when running, or generate an Untapped Opportunity Blueprint tailored to the competitor's scraped landing page if 0 ads are running on that platform.
-  5. **Competitor Ad Library UI (`/p/$projectId/competitor-analysis` & Sub-tab):** Platform selector pills, creative cards, longevity badges (*"🔥 Active 45+ days - Winning Ad"*), and 1-click **Export Angle to Action Roadmap**.
+  5. **Competitor Ad Library UI (`/p/$projectId/competitor-analysis` & Sub-tab):** Platform selector pills, creative cards, longevity badges (_"🔥 Active 45+ days - Winning Ad"_), and 1-click **Export Angle to Action Roadmap**.
   6. **My Analysis PDF Suite Integration:** Connect saved ad reports to `/p/$projectId/my-analysis` with print-ready PDF export.
 - **Verification:** Test single and multi-platform selection, verify transparent fallback vs. live ads, export angle to roadmap, and generate PDF report.
 
 ---
 
 ### 🔹 Phase 50: Dashboard Responsive Refactor, Header Overlaps & Button Contrast Polish
+
 - **Objective:** Full UI polish across all dashboard screens to fix text overlaps with headers, enlarge tiny search and input boxes, improve button visibility, and ensure 100% mobile/tablet responsiveness.
 - **Key Tasks:**
   1. **Header Overlap & Clearance:** Audit and fix layout clearance (`pt-16`/`pt-20`, flex-wrap) across top bar, page titles, breadcrumbs, and mobile menus so text never overlaps.
@@ -234,18 +245,20 @@ flowchart TD
 ---
 
 ### 🔹 Phase 51: Super-Admin User Messaging & Targeted Broadcast Suite
+
 - **Objective:** Build a multi-channel direct messaging & broadcast communication center in `/admin/users` with audience filtering, dynamic merge variables, in-app notification bell delivery, and email dispatch.
 - **Key Tasks:**
   1. **Audience Filtering Engine:** Target All Users, Free/Starter Only, Subscribed/Paid Only, Specific Plan Tiers (`starter`, `pro`, `agency`), Specific Countries, or Single User Direct Message.
   2. **Dynamic Merge Variables:** Support automatic substitution for `{{name}}`, `{{first_name}}`, `{{email}}`, `{{plan}}`, `{{credits}}` across title and message body.
   3. **Multi-Channel Dispatch:** Dual delivery toggles for `[x] In-App Notification Bell` (saved to DB `userNotifications` with unread badge) and `[x] Email Delivery`.
-  4. **Live Audience Count & Preview:** Real-time recipient counter (*"Will reach 142 users"*) and live template preview.
+  4. **Live Audience Count & Preview:** Real-time recipient counter (_"Will reach 142 users"_) and live template preview.
   5. **Admin UI Integration:** Add "Broadcast Message" header action and "Message User" row actions to `/admin/users`.
 - **Verification:** Test broadcast with merge tags, verify in-app notification bell display upon user impersonation, and confirm recipient filtering.
 
 ---
 
 ### 🔹 Phase 52: Public NextSaaS Redesign, Outcome-Driven Onboarding & Complete Auth Suite Elevation
+
 - **Objective:** Redesign the entire public marketing experience to match the exact `seosaas/analytics-reporting` NextSaaS template layout, elevate the onboarding wizard with Senior Sales outcome-driven activation, and upgrade the complete auth & security flow (Login, Register, Logout, Session Timeout, Forgot/Reset Password, and unverified user Confirm Email redirect gate).
 - **Key Tasks:**
   1. **Public Marketing Redesign (`seosaas/analytics-reporting` Mirror):**
@@ -253,7 +266,7 @@ flowchart TD
      - Build exact template components: `Navbar.tsx`, `Hero.tsx` + `HeroPerspective.tsx` (with embedded Interactive Domain/Keyword Live Scanner for instant value before signup), `Feature.tsx` (3-card tilted bento), `Services.tsx` (with custom shape icons & hover transforms), `Process.tsx` (3-step outcome roadmap), `IntegrationMarquee.tsx`, `Number.tsx` (trust stats & counters), `Faq.tsx` (accordion), and `Footer.tsx`.
      - Redesign [`src/routes/index.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/index.tsx), [`src/routes/pricing.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/pricing.tsx), and [`src/routes/free-audit.tsx`](file:///Users/rasheedmac/Downloads/seosaas/src/routes/free-audit.tsx).
   2. **Outcome-Driven Onboarding Experience (`SkorviaOnboardingWizard.tsx`):**
-     - Reframe onboarding around *Pain Point $\rightarrow$ Desired Outcome*:
+     - Reframe onboarding around _Pain Point $\rightarrow$ Desired Outcome_:
        - Step 1: Growth Baseline Benchmark (Brand & Industry)
        - Step 2: High-Stakes Competitor Targeting (Domains & Social Assets)
        - Step 3: First High-Value Victory Selector (Direct activation into Competitor Ad Spying, AI Citation Radar, or Brand Trust Pre-Ad Gate)
@@ -266,7 +279,3 @@ flowchart TD
      - **Logout (`logout.tsx`):** Clean sign-out confirmation and session cleanup screen.
      - **Session Timeout & Inactivity Lock:** Polished re-authentication dialog for timed-out sessions.
 - **Verification:** Test public pages across mobile/desktop, verify interactive hero scanner without login, test unverified user login redirect to `/confirm-email`, test onboarding outcome selector, and run full test suites.
-
-
-
-

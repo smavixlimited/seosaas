@@ -50,7 +50,8 @@ function UptimePage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (monitorId: string) => deleteUptimeMonitorServerFn({ data: { monitorId } }),
+    mutationFn: (monitorId: string) =>
+      deleteUptimeMonitorServerFn({ data: { monitorId } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uptime-monitors"] });
       toast.success("Monitor removed.");
@@ -58,7 +59,8 @@ function UptimePage() {
   });
 
   const probeMutation = useMutation({
-    mutationFn: (monitorId: string) => probeUptimeMonitorServerFn({ data: { monitorId } }),
+    mutationFn: (monitorId: string) =>
+      probeUptimeMonitorServerFn({ data: { monitorId } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uptime-monitors"] });
       toast.success("Uptime probe complete.");
@@ -81,7 +83,8 @@ function UptimePage() {
               </h1>
             </div>
             <p className="mt-1 text-xs text-base-content/60">
-              Automated 5-minute health probes for HTTP availability, response times, and SSL certificates.
+              Automated 5-minute health probes for HTTP availability, response
+              times, and SSL certificates.
             </p>
           </div>
 
@@ -97,16 +100,28 @@ function UptimePage() {
         {/* Overview Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-1">
-            <div className="text-xs font-semibold text-base-content/60">Total Monitored</div>
-            <div className="text-2xl font-black text-base-content">{monitors.length} URLs</div>
+            <div className="text-xs font-semibold text-base-content/60">
+              Total Monitored
+            </div>
+            <div className="text-2xl font-black text-base-content">
+              {monitors.length} URLs
+            </div>
           </div>
           <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4 space-y-1">
-            <div className="text-xs font-semibold text-emerald-600">Operational (100% Up)</div>
-            <div className="text-2xl font-black text-emerald-600">{upCount} URLs</div>
+            <div className="text-xs font-semibold text-emerald-600">
+              Operational (100% Up)
+            </div>
+            <div className="text-2xl font-black text-emerald-600">
+              {upCount} URLs
+            </div>
           </div>
           <div className="rounded-2xl border border-error/30 bg-error/5 p-4 space-y-1">
-            <div className="text-xs font-semibold text-error">Down / Degraded</div>
-            <div className="text-2xl font-black text-error">{downCount} URLs</div>
+            <div className="text-xs font-semibold text-error">
+              Down / Degraded
+            </div>
+            <div className="text-2xl font-black text-error">
+              {downCount} URLs
+            </div>
           </div>
         </div>
 
@@ -114,9 +129,12 @@ function UptimePage() {
         {monitors.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-base-300 bg-base-100 p-12 text-center space-y-3">
             <Globe className="h-10 w-10 text-base-content/30 mx-auto" />
-            <h3 className="text-base font-bold text-base-content">No Uptime Monitors Configured</h3>
+            <h3 className="text-base font-bold text-base-content">
+              No Uptime Monitors Configured
+            </h3>
             <p className="text-xs text-base-content/60 max-w-sm mx-auto">
-              Add your primary website or client domains to receive automated downtime alerts and SSL certificate expiration notices.
+              Add your primary website or client domains to receive automated
+              downtime alerts and SSL certificate expiration notices.
             </p>
             <button
               type="button"
@@ -172,7 +190,12 @@ function UptimePage() {
                         <Lock className="h-3 w-3 text-emerald-500" /> SSL Active
                       </span>
                       <span>•</span>
-                      <span>Checked: {mon.lastCheckedAt ? new Date(mon.lastCheckedAt).toLocaleTimeString() : "Pending"}</span>
+                      <span>
+                        Checked:{" "}
+                        {mon.lastCheckedAt
+                          ? new Date(mon.lastCheckedAt).toLocaleTimeString()
+                          : "Pending"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -184,13 +207,17 @@ function UptimePage() {
                     onClick={() => probeMutation.mutate(mon.id)}
                     className="btn btn-ghost btn-sm rounded-xl text-xs gap-1.5"
                   >
-                    <RefreshCw className={`h-3.5 w-3.5 ${probeMutation.isPending ? "animate-spin" : ""}`} /> Probe Now
+                    <RefreshCw
+                      className={`h-3.5 w-3.5 ${probeMutation.isPending ? "animate-spin" : ""}`}
+                    />{" "}
+                    Probe Now
                   </button>
 
                   <button
                     type="button"
                     onClick={() => {
-                      if (confirm("Delete monitor?")) deleteMutation.mutate(mon.id);
+                      if (confirm("Delete monitor?"))
+                        deleteMutation.mutate(mon.id);
                     }}
                     className="btn btn-ghost btn-sm btn-square rounded-xl text-error"
                   >
@@ -206,9 +233,12 @@ function UptimePage() {
         {modalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-3xl border border-base-300 bg-base-100 p-6 shadow-2xl space-y-4">
-              <h3 className="text-lg font-bold text-base-content">Add Website to Monitor</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Add Website to Monitor
+              </h3>
               <p className="text-xs text-base-content/70">
-                Skorvia will ping this URL every 5 minutes and notify you of latency spikes or downtime.
+                Skorvia will ping this URL every 5 minutes and notify you of
+                latency spikes or downtime.
               </p>
 
               <form
@@ -219,7 +249,9 @@ function UptimePage() {
                 className="space-y-4"
               >
                 <div>
-                  <label className="text-xs font-bold text-base-content/70">Domain / URL</label>
+                  <label className="text-xs font-bold text-base-content/70">
+                    Domain / URL
+                  </label>
                   <input
                     type="text"
                     required

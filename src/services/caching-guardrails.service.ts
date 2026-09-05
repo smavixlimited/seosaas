@@ -5,7 +5,10 @@ import { AppError } from "@/server/lib/errors";
 /**
  * Creates a deterministic SHA-256 hash string for an API endpoint and query parameters.
  */
-export async function generateQueryHash(endpoint: string, params: unknown): Promise<string> {
+export async function generateQueryHash(
+  endpoint: string,
+  params: unknown,
+): Promise<string> {
   const normalized = JSON.stringify({
     endpoint,
     params,
@@ -22,7 +25,7 @@ export async function generateQueryHash(endpoint: string, params: unknown): Prom
  */
 export async function getCachedQuery<T>(
   endpoint: string,
-  params: unknown
+  params: unknown,
 ): Promise<{ fromCache: true; data: T } | null> {
   const { db } = await import("@/db");
   const hash = await generateQueryHash(endpoint, params);
@@ -31,7 +34,9 @@ export async function getCachedQuery<T>(
   const [hit] = await db
     .select()
     .from(cachedQueries)
-    .where(and(eq(cachedQueries.queryHash, hash), gt(cachedQueries.expiresAt, now)))
+    .where(
+      and(eq(cachedQueries.queryHash, hash), gt(cachedQueries.expiresAt, now)),
+    )
     .limit(1);
 
   if (!hit) return null;
@@ -52,12 +57,14 @@ export async function setCachedQuery(
   params: unknown,
   response: unknown,
   ttlDays = 14,
-  costSavedUsd = 0
+  costSavedUsd = 0,
 ): Promise<void> {
   const { db } = await import("@/db");
   const hash = await generateQueryHash(endpoint, params);
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + ttlDays * 24 * 60 * 60 * 1000).toISOString();
+  const expiresAt = new Date(
+    now.getTime() + ttlDays * 24 * 60 * 60 * 1000,
+  ).toISOString();
 
   await db
     .insert(cachedQueries)
@@ -85,7 +92,7 @@ export async function setCachedQuery(
  */
 export async function assertUserQuotaGuardrail(
   userId: string,
-  requiredCredits = 1
+  requiredCredits = 1,
 ): Promise<{ remaining: number; planId: string }> {
   const { db } = await import("@/db");
   const [quota] = await db
@@ -96,7 +103,9 @@ export async function assertUserQuotaGuardrail(
 
   // If no quota record exists yet, create default starter/trial record
   if (!quota) {
-    const nextReset = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const nextReset = new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000,
+    ).toISOString();
     const [newUserQuota] = await db
       .insert(userQuotas)
       .values({
@@ -111,7 +120,9 @@ export async function assertUserQuotaGuardrail(
       })
       .returning();
 
-    const remaining = (newUserQuota?.monthlyCreditsLimit ?? 500) - (newUserQuota?.creditsUsed ?? 0);
+    const remaining =
+      (newUserQuota?.monthlyCreditsLimit ?? 500) -
+      (newUserQuota?.creditsUsed ?? 0);
     return { remaining, planId: "starter" };
   }
 
@@ -119,7 +130,9 @@ export async function assertUserQuotaGuardrail(
   const now = new Date();
   const resetDate = new Date(quota.resetAt);
   if (now > resetDate) {
-    const nextReset = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const nextReset = new Date(
+      now.getTime() + 30 * 24 * 60 * 60 * 1000,
+    ).toISOString();
     await db
       .update(userQuotas)
       .set({
@@ -137,7 +150,7 @@ export async function assertUserQuotaGuardrail(
   if (remaining < requiredCredits) {
     throw new AppError(
       "INSUFFICIENT_CREDITS",
-      `Monthly credit quota reached (${quota.creditsUsed}/${quota.monthlyCreditsLimit} credits used). Please upgrade your Skorvia plan to continue.`
+      `Monthly credit quota reached (${quota.creditsUsed}/${quota.monthlyCreditsLimit} credits used). Please upgrade your Skorvia plan to continue.`,
     );
   }
 
@@ -147,7 +160,10 @@ export async function assertUserQuotaGuardrail(
 /**
  * Deducts / records credit consumption for a user.
  */
-export async function consumeUserQuotaCredits(userId: string, credits: number): Promise<void> {
+export async function consumeUserQuotaCredits(
+  userId: string,
+  credits: number,
+): Promise<void> {
   const { db } = await import("@/db");
   await db
     .update(userQuotas)

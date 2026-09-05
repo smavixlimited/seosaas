@@ -8,11 +8,7 @@ describe("Dedicated Competitor Comparison Pages Suite", () => {
   });
 
   it("ensures comparison route paths are properly formatted", () => {
-    const comparisonRoutes = [
-      "/vs/ahrefs",
-      "/vs/moz",
-      "/vs/se-ranking",
-    ];
+    const comparisonRoutes = ["/vs/ahrefs", "/vs/moz", "/vs/se-ranking"];
     expect(comparisonRoutes).toHaveLength(3);
     expect(comparisonRoutes[0]).toBe("/vs/ahrefs");
     expect(comparisonRoutes[1]).toBe("/vs/moz");

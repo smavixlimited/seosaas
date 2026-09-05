@@ -37,7 +37,11 @@ export async function isUserSuperAdmin(userId: string): Promise<boolean> {
   }
 
   try {
-    const [foundUser] = await db.select().from(user).where(eq(user.id, userId)).limit(1);
+    const [foundUser] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
     if (foundUser && isSuperAdminEmail(foundUser.email)) return true;
 
     // Also check if member role in any organization is 'owner' or 'superadmin'
@@ -71,11 +75,12 @@ export async function isUserSuperAdmin(userId: string): Promise<boolean> {
 // ---------------------------------------------------------------------------
 
 export async function getAdminOverviewMetrics() {
-  
   const [userCount] = await db.select({ value: count() }).from(user);
   const [orgCount] = await db.select({ value: count() }).from(organization);
   const [leadCount] = await db.select({ value: count() }).from(leads);
-  const [monitorCount] = await db.select({ value: count() }).from(uptimeMonitors);
+  const [monitorCount] = await db
+    .select({ value: count() })
+    .from(uptimeMonitors);
   const [pendingPaymentsCount] = await db
     .select({ value: count() })
     .from(manualPayments)
@@ -111,7 +116,7 @@ export async function getAdminOverviewMetrics() {
 // ---------------------------------------------------------------------------
 
 export async function getAdminPlans() {
-    const dbPlans = await db.select().from(saasPlans).orderBy(saasPlans.priceUsd);
+  const dbPlans = await db.select().from(saasPlans).orderBy(saasPlans.priceUsd);
 
   // If database plans table is empty, seed with initial BRAND_CONFIG tiers
   if (dbPlans.length === 0) {
@@ -124,7 +129,8 @@ export async function getAdminPlans() {
       isActive: true,
       limitsJson: JSON.stringify({
         maxDomains: t.id === "starter" ? 5 : t.id === "pro" ? 20 : 9999,
-        monthlyCredits: t.id === "starter" ? 500 : t.id === "pro" ? 2500 : 10000,
+        monthlyCredits:
+          t.id === "starter" ? 500 : t.id === "pro" ? 2500 : 10000,
         auditPages: t.id === "starter" ? 5000 : t.id === "pro" ? 50000 : 250000,
         uptimeMonitors: t.id === "starter" ? 0 : t.id === "pro" ? 5 : 50,
       }),
@@ -156,7 +162,7 @@ export async function upsertAdminPlan(data: {
   limitsJson: string;
   featuresJson: string;
 }) {
-    const now = new Date().toISOString();
+  const now = new Date().toISOString();
 
   await db
     .insert(saasPlans)
@@ -187,7 +193,7 @@ export async function upsertAdminPlan(data: {
 // ---------------------------------------------------------------------------
 
 export async function getAdminGateways() {
-    const defaultGateways = ["paystack", "flutterwave", "lemonsqueezy", "manual"];
+  const defaultGateways = ["paystack", "flutterwave", "lemonsqueezy", "manual"];
 
   const currentGateways = await db.select().from(gatewaySettings);
 
@@ -219,7 +225,7 @@ export async function updateAdminGateway(data: {
   secretKey?: string | null;
   manualInstructions?: string | null;
 }) {
-    const now = new Date().toISOString();
+  const now = new Date().toISOString();
 
   await db
     .insert(gatewaySettings)
@@ -250,7 +256,7 @@ export async function updateAdminGateway(data: {
 // ---------------------------------------------------------------------------
 
 export async function getAdminManualPayments() {
-    return db
+  return db
     .select()
     .from(manualPayments)
     .orderBy(desc(manualPayments.createdAt))
@@ -267,7 +273,7 @@ export async function submitManualPaymentReceipt(data: {
   receiptUrl?: string | null;
   userNotes?: string | null;
 }) {
-    const id = crypto.randomUUID();
+  const id = crypto.randomUUID();
   const now = new Date().toISOString();
 
   await db.insert(manualPayments).values({
@@ -293,7 +299,7 @@ export async function reviewManualPayment(data: {
   rejectionReason?: string;
   reviewerId: string;
 }) {
-    const now = new Date().toISOString();
+  const now = new Date().toISOString();
 
   const [payment] = await db
     .select()
@@ -317,8 +323,15 @@ export async function reviewManualPayment(data: {
 
   // If approved, automatically upgrade user quota & credits
   if (data.status === "approved") {
-    const creditsToGrant = payment.planId === "agency" ? 10000 : payment.planId === "pro" ? 2500 : 500;
-    const nextReset = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const creditsToGrant =
+      payment.planId === "agency"
+        ? 10000
+        : payment.planId === "pro"
+          ? 2500
+          : 500;
+    const nextReset = new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000,
+    ).toISOString();
 
     await db
       .insert(userQuotas)
@@ -351,7 +364,11 @@ export async function reviewManualPayment(data: {
 // ---------------------------------------------------------------------------
 
 export async function getAdminUsersList() {
-    const allUsers = await db.select().from(user).orderBy(desc(user.createdAt)).limit(100);
+  const allUsers = await db
+    .select()
+    .from(user)
+    .orderBy(desc(user.createdAt))
+    .limit(100);
   const quotas = await db.select().from(userQuotas);
 
   return allUsers.map((u) => {

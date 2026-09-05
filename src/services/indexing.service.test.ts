@@ -12,8 +12,8 @@ describe("Instant Indexing Service (IndexNow API & Sitemap Parser)", () => {
         new Response(JSON.stringify({ success: true }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
-        })
-      )
+        }),
+      ),
     );
 
     const res = await IndexingService.submitIndexNow({
@@ -35,7 +35,7 @@ describe("Instant Indexing Service (IndexNow API & Sitemap Parser)", () => {
       IndexingService.submitIndexNow({
         host: "",
         urlList: ["https://example.com/page"],
-      })
+      }),
     ).rejects.toThrow("A valid host domain is required");
   });
 
@@ -44,7 +44,7 @@ describe("Instant Indexing Service (IndexNow API & Sitemap Parser)", () => {
       IndexingService.submitIndexNow({
         host: "example.com",
         urlList: [],
-      })
+      }),
     ).rejects.toThrow("Please provide at least one URL to index");
   });
 
@@ -59,12 +59,14 @@ describe("Instant Indexing Service (IndexNow API & Sitemap Parser)", () => {
             <url><loc>https://example.com/about</loc></url>
             <url><loc>https://example.com/features</loc></url>
           </urlset>`,
-          { status: 200, headers: { "Content-Type": "application/xml" } }
-        )
-      )
+          { status: 200, headers: { "Content-Type": "application/xml" } },
+        ),
+      ),
     );
 
-    const sitemapRes = await IndexingService.fetchSitemapUrls("https://example.com/sitemap.xml");
+    const sitemapRes = await IndexingService.fetchSitemapUrls(
+      "https://example.com/sitemap.xml",
+    );
     expect(sitemapRes.urlCount).toBe(3);
     expect(sitemapRes.urls).toContain("https://example.com/about");
     expect(sitemapRes.urls).toContain("https://example.com/features");

@@ -8,7 +8,9 @@ const roadmapQuerySchema = z.object({}).optional();
 const updateTaskStatusSchema = z.object({
   taskId: z.string().min(1),
   status: z.enum(["todo", "in_progress", "completed", "dismissed"]),
-  verificationType: z.enum(["manual", "ai_generated", "live_crawled"]).optional(),
+  verificationType: z
+    .enum(["manual", "ai_generated", "live_crawled"])
+    .optional(),
 });
 
 const generateAiFixSchema = z.object({
@@ -18,7 +20,13 @@ const generateAiFixSchema = z.object({
 const createCustomTaskSchema = z.object({
   title: z.string().min(1).max(255),
   description: z.string().min(1).max(2000),
-  category: z.enum(["quick_win", "high_impact", "technical", "content_gap", "growth"]),
+  category: z.enum([
+    "quick_win",
+    "high_impact",
+    "technical",
+    "content_gap",
+    "growth",
+  ]),
   priority: z.enum(["critical", "high", "medium", "low"]).optional(),
   estimatedMinutes: z.number().int().positive().optional(),
   targetUrl: z.string().url().optional().or(z.literal("")),
@@ -34,11 +42,11 @@ export const getProjectRoadmap = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const tasks = await RoadmapService.getRoadmapTasks(
       context.projectId,
-      context.project.domain || undefined
+      context.project.domain || undefined,
     );
     const metrics = await RoadmapService.getRoadmapMetrics(
       context.projectId,
-      context.project.domain || undefined
+      context.project.domain || undefined,
     );
 
     return {
@@ -58,7 +66,7 @@ export const updateRoadmapTask = createServerFn({ method: "POST" })
       data.taskId,
       data.status,
       context.userId,
-      data.verificationType || "manual"
+      data.verificationType || "manual",
     );
   });
 

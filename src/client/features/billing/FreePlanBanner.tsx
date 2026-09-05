@@ -46,7 +46,9 @@ export function FreePlanBanner() {
   const dbCreditsRemaining = creditUsageQuery.data?.creditsRemaining ?? 500;
   const isOutOfCredits = totalRemaining <= 0 && dbCreditsRemaining <= 0;
   const isLowCredits =
-    !isOutOfCredits && (totalRemaining < LOW_CREDITS_THRESHOLD_USD && dbCreditsRemaining < 20);
+    !isOutOfCredits &&
+    totalRemaining < LOW_CREDITS_THRESHOLD_USD &&
+    dbCreditsRemaining < 20;
 
   const creditsActionLink = isFreePlan ? (
     <Link
@@ -56,7 +58,10 @@ export function FreePlanBanner() {
       Upgrade your plan
     </Link>
   ) : (
-    <Link to={BILLING_ROUTE} className="link link-primary font-bold underline ml-1">
+    <Link
+      to={BILLING_ROUTE}
+      className="link link-primary font-bold underline ml-1"
+    >
       Buy more credits
     </Link>
   );
@@ -83,10 +88,7 @@ export function FreePlanBanner() {
     return (
       <BannerShell variant="info">
         We hope you&rsquo;re enjoying Skorvia!{" "}
-        <Link
-          to={BILLING_ROUTE}
-          className="link link-primary font-medium"
-        >
+        <Link to={BILLING_ROUTE} className="link link-primary font-medium">
           Upgrade anytime
         </Link>{" "}
         or{" "}

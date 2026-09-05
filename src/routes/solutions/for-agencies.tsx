@@ -21,7 +21,10 @@ function ForAgenciesPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary">
-              <Icon icon="solar:users-group-two-rounded-bold" className="h-4 w-4" />
+              <Icon
+                icon="solar:users-group-two-rounded-bold"
+                className="h-4 w-4"
+              />
               <span>Built for Growth, SEO & Digital Marketing Agencies</span>
             </div>
 
@@ -33,7 +36,10 @@ function ForAgenciesPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-base-content/70 font-medium max-w-2xl mx-auto leading-relaxed">
-              Managing 20+ client domains on legacy \$499/mo agency tiers is burning your margins. {BRAND_CONFIG.name} delivers unlimited client projects, automated white-label PDF reports, and read-only client access.
+              Managing 20+ client domains on legacy \$499/mo agency tiers is
+              burning your margins. {BRAND_CONFIG.name} delivers unlimited
+              client projects, automated white-label PDF reports, and read-only
+              client access.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -62,7 +68,8 @@ function ForAgenciesPage() {
               Everything Your Agency Needs to Win & Retain Clients
             </h2>
             <p className="text-sm text-base-content/70">
-              Deliver institutional-grade SEO campaigns without complex enterprise contracts.
+              Deliver institutional-grade SEO campaigns without complex
+              enterprise contracts.
             </p>
           </div>
 
@@ -106,8 +113,12 @@ function ForAgenciesPage() {
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                   <Icon icon={card.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="font-extrabold text-base text-base-content">{card.title}</h3>
-                <p className="text-xs text-base-content/70 leading-relaxed">{card.desc}</p>
+                <h3 className="font-extrabold text-base text-base-content">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {card.desc}
+                </p>
               </div>
             ))}
           </div>

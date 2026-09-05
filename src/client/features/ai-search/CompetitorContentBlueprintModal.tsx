@@ -21,9 +21,14 @@ export function CompetitorContentBlueprintModal({
   defaultCompetitorUrls = [],
 }: CompetitorContentBlueprintModalProps) {
   const [keyword, setKeyword] = React.useState(defaultKeyword);
-  const [competitor1, setCompetitor1] = React.useState(defaultCompetitorUrls[0] || "https://ahrefs.com");
-  const [competitor2, setCompetitor2] = React.useState(defaultCompetitorUrls[1] || "https://moz.com");
-  const [blueprint, setBlueprint] = React.useState<CompetitorContentBlueprintResult | null>(null);
+  const [competitor1, setCompetitor1] = React.useState(
+    defaultCompetitorUrls[0] || "https://ahrefs.com",
+  );
+  const [competitor2, setCompetitor2] = React.useState(
+    defaultCompetitorUrls[1] || "https://moz.com",
+  );
+  const [blueprint, setBlueprint] =
+    React.useState<CompetitorContentBlueprintResult | null>(null);
 
   React.useEffect(() => {
     if (defaultKeyword) setKeyword(defaultKeyword);
@@ -34,7 +39,8 @@ export function CompetitorContentBlueprintModal({
   const blueprintMutation = useMutation({
     mutationFn: async () => {
       const urls = [competitor1.trim(), competitor2.trim()].filter(Boolean);
-      if (urls.length === 0) throw new Error("At least one competitor URL is required");
+      if (urls.length === 0)
+        throw new Error("At least one competitor URL is required");
 
       return await generateCompetitorBlueprintServerFn({
         data: {
@@ -49,7 +55,9 @@ export function CompetitorContentBlueprintModal({
       toast.success("Competitor blueprint generated successfully!");
     },
     onError: (err: unknown) => {
-      toast.error(err instanceof Error ? err.message : "Failed to analyze competitors");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to analyze competitors",
+      );
     },
   });
 
@@ -69,7 +77,8 @@ export function CompetitorContentBlueprintModal({
                 1-Click Competitor Content Blueprint &amp; Gap Dissection
               </h3>
               <p className="text-[11px] text-base-content/60">
-                Scrapes top-ranking competitor pages via Firecrawl to reverse-engineer their content structure and schemas.
+                Scrapes top-ranking competitor pages via Firecrawl to
+                reverse-engineer their content structure and schemas.
               </p>
             </div>
           </div>
@@ -132,10 +141,18 @@ export function CompetitorContentBlueprintModal({
               className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/25 gap-2"
             >
               <Icon
-                icon={blueprintMutation.isPending ? "solar:refresh-circle-bold" : "solar:magic-stick-3-bold"}
+                icon={
+                  blueprintMutation.isPending
+                    ? "solar:refresh-circle-bold"
+                    : "solar:magic-stick-3-bold"
+                }
                 className={`h-4 w-4 ${blueprintMutation.isPending ? "animate-spin" : ""}`}
               />
-              <span>{blueprintMutation.isPending ? "Scraping & Dissecting..." : "Run Competitor Dissection"}</span>
+              <span>
+                {blueprintMutation.isPending
+                  ? "Scraping & Dissecting..."
+                  : "Run Competitor Dissection"}
+              </span>
             </button>
           </div>
 
@@ -149,10 +166,13 @@ export function CompetitorContentBlueprintModal({
                     Average Competitor Length
                   </div>
                   <div className="text-xl font-black text-base-content">
-                    {blueprint.wordCountGap.averageCompetitor.toLocaleString()} words
+                    {blueprint.wordCountGap.averageCompetitor.toLocaleString()}{" "}
+                    words
                   </div>
                   <div className="text-[11px] text-emerald-600 font-bold">
-                    Target: {blueprint.wordCountGap.recommendedMin.toLocaleString()}+ words
+                    Target:{" "}
+                    {blueprint.wordCountGap.recommendedMin.toLocaleString()}+
+                    words
                   </div>
                 </div>
 
@@ -193,7 +213,9 @@ export function CompetitorContentBlueprintModal({
                       key={idx}
                       className="p-2.5 rounded-xl border border-base-200 bg-base-200/40 text-xs font-bold text-base-content flex items-start gap-2"
                     >
-                      <span className="badge badge-primary badge-xs mt-0.5">{idx + 1}</span>
+                      <span className="badge badge-primary badge-xs mt-0.5">
+                        {idx + 1}
+                      </span>
                       <span>{sub}</span>
                     </div>
                   ))}
@@ -205,14 +227,20 @@ export function CompetitorContentBlueprintModal({
                 <div className="flex items-center justify-between border-b border-base-200 pb-3">
                   <div className="flex items-center gap-2 text-xs font-black uppercase text-primary">
                     <Icon icon="solar:stars-bold" className="h-4 w-4" />
-                    <span>AI Generated Article Outline &amp; Content Brief</span>
+                    <span>
+                      AI Generated Article Outline &amp; Content Brief
+                    </span>
                   </div>
                   <button
                     type="button"
                     onClick={() => {
-                      const text = `# ${blueprint.aiContentBrief.recommendedTitle}\n\nMeta Description: ${blueprint.aiContentBrief.metaDescription}\n\n` +
+                      const text =
+                        `# ${blueprint.aiContentBrief.recommendedTitle}\n\nMeta Description: ${blueprint.aiContentBrief.metaDescription}\n\n` +
                         blueprint.aiContentBrief.suggestedOutline
-                          .map((o) => `## ${o.heading}\n${o.keyPoints.map((k) => `- ${k}`).join("\n")}`)
+                          .map(
+                            (o) =>
+                              `## ${o.heading}\n${o.keyPoints.map((k) => `- ${k}`).join("\n")}`,
+                          )
                           .join("\n\n");
                       void navigator.clipboard.writeText(text);
                       toast.success("Content brief copied to clipboard!");
@@ -226,24 +254,33 @@ export function CompetitorContentBlueprintModal({
 
                 <div className="space-y-3 text-xs">
                   <div className="p-3 rounded-xl bg-primary/5 border border-primary/10">
-                    <div className="font-extrabold text-primary mb-1">Recommended Title Tag</div>
-                    <div className="text-base-content font-bold">{blueprint.aiContentBrief.recommendedTitle}</div>
+                    <div className="font-extrabold text-primary mb-1">
+                      Recommended Title Tag
+                    </div>
+                    <div className="text-base-content font-bold">
+                      {blueprint.aiContentBrief.recommendedTitle}
+                    </div>
                   </div>
 
                   <div className="space-y-2 pt-2">
-                    {blueprint.aiContentBrief.suggestedOutline.map((section, idx) => (
-                      <div key={idx} className="p-3 rounded-xl border border-base-200 bg-base-200/30 space-y-1.5">
-                        <div className="font-extrabold text-xs text-base-content flex items-center gap-1.5">
-                          <span className="text-primary font-black">H2:</span>
-                          <span>{section.heading}</span>
+                    {blueprint.aiContentBrief.suggestedOutline.map(
+                      (section, idx) => (
+                        <div
+                          key={idx}
+                          className="p-3 rounded-xl border border-base-200 bg-base-200/30 space-y-1.5"
+                        >
+                          <div className="font-extrabold text-xs text-base-content flex items-center gap-1.5">
+                            <span className="text-primary font-black">H2:</span>
+                            <span>{section.heading}</span>
+                          </div>
+                          <ul className="list-disc list-inside text-[11px] text-base-content/70 pl-2 space-y-0.5">
+                            {section.keyPoints.map((pt, pIdx) => (
+                              <li key={pIdx}>{pt}</li>
+                            ))}
+                          </ul>
                         </div>
-                        <ul className="list-disc list-inside text-[11px] text-base-content/70 pl-2 space-y-0.5">
-                          {section.keyPoints.map((pt, pIdx) => (
-                            <li key={pIdx}>{pt}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </div>
               </div>

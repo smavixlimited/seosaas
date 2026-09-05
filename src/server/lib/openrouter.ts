@@ -38,7 +38,8 @@ export async function getChatAgentModel(): Promise<LanguageModelV3> {
   let modelId: string | undefined;
 
   try {
-    const { SystemSettingsService } = await import("@/services/system-settings.service");
+    const { SystemSettingsService } =
+      await import("@/services/system-settings.service");
     const aiSettings = await SystemSettingsService.getAiApis();
     if (aiSettings?.openrouterApiKey) {
       apiKey = aiSettings.openrouterApiKey;

@@ -39,7 +39,9 @@ const createCouponSchema = z.object({
   discountValue: z.number().positive(),
   currency: z.string().optional(),
   applicablePlans: z.array(z.string()).optional(),
-  customerEligibility: z.enum(["all", "new_customers_only", "existing_customers_only"]).default("all"),
+  customerEligibility: z
+    .enum(["all", "new_customers_only", "existing_customers_only"])
+    .default("all"),
   maxRedemptions: z.number().int().positive().optional().nullable(),
   maxRedemptionsPerUser: z.number().int().positive().default(1),
   expiresAt: z.string().optional().nullable(),

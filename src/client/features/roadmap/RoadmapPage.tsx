@@ -10,7 +10,11 @@ import {
   createRoadmapTask,
   syncRoadmapLiveCrawl,
 } from "@/serverFunctions/roadmap";
-import type { RoadmapTaskItem, RoadmapCategory, RoadmapStatus } from "@/services/roadmap.service";
+import type {
+  RoadmapTaskItem,
+  RoadmapCategory,
+  RoadmapStatus,
+} from "@/services/roadmap.service";
 
 interface RoadmapPageProps {
   projectId: string;
@@ -20,9 +24,16 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = React.useState<"all" | RoadmapCategory>("all");
-  const [statusFilter, setStatusFilter] = React.useState<"active" | "completed">("active");
-  const [selectedSnippet, setSelectedSnippet] = React.useState<{ title: string; snippet: string } | null>(null);
+  const [activeTab, setActiveTab] = React.useState<"all" | RoadmapCategory>(
+    "all",
+  );
+  const [statusFilter, setStatusFilter] = React.useState<
+    "active" | "completed"
+  >("active");
+  const [selectedSnippet, setSelectedSnippet] = React.useState<{
+    title: string;
+    snippet: string;
+  } | null>(null);
 
   const roadmapQuery = useQuery({
     queryKey: ["projectRoadmap", projectId],
@@ -40,7 +51,9 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
         },
       }),
     onSuccess: (updated) => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       if (updated?.status === "completed") {
         toast.success("Task completed & verified!");
       } else {
@@ -58,7 +71,9 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
         data: { taskId: vars.taskId },
       }),
     onSuccess: (res) => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       setSelectedSnippet({ title: res.task.title, snippet: res.codeSnippet });
       toast.success("AI Fix generated & task auto-verified!");
     },
@@ -70,11 +85,17 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
   const syncCrawlMutation = useMutation({
     mutationFn: () => syncRoadmapLiveCrawl({}),
     onSuccess: (res) => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       if (res.newlyVerifiedCount > 0) {
-        toast.success(`Live crawl verified ${res.newlyVerifiedCount} fixed issues!`);
+        toast.success(
+          `Live crawl verified ${res.newlyVerifiedCount} fixed issues!`,
+        );
       } else {
-        toast.info("Live crawl sync complete. All active tasks remain in queue.");
+        toast.info(
+          "Live crawl sync complete. All active tasks remain in queue.",
+        );
       }
     },
     onError: (err: Error) => {
@@ -106,11 +127,16 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
   // Filter tasks
   const filteredTasks = tasks.filter((t) => {
     const matchesCategory = activeTab === "all" || t.category === activeTab;
-    const matchesStatus = statusFilter === "active" ? t.status !== "completed" : t.status === "completed";
+    const matchesStatus =
+      statusFilter === "active"
+        ? t.status !== "completed"
+        : t.status === "completed";
     return matchesCategory && matchesStatus;
   });
 
-  const quickWinsCount = tasks.filter((t) => t.category === "quick_win" && t.status !== "completed").length;
+  const quickWinsCount = tasks.filter(
+    (t) => t.category === "quick_win" && t.status !== "completed",
+  ).length;
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-150">
@@ -121,7 +147,10 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
             SEO &amp; Growth Roadmap
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
-            Your automated path to higher rankings and traffic. Prioritize high-impact search fixes discovered from your audits, generate instant 1-click solutions with Skorvia AI, and track verified SEO growth.
+            Your automated path to higher rankings and traffic. Prioritize
+            high-impact search fixes discovered from your audits, generate
+            instant 1-click solutions with Skorvia AI, and track verified SEO
+            growth.
           </p>
         </div>
 
@@ -132,8 +161,15 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
             disabled={syncCrawlMutation.isPending}
             className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
           >
-            <Icon icon="solar:refresh-circle-bold" className={`h-4 w-4 text-primary ${syncCrawlMutation.isPending ? "animate-spin" : ""}`} />
-            <span>{syncCrawlMutation.isPending ? "Checking Crawl..." : "Sync Live Crawl"}</span>
+            <Icon
+              icon="solar:refresh-circle-bold"
+              className={`h-4 w-4 text-primary ${syncCrawlMutation.isPending ? "animate-spin" : ""}`}
+            />
+            <span>
+              {syncCrawlMutation.isPending
+                ? "Checking Crawl..."
+                : "Sync Live Crawl"}
+            </span>
           </button>
         </div>
       </div>
@@ -142,7 +178,9 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
       {metrics ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Sprint Completion</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Sprint Completion
+            </span>
             <div className="flex items-baseline justify-between">
               <h4 className="text-lg font-bold text-slate-800 dark:text-slate-100 font-mono">
                 {metrics.completionRate}%
@@ -160,27 +198,39 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Est. Time Saved</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Est. Time Saved
+            </span>
             <h4 className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono">
               {metrics.estimatedMinutesSaved} mins
             </h4>
-            <span className="text-[11px] text-slate-400">Via AI &amp; automated fixes</span>
+            <span className="text-[11px] text-slate-400">
+              Via AI &amp; automated fixes
+            </span>
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">SEO Health Score Boost</span>
+            <span className="text-xs text-slate-400 font-medium">
+              SEO Health Score Boost
+            </span>
             <h4 className="text-lg font-bold text-indigo-600 dark:text-indigo-400 font-mono">
               +{metrics.healthScoreBoost} pts
             </h4>
-            <span className="text-[11px] text-slate-400">Projected crawl recovery</span>
+            <span className="text-[11px] text-slate-400">
+              Projected crawl recovery
+            </span>
           </div>
 
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1 shadow-2xs">
-            <span className="text-xs text-slate-400 font-medium">Open Quick Wins (&lt; 5m)</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Open Quick Wins (&lt; 5m)
+            </span>
             <h4 className="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
               {quickWinsCount} items
             </h4>
-            <span className="text-[11px] text-slate-400">Immediate top-tier gains</span>
+            <span className="text-[11px] text-slate-400">
+              Immediate top-tier gains
+            </span>
           </div>
         </div>
       ) : null}
@@ -288,17 +338,27 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
       {roadmapQuery.isLoading ? (
         <div className="p-12 text-center space-y-3">
           <div className="mx-auto h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary animate-pulse">
-            <Icon icon="solar:checklist-minimalistic-bold-duotone" className="h-5 w-5 animate-spin" />
+            <Icon
+              icon="solar:checklist-minimalistic-bold-duotone"
+              className="h-5 w-5 animate-spin"
+            />
           </div>
-          <p className="text-xs text-slate-500">Loading action roadmap sprint...</p>
+          <p className="text-xs text-slate-500">
+            Loading action roadmap sprint...
+          </p>
         </div>
       ) : filteredTasks.length === 0 ? (
         <div className="p-12 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-3">
           <div className="mx-auto h-12 w-12 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center text-slate-400">
-            <Icon icon="solar:shield-check-bold-duotone" className="h-6 w-6 text-emerald-500" />
+            <Icon
+              icon="solar:shield-check-bold-duotone"
+              className="h-6 w-6 text-emerald-500"
+            />
           </div>
           <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-            {statusFilter === "active" ? "No Active Tasks in this Category" : "No Completed Tasks Yet"}
+            {statusFilter === "active"
+              ? "No Active Tasks in this Category"
+              : "No Completed Tasks Yet"}
           </h4>
           <p className="text-xs text-slate-400 max-w-sm mx-auto">
             {statusFilter === "active"
@@ -336,7 +396,12 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                         : "border-slate-300 dark:border-slate-600 hover:border-primary"
                     }`}
                   >
-                    {isCompleted ? <Icon icon="solar:check-read-bold" className="h-3.5 w-3.5" /> : null}
+                    {isCompleted ? (
+                      <Icon
+                        icon="solar:check-read-bold"
+                        className="h-3.5 w-3.5"
+                      />
+                    ) : null}
                   </button>
 
                   {/* Task Content */}
@@ -347,12 +412,12 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                           task.category === "quick_win"
                             ? "bg-amber-500/10 text-amber-600"
                             : task.category === "high_impact"
-                            ? "bg-rose-500/10 text-rose-600"
-                            : task.category === "technical"
-                            ? "bg-blue-500/10 text-blue-600"
-                            : task.category === "content_gap"
-                            ? "bg-purple-500/10 text-purple-600"
-                            : "bg-emerald-500/10 text-emerald-600"
+                              ? "bg-rose-500/10 text-rose-600"
+                              : task.category === "technical"
+                                ? "bg-blue-500/10 text-blue-600"
+                                : task.category === "content_gap"
+                                  ? "bg-purple-500/10 text-purple-600"
+                                  : "bg-emerald-500/10 text-emerald-600"
                         }`}
                       >
                         {task.impactBadge}
@@ -370,8 +435,8 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                               task.verificationType === "ai_generated"
                                 ? "solar:bolt-bold-duotone"
                                 : task.verificationType === "live_crawled"
-                                ? "solar:refresh-circle-bold"
-                                : "solar:check-circle-bold"
+                                  ? "solar:refresh-circle-bold"
+                                  : "solar:check-circle-bold"
                             }
                             className="h-3 w-3"
                           />
@@ -379,8 +444,8 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                             {task.verificationType === "ai_generated"
                               ? "AI Fix Verified"
                               : task.verificationType === "live_crawled"
-                              ? "Live Crawl Verified"
-                              : "Manual Verified"}
+                                ? "Live Crawl Verified"
+                                : "Manual Verified"}
                           </span>
                         </span>
                       ) : null}
@@ -409,7 +474,10 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                         className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-mono"
                       >
                         <span>{task.targetUrl}</span>
-                        <Icon icon="solar:arrow-right-up-bold" className="h-3 w-3" />
+                        <Icon
+                          icon="solar:arrow-right-up-bold"
+                          className="h-3 w-3"
+                        />
                       </a>
                     ) : null}
 
@@ -418,20 +486,33 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                       {task.aiFixCodeSnippet ? (
                         <button
                           type="button"
-                          onClick={() => setSelectedSnippet({ title: task.title, snippet: task.aiFixCodeSnippet! })}
+                          onClick={() =>
+                            setSelectedSnippet({
+                              title: task.title,
+                              snippet: task.aiFixCodeSnippet!,
+                            })
+                          }
                           className="px-2.5 py-1 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary text-[11px] font-bold flex items-center gap-1 transition-colors"
                         >
-                          <Icon icon="solar:code-bold-duotone" className="h-3.5 w-3.5" />
+                          <Icon
+                            icon="solar:code-bold-duotone"
+                            className="h-3.5 w-3.5"
+                          />
                           <span>View Code Snippet</span>
                         </button>
                       ) : (
                         <button
                           type="button"
-                          onClick={() => aiFixMutation.mutate({ taskId: task.id })}
+                          onClick={() =>
+                            aiFixMutation.mutate({ taskId: task.id })
+                          }
                           disabled={aiFixMutation.isPending}
                           className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-semibold flex items-center gap-1 transition-colors"
                         >
-                          <Icon icon="solar:bolt-bold-duotone" className="h-3.5 w-3.5 text-primary" />
+                          <Icon
+                            icon="solar:bolt-bold-duotone"
+                            className="h-3.5 w-3.5 text-primary"
+                          />
                           <span>Generate 1-Click Fix</span>
                         </button>
                       )}
@@ -441,7 +522,10 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
                         onClick={() => handleLaunchSam(task)}
                         className="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary/90 text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs transition-colors"
                       >
-                        <Icon icon="solar:chat-round-line-bold" className="h-3.5 w-3.5" />
+                        <Icon
+                          icon="solar:chat-round-line-bold"
+                          className="h-3.5 w-3.5"
+                        />
                         <span>Fix with SAM AI</span>
                       </button>
                     </div>

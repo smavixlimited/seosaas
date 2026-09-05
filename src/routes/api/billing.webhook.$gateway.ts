@@ -5,7 +5,10 @@ import {
   verifyWebhookHmacSignature,
 } from "@/services/billing.service";
 
-async function handleWebhook(request: Request, gateway: string): Promise<Response> {
+async function handleWebhook(
+  request: Request,
+  gateway: string,
+): Promise<Response> {
   try {
     const rawBody = await request.text();
     let event: Record<string, unknown> = {};
@@ -21,7 +24,12 @@ async function handleWebhook(request: Request, gateway: string): Promise<Respons
       const signature = request.headers.get("x-paystack-signature");
 
       if (secretKey && signature) {
-        const isValid = await verifyWebhookHmacSignature(rawBody, signature, secretKey, "SHA-512");
+        const isValid = await verifyWebhookHmacSignature(
+          rawBody,
+          signature,
+          secretKey,
+          "SHA-512",
+        );
         if (!isValid) {
           return new Response("Invalid webhook signature", { status: 401 });
         }
@@ -43,21 +51,36 @@ async function handleWebhook(request: Request, gateway: string): Promise<Respons
       }
     } else if (gateway === "lemonsqueezy") {
       const gw = await getGatewayConfig("lemonsqueezy");
-      const secretKey = gw?.secretKey || process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+      const secretKey =
+        gw?.secretKey || process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
       const signature = request.headers.get("x-signature");
 
       if (secretKey && signature) {
-        const isValid = await verifyWebhookHmacSignature(rawBody, signature, secretKey, "SHA-256");
+        const isValid = await verifyWebhookHmacSignature(
+          rawBody,
+          signature,
+          secretKey,
+          "SHA-256",
+        );
         if (!isValid) {
           return new Response("Invalid webhook signature", { status: 401 });
         }
       }
 
-      const eventName = event.meta ? (event.meta as Record<string, unknown>).event_name : event.event;
-      if (eventName === "subscription_created" || eventName === "order_created") {
+      const eventName = event.meta
+        ? (event.meta as Record<string, unknown>).event_name
+        : event.event;
+      if (
+        eventName === "subscription_created" ||
+        eventName === "order_created"
+      ) {
         const data = event.data as Record<string, unknown> | undefined;
-        const attributes = data?.attributes as Record<string, unknown> | undefined;
-        const customData = attributes?.custom_data as Record<string, unknown> | undefined;
+        const attributes = data?.attributes as
+          | Record<string, unknown>
+          | undefined;
+        const customData = attributes?.custom_data as
+          | Record<string, unknown>
+          | undefined;
         const userId = customData?.user_id as string | undefined;
         const planId = (customData?.plan_id as string | undefined) || "pro";
 
@@ -74,7 +97,7 @@ async function handleWebhook(request: Request, gateway: string): Promise<Respons
   } catch (err) {
     return Response.json(
       { status: "error", message: (err as Error).message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

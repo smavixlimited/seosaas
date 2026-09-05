@@ -5,7 +5,10 @@ import { BRAND_CONFIG } from "@/config/brand";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
 import { useCurrency, CurrencySwitcher } from "@/client/lib/currency";
-import { CheckoutModal, type PlanItem } from "@/client/components/billing/CheckoutModal";
+import {
+  CheckoutModal,
+  type PlanItem,
+} from "@/client/components/billing/CheckoutModal";
 import { getPublicPlansServerFn } from "@/serverFunctions/billing-gateways";
 import type { AdminPlanRecord } from "@/services/billing-plans.service";
 
@@ -23,30 +26,33 @@ export const Route = createFileRoute("/pricing")({
 function PricingPage() {
   const dbPlans = (Route.useLoaderData() ?? []) as AdminPlanRecord[];
   const { formatPrice } = useCurrency();
-  const [billingInterval, setBillingInterval] = React.useState<"month" | "year">("month");
+  const [billingInterval, setBillingInterval] = React.useState<
+    "month" | "year"
+  >("month");
   const [selectedPlan, setSelectedPlan] = React.useState<PlanItem | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = React.useState(false);
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
 
   const isAnnual = billingInterval === "year";
 
-  const tiers: PlanItem[] = dbPlans.length > 0
-    ? dbPlans.map((p) => ({
-        id: p.id,
-        name: p.name,
-        priceUsd: isAnnual ? Math.round(p.priceUsd * 0.8) : p.priceUsd,
-        priceNgn: isAnnual ? Math.round(p.priceNgn * 0.8) : p.priceNgn,
-        billingInterval: p.billingInterval,
-        limits: p.limits,
-        features: p.features,
-      }))
-    : BRAND_CONFIG.pricing.tiers.map((t) => ({
-        id: t.id,
-        name: t.name,
-        priceUsd: isAnnual ? t.priceAnnualUSD : t.priceMonthlyUSD,
-        priceNgn: isAnnual ? t.priceAnnualNGN : t.priceMonthlyNGN,
-        billingInterval: "month",
-      }));
+  const tiers: PlanItem[] =
+    dbPlans.length > 0
+      ? dbPlans.map((p) => ({
+          id: p.id,
+          name: p.name,
+          priceUsd: isAnnual ? Math.round(p.priceUsd * 0.8) : p.priceUsd,
+          priceNgn: isAnnual ? Math.round(p.priceNgn * 0.8) : p.priceNgn,
+          billingInterval: p.billingInterval,
+          limits: p.limits,
+          features: p.features,
+        }))
+      : BRAND_CONFIG.pricing.tiers.map((t) => ({
+          id: t.id,
+          name: t.name,
+          priceUsd: isAnnual ? t.priceAnnualUSD : t.priceMonthlyUSD,
+          priceNgn: isAnnual ? t.priceAnnualNGN : t.priceMonthlyNGN,
+          billingInterval: "month",
+        }));
 
   const openCheckout = (tier: PlanItem) => {
     setSelectedPlan(tier);
@@ -55,7 +61,9 @@ function PricingPage() {
 
   const starterPlan = dbPlans.find((p) => p.id === "starter");
   const proPlan = dbPlans.find((p) => p.id === "pro");
-  const agencyPlan = dbPlans.find((p) => p.id === "agency" || p.id === "enterprise");
+  const agencyPlan = dbPlans.find(
+    (p) => p.id === "agency" || p.id === "enterprise",
+  );
 
   const comparisonRows = [
     // 1. Core SEO Suite
@@ -111,9 +119,16 @@ function PricingPage() {
     // 3. AI & Content
     {
       feature: "AI Search & AEO Citation Visibility",
-      starter: starterPlan?.features?.ai_visibility ?? starterPlan?.features?.aeoAudit ?? false,
-      pro: proPlan?.features?.ai_visibility ?? proPlan?.features?.aeoAudit ?? true,
-      agency: agencyPlan?.features?.ai_visibility ?? agencyPlan?.features?.aeoAudit ?? true,
+      starter:
+        starterPlan?.features?.ai_visibility ??
+        starterPlan?.features?.aeoAudit ??
+        false,
+      pro:
+        proPlan?.features?.ai_visibility ?? proPlan?.features?.aeoAudit ?? true,
+      agency:
+        agencyPlan?.features?.ai_visibility ??
+        agencyPlan?.features?.aeoAudit ??
+        true,
     },
     {
       feature: "AI Content Studio & Automated llms.txt",
@@ -129,9 +144,18 @@ function PricingPage() {
     },
     {
       feature: "1-Click IndexNow & Google Push",
-      starter: starterPlan?.features?.indexnow_submitter ?? starterPlan?.features?.indexnowSubmit ?? false,
-      pro: proPlan?.features?.indexnow_submitter ?? proPlan?.features?.indexnowSubmit ?? true,
-      agency: agencyPlan?.features?.indexnow_submitter ?? agencyPlan?.features?.indexnowSubmit ?? true,
+      starter:
+        starterPlan?.features?.indexnow_submitter ??
+        starterPlan?.features?.indexnowSubmit ??
+        false,
+      pro:
+        proPlan?.features?.indexnow_submitter ??
+        proPlan?.features?.indexnowSubmit ??
+        true,
+      agency:
+        agencyPlan?.features?.indexnow_submitter ??
+        agencyPlan?.features?.indexnowSubmit ??
+        true,
     },
     // 4. Infrastructure & Agency
     {
@@ -148,9 +172,18 @@ function PricingPage() {
     },
     {
       feature: "White-Label Client PDF Reports",
-      starter: starterPlan?.features?.white_label_pdf ?? starterPlan?.features?.whiteLabelPdf ?? false,
-      pro: proPlan?.features?.white_label_pdf ?? proPlan?.features?.whiteLabelPdf ?? false,
-      agency: agencyPlan?.features?.white_label_pdf ?? agencyPlan?.features?.whiteLabelPdf ?? true,
+      starter:
+        starterPlan?.features?.white_label_pdf ??
+        starterPlan?.features?.whiteLabelPdf ??
+        false,
+      pro:
+        proPlan?.features?.white_label_pdf ??
+        proPlan?.features?.whiteLabelPdf ??
+        false,
+      agency:
+        agencyPlan?.features?.white_label_pdf ??
+        agencyPlan?.features?.whiteLabelPdf ??
+        true,
     },
     {
       feature: "Multi-Seat Team Management",
@@ -160,15 +193,30 @@ function PricingPage() {
     },
     {
       feature: "Personal API Key & Autonomous MCP Server",
-      starter: starterPlan?.features?.mcp_api_access ?? starterPlan?.features?.mcpAccess ?? false,
-      pro: proPlan?.features?.mcp_api_access ?? proPlan?.features?.mcpAccess ?? true,
-      agency: agencyPlan?.features?.mcp_api_access ?? agencyPlan?.features?.mcpAccess ?? true,
+      starter:
+        starterPlan?.features?.mcp_api_access ??
+        starterPlan?.features?.mcpAccess ??
+        false,
+      pro:
+        proPlan?.features?.mcp_api_access ??
+        proPlan?.features?.mcpAccess ??
+        true,
+      agency:
+        agencyPlan?.features?.mcp_api_access ??
+        agencyPlan?.features?.mcpAccess ??
+        true,
     },
     {
       feature: "Priority Dedicated Support",
-      starter: starterPlan?.features?.priority_support ? "Priority" : "Standard",
-      pro: proPlan?.features?.priority_support ? "Priority 24/7" : "Priority (12hr)",
-      agency: agencyPlan?.features?.priority_support ? "Dedicated 24/7" : "Dedicated 24/7",
+      starter: starterPlan?.features?.priority_support
+        ? "Priority"
+        : "Standard",
+      pro: proPlan?.features?.priority_support
+        ? "Priority 24/7"
+        : "Priority (12hr)",
+      agency: agencyPlan?.features?.priority_support
+        ? "Dedicated 24/7"
+        : "Dedicated 24/7",
     },
   ];
 
@@ -200,12 +248,15 @@ function PricingPage() {
         <div className="main-container">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="badge badge-cyan">Simple, Transparent Pricing</span>
+            <span className="badge badge-cyan">
+              Simple, Transparent Pricing
+            </span>
             <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               Invest in high-converting SEO without the enterprise tax.
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto">
-              Select the pricing plan that best suits your needs. Scale seamlessly from solo founder to full-service agency.
+              Select the pricing plan that best suits your needs. Scale
+              seamlessly from solo founder to full-service agency.
             </p>
 
             {/* Currency & Billing Toggle */}
@@ -233,9 +284,13 @@ function PricingPage() {
                   }`}
                 >
                   <span>Annual Billing</span>
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-black ${
-                    isAnnual ? "bg-white/20 text-white" : "bg-primary-500/15 text-primary-500"
-                  }`}>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-black ${
+                      isAnnual
+                        ? "bg-white/20 text-white"
+                        : "bg-primary-500/15 text-primary-500"
+                    }`}
+                  >
                     SAVE 20%
                   </span>
                 </button>
@@ -251,7 +306,9 @@ function PricingPage() {
             {tiers.map((tier) => {
               const formattedPrice = formatPrice(tier.priceUsd, tier.priceNgn);
               const isHighlighted = tier.id === "pro";
-              const staticMeta = BRAND_CONFIG.pricing.tiers.find((t) => t.id === tier.id);
+              const staticMeta = BRAND_CONFIG.pricing.tiers.find(
+                (t) => t.id === tier.id,
+              );
 
               return (
                 <div
@@ -271,29 +328,50 @@ function PricingPage() {
                   <div className="space-y-6">
                     <div>
                       <div className="flex items-center justify-between">
-                        <h3 className={`text-heading-5 font-bold font-interTight ${isHighlighted ? "text-white" : "text-secondary dark:text-accent"}`}>
+                        <h3
+                          className={`text-heading-5 font-bold font-interTight ${isHighlighted ? "text-white" : "text-secondary dark:text-accent"}`}
+                        >
                           {tier.name}
                         </h3>
-                        <span className={`badge ${isHighlighted ? "badge-yellow" : "badge-cyan"}`}>
-                          {tier.id === "starter" ? "Starter" : tier.id === "pro" ? "Scale" : "Agency"}
+                        <span
+                          className={`badge ${isHighlighted ? "badge-yellow" : "badge-cyan"}`}
+                        >
+                          {tier.id === "starter"
+                            ? "Starter"
+                            : tier.id === "pro"
+                              ? "Scale"
+                              : "Agency"}
                         </span>
                       </div>
-                      <p className={`text-tagline-2 mt-2 min-h-[40px] leading-relaxed ${
-                        isHighlighted ? "text-accent/80" : "text-secondary/60 dark:text-accent/60"
-                      }`}>
-                        {staticMeta?.description || "High-performance SEO intelligence suite."}
+                      <p
+                        className={`text-tagline-2 mt-2 min-h-[40px] leading-relaxed ${
+                          isHighlighted
+                            ? "text-accent/80"
+                            : "text-secondary/60 dark:text-accent/60"
+                        }`}
+                      >
+                        {staticMeta?.description ||
+                          "High-performance SEO intelligence suite."}
                       </p>
                     </div>
 
                     <div className="flex items-baseline gap-2 pt-2">
-                      <span className={`text-heading-2 font-extrabold font-interTight ${
-                        isHighlighted ? "text-white" : "text-secondary dark:text-accent"
-                      }`}>
+                      <span
+                        className={`text-heading-2 font-extrabold font-interTight ${
+                          isHighlighted
+                            ? "text-white"
+                            : "text-secondary dark:text-accent"
+                        }`}
+                      >
                         {formattedPrice}
                       </span>
-                      <span className={`text-tagline-2 font-medium ${
-                        isHighlighted ? "text-accent/70" : "text-secondary/50 dark:text-accent/50"
-                      }`}>
+                      <span
+                        className={`text-tagline-2 font-medium ${
+                          isHighlighted
+                            ? "text-accent/70"
+                            : "text-secondary/50 dark:text-accent/50"
+                        }`}
+                      >
                         / month
                       </span>
                     </div>
@@ -304,27 +382,50 @@ function PricingPage() {
                       </p>
                     )}
 
-                    <div className={`space-y-3 pt-6 border-t ${
-                      isHighlighted ? "border-white/10" : "border-stroke-4 dark:border-stroke-8"
-                    }`}>
-                      <p className={`text-[11px] font-black uppercase tracking-wider ${
-                        isHighlighted ? "text-accent/60" : "text-secondary/40 dark:text-accent/40"
-                      }`}>
+                    <div
+                      className={`space-y-3 pt-6 border-t ${
+                        isHighlighted
+                          ? "border-white/10"
+                          : "border-stroke-4 dark:border-stroke-8"
+                      }`}
+                    >
+                      <p
+                        className={`text-[11px] font-black uppercase tracking-wider ${
+                          isHighlighted
+                            ? "text-accent/60"
+                            : "text-secondary/40 dark:text-accent/40"
+                        }`}
+                      >
                         Included Capabilities
                       </p>
                       <ul className="space-y-3 text-tagline-2">
-                        {(staticMeta?.features || [
-                          "Live SERP Keyword Tracking",
-                          "Backlink Analysis",
-                          "Technical Site Audit",
-                        ]).map((feat, idx) => (
+                        {(
+                          staticMeta?.features || [
+                            "Live SERP Keyword Tracking",
+                            "Backlink Analysis",
+                            "Technical Site Audit",
+                          ]
+                        ).map((feat, idx) => (
                           <li key={idx} className="flex items-center gap-3">
-                            <div className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${
-                              isHighlighted ? "bg-primary-500 text-white" : "bg-primary-500/10 text-primary-500"
-                            }`}>
-                              <Icon icon="solar:check-circle-bold" className="size-4" />
+                            <div
+                              className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${
+                                isHighlighted
+                                  ? "bg-primary-500 text-white"
+                                  : "bg-primary-500/10 text-primary-500"
+                              }`}
+                            >
+                              <Icon
+                                icon="solar:check-circle-bold"
+                                className="size-4"
+                              />
                             </div>
-                            <span className={isHighlighted ? "text-accent/90" : "text-secondary/80 dark:text-accent/80"}>
+                            <span
+                              className={
+                                isHighlighted
+                                  ? "text-accent/90"
+                                  : "text-secondary/80 dark:text-accent/80"
+                              }
+                            >
                               {feat}
                             </span>
                           </li>
@@ -358,19 +459,28 @@ function PricingPage() {
                 <div className="mx-auto w-12 h-12 rounded-full bg-ns-yellow/20 text-ns-yellow flex items-center justify-center mb-3">
                   <Icon icon="solar:shield-check-bold" className="size-6" />
                 </div>
-                <h4 className="text-heading-5 font-bold font-interTight">99.9% Data Accuracy</h4>
+                <h4 className="text-heading-5 font-bold font-interTight">
+                  99.9% Data Accuracy
+                </h4>
                 <p className="text-tagline-2 text-accent/70">
-                  Direct live SERP scrape & verified real-time volume from premier global search infrastructure.
+                  Direct live SERP scrape & verified real-time volume from
+                  premier global search infrastructure.
                 </p>
               </div>
 
               <div className="space-y-2 py-4 md:py-0 px-4">
                 <div className="mx-auto w-12 h-12 rounded-full bg-ns-cyan/20 text-ns-cyan flex items-center justify-center mb-3">
-                  <Icon icon="solar:users-group-two-rounded-bold" className="size-6" />
+                  <Icon
+                    icon="solar:users-group-two-rounded-bold"
+                    className="size-6"
+                  />
                 </div>
-                <h4 className="text-heading-5 font-bold font-interTight">Zero Seat Tax</h4>
+                <h4 className="text-heading-5 font-bold font-interTight">
+                  Zero Seat Tax
+                </h4>
                 <p className="text-tagline-2 text-accent/70">
-                  Invite your team and clients without paying up to $45/month extra per team member.
+                  Invite your team and clients without paying up to $45/month
+                  extra per team member.
                 </p>
               </div>
 
@@ -378,9 +488,12 @@ function PricingPage() {
                 <div className="mx-auto w-12 h-12 rounded-full bg-ns-red/20 text-ns-red flex items-center justify-center mb-3">
                   <Icon icon="solar:bolt-bold" className="size-6" />
                 </div>
-                <h4 className="text-heading-5 font-bold font-interTight">MCP Agent Ready</h4>
+                <h4 className="text-heading-5 font-bold font-interTight">
+                  MCP Agent Ready
+                </h4>
                 <p className="text-tagline-2 text-accent/70">
-                  Connect autonomous coding and research agents via standard Model Context Protocol.
+                  Connect autonomous coding and research agents via standard
+                  Model Context Protocol.
                 </p>
               </div>
             </div>
@@ -394,7 +507,8 @@ function PricingPage() {
                 Compare All Plan Features
               </h2>
               <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
-                Transparent technical limits, seat allowances, and automated workflows.
+                Transparent technical limits, seat allowances, and automated
+                workflows.
               </p>
             </div>
 
@@ -404,47 +518,76 @@ function PricingPage() {
                   <tr className="border-b border-stroke-4 dark:border-stroke-8 bg-background-2/50 dark:bg-background-7/50 text-[11px] font-black uppercase tracking-wider text-secondary/70 dark:text-accent/70">
                     <th className="py-4 px-6">Feature</th>
                     <th className="py-4 px-6 text-center">Starter</th>
-                    <th className="py-4 px-6 text-center text-primary-500 font-black">Pro (Popular)</th>
+                    <th className="py-4 px-6 text-center text-primary-500 font-black">
+                      Pro (Popular)
+                    </th>
                     <th className="py-4 px-6 text-center">Agency</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stroke-4 dark:divide-stroke-8">
                   {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-background-7/40 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-background-2/40 dark:hover:bg-background-7/40 transition-colors"
+                    >
                       <td className="py-4 px-6 font-medium text-secondary/90 dark:text-accent/90">
                         {row.feature}
                       </td>
                       <td className="py-4 px-6 text-center">
                         {typeof row.starter === "boolean" ? (
                           row.starter ? (
-                            <Icon icon="solar:check-circle-bold" className="size-5 text-ns-green mx-auto" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-ns-green mx-auto"
+                            />
                           ) : (
-                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
+                            <Icon
+                              icon="solar:close-circle-bold"
+                              className="size-5 text-secondary/20 dark:text-accent/20 mx-auto"
+                            />
                           )
                         ) : (
-                          <span className="font-bold text-secondary dark:text-accent">{row.starter}</span>
+                          <span className="font-bold text-secondary dark:text-accent">
+                            {row.starter}
+                          </span>
                         )}
                       </td>
                       <td className="py-4 px-6 text-center bg-primary-500/5">
                         {typeof row.pro === "boolean" ? (
                           row.pro ? (
-                            <Icon icon="solar:check-circle-bold" className="size-5 text-primary-500 mx-auto" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-primary-500 mx-auto"
+                            />
                           ) : (
-                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
+                            <Icon
+                              icon="solar:close-circle-bold"
+                              className="size-5 text-secondary/20 dark:text-accent/20 mx-auto"
+                            />
                           )
                         ) : (
-                          <span className="font-black text-primary-500">{row.pro}</span>
+                          <span className="font-black text-primary-500">
+                            {row.pro}
+                          </span>
                         )}
                       </td>
                       <td className="py-4 px-6 text-center">
                         {typeof row.agency === "boolean" ? (
                           row.agency ? (
-                            <Icon icon="solar:check-circle-bold" className="size-5 text-ns-green mx-auto" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-ns-green mx-auto"
+                            />
                           ) : (
-                            <Icon icon="solar:close-circle-bold" className="size-5 text-secondary/20 dark:text-accent/20 mx-auto" />
+                            <Icon
+                              icon="solar:close-circle-bold"
+                              className="size-5 text-secondary/20 dark:text-accent/20 mx-auto"
+                            />
                           )
                         ) : (
-                          <span className="font-bold text-secondary dark:text-accent">{row.agency}</span>
+                          <span className="font-bold text-secondary dark:text-accent">
+                            {row.agency}
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -457,7 +600,9 @@ function PricingPage() {
           {/* Pricing FAQs */}
           <div className="mt-24 max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-3">
-              <span className="badge badge-yellow">Frequently Asked Questions</span>
+              <span className="badge badge-yellow">
+                Frequently Asked Questions
+              </span>
               <h2 className="text-heading-3 font-bold text-secondary dark:text-accent font-interTight">
                 Got questions? We have answers.
               </h2>
@@ -478,7 +623,9 @@ function PricingPage() {
                     <Icon
                       icon="solar:alt-arrow-down-bold"
                       className={`size-5 shrink-0 transition-transform duration-300 ${
-                        openFaq === idx ? "rotate-180 text-primary-500" : "text-secondary/40 dark:text-accent/40"
+                        openFaq === idx
+                          ? "rotate-180 text-primary-500"
+                          : "text-secondary/40 dark:text-accent/40"
                       }`}
                     />
                   </button>

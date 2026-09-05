@@ -36,9 +36,13 @@ function MyBrandsPage() {
       <div className="mx-auto w-full max-w-2xl space-y-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-base-content">My Brands</h1>
+            <h1 className="text-2xl font-black tracking-tight text-base-content">
+              My Brands
+            </h1>
             <p className="mt-1 text-xs text-base-content/60 leading-relaxed">
-              Each Brand is a dedicated workspace with its own Search Console, competitor intelligence, local Map Pack tracking, conversion readiness scorecards, and Skorvia AI memory.
+              Each Brand is a dedicated workspace with its own Search Console,
+              competitor intelligence, local Map Pack tracking, conversion
+              readiness scorecards, and Skorvia AI memory.
             </p>
           </div>
           <button
@@ -120,7 +124,9 @@ function ArchivedProjects() {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-xs font-bold uppercase tracking-wider text-base-content/50">Archived Brands</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-base-content/50">
+        Archived Brands
+      </h2>
       <ul className="divide-y divide-base-300 overflow-hidden rounded-2xl border border-base-300">
         {archived.map((project) => (
           <li

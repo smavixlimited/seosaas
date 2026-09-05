@@ -19,7 +19,9 @@ export const CronOrchestratorService = {
   /**
    * Unified cron job dispatcher for Cloudflare Workers scheduled handlers.
    */
-  async executeScheduledTask(schedule: CronScheduleType): Promise<CronExecutionResult> {
+  async executeScheduledTask(
+    schedule: CronScheduleType,
+  ): Promise<CronExecutionResult> {
     const executedAt = new Date().toISOString();
 
     try {

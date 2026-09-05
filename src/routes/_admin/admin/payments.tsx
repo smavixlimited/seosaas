@@ -21,10 +21,15 @@ export const Route = createFileRoute("/_admin/admin/payments")({
 function AdminPaymentsPage() {
   const initialPayments = Route.useLoaderData();
   const [payments, setPayments] = React.useState(initialPayments);
-  const [filter, setFilter] = React.useState<"all" | "pending" | "approved" | "rejected">("pending");
+  const [filter, setFilter] = React.useState<
+    "all" | "pending" | "approved" | "rejected"
+  >("pending");
   const [processingId, setProcessingId] = React.useState<string | null>(null);
 
-  const handleReview = async (paymentId: string, status: "approved" | "rejected") => {
+  const handleReview = async (
+    paymentId: string,
+    status: "approved" | "rejected",
+  ) => {
     let rejectionReason: string | undefined;
     if (status === "rejected") {
       const reason = prompt("Enter reason for rejection (optional):");
@@ -46,12 +51,16 @@ function AdminPaymentsPage() {
         prev.map((p) =>
           p.id === paymentId
             ? { ...p, status, rejectionReason: rejectionReason ?? null }
-            : p
-        )
+            : p,
+        ),
       );
-      toast.success(`Payment ${status === "approved" ? "approved & subscription activated" : "rejected"}!`);
+      toast.success(
+        `Payment ${status === "approved" ? "approved & subscription activated" : "rejected"}!`,
+      );
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to review payment");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to review payment",
+      );
     } finally {
       setProcessingId(null);
     }
@@ -71,7 +80,8 @@ function AdminPaymentsPage() {
             Manual Bank Receipts &amp; Verification Queue
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Verify direct wire transfers, match transaction references, and activate customer workspaces.
+            Verify direct wire transfers, match transaction references, and
+            activate customer workspaces.
           </p>
         </div>
 
@@ -88,7 +98,12 @@ function AdminPaymentsPage() {
                   : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-200"
               }`}
             >
-              {f} ({payments.filter((p) => (f === "all" ? true : p.status === f)).length})
+              {f} (
+              {
+                payments.filter((p) => (f === "all" ? true : p.status === f))
+                  .length
+              }
+              )
             </button>
           ))}
         </div>
@@ -119,13 +134,19 @@ function AdminPaymentsPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {filteredPayments.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-slate-400">
+                  <td
+                    colSpan={8}
+                    className="px-6 py-12 text-center text-slate-400"
+                  >
                     No submissions found under "{filter}".
                   </td>
                 </tr>
               ) : (
                 filteredPayments.map((p) => (
-                  <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">
+                  <tr
+                    key={p.id}
+                    className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors"
+                  >
                     <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
                       {p.userEmail}
                     </td>
@@ -135,7 +156,9 @@ function AdminPaymentsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
-                      {p.currency === "USD" ? `$${p.amount}` : `₦${p.amount.toLocaleString()}`}
+                      {p.currency === "USD"
+                        ? `$${p.amount}`
+                        : `₦${p.amount.toLocaleString()}`}
                     </td>
                     <td className="px-6 py-3.5 font-mono text-[11px] text-slate-600 dark:text-slate-300">
                       {p.transactionReference}
@@ -148,11 +171,16 @@ function AdminPaymentsPage() {
                           rel="noreferrer"
                           className="text-primary font-semibold hover:underline flex items-center gap-1"
                         >
-                          <Icon icon="solar:document-text-bold-duotone" className="h-4 w-4" />
+                          <Icon
+                            icon="solar:document-text-bold-duotone"
+                            className="h-4 w-4"
+                          />
                           <span>View Proof</span>
                         </a>
                       ) : (
-                        <span className="text-slate-400 italic">No receipt attached</span>
+                        <span className="text-slate-400 italic">
+                          No receipt attached
+                        </span>
                       )}
                     </td>
                     <td className="px-6 py-3.5 text-slate-400">
@@ -168,8 +196,8 @@ function AdminPaymentsPage() {
                           p.status === "approved"
                             ? "bg-emerald-500/10 text-emerald-600"
                             : p.status === "rejected"
-                            ? "bg-rose-500/10 text-rose-600"
-                            : "bg-amber-500/10 text-amber-600"
+                              ? "bg-rose-500/10 text-rose-600"
+                              : "bg-amber-500/10 text-amber-600"
                         }`}
                       >
                         {p.status.toUpperCase()}
@@ -184,7 +212,10 @@ function AdminPaymentsPage() {
                             onClick={() => handleReview(p.id, "approved")}
                             className="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 shadow-2xs"
                           >
-                            <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             <span>Approve</span>
                           </button>
                           <button
@@ -197,7 +228,9 @@ function AdminPaymentsPage() {
                           </button>
                         </div>
                       ) : (
-                        <span className="text-[11px] text-slate-400">Processed</span>
+                        <span className="text-[11px] text-slate-400">
+                          Processed
+                        </span>
                       )}
                     </td>
                   </tr>

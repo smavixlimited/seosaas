@@ -16,7 +16,8 @@ function LockScreenPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isVerifying, setIsVerifying] = React.useState(false);
 
-  const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "User";
+  const userName =
+    session?.user?.name || session?.user?.email?.split("@")[0] || "User";
   const userEmail = session?.user?.email || "";
 
   const handleUnlock = async (e: React.FormEvent) => {
@@ -34,7 +35,9 @@ function LockScreenPage() {
       });
 
       if (result.error) {
-        toast.error(result.error.message || "Incorrect password. Please try again.");
+        toast.error(
+          result.error.message || "Incorrect password. Please try again.",
+        );
       } else {
         toast.success("Welcome back! Screen unlocked.");
         void navigate({ to: "/" });
@@ -75,9 +78,12 @@ function LockScreenPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-black text-base-content">Screen Locked</h2>
+            <h2 className="text-2xl font-black text-base-content">
+              Screen Locked
+            </h2>
             <p className="text-xs text-base-content/60 font-medium">
-              Hi <span className="font-bold text-base-content">{userName}</span>, enter your password to unlock.
+              Hi <span className="font-bold text-base-content">{userName}</span>
+              , enter your password to unlock.
             </p>
           </div>
         </div>
@@ -85,7 +91,9 @@ function LockScreenPage() {
         {/* Password Form */}
         <form onSubmit={handleUnlock} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-base-content/80">Password</label>
+            <label className="text-xs font-bold text-base-content/80">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -100,7 +108,14 @@ function LockScreenPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content"
               >
-                <Icon icon={showPassword ? "solar:eye-closed-linear" : "solar:eye-linear"} className="h-4 w-4" />
+                <Icon
+                  icon={
+                    showPassword
+                      ? "solar:eye-closed-linear"
+                      : "solar:eye-linear"
+                  }
+                  className="h-4 w-4"
+                />
               </button>
             </div>
           </div>
@@ -114,7 +129,10 @@ function LockScreenPage() {
               <span className="loading loading-spinner loading-xs" />
             ) : (
               <div className="flex items-center justify-center gap-2">
-                <Icon icon="solar:lock-unlocked-bold-duotone" className="h-4 w-4" />
+                <Icon
+                  icon="solar:lock-unlocked-bold-duotone"
+                  className="h-4 w-4"
+                />
                 <span>Unlock</span>
               </div>
             )}
@@ -133,7 +151,10 @@ function LockScreenPage() {
               }}
               className="font-bold text-primary hover:underline inline-flex items-center gap-1"
             >
-              <Icon icon="solar:fingerprint-bold-duotone" className="h-3.5 w-3.5" />
+              <Icon
+                icon="solar:fingerprint-bold-duotone"
+                className="h-3.5 w-3.5"
+              />
               Fingerprint / Face ID
             </button>
           </p>

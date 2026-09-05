@@ -48,7 +48,9 @@ async function handleAutumnRequest(request: Request) {
   }
 
   try {
-    return await (await loadHandler())(request);
+    return await (
+      await loadHandler()
+    )(request);
   } catch (err) {
     console.warn("Autumn handler error:", err);
     return new Response(

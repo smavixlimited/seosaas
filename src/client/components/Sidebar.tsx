@@ -58,7 +58,9 @@ function SidebarNavLink({
   onNavigate?: () => void;
   linkProps: LinkOptions;
 }) {
-  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(
+    null,
+  );
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!benefit) return;
@@ -92,7 +94,10 @@ function SidebarNavLink({
               <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-md bg-primary" />
             ) : null}
             {solarIcon ? (
-              <Icon icon={solarIcon} className="h-4 w-4 shrink-0 text-inherit" />
+              <Icon
+                icon={solarIcon}
+                className="h-4 w-4 shrink-0 text-inherit"
+              />
             ) : FallbackIcon ? (
               <FallbackIcon className="h-4 w-4 shrink-0" />
             ) : null}
@@ -114,7 +119,9 @@ function SidebarNavLink({
             <span className="badge badge-primary badge-xs font-bold text-[9px] uppercase tracking-wider">
               {label}
             </span>
-            <span className="text-[10px] font-bold text-base-content/50">Benefit</span>
+            <span className="text-[10px] font-bold text-base-content/50">
+              Benefit
+            </span>
           </div>
           <p className="text-xs text-base-content/85 leading-relaxed font-medium">
             {benefit}
@@ -135,7 +142,8 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
   });
 
   const planId = (creditUsageQuery.data?.planId || "").toLowerCase();
-  const isAgency = planId === "agency" || planId === "scale" || planId === "enterprise";
+  const isAgency =
+    planId === "agency" || planId === "scale" || planId === "enterprise";
 
   const navGroups = [
     ...(projectId ? getProjectNavGroups(projectId) : []),
@@ -242,17 +250,21 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
             <div key={group.label} className="space-y-1">
               <div className="flex items-center gap-1.5 px-2 pt-2 text-[10px] font-black uppercase tracking-wider text-base-content/45">
                 {(group as { solarIcon?: string }).solarIcon ? (
-                  <Icon icon={(group as { solarIcon?: string }).solarIcon!} className="h-3 w-3 text-primary/70" />
+                  <Icon
+                    icon={(group as { solarIcon?: string }).solarIcon!}
+                    className="h-3 w-3 text-primary/70"
+                  />
                 ) : null}
                 <span>{group.label}</span>
               </div>
               {group.items.map((item) => {
-                const { icon, solarIcon, label, benefit, ...linkProps } = item as {
-                  icon?: ComponentType<{ className?: string }>;
-                  solarIcon?: string;
-                  label: string;
-                  benefit?: string;
-                } & LinkOptions;
+                const { icon, solarIcon, label, benefit, ...linkProps } =
+                  item as {
+                    icon?: ComponentType<{ className?: string }>;
+                    solarIcon?: string;
+                    label: string;
+                    benefit?: string;
+                  } & LinkOptions;
                 return (
                   <SidebarNavLink
                     key={linkProps.to as string}
@@ -343,14 +355,22 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
             className="dropdown-content z-30 menu mb-1 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl text-xs"
           >
             <li>
-              <Link to="/settings" onClick={closeMenu} className="rounded-xl py-1.5">
+              <Link
+                to="/settings"
+                onClick={closeMenu}
+                className="rounded-xl py-1.5"
+              >
                 <Settings className="h-4 w-4" />
                 Settings
               </Link>
             </li>
             {isHostedMode ? (
               <li>
-                <Link to={BILLING_ROUTE} onClick={closeMenu} className="rounded-xl py-1.5">
+                <Link
+                  to={BILLING_ROUTE}
+                  onClick={closeMenu}
+                  className="rounded-xl py-1.5"
+                >
                   <CreditCard className="h-4 w-4" />
                   Billing & Quotas
                 </Link>

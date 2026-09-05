@@ -22,7 +22,9 @@ export const getUserCreditUsageServerFn = createServerFn({ method: "POST" })
 /**
  * Submits cancellation exit survey and handles 30% retention discount opt-in.
  */
-export const submitCancellationSurveyServerFn = createServerFn({ method: "POST" })
+export const submitCancellationSurveyServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireAuthenticatedContext)
   .validator(cancellationSchema)
   .handler(async ({ data, context }) => {
@@ -39,7 +41,9 @@ export const submitCancellationSurveyServerFn = createServerFn({ method: "POST" 
 /**
  * Checks if user has an active retention discount.
  */
-export const getRetentionDiscountStatusServerFn = createServerFn({ method: "POST" })
+export const getRetentionDiscountStatusServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireAuthenticatedContext)
   .handler(async ({ context }) => {
     return RetentionService.hasActiveDiscount(context.userId);

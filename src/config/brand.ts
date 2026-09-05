@@ -4,7 +4,8 @@ export const BRAND_CONFIG = {
   domain: "skorvia.com",
   url: "https://skorvia.com",
   slogan: "Next-Gen SEO Intelligence & Answer Engine Optimization",
-  description: "Enterprise-grade SEO insights, backlink tracking, keyword discovery, site audit automation, and AI/AEO ranking intelligence for growth teams and agencies.",
+  description:
+    "Enterprise-grade SEO insights, backlink tracking, keyword discovery, site audit automation, and AI/AEO ranking intelligence for growth teams and agencies.",
   supportEmail: "support@skorvia.com",
   contactEmail: "hello@skorvia.com",
   salesEmail: "sales@skorvia.com",
@@ -34,7 +35,8 @@ export const BRAND_CONFIG = {
         id: "starter",
         name: "Starter",
         badge: "Essential",
-        description: "Perfect for solo founders, creators, and single-site operators.",
+        description:
+          "Perfect for solo founders, creators, and single-site operators.",
         priceMonthlyUSD: 29,
         priceAnnualUSD: 24,
         priceMonthlyNGN: 35000,
@@ -53,7 +55,8 @@ export const BRAND_CONFIG = {
         id: "pro",
         name: "Professional",
         badge: "Most Popular",
-        description: "For scaling businesses, in-house marketing teams, and growth leads.",
+        description:
+          "For scaling businesses, in-house marketing teams, and growth leads.",
         priceMonthlyUSD: 79,
         priceAnnualUSD: 64,
         priceMonthlyNGN: 95000,
@@ -74,7 +77,8 @@ export const BRAND_CONFIG = {
         id: "agency",
         name: "Agency & Scale",
         badge: "Full Power",
-        description: "Complete power suite for agencies, enterprises, and high-volume teams.",
+        description:
+          "Complete power suite for agencies, enterprises, and high-volume teams.",
         priceMonthlyUSD: 199,
         priceAnnualUSD: 159,
         priceMonthlyNGN: 240000,

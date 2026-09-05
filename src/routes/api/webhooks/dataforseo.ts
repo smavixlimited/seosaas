@@ -11,7 +11,9 @@ async function handleDataForSeoPostback(request: Request): Promise<Response> {
       return new Response("Invalid JSON payload", { status: 400 });
     }
 
-    const tasks = (payload.tasks as Array<Record<string, unknown>>) || [payload];
+    const tasks = (payload.tasks as Array<Record<string, unknown>>) || [
+      payload,
+    ];
     for (const task of tasks) {
       await DataForSeoAsyncService.handlePostbackPayload({
         id: task.id as string | undefined,
@@ -21,16 +23,22 @@ async function handleDataForSeoPostback(request: Request): Promise<Response> {
       });
     }
 
-    return new Response(JSON.stringify({ success: true, processed: tasks.length }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ success: true, processed: tasks.length }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (err) {
     console.error("DataForSEO postback error:", err);
-    return new Response(JSON.stringify({ error: "Internal processing error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "Internal processing error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 }
 
@@ -38,7 +46,11 @@ export const Route = createFileRoute("/api/webhooks/dataforseo")({
   server: {
     handlers: {
       POST: ({ request }) => handleDataForSeoPostback(request),
-      GET: () => Response.json({ status: "ok", endpoint: "dataforseo_postback_receiver" }),
+      GET: () =>
+        Response.json({
+          status: "ok",
+          endpoint: "dataforseo_postback_receiver",
+        }),
     },
   },
 });

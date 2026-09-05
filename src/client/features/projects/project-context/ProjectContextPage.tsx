@@ -80,8 +80,8 @@ export function ProjectContextPage({ projectId }: { projectId: string }) {
     <div key={projectId} className="space-y-8">
       <p className="text-sm text-base-content/70">
         What Skorvia, Claude Code, and any connected MCP client know about this
-        brand. They read it before they work and write back what they learn,
-        so correct anything that looks wrong.
+        brand. They read it before they work and write back what they learn, so
+        correct anything that looks wrong.
       </p>
 
       <ProseSections

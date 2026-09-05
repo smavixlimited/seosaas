@@ -63,26 +63,37 @@ export const autumn = {
   track: async (...args: Parameters<Autumn["track"]>) => {
     try {
       const client = await loadAutumn();
-      if (!client) return { success: true } as unknown as Awaited<ReturnType<Autumn["track"]>>;
+      if (!client)
+        return { success: true } as unknown as Awaited<
+          ReturnType<Autumn["track"]>
+        >;
       return await client.track(...args);
     } catch (err) {
       console.warn("Autumn track error:", err);
-      return { success: true } as unknown as Awaited<ReturnType<Autumn["track"]>>;
+      return { success: true } as unknown as Awaited<
+        ReturnType<Autumn["track"]>
+      >;
     }
   },
   customers: {
-    getOrCreate: async (...args: Parameters<Autumn["customers"]["getOrCreate"]>) => {
+    getOrCreate: async (
+      ...args: Parameters<Autumn["customers"]["getOrCreate"]>
+    ) => {
       try {
         const client = await loadAutumn();
         if (!client) {
           const custId = args[0]?.customerId || "default_customer";
-          return { id: custId } as unknown as Awaited<ReturnType<Autumn["customers"]["getOrCreate"]>>;
+          return { id: custId } as unknown as Awaited<
+            ReturnType<Autumn["customers"]["getOrCreate"]>
+          >;
         }
         return await client.customers.getOrCreate(...args);
       } catch (err) {
         console.warn("Autumn getOrCreate error, falling back:", err);
         const custId = args[0]?.customerId || "default_customer";
-        return { id: custId } as unknown as Awaited<ReturnType<Autumn["customers"]["getOrCreate"]>>;
+        return { id: custId } as unknown as Awaited<
+          ReturnType<Autumn["customers"]["getOrCreate"]>
+        >;
       }
     },
   },

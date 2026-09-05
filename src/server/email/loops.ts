@@ -117,7 +117,8 @@ export async function sendHostedVerificationEmail({
 }) {
   const loopsKey = getOptionalEnv("LOOPS_API_KEY");
   if (!loopsKey) {
-    const { sendAccountVerificationEmail } = await import("@/services/email/resend.service");
+    const { sendAccountVerificationEmail } =
+      await import("@/services/email/resend.service");
     await sendAccountVerificationEmail({ email, confirmationUrl });
     return;
   }
@@ -143,7 +144,8 @@ export async function sendHostedPasswordResetEmail({
 }) {
   const loopsKey = getOptionalEnv("LOOPS_API_KEY");
   if (!loopsKey) {
-    const { sendPasswordResetEmail } = await import("@/services/email/resend.service");
+    const { sendPasswordResetEmail } =
+      await import("@/services/email/resend.service");
     await sendPasswordResetEmail({ email, resetUrl });
     return;
   }

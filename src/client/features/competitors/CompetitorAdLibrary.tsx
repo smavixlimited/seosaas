@@ -2,9 +2,16 @@ import * as React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
-import { getCompetitorAdsServerFn, exportAdAngleToRoadmapServerFn } from "@/serverFunctions/competitor-ads";
+import {
+  getCompetitorAdsServerFn,
+  exportAdAngleToRoadmapServerFn,
+} from "@/serverFunctions/competitor-ads";
 import { listBrandCompetitors } from "@/serverFunctions/brand-competitor";
-import type { AdPlatform, CompetitorAdItem, CompetitorAdsOverviewResult } from "@/services/competitor-ads.service";
+import type {
+  AdPlatform,
+  CompetitorAdItem,
+  CompetitorAdsOverviewResult,
+} from "@/services/competitor-ads.service";
 
 interface CompetitorAdLibraryProps {
   projectId: string;
@@ -19,35 +26,43 @@ const PLATFORM_CONFIG: Record<
     label: "All Networks",
     icon: "solar:layers-bold-duotone",
     badgeColor: "badge-primary",
-    description: "Multi-platform intelligence aggregate across all 4 major ad channels",
+    description:
+      "Multi-platform intelligence aggregate across all 4 major ad channels",
   },
   meta: {
     label: "Meta (FB & IG)",
     icon: "logos:meta-icon",
     badgeColor: "badge-info",
-    description: "Live Facebook & Instagram Ad Library feeds, creative copy, and image/video angles",
+    description:
+      "Live Facebook & Instagram Ad Library feeds, creative copy, and image/video angles",
   },
   google: {
     label: "Google Search Ads",
     icon: "logos:google-icon",
     badgeColor: "badge-warning",
-    description: "Live DataForSEO Google Search SERP ads, sitelinks, headline variations & bid terms",
+    description:
+      "Live DataForSEO Google Search SERP ads, sitelinks, headline variations & bid terms",
   },
   tiktok: {
     label: "TikTok Ads",
     icon: "logos:tiktok-icon",
     badgeColor: "badge-neutral",
-    description: "TikTok Creative Center inspiration, high-CTR hook scripts, and trending formats",
+    description:
+      "TikTok Creative Center inspiration, high-CTR hook scripts, and trending formats",
   },
   linkedin: {
     label: "LinkedIn Ads",
     icon: "logos:linkedin-icon",
     badgeColor: "badge-info",
-    description: "B2B enterprise sponsored updates, whitepaper leads, and decision-maker angles",
+    description:
+      "B2B enterprise sponsored updates, whitepaper leads, and decision-maker angles",
   },
 };
 
-export function CompetitorAdLibrary({ projectId, initialDomain = "" }: CompetitorAdLibraryProps) {
+export function CompetitorAdLibrary({
+  projectId,
+  initialDomain = "",
+}: CompetitorAdLibraryProps) {
   const queryClient = useQueryClient();
 
   const competitorsQuery = useQuery({
@@ -58,9 +73,13 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
   const savedCompetitors = competitorsQuery.data ?? [];
 
   const [selectedDomain, setSelectedDomain] = React.useState(initialDomain);
-  const [selectedPlatform, setSelectedPlatform] = React.useState<AdPlatform | "all">("all");
-  const [selectedAngleFilter, setSelectedAngleFilter] = React.useState<string>("all");
-  const [activeAdDetail, setActiveAdDetail] = React.useState<CompetitorAdItem | null>(null);
+  const [selectedPlatform, setSelectedPlatform] = React.useState<
+    AdPlatform | "all"
+  >("all");
+  const [selectedAngleFilter, setSelectedAngleFilter] =
+    React.useState<string>("all");
+  const [activeAdDetail, setActiveAdDetail] =
+    React.useState<CompetitorAdItem | null>(null);
 
   React.useEffect(() => {
     if (initialDomain) {
@@ -102,7 +121,10 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
         },
       }),
     onSuccess: (data) => {
-      queryClient.setQueryData(["competitorAds", projectId, cleanDomain, selectedPlatform], data);
+      queryClient.setQueryData(
+        ["competitorAds", projectId, cleanDomain, selectedPlatform],
+        data,
+      );
       toast.success("Live ad scan completed!");
     },
     onError: (err: any) => {
@@ -128,7 +150,9 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
         },
       }),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["actionRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["actionRoadmap", projectId],
+      });
       toast.success("🚀 Strategic Ad Counter-Play exported to Action Roadmap!");
     },
     onError: (err: any) => {
@@ -141,8 +165,11 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
 
   const filteredAds = React.useMemo(() => {
     return adsList.filter((ad) => {
-      const matchesPlatform = selectedPlatform === "all" || ad.platform === selectedPlatform;
-      const matchesAngle = selectedAngleFilter === "all" || ad.angleCategory === selectedAngleFilter;
+      const matchesPlatform =
+        selectedPlatform === "all" || ad.platform === selectedPlatform;
+      const matchesAngle =
+        selectedAngleFilter === "all" ||
+        ad.angleCategory === selectedAngleFilter;
       return matchesPlatform && matchesAngle;
     });
   }, [adsList, selectedPlatform, selectedAngleFilter]);
@@ -157,27 +184,34 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
               <span className="badge badge-warning badge-sm font-bold uppercase tracking-wider text-xs">
                 Ad Intelligence
               </span>
-              <span className="text-xs text-base-content/60 font-medium">No User Ad Account Required</span>
+              <span className="text-xs text-base-content/60 font-medium">
+                No User Ad Account Required
+              </span>
             </div>
             <h2 className="text-xl md:text-2xl font-black text-base-content">
               Competitor Ad Library &amp; Angles
             </h2>
             <p className="text-xs text-base-content/70">
-              Spy on active competitor ad copy, creative angles, winning longevity, and exploit their messaging blind spots.
+              Spy on active competitor ad copy, creative angles, winning
+              longevity, and exploit their messaging blind spots.
             </p>
           </div>
 
           {/* Competitor Dropdown */}
           <div className="flex items-center gap-2.5 flex-wrap">
             <div className="form-control min-w-[240px]">
-              <label className="label py-1 text-xs font-bold text-base-content/70">Select Competitor</label>
+              <label className="label py-1 text-xs font-bold text-base-content/70">
+                Select Competitor
+              </label>
               <select
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
                 className="select select-bordered select-sm md:select-md rounded-2xl font-bold bg-base-100 border-base-300"
               >
                 {savedCompetitors.length === 0 && (
-                  <option value={cleanDomain || "competitor.com"}>{cleanDomain || "Select competitor"}</option>
+                  <option value={cleanDomain || "competitor.com"}>
+                    {cleanDomain || "Select competitor"}
+                  </option>
                 )}
                 {savedCompetitors.map((c) => (
                   <option key={c.id} value={c.domain}>
@@ -198,7 +232,11 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
                   icon="solar:radar-2-bold"
                   className={`h-4 w-4 ${refreshMutation.isPending ? "animate-spin" : ""}`}
                 />
-                <span>{refreshMutation.isPending ? "Scanning..." : "Scan Active Ads"}</span>
+                <span>
+                  {refreshMutation.isPending
+                    ? "Scanning..."
+                    : "Scan Active Ads"}
+                </span>
               </button>
             </div>
           </div>
@@ -207,32 +245,36 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
         {/* Platform Selector Tabs */}
         <div className="pt-3 border-t border-base-200">
           <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
-            <span className="text-xs font-bold text-base-content/70 uppercase tracking-wider">Filter by Platform:</span>
+            <span className="text-xs font-bold text-base-content/70 uppercase tracking-wider">
+              Filter by Platform:
+            </span>
             <span className="text-xs text-base-content/50">
               {PLATFORM_CONFIG[selectedPlatform].description}
             </span>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            {(["all", "meta", "google", "tiktok", "linkedin"] as const).map((plat) => {
-              const config = PLATFORM_CONFIG[plat];
-              const isSelected = selectedPlatform === plat;
-              return (
-                <button
-                  key={plat}
-                  type="button"
-                  onClick={() => setSelectedPlatform(plat)}
-                  className={`btn btn-sm rounded-xl font-bold gap-1.5 transition-all ${
-                    isSelected
-                      ? "btn-primary text-white shadow-sm"
-                      : "btn-outline border-base-300 bg-base-100 text-base-content hover:bg-base-200"
-                  }`}
-                >
-                  <Icon icon={config.icon} className="h-4 w-4 shrink-0" />
-                  <span>{config.label}</span>
-                </button>
-              );
-            })}
+            {(["all", "meta", "google", "tiktok", "linkedin"] as const).map(
+              (plat) => {
+                const config = PLATFORM_CONFIG[plat];
+                const isSelected = selectedPlatform === plat;
+                return (
+                  <button
+                    key={plat}
+                    type="button"
+                    onClick={() => setSelectedPlatform(plat)}
+                    className={`btn btn-sm rounded-xl font-bold gap-1.5 transition-all ${
+                      isSelected
+                        ? "btn-primary text-white shadow-sm"
+                        : "btn-outline border-base-300 bg-base-100 text-base-content hover:bg-base-200"
+                    }`}
+                  >
+                    <Icon icon={config.icon} className="h-4 w-4 shrink-0" />
+                    <span>{config.label}</span>
+                  </button>
+                );
+              },
+            )}
           </div>
         </div>
       </div>
@@ -241,34 +283,55 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
       {adData && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 md:p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-1">
-            <div className="text-xs font-bold text-base-content/60">Total Ads Tracked</div>
-            <div className="text-2xl font-black text-base-content">{adData.totalAdsFound}</div>
+            <div className="text-xs font-bold text-base-content/60">
+              Total Ads Tracked
+            </div>
+            <div className="text-2xl font-black text-base-content">
+              {adData.totalAdsFound}
+            </div>
             <div className="text-xs text-base-content/60 flex items-center gap-1">
-              <Icon icon="solar:shield-check-bold" className="h-3.5 w-3.5 text-primary" />
+              <Icon
+                icon="solar:shield-check-bold"
+                className="h-3.5 w-3.5 text-primary"
+              />
               <span>Across {adData.activePlatforms.length} networks</span>
             </div>
           </div>
 
           <div className="p-4 md:p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-1">
-            <div className="text-xs font-bold text-base-content/60">Winning Ads (30+ Days)</div>
+            <div className="text-xs font-bold text-base-content/60">
+              Winning Ads (30+ Days)
+            </div>
             <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
               {adData.winningAdsCount}
             </div>
-            <div className="text-xs text-emerald-600/80 font-medium">🔥 High-converting angles</div>
+            <div className="text-xs text-emerald-600/80 font-medium">
+              🔥 High-converting angles
+            </div>
           </div>
 
           <div className="p-4 md:p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-1">
-            <div className="text-xs font-bold text-base-content/60">Dominant Ad Hook</div>
+            <div className="text-xs font-bold text-base-content/60">
+              Dominant Ad Hook
+            </div>
             <div className="text-lg font-black text-primary capitalize truncate">
               {adData.dominantAngle.replace("_", " ")}
             </div>
-            <div className="text-xs text-base-content/60">Primary conversion focus</div>
+            <div className="text-xs text-base-content/60">
+              Primary conversion focus
+            </div>
           </div>
 
           <div className="p-4 md:p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-1">
-            <div className="text-xs font-bold text-base-content/60">Est. Monthly Ad Burn</div>
-            <div className="text-2xl font-black text-base-content">{adData.estimatedMonthlyAdBurn}</div>
-            <div className="text-xs text-base-content/60">Estimated paid footprint</div>
+            <div className="text-xs font-bold text-base-content/60">
+              Est. Monthly Ad Burn
+            </div>
+            <div className="text-2xl font-black text-base-content">
+              {adData.estimatedMonthlyAdBurn}
+            </div>
+            <div className="text-xs text-base-content/60">
+              Estimated paid footprint
+            </div>
           </div>
         </div>
       )}
@@ -277,7 +340,9 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
       {adsQuery.isLoading ? (
         <div className="rounded-3xl border border-base-300 bg-base-100 p-12 text-center space-y-3">
           <span className="loading loading-spinner loading-lg text-primary" />
-          <p className="text-sm font-bold text-base-content/70">Scanning live competitor ad networks...</p>
+          <p className="text-sm font-bold text-base-content/70">
+            Scanning live competitor ad networks...
+          </p>
         </div>
       ) : filteredAds.length > 0 ? (
         <div className="space-y-4">
@@ -289,21 +354,32 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
 
             {/* Angle Category Filter */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-xs text-base-content/60 font-semibold mr-1">Angle:</span>
-              {(["all", "problem_solution", "social_proof", "discount_offer", "fomo", "educational"] as const).map(
-                (ang) => (
-                  <button
-                    key={ang}
-                    type="button"
-                    onClick={() => setSelectedAngleFilter(ang)}
-                    className={`btn btn-xs rounded-lg font-bold capitalize ${
-                      selectedAngleFilter === ang ? "btn-neutral text-white" : "btn-ghost text-base-content/70"
-                    }`}
-                  >
-                    {ang.replace("_", " ")}
-                  </button>
-                )
-              )}
+              <span className="text-xs text-base-content/60 font-semibold mr-1">
+                Angle:
+              </span>
+              {(
+                [
+                  "all",
+                  "problem_solution",
+                  "social_proof",
+                  "discount_offer",
+                  "fomo",
+                  "educational",
+                ] as const
+              ).map((ang) => (
+                <button
+                  key={ang}
+                  type="button"
+                  onClick={() => setSelectedAngleFilter(ang)}
+                  className={`btn btn-xs rounded-lg font-bold capitalize ${
+                    selectedAngleFilter === ang
+                      ? "btn-neutral text-white"
+                      : "btn-ghost text-base-content/70"
+                  }`}
+                >
+                  {ang.replace("_", " ")}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -349,7 +425,10 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
                       {ad.mediaType === "video" && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                           <span className="size-10 rounded-full bg-white/90 text-primary flex items-center justify-center shadow-lg">
-                            <Icon icon="solar:play-bold" className="h-5 w-5 ml-0.5" />
+                            <Icon
+                              icon="solar:play-bold"
+                              className="h-5 w-5 ml-0.5"
+                            />
                           </span>
                         </div>
                       )}
@@ -386,24 +465,28 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
                       </p>
 
                       {/* Google Ad Sitelinks */}
-                      {ad.metadata?.sitelinks && ad.metadata.sitelinks.length > 0 && (
-                        <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                          {ad.metadata.sitelinks.map((s, idx) => (
-                            <span
-                              key={idx}
-                              className="badge badge-xs badge-ghost text-[10px] text-primary font-semibold"
-                            >
-                              {s}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      {ad.metadata?.sitelinks &&
+                        ad.metadata.sitelinks.length > 0 && (
+                          <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                            {ad.metadata.sitelinks.map((s, idx) => (
+                              <span
+                                key={idx}
+                                className="badge badge-xs badge-ghost text-[10px] text-primary font-semibold"
+                              >
+                                {s}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                     </div>
 
                     {/* Footer Actions */}
                     <div className="pt-4 border-t border-base-200 flex items-center justify-between gap-2">
                       <span className="text-[11px] font-bold text-base-content/60 flex items-center gap-1">
-                        <Icon icon="solar:cursor-bold" className="h-3 w-3 text-primary" />
+                        <Icon
+                          icon="solar:cursor-bold"
+                          className="h-3 w-3 text-primary"
+                        />
                         <span>{ad.ctaType}</span>
                       </span>
 
@@ -441,7 +524,8 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
               No Active Ads Found on {PLATFORM_CONFIG[selectedPlatform].label}
             </h3>
             <p className="text-xs text-base-content/70">
-              {cleanDomain} is currently not running ads on this specific network, or running unindexed dark posts.
+              {cleanDomain} is currently not running ads on this specific
+              network, or running unindexed dark posts.
             </p>
           </div>
         </div>
@@ -452,7 +536,9 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
         <div className="rounded-3xl border border-primary/30 bg-primary/5 p-6 md:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-primary/20">
             <div className="flex items-center gap-2">
-              <span className="badge badge-primary font-bold text-white text-xs">Opportunity Blueprint</span>
+              <span className="badge badge-primary font-bold text-white text-xs">
+                Opportunity Blueprint
+              </span>
               <h3 className="text-lg font-black text-base-content">
                 Untapped Ad Angles to Out-Convert {adData.competitorName}
               </h3>
@@ -463,44 +549,57 @@ export function CompetitorAdLibrary({ projectId, initialDomain = "" }: Competito
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {adData.opportunityBlueprint.strategicAngleRecommentations.map((opp, idx) => (
-              <div
-                key={idx}
-                className="p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-3 flex flex-col justify-between"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="badge badge-sm badge-outline font-bold uppercase text-xs">
-                      {opp.platform} Attack Play
-                    </span>
-                    <span className="text-xs font-bold text-primary">{opp.targetAngle}</span>
+            {adData.opportunityBlueprint.strategicAngleRecommentations.map(
+              (opp, idx) => (
+                <div
+                  key={idx}
+                  className="p-5 rounded-2xl bg-base-100 border border-base-300 shadow-sm space-y-3 flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="badge badge-sm badge-outline font-bold uppercase text-xs">
+                        {opp.platform} Attack Play
+                      </span>
+                      <span className="text-xs font-bold text-primary">
+                        {opp.targetAngle}
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-black text-base-content">
+                      {opp.suggestedHook}
+                    </h4>
+
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      {opp.counterPlaySummary}
+                    </p>
                   </div>
 
-                  <h4 className="text-sm font-black text-base-content">{opp.suggestedHook}</h4>
-
-                  <p className="text-xs text-base-content/70 leading-relaxed">{opp.counterPlaySummary}</p>
+                  <div className="pt-3 border-t border-base-200 flex items-center justify-between gap-2">
+                    <span className="text-xs font-mono text-base-content/60">
+                      CTA: {opp.recommendedCta}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        exportRoadmapMutation.mutate({
+                          platform: opp.platform,
+                          suggestedHook: opp.suggestedHook,
+                          counterPlaySummary: opp.counterPlaySummary,
+                          recommendedCta: opp.recommendedCta,
+                        })
+                      }
+                      className="btn btn-xs btn-primary rounded-xl font-bold gap-1 text-white"
+                    >
+                      <Icon
+                        icon="solar:check-square-bold"
+                        className="h-3 w-3"
+                      />
+                      <span>Add to Roadmap</span>
+                    </button>
+                  </div>
                 </div>
-
-                <div className="pt-3 border-t border-base-200 flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono text-base-content/60">CTA: {opp.recommendedCta}</span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      exportRoadmapMutation.mutate({
-                        platform: opp.platform,
-                        suggestedHook: opp.suggestedHook,
-                        counterPlaySummary: opp.counterPlaySummary,
-                        recommendedCta: opp.recommendedCta,
-                      })
-                    }
-                    className="btn btn-xs btn-primary rounded-xl font-bold gap-1 text-white"
-                  >
-                    <Icon icon="solar:check-square-bold" className="h-3 w-3" />
-                    <span>Add to Roadmap</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
       )}

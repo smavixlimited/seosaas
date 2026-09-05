@@ -8,13 +8,18 @@ import {
   runConversionReadinessAudit,
 } from "@/serverFunctions/conversion-readiness";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
-import type { RecommendedFixItem, ConversionAuditResult } from "@/services/conversion-ad-readiness.service";
+import type {
+  RecommendedFixItem,
+  ConversionAuditResult,
+} from "@/services/conversion-ad-readiness.service";
 
 interface ConversionReadinessPageProps {
   projectId: string;
 }
 
-export function ConversionReadinessPage({ projectId }: ConversionReadinessPageProps) {
+export function ConversionReadinessPage({
+  projectId,
+}: ConversionReadinessPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [targetUrl, setTargetUrl] = React.useState("");
@@ -33,13 +38,20 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
         data: {
           title: fix.title,
           description: fix.action,
-          category: fix.priority === "HIGH" ? "high_impact" : fix.priority === "QUICK_WIN" ? "quick_win" : "growth",
+          category:
+            fix.priority === "HIGH"
+              ? "high_impact"
+              : fix.priority === "QUICK_WIN"
+                ? "quick_win"
+                : "growth",
           priority: fix.priority === "HIGH" ? "critical" : "high",
           aiPrompt: fix.suggestedPromptForSam,
         },
       }),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       toast.success("Added fix to Action Roadmap!");
     },
     onError: (err: any) => {
@@ -54,7 +66,12 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
           data: {
             title: fix.title,
             description: fix.action,
-            category: fix.priority === "HIGH" ? "high_impact" : fix.priority === "QUICK_WIN" ? "quick_win" : "growth",
+            category:
+              fix.priority === "HIGH"
+                ? "high_impact"
+                : fix.priority === "QUICK_WIN"
+                  ? "quick_win"
+                  : "growth",
             priority: fix.priority === "HIGH" ? "critical" : "high",
             aiPrompt: fix.suggestedPromptForSam,
           },
@@ -62,7 +79,9 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
       }
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       toast.success("Exported all optimization fixes to Action Roadmap!");
     },
     onError: (err: any) => {
@@ -74,7 +93,11 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
     mutationFn: () =>
       runConversionReadinessAudit({
         data: {
-          targetUrl: targetUrl ? (targetUrl.startsWith("http") ? targetUrl : `https://${targetUrl}`) : audit?.targetUrl || "https://example.com",
+          targetUrl: targetUrl
+            ? targetUrl.startsWith("http")
+              ? targetUrl
+              : `https://${targetUrl}`
+            : audit?.targetUrl || "https://example.com",
         },
       }),
     onSuccess: (data) => {
@@ -119,13 +142,16 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
             <span className="badge badge-primary badge-sm font-bold text-xs uppercase tracking-wider">
               Ad Spend Protection &amp; CRO
             </span>
-            <span className="text-xs text-base-content/50 font-mono">Conversion Scorecard</span>
+            <span className="text-xs text-base-content/50 font-mono">
+              Conversion Scorecard
+            </span>
           </div>
           <h1 className="text-2xl font-black tracking-tight text-base-content mt-1">
             Conversion &amp; Ad Readiness Audit (0–100)
           </h1>
           <p className="text-xs text-base-content/60">
-            Diagnose landing page conversion leaks, audit trust signals, and optimize for paid ad ROI before spending budget.
+            Diagnose landing page conversion leaks, audit trust signals, and
+            optimize for paid ad ROI before spending budget.
           </p>
         </div>
 
@@ -149,8 +175,13 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
               disabled={runAuditMutation.isPending}
               className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
             >
-              <Icon icon="solar:refresh-circle-bold" className={`h-4 w-4 ${runAuditMutation.isPending ? "animate-spin" : ""}`} />
-              <span>{runAuditMutation.isPending ? "Auditing Page..." : "Run Audit"}</span>
+              <Icon
+                icon="solar:refresh-circle-bold"
+                className={`h-4 w-4 ${runAuditMutation.isPending ? "animate-spin" : ""}`}
+              />
+              <span>
+                {runAuditMutation.isPending ? "Auditing Page..." : "Run Audit"}
+              </span>
             </button>
           </form>
         </div>
@@ -161,29 +192,43 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
           {/* Top Score Banner */}
           <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6">
-              <div className={`h-24 w-24 rounded-full border-4 flex flex-col items-center justify-center font-mono ${getScoreColor(audit.overallScore)}`}>
-                <span className="text-3xl font-black">{audit.overallScore}</span>
-                <span className="text-[10px] font-bold uppercase text-base-content/60">Score</span>
+              <div
+                className={`h-24 w-24 rounded-full border-4 flex flex-col items-center justify-center font-mono ${getScoreColor(audit.overallScore)}`}
+              >
+                <span className="text-3xl font-black">
+                  {audit.overallScore}
+                </span>
+                <span className="text-[10px] font-bold uppercase text-base-content/60">
+                  Score
+                </span>
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="badge badge-lg font-black text-sm bg-base-200">Grade: {audit.grade}</span>
-                  <span className={`badge badge-sm font-bold text-[10px] ${
-                    audit.adWastedSpendRisk === "low"
-                      ? "badge-success text-white"
-                      : audit.adWastedSpendRisk === "moderate"
-                      ? "badge-warning"
-                      : "badge-error text-white"
-                  }`}>
+                  <span className="badge badge-lg font-black text-sm bg-base-200">
+                    Grade: {audit.grade}
+                  </span>
+                  <span
+                    className={`badge badge-sm font-bold text-[10px] ${
+                      audit.adWastedSpendRisk === "low"
+                        ? "badge-success text-white"
+                        : audit.adWastedSpendRisk === "moderate"
+                          ? "badge-warning"
+                          : "badge-error text-white"
+                    }`}
+                  >
                     {audit.adWastedSpendRisk.toUpperCase()} AD LEAKAGE RISK
                   </span>
                 </div>
                 <h3 className="text-base font-bold text-base-content">
-                  Audited Target: <span className="font-mono text-primary">{audit.targetUrl}</span>
+                  Audited Target:{" "}
+                  <span className="font-mono text-primary">
+                    {audit.targetUrl}
+                  </span>
                 </h3>
                 <p className="text-xs text-base-content/60">
-                  Last scanned: {new Date(audit.auditedAt).toLocaleDateString()} at {new Date(audit.auditedAt).toLocaleTimeString()}
+                  Last scanned: {new Date(audit.auditedAt).toLocaleDateString()}{" "}
+                  at {new Date(audit.auditedAt).toLocaleTimeString()}
                 </p>
               </div>
             </div>
@@ -197,7 +242,11 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
                     `Act as a Top 1% Conversion Rate Optimization (CRO) and Paid Traffic Expert. Audit my landing page (${audit.targetUrl}) which scored ${audit.overallScore}/100. Critical issues: ${audit.criticalFrictionPoints.map((f) => f.title).join("; ")}. Provide immediate copy rewrites, trust badges placement, and CTA adjustments.`,
                   );
                 }
-                void navigate({ to: "/p/$projectId/sam", params: { projectId }, search: { s: undefined } });
+                void navigate({
+                  to: "/p/$projectId/sam",
+                  params: { projectId },
+                  search: { s: undefined },
+                });
               }}
               className="btn btn-outline btn-primary rounded-2xl px-6 font-bold gap-2 shrink-0"
             >
@@ -209,26 +258,63 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
           {/* 6 Core Sub-Pillar Breakdowns */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
-              { label: "Ad Pixels & Tracking", score: audit.trackingPixelScore ?? 85, icon: "solar:radar-bold", highlight: true },
-              { label: "Trust & Credibility", score: audit.trustAndCredibilityScore, icon: "solar:shield-check-bold" },
-              { label: "CTA & Offer Clarity", score: audit.ctaAndOfferClarityScore, icon: "solar:target-bold" },
-              { label: "Mobile Speed & Vitals", score: audit.pageSpeedAndMobileScore, icon: "solar:smartphone-bold" },
-              { label: "Social Proof & Reviews", score: audit.socialProofAndReviewsScore, icon: "solar:star-bold" },
-              { label: "Checkout Friction", score: audit.frictionAndFormLengthScore, icon: "solar:card-bold" },
+              {
+                label: "Ad Pixels & Tracking",
+                score: audit.trackingPixelScore ?? 85,
+                icon: "solar:radar-bold",
+                highlight: true,
+              },
+              {
+                label: "Trust & Credibility",
+                score: audit.trustAndCredibilityScore,
+                icon: "solar:shield-check-bold",
+              },
+              {
+                label: "CTA & Offer Clarity",
+                score: audit.ctaAndOfferClarityScore,
+                icon: "solar:target-bold",
+              },
+              {
+                label: "Mobile Speed & Vitals",
+                score: audit.pageSpeedAndMobileScore,
+                icon: "solar:smartphone-bold",
+              },
+              {
+                label: "Social Proof & Reviews",
+                score: audit.socialProofAndReviewsScore,
+                icon: "solar:star-bold",
+              },
+              {
+                label: "Checkout Friction",
+                score: audit.frictionAndFormLengthScore,
+                icon: "solar:card-bold",
+              },
             ].map((pillar, idx) => (
               <div
                 key={idx}
                 className={`rounded-3xl border p-4 shadow-sm space-y-2 ${
-                  pillar.highlight ? "border-primary/40 bg-primary/5" : "border-base-300 bg-base-100"
+                  pillar.highlight
+                    ? "border-primary/40 bg-primary/5"
+                    : "border-base-300 bg-base-100"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-base-content/70 line-clamp-1">{pillar.label}</span>
-                  <Icon icon={pillar.icon} className={`h-4 w-4 shrink-0 ${pillar.highlight ? "text-primary" : "text-base-content/40"}`} />
+                  <span className="text-[11px] font-bold text-base-content/70 line-clamp-1">
+                    {pillar.label}
+                  </span>
+                  <Icon
+                    icon={pillar.icon}
+                    className={`h-4 w-4 shrink-0 ${pillar.highlight ? "text-primary" : "text-base-content/40"}`}
+                  />
                 </div>
-                <div className="text-xl font-black font-mono text-base-content">{pillar.score}/100</div>
+                <div className="text-xl font-black font-mono text-base-content">
+                  {pillar.score}/100
+                </div>
                 <div className="w-full bg-base-200 h-1.5 rounded-full overflow-hidden">
-                  <div className={`h-full ${getScoreBg(pillar.score)} rounded-full`} style={{ width: `${pillar.score}%` }} />
+                  <div
+                    className={`h-full ${getScoreBg(pillar.score)} rounded-full`}
+                    style={{ width: `${pillar.score}%` }}
+                  />
                 </div>
               </div>
             ))}
@@ -239,24 +325,38 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-base-200 pb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <Icon icon="solar:radar-bold" className="h-5 w-5 text-primary" />
-                  <h3 className="text-base font-black text-base-content">Ad Tracking &amp; Conversion Pixel Health</h3>
-                  <span className="badge badge-sm badge-outline text-[10px] font-bold text-primary">Ad Spend Security</span>
+                  <Icon
+                    icon="solar:radar-bold"
+                    className="h-5 w-5 text-primary"
+                  />
+                  <h3 className="text-base font-black text-base-content">
+                    Ad Tracking &amp; Conversion Pixel Health
+                  </h3>
+                  <span className="badge badge-sm badge-outline text-[10px] font-bold text-primary">
+                    Ad Spend Security
+                  </span>
                 </div>
                 <p className="text-xs text-base-content/60 mt-0.5">
-                  Detects whether ad network pixels (Meta, Google Ads, TikTok, GTM) are firing to prevent wasted ad budget.
+                  Detects whether ad network pixels (Meta, Google Ads, TikTok,
+                  GTM) are firing to prevent wasted ad budget.
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
                 {audit.hasAdPixelInstalled ? (
                   <span className="badge badge-success text-white font-bold text-xs gap-1 py-3 px-3">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5"
+                    />
                     <span>Ad Pixels Active</span>
                   </span>
                 ) : (
                   <span className="badge badge-error text-white font-bold text-xs gap-1 py-3 px-3 animate-pulse">
-                    <Icon icon="solar:danger-triangle-bold" className="h-3.5 w-3.5" />
+                    <Icon
+                      icon="solar:danger-triangle-bold"
+                      className="h-3.5 w-3.5"
+                    />
                     <span>No Ad Pixel Detected (High Risk)</span>
                   </span>
                 )}
@@ -278,7 +378,9 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-xs text-base-content flex items-center gap-1.5">
-                        <span className={`size-2 rounded-full ${isActive ? "bg-emerald-500" : "bg-base-content/30"}`} />
+                        <span
+                          className={`size-2 rounded-full ${isActive ? "bg-emerald-500" : "bg-base-content/30"}`}
+                        />
                         <span>{pixel.name}</span>
                       </span>
                       <span
@@ -290,25 +392,35 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-base-content/70 leading-snug">{pixel.details}</p>
+                    <p className="text-[11px] text-base-content/70 leading-snug">
+                      {pixel.details}
+                    </p>
 
                     {pixel.pixelId && (
                       <div className="text-[10px] text-base-content/50 font-mono flex items-center gap-1">
                         <span>ID:</span>
-                        <span className="font-bold text-base-content">{pixel.pixelId}</span>
+                        <span className="font-bold text-base-content">
+                          {pixel.pixelId}
+                        </span>
                       </div>
                     )}
 
-                    {pixel.eventsDetected && pixel.eventsDetected.length > 0 && (
-                      <div className="flex items-center gap-1 flex-wrap pt-1 border-t border-base-200">
-                        <span className="text-[9px] text-base-content/50 font-bold uppercase">Events:</span>
-                        {pixel.eventsDetected.map((ev, eIdx) => (
-                          <span key={eIdx} className="badge badge-xs badge-neutral text-[9px] font-mono">
-                            {ev}
+                    {pixel.eventsDetected &&
+                      pixel.eventsDetected.length > 0 && (
+                        <div className="flex items-center gap-1 flex-wrap pt-1 border-t border-base-200">
+                          <span className="text-[9px] text-base-content/50 font-bold uppercase">
+                            Events:
                           </span>
-                        ))}
-                      </div>
-                    )}
+                          {pixel.eventsDetected.map((ev, eIdx) => (
+                            <span
+                              key={eIdx}
+                              className="badge badge-xs badge-neutral text-[9px] font-mono"
+                            >
+                              {ev}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                   </div>
                 );
               })}
@@ -319,15 +431,23 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
               <h3 className="text-base font-black text-base-content flex items-center gap-2">
-                <Icon icon="solar:danger-triangle-bold" className="h-5 w-5 text-rose-500" />
+                <Icon
+                  icon="solar:danger-triangle-bold"
+                  className="h-5 w-5 text-rose-500"
+                />
                 <span>Identified Conversion Leaks</span>
               </h3>
               <div className="space-y-2">
                 {audit.criticalFrictionPoints.map((point, idx) => (
-                  <div key={idx} className="flex flex-col gap-1 p-3 rounded-2xl bg-rose-500/5 border border-rose-500/20 text-xs text-rose-700 dark:text-rose-300 font-medium">
+                  <div
+                    key={idx}
+                    className="flex flex-col gap-1 p-3 rounded-2xl bg-rose-500/5 border border-rose-500/20 text-xs text-rose-700 dark:text-rose-300 font-medium"
+                  >
                     <div className="flex items-center justify-between">
                       <span className="font-bold">{point.title}</span>
-                      <span className="badge badge-xs badge-error text-white font-mono">{point.severity.toUpperCase()}</span>
+                      <span className="badge badge-xs badge-error text-white font-mono">
+                        {point.severity.toUpperCase()}
+                      </span>
                     </div>
                     <span className="text-base-content/70">{point.issue}</span>
                   </div>
@@ -337,17 +457,28 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
 
             <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
               <h3 className="text-base font-black text-base-content flex items-center gap-2">
-                <Icon icon="solar:check-circle-bold" className="h-5 w-5 text-emerald-500" />
+                <Icon
+                  icon="solar:check-circle-bold"
+                  className="h-5 w-5 text-emerald-500"
+                />
                 <span>Passing Trust &amp; Conversion Signals</span>
               </h3>
               <div className="space-y-2">
                 {audit.checksPassed.map((check, idx) => (
-                  <div key={idx} className="flex flex-col gap-1 p-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300 font-medium">
+                  <div
+                    key={idx}
+                    className="flex flex-col gap-1 p-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300 font-medium"
+                  >
                     <div className="flex items-center gap-2 font-bold">
-                      <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-4 w-4 text-emerald-500 shrink-0"
+                      />
                       <span>{check.label}</span>
                     </div>
-                    <span className="text-base-content/70 pl-6">{check.detail}</span>
+                    <span className="text-base-content/70 pl-6">
+                      {check.detail}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -359,7 +490,10 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-base-200 pb-3">
               <div>
                 <h3 className="text-base font-black text-base-content flex items-center gap-2">
-                  <Icon icon="solar:bolt-bold" className="h-5 w-5 text-amber-500" />
+                  <Icon
+                    icon="solar:bolt-bold"
+                    className="h-5 w-5 text-amber-500"
+                  />
                   <span>Recommended Optimization Actions</span>
                 </h3>
                 <p className="text-xs text-base-content/60 mt-0.5">
@@ -371,7 +505,9 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
                 <button
                   type="button"
                   disabled={exportAllToRoadmapMutation.isPending}
-                  onClick={() => exportAllToRoadmapMutation.mutate(audit.recommendedFixes)}
+                  onClick={() =>
+                    exportAllToRoadmapMutation.mutate(audit.recommendedFixes)
+                  }
                   className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white shadow-md shadow-primary/20 gap-1.5"
                 >
                   <Icon icon="solar:rocket-bold" className="h-4 w-4" />
@@ -386,18 +522,33 @@ export function ConversionReadinessPage({ projectId }: ConversionReadinessPagePr
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {audit.recommendedFixes.map((fix, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-base-200/40 border border-base-300 flex flex-col justify-between space-y-3">
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl bg-base-200/40 border border-base-300 flex flex-col justify-between space-y-3"
+                >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className={`badge badge-xs font-bold ${
-                        fix.priority === "HIGH" ? "badge-error text-white" : fix.priority === "MEDIUM" ? "badge-warning" : "badge-success text-white"
-                      }`}>
+                      <span
+                        className={`badge badge-xs font-bold ${
+                          fix.priority === "HIGH"
+                            ? "badge-error text-white"
+                            : fix.priority === "MEDIUM"
+                              ? "badge-warning"
+                              : "badge-success text-white"
+                        }`}
+                      >
                         {fix.priority} PRIORITY
                       </span>
-                      <span className="text-[10px] text-base-content/50 font-mono">{fix.estimatedConversionLift} Lift</span>
+                      <span className="text-[10px] text-base-content/50 font-mono">
+                        {fix.estimatedConversionLift} Lift
+                      </span>
                     </div>
-                    <h4 className="text-sm font-bold text-base-content">{fix.title}</h4>
-                    <p className="text-xs text-base-content/70 leading-relaxed">{fix.action}</p>
+                    <h4 className="text-sm font-bold text-base-content">
+                      {fix.title}
+                    </h4>
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      {fix.action}
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 pt-2 border-t border-base-300/60">

@@ -3,7 +3,10 @@ import { db } from "@/db";
 import { saasCoupons, couponRedemptions, manualPayments } from "@/db/schema";
 import crypto from "crypto";
 
-export type CustomerEligibilityType = "all" | "new_customers_only" | "existing_customers_only";
+export type CustomerEligibilityType =
+  | "all"
+  | "new_customers_only"
+  | "existing_customers_only";
 
 export interface SaasCouponDto {
   id: string;
@@ -81,7 +84,11 @@ export const CouponsService = {
     const cleanCode = params.code.trim().toUpperCase();
 
     if (!cleanCode) {
-      return { valid: false, error: "Please enter a coupon code.", errorCode: "INVALID_CODE" };
+      return {
+        valid: false,
+        error: "Please enter a coupon code.",
+        errorCode: "INVALID_CODE",
+      };
     }
 
     const [coupon] = await db
@@ -91,22 +98,37 @@ export const CouponsService = {
       .limit(1);
 
     if (!coupon) {
-      return { valid: false, error: "Coupon code not found.", errorCode: "INVALID_CODE" };
+      return {
+        valid: false,
+        error: "Coupon code not found.",
+        errorCode: "INVALID_CODE",
+      };
     }
 
     if (!coupon.isActive) {
-      return { valid: false, error: "This promo code is no longer active.", errorCode: "INACTIVE" };
+      return {
+        valid: false,
+        error: "This promo code is no longer active.",
+        errorCode: "INACTIVE",
+      };
     }
 
     if (coupon.expiresAt) {
       const expiryDate = new Date(coupon.expiresAt);
       if (expiryDate.getTime() < Date.now()) {
-        return { valid: false, error: "This promo code has expired.", errorCode: "EXPIRED" };
+        return {
+          valid: false,
+          error: "This promo code has expired.",
+          errorCode: "EXPIRED",
+        };
       }
     }
 
     // 1. TOTAL CAMPAIGN REDEMPTIONS CAP CHECK (Across ALL users)
-    if (coupon.maxRedemptions && coupon.timesRedeemed >= coupon.maxRedemptions) {
+    if (
+      coupon.maxRedemptions &&
+      coupon.timesRedeemed >= coupon.maxRedemptions
+    ) {
       return {
         valid: false,
         error: `This promo code has reached its maximum total redemptions limit (${coupon.maxRedemptions} total claims across all users) and is no longer available.`,
@@ -115,14 +137,20 @@ export const CouponsService = {
     }
 
     // 2. TARGET CUSTOMER ELIGIBILITY CHECK (New vs Existing vs All)
-    const eligibility = (coupon.customerEligibility || "all") as CustomerEligibilityType;
+    const eligibility = (coupon.customerEligibility ||
+      "all") as CustomerEligibilityType;
     if (params.userId && eligibility !== "all") {
       // Check if user has previously made an approved payment or redeemed a coupon
       const [approvedPayments, pastRedemptions] = await Promise.all([
         db
           .select({ id: manualPayments.id })
           .from(manualPayments)
-          .where(and(eq(manualPayments.userId, params.userId), eq(manualPayments.status, "approved")))
+          .where(
+            and(
+              eq(manualPayments.userId, params.userId),
+              eq(manualPayments.status, "approved"),
+            ),
+          )
           .limit(1),
         db
           .select({ id: couponRedemptions.id })
@@ -131,20 +159,26 @@ export const CouponsService = {
           .limit(1),
       ]);
 
-      const isExistingPayingCustomer = approvedPayments.length > 0 || pastRedemptions.length > 0;
+      const isExistingPayingCustomer =
+        approvedPayments.length > 0 || pastRedemptions.length > 0;
 
       if (eligibility === "new_customers_only" && isExistingPayingCustomer) {
         return {
           valid: false,
-          error: "This promo code is strictly reserved for new, first-time subscribers only.",
+          error:
+            "This promo code is strictly reserved for new, first-time subscribers only.",
           errorCode: "NEW_CUSTOMERS_ONLY",
         };
       }
 
-      if (eligibility === "existing_customers_only" && !isExistingPayingCustomer) {
+      if (
+        eligibility === "existing_customers_only" &&
+        !isExistingPayingCustomer
+      ) {
         return {
           valid: false,
-          error: "This promo code is an exclusive loyalty reward for existing subscribers only.",
+          error:
+            "This promo code is an exclusive loyalty reward for existing subscribers only.",
           errorCode: "EXISTING_CUSTOMERS_ONLY",
         };
       }
@@ -187,8 +221,8 @@ export const CouponsService = {
         .where(
           and(
             eq(couponRedemptions.couponId, coupon.id),
-            eq(couponRedemptions.userId, params.userId)
-          )
+            eq(couponRedemptions.userId, params.userId),
+          ),
         );
 
       if (redemptions.length >= coupon.maxRedemptionsPerUser) {
@@ -206,7 +240,10 @@ export const CouponsService = {
       const percentage = Math.min(100, Math.max(0, coupon.discountValue));
       discountAmount = Math.round((params.amount * percentage) / 100);
     } else {
-      discountAmount = Math.min(params.amount, Math.max(0, coupon.discountValue));
+      discountAmount = Math.min(
+        params.amount,
+        Math.max(0, coupon.discountValue),
+      );
     }
 
     const finalAmount = Math.max(0, params.amount - discountAmount);
@@ -285,8 +322,11 @@ export const CouponsService = {
       discountType: r.discountType as "percentage" | "fixed_amount",
       discountValue: r.discountValue,
       currency: r.currency,
-      applicablePlans: r.applicablePlansJson ? JSON.parse(r.applicablePlansJson) : null,
-      customerEligibility: ((r as unknown as { customerEligibility?: string }).customerEligibility || "all") as CustomerEligibilityType,
+      applicablePlans: r.applicablePlansJson
+        ? JSON.parse(r.applicablePlansJson)
+        : null,
+      customerEligibility: ((r as unknown as { customerEligibility?: string })
+        .customerEligibility || "all") as CustomerEligibilityType,
       maxRedemptions: r.maxRedemptions,
       timesRedeemed: r.timesRedeemed,
       maxRedemptionsPerUser: r.maxRedemptionsPerUser,
@@ -315,7 +355,9 @@ export const CouponsService = {
         discountType: input.discountType,
         discountValue: input.discountValue,
         currency: input.currency?.toUpperCase() || null,
-        applicablePlansJson: input.applicablePlans ? JSON.stringify(input.applicablePlans) : null,
+        applicablePlansJson: input.applicablePlans
+          ? JSON.stringify(input.applicablePlans)
+          : null,
         customerEligibility: eligibility,
         maxRedemptions: input.maxRedemptions || null,
         timesRedeemed: 0,
@@ -331,14 +373,17 @@ export const CouponsService = {
       id: created?.id || id,
       code: created?.code || cleanCode,
       description: created?.description || input.description || null,
-      discountType: (created?.discountType || input.discountType) as "percentage" | "fixed_amount",
+      discountType: (created?.discountType || input.discountType) as
+        | "percentage"
+        | "fixed_amount",
       discountValue: created?.discountValue ?? input.discountValue,
       currency: created?.currency || input.currency || null,
       applicablePlans: input.applicablePlans || null,
       customerEligibility: eligibility,
       maxRedemptions: created?.maxRedemptions ?? input.maxRedemptions ?? null,
       timesRedeemed: created?.timesRedeemed ?? 0,
-      maxRedemptionsPerUser: created?.maxRedemptionsPerUser ?? input.maxRedemptionsPerUser ?? 1,
+      maxRedemptionsPerUser:
+        created?.maxRedemptionsPerUser ?? input.maxRedemptionsPerUser ?? 1,
       expiresAt: created?.expiresAt || input.expiresAt || null,
       isActive: created ? Boolean(created.isActive) : (input.isActive ?? true),
       createdAt: created?.createdAt || now,
@@ -349,24 +394,40 @@ export const CouponsService = {
   /**
    * Admin: Update coupon.
    */
-  async updateCoupon(id: string, input: Partial<CreateCouponInput>): Promise<SaasCouponDto> {
+  async updateCoupon(
+    id: string,
+    input: Partial<CreateCouponInput>,
+  ): Promise<SaasCouponDto> {
     const now = new Date().toISOString();
     const updatePayload: Record<string, unknown> = {
       updatedAt: now,
     };
 
-    if (input.code !== undefined) updatePayload.code = input.code.trim().toUpperCase();
-    if (input.description !== undefined) updatePayload.description = input.description.trim() || null;
-    if (input.discountType !== undefined) updatePayload.discountType = input.discountType;
-    if (input.discountValue !== undefined) updatePayload.discountValue = input.discountValue;
-    if (input.currency !== undefined) updatePayload.currency = input.currency ? input.currency.toUpperCase() : null;
+    if (input.code !== undefined)
+      updatePayload.code = input.code.trim().toUpperCase();
+    if (input.description !== undefined)
+      updatePayload.description = input.description.trim() || null;
+    if (input.discountType !== undefined)
+      updatePayload.discountType = input.discountType;
+    if (input.discountValue !== undefined)
+      updatePayload.discountValue = input.discountValue;
+    if (input.currency !== undefined)
+      updatePayload.currency = input.currency
+        ? input.currency.toUpperCase()
+        : null;
     if (input.applicablePlans !== undefined) {
-      updatePayload.applicablePlansJson = input.applicablePlans ? JSON.stringify(input.applicablePlans) : null;
+      updatePayload.applicablePlansJson = input.applicablePlans
+        ? JSON.stringify(input.applicablePlans)
+        : null;
     }
-    if (input.customerEligibility !== undefined) updatePayload.customerEligibility = input.customerEligibility;
-    if (input.maxRedemptions !== undefined) updatePayload.maxRedemptions = input.maxRedemptions || null;
-    if (input.maxRedemptionsPerUser !== undefined) updatePayload.maxRedemptionsPerUser = input.maxRedemptionsPerUser;
-    if (input.expiresAt !== undefined) updatePayload.expiresAt = input.expiresAt || null;
+    if (input.customerEligibility !== undefined)
+      updatePayload.customerEligibility = input.customerEligibility;
+    if (input.maxRedemptions !== undefined)
+      updatePayload.maxRedemptions = input.maxRedemptions || null;
+    if (input.maxRedemptionsPerUser !== undefined)
+      updatePayload.maxRedemptionsPerUser = input.maxRedemptionsPerUser;
+    if (input.expiresAt !== undefined)
+      updatePayload.expiresAt = input.expiresAt || null;
     if (input.isActive !== undefined) updatePayload.isActive = input.isActive;
 
     const result = await db
@@ -385,8 +446,12 @@ export const CouponsService = {
         discountType: updated.discountType as "percentage" | "fixed_amount",
         discountValue: updated.discountValue,
         currency: updated.currency,
-        applicablePlans: updated.applicablePlansJson ? JSON.parse(updated.applicablePlansJson) : null,
-        customerEligibility: ((updated as unknown as { customerEligibility?: string }).customerEligibility || "all") as CustomerEligibilityType,
+        applicablePlans: updated.applicablePlansJson
+          ? JSON.parse(updated.applicablePlansJson)
+          : null,
+        customerEligibility: ((
+          updated as unknown as { customerEligibility?: string }
+        ).customerEligibility || "all") as CustomerEligibilityType,
         maxRedemptions: updated.maxRedemptions,
         timesRedeemed: updated.timesRedeemed,
         maxRedemptionsPerUser: updated.maxRedemptionsPerUser,
@@ -397,7 +462,11 @@ export const CouponsService = {
       };
     }
 
-    const [fetched] = await db.select().from(saasCoupons).where(eq(saasCoupons.id, id)).limit(1);
+    const [fetched] = await db
+      .select()
+      .from(saasCoupons)
+      .where(eq(saasCoupons.id, id))
+      .limit(1);
     if (!fetched) {
       throw new Error(`Coupon with ID ${id} not found`);
     }
@@ -409,8 +478,12 @@ export const CouponsService = {
       discountType: fetched.discountType as "percentage" | "fixed_amount",
       discountValue: fetched.discountValue,
       currency: fetched.currency,
-      applicablePlans: fetched.applicablePlansJson ? JSON.parse(fetched.applicablePlansJson) : null,
-      customerEligibility: ((fetched as unknown as { customerEligibility?: string }).customerEligibility || "all") as CustomerEligibilityType,
+      applicablePlans: fetched.applicablePlansJson
+        ? JSON.parse(fetched.applicablePlansJson)
+        : null,
+      customerEligibility: ((
+        fetched as unknown as { customerEligibility?: string }
+      ).customerEligibility || "all") as CustomerEligibilityType,
       maxRedemptions: fetched.maxRedemptions,
       timesRedeemed: fetched.timesRedeemed,
       maxRedemptionsPerUser: fetched.maxRedemptionsPerUser,
@@ -432,7 +505,10 @@ export const CouponsService = {
   /**
    * Admin: Toggle active state.
    */
-  async toggleCouponActive(id: string, isActive: boolean): Promise<SaasCouponDto> {
+  async toggleCouponActive(
+    id: string,
+    isActive: boolean,
+  ): Promise<SaasCouponDto> {
     return this.updateCoupon(id, { isActive });
   },
 };

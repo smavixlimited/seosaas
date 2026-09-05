@@ -24,7 +24,10 @@ export function useImpersonation() {
     return { isImpersonating: false };
   });
 
-  const startImpersonation = (data: { token: string; targetUser: { email: string; name: string } }) => {
+  const startImpersonation = (data: {
+    token: string;
+    targetUser: { email: string; name: string };
+  }) => {
     const payload = {
       targetUserEmail: data.targetUser.email,
       targetUserName: data.targetUser.name,
@@ -54,7 +57,8 @@ export function useImpersonation() {
 }
 
 export function ImpersonationBanner() {
-  const { isImpersonating, targetUserEmail, stopImpersonation } = useImpersonation();
+  const { isImpersonating, targetUserEmail, stopImpersonation } =
+    useImpersonation();
 
   if (!isImpersonating || !targetUserEmail) return null;
 
@@ -63,7 +67,8 @@ export function ImpersonationBanner() {
       <div className="flex items-center gap-2 text-xs font-bold">
         <Icon icon="solar:shield-warning-bold-duotone" className="h-4 w-4" />
         <span>
-          Viewing as <strong className="underline">{targetUserEmail}</strong> (Superadmin Impersonation Mode)
+          Viewing as <strong className="underline">{targetUserEmail}</strong>{" "}
+          (Superadmin Impersonation Mode)
         </span>
       </div>
 

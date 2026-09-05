@@ -25,7 +25,10 @@ export interface UserCreditUsageSummary {
 
 // In-Memory store for surveys and retention discounts
 const cancellationSurveys = new Map<string, CancellationSurveyRecord>();
-const activeRetentionDiscounts = new Map<string, { discountPercent: number; expiresAt: number }>();
+const activeRetentionDiscounts = new Map<
+  string,
+  { discountPercent: number; expiresAt: number }
+>();
 
 export const RetentionService = {
   /**
@@ -53,7 +56,9 @@ export const RetentionService = {
         planId = row.planId ?? "starter";
       } else {
         // Initialize default user quotas in database for new user
-        const resetAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        const resetAt = new Date(
+          Date.now() + 30 * 24 * 60 * 60 * 1000,
+        ).toISOString();
         try {
           await db.insert(userQuotas).values({
             userId,
@@ -71,7 +76,10 @@ export const RetentionService = {
     }
 
     const creditsRemaining = Math.max(0, monthlyCreditsLimit - creditsUsed);
-    const percentageUsed = Math.min(100, Math.round((creditsUsed / Math.max(1, monthlyCreditsLimit)) * 100));
+    const percentageUsed = Math.min(
+      100,
+      Math.round((creditsUsed / Math.max(1, monthlyCreditsLimit)) * 100),
+    );
     const isNearLimit = percentageUsed >= 80;
     const isDepleted = creditsRemaining <= 0;
 
@@ -181,7 +189,9 @@ export const RetentionService = {
   /**
    * Checks if user has an active retention discount.
    */
-  async hasActiveDiscountAsync(userId: string): Promise<{ hasDiscount: boolean; discountPercent?: number }> {
+  async hasActiveDiscountAsync(
+    userId: string,
+  ): Promise<{ hasDiscount: boolean; discountPercent?: number }> {
     try {
       const { db } = await import("@/db");
       const { cancellationSurveys: surveysTable } = await import("@/db/schema");
@@ -193,14 +203,21 @@ export const RetentionService = {
         .where(
           and(
             eq(surveysTable.userId, userId),
-            eq(surveysTable.acceptedRetentionDiscount, true)
-          )
+            eq(surveysTable.acceptedRetentionDiscount, true),
+          ),
         )
         .orderBy(desc(surveysTable.createdAt))
         .limit(1);
 
-      if (row && row.discountExpiresAt && new Date(row.discountExpiresAt).getTime() > Date.now()) {
-        return { hasDiscount: true, discountPercent: row.discountPercent ?? 30 };
+      if (
+        row &&
+        row.discountExpiresAt &&
+        new Date(row.discountExpiresAt).getTime() > Date.now()
+      ) {
+        return {
+          hasDiscount: true,
+          discountPercent: row.discountPercent ?? 30,
+        };
       }
     } catch {}
 
@@ -213,7 +230,10 @@ export const RetentionService = {
     return { hasDiscount: true, discountPercent: discount.discountPercent };
   },
 
-  hasActiveDiscount(userId: string): { hasDiscount: boolean; discountPercent?: number } {
+  hasActiveDiscount(userId: string): {
+    hasDiscount: boolean;
+    discountPercent?: number;
+  } {
     const discount = activeRetentionDiscounts.get(userId);
     if (!discount) return { hasDiscount: false };
     if (discount.expiresAt < Date.now()) {

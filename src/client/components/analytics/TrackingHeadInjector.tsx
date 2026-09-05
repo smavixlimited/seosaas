@@ -16,7 +16,9 @@ export function TrackingHeadInjector() {
 
     // 1. Google Search Console Verification Meta Tag
     if (tracking.gscSiteVerificationTag) {
-      const existingGsc = document.querySelector('meta[name="google-site-verification"]');
+      const existingGsc = document.querySelector(
+        'meta[name="google-site-verification"]',
+      );
       let token = tracking.gscSiteVerificationTag;
       // Extract content if full tag was pasted
       if (token.includes('content="')) {

@@ -1,6 +1,11 @@
 import { generateText } from "ai";
 
-export type RoadmapCategory = "quick_win" | "high_impact" | "technical" | "content_gap" | "growth";
+export type RoadmapCategory =
+  | "quick_win"
+  | "high_impact"
+  | "technical"
+  | "content_gap"
+  | "growth";
 export type RoadmapStatus = "todo" | "in_progress" | "completed" | "dismissed";
 export type VerificationType = "manual" | "ai_generated" | "live_crawled";
 
@@ -39,7 +44,10 @@ export const RoadmapService = {
   /**
    * Retrieves all roadmap tasks for a project, seeding initial tasks if empty.
    */
-  async getRoadmapTasks(projectId: string, domain?: string): Promise<RoadmapTaskItem[]> {
+  async getRoadmapTasks(
+    projectId: string,
+    domain?: string,
+  ): Promise<RoadmapTaskItem[]> {
     let tasks: RoadmapTaskItem[] = [];
 
     try {
@@ -68,13 +76,19 @@ export const RoadmapService = {
   /**
    * Automatically populates a rich, prioritized SEO & Growth Sprint for a project.
    */
-  async seedInitialRoadmap(projectId: string, domain: string): Promise<RoadmapTaskItem[]> {
+  async seedInitialRoadmap(
+    projectId: string,
+    domain: string,
+  ): Promise<RoadmapTaskItem[]> {
     const now = new Date().toISOString();
-    const defaultTasks: Array<Omit<RoadmapTaskItem, "id" | "createdAt" | "updatedAt">> = [
+    const defaultTasks: Array<
+      Omit<RoadmapTaskItem, "id" | "createdAt" | "updatedAt">
+    > = [
       {
         projectId,
         title: "Deploy SoftwareApplication & Organization Schema Markup",
-        description: "Add structured JSON-LD schema to the homepage and key product pages to help Google AI Overviews and Perplexity cite entity features accurately.",
+        description:
+          "Add structured JSON-LD schema to the homepage and key product pages to help Google AI Overviews and Perplexity cite entity features accurately.",
         category: "high_impact",
         priority: "critical",
         impactBadge: "High Impact",
@@ -90,7 +104,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Fix Missing H1 Tag and Meta Description on Core Landing Pages",
-        description: "Pages missing primary headings and meta descriptions suffer severe click-through and ranking penalties across SERP results.",
+        description:
+          "Pages missing primary headings and meta descriptions suffer severe click-through and ranking penalties across SERP results.",
         category: "quick_win",
         priority: "high",
         impactBadge: "Quick Win (< 5m)",
@@ -106,7 +121,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Launch Competitor Comparison Battlecard Landing Page",
-        description: "Capture high-intent buyers searching for alternative solutions by deploying an objective, feature-by-feature comparison guide.",
+        description:
+          "Capture high-intent buyers searching for alternative solutions by deploying an objective, feature-by-feature comparison guide.",
         category: "growth",
         priority: "high",
         impactBadge: "Growth Play",
@@ -121,7 +137,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Optimize Largest Contentful Paint (LCP) & Image Formats",
-        description: "Compress hero banner assets to WebP and enable lazy loading on below-the-fold images to pass Google Core Web Vitals.",
+        description:
+          "Compress hero banner assets to WebP and enable lazy loading on below-the-fold images to pass Google Core Web Vitals.",
         category: "technical",
         priority: "medium",
         impactBadge: "Technical Health",
@@ -137,7 +154,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Optimize Page 2 Striking-Distance Keywords (Ranks #11–#20)",
-        description: "Target commercial queries ranking just off page 1 by adding rich FAQ sections, data tables, and actionable step-by-step guides.",
+        description:
+          "Target commercial queries ranking just off page 1 by adding rich FAQ sections, data tables, and actionable step-by-step guides.",
         category: "content_gap",
         priority: "high",
         impactBadge: "High Impact",
@@ -153,7 +171,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Claim Unlinked Brand Mentions Across Industry Blogs",
-        description: "Find publications and directories that mentioned your brand name without a link and send a personalized outreach pitch to secure dofollow backlinks.",
+        description:
+          "Find publications and directories that mentioned your brand name without a link and send a personalized outreach pitch to secure dofollow backlinks.",
         category: "growth",
         priority: "medium",
         impactBadge: "Quick Win (< 5m)",
@@ -167,7 +186,8 @@ export const RoadmapService = {
       {
         projectId,
         title: "Eliminate Broken 404 Links & Setup 301 Redirect Rules",
-        description: "Redirect broken legacy URLs to relevant live pages to recover lost link equity and prevent search crawler crawl-budget waste.",
+        description:
+          "Redirect broken legacy URLs to relevant live pages to recover lost link equity and prevent search crawler crawl-budget waste.",
         category: "technical",
         priority: "high",
         impactBadge: "Technical Health",
@@ -220,7 +240,7 @@ export const RoadmapService = {
     taskId: string,
     status: RoadmapStatus,
     userId?: string,
-    verificationType: VerificationType = "manual"
+    verificationType: VerificationType = "manual",
   ): Promise<RoadmapTaskItem | null> {
     const now = new Date().toISOString();
     const verifiedAt = status === "completed" ? now : null;
@@ -230,14 +250,21 @@ export const RoadmapService = {
       const { roadmapTasks } = await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
-      const [existing] = await db.select().from(roadmapTasks).where(eq(roadmapTasks.id, taskId)).limit(1);
+      const [existing] = await db
+        .select()
+        .from(roadmapTasks)
+        .where(eq(roadmapTasks.id, taskId))
+        .limit(1);
       if (!existing) return null;
 
       await db
         .update(roadmapTasks)
         .set({
           status,
-          verificationType: status === "completed" ? verificationType : existing.verificationType,
+          verificationType:
+            status === "completed"
+              ? verificationType
+              : existing.verificationType,
           verifiedAt,
           completedByUserId: status === "completed" ? userId : null,
           updatedAt: now,
@@ -247,7 +274,8 @@ export const RoadmapService = {
       return {
         ...existing,
         status,
-        verificationType: status === "completed" ? verificationType : existing.verificationType,
+        verificationType:
+          status === "completed" ? verificationType : existing.verificationType,
         verifiedAt,
         completedByUserId: status === "completed" ? userId : null,
         updatedAt: now,
@@ -262,7 +290,10 @@ export const RoadmapService = {
    * Generates an instant AI Fix (Schema JSON-LD, meta tags, redirect rules, or copy outline)
    * using OpenRouter and auto-completes the task with verificationType: "ai_generated".
    */
-  async generateAiFix(taskId: string, userId?: string): Promise<{ task: RoadmapTaskItem; codeSnippet: string }> {
+  async generateAiFix(
+    taskId: string,
+    userId?: string,
+  ): Promise<{ task: RoadmapTaskItem; codeSnippet: string }> {
     let task: RoadmapTaskItem | null = null;
 
     try {
@@ -270,7 +301,11 @@ export const RoadmapService = {
       const { roadmapTasks } = await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
-      const [existing] = await db.select().from(roadmapTasks).where(eq(roadmapTasks.id, taskId)).limit(1);
+      const [existing] = await db
+        .select()
+        .from(roadmapTasks)
+        .where(eq(roadmapTasks.id, taskId))
+        .limit(1);
       if (existing) {
         task = existing as RoadmapTaskItem;
       }
@@ -294,7 +329,8 @@ export const RoadmapService = {
           messages: [
             {
               role: "system",
-              content: "You are a Principal Full-Stack SEO Architect. Generate the exact production-ready code snippet (Schema JSON-LD, HTML meta tags, redirect directives, or copy asset) to resolve the requested task. Return ONLY the clean code block or structured markup without preamble.",
+              content:
+                "You are a Principal Full-Stack SEO Architect. Generate the exact production-ready code snippet (Schema JSON-LD, HTML meta tags, redirect directives, or copy asset) to resolve the requested task. Return ONLY the clean code block or structured markup without preamble.",
             },
             {
               role: "user",
@@ -348,7 +384,9 @@ export const RoadmapService = {
    * Autonomous Live Crawl Auto-Detect: Cross-references recent audit issues with active roadmap tasks.
    * If fixed in the latest crawl, marks tasks as completed with verificationType: "live_crawled".
    */
-  async syncAuditIssuesToRoadmap(projectId: string): Promise<{ newlyVerifiedCount: number }> {
+  async syncAuditIssuesToRoadmap(
+    projectId: string,
+  ): Promise<{ newlyVerifiedCount: number }> {
     let newlyVerifiedCount = 0;
     const now = new Date().toISOString();
 
@@ -361,7 +399,12 @@ export const RoadmapService = {
       const activeTasks = await db
         .select()
         .from(roadmapTasks)
-        .where(and(eq(roadmapTasks.projectId, projectId), eq(roadmapTasks.status, "todo")));
+        .where(
+          and(
+            eq(roadmapTasks.projectId, projectId),
+            eq(roadmapTasks.status, "todo"),
+          ),
+        );
 
       for (const t of activeTasks) {
         if (t.sourceIssueId) {
@@ -397,17 +440,24 @@ export const RoadmapService = {
   /**
    * Computes sprint metrics: completion rate, estimated time saved, health score boost.
    */
-  async getRoadmapMetrics(projectId: string, domain?: string): Promise<RoadmapMetrics> {
+  async getRoadmapMetrics(
+    projectId: string,
+    domain?: string,
+  ): Promise<RoadmapMetrics> {
     const tasks = await this.getRoadmapTasks(projectId, domain);
 
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter((t) => t.status === "completed").length;
-    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const completionRate =
+      totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
     let estimatedMinutesSaved = 0;
     let healthScoreBoost = 0;
 
-    const byCategory: Record<RoadmapCategory, { total: number; completed: number }> = {
+    const byCategory: Record<
+      RoadmapCategory,
+      { total: number; completed: number }
+    > = {
       quick_win: { total: 0, completed: 0 },
       high_impact: { total: 0, completed: 0 },
       technical: { total: 0, completed: 0 },
@@ -416,12 +466,15 @@ export const RoadmapService = {
     };
 
     tasks.forEach((t) => {
-      const cat = (t.category in byCategory ? t.category : "quick_win") as RoadmapCategory;
+      const cat = (
+        t.category in byCategory ? t.category : "quick_win"
+      ) as RoadmapCategory;
       byCategory[cat].total++;
       if (t.status === "completed") {
         byCategory[cat].completed++;
         estimatedMinutesSaved += t.estimatedMinutes || 15;
-        healthScoreBoost += t.priority === "critical" ? 4 : t.priority === "high" ? 3 : 2;
+        healthScoreBoost +=
+          t.priority === "critical" ? 4 : t.priority === "high" ? 3 : 2;
       }
     });
 
@@ -448,7 +501,7 @@ export const RoadmapService = {
       estimatedMinutes?: number;
       targetUrl?: string;
       aiPrompt?: string;
-    }
+    },
   ): Promise<RoadmapTaskItem> {
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
@@ -457,12 +510,12 @@ export const RoadmapService = {
       data.category === "quick_win"
         ? "Quick Win (< 5m)"
         : data.category === "high_impact"
-        ? "High Impact"
-        : data.category === "technical"
-        ? "Technical Health"
-        : data.category === "content_gap"
-        ? "Content Moat"
-        : "Growth Play";
+          ? "High Impact"
+          : data.category === "technical"
+            ? "Technical Health"
+            : data.category === "content_gap"
+              ? "Content Moat"
+              : "Growth Play";
 
     const newTask: RoadmapTaskItem = {
       id,

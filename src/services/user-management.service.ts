@@ -11,7 +11,11 @@ export function isSuperAdminEmail(email?: string | null): boolean {
   return SUPERADMIN_EMAILS.includes(email.toLowerCase());
 }
 
-export type UserAccountStatus = "active" | "suspended" | "banned" | "unverified";
+export type UserAccountStatus =
+  | "active"
+  | "suspended"
+  | "banned"
+  | "unverified";
 export type UserRole = "superadmin" | "admin" | "user";
 
 export interface AdminUserRecord {
@@ -132,23 +136,29 @@ export const UserManagementService = {
 
       for (const su of seedUsers) {
         try {
-          await db.insert(user).values({
-            id: su.id,
-            name: su.name,
-            email: su.email,
-            emailVerified: su.emailVerified,
-          }).onConflictDoNothing();
+          await db
+            .insert(user)
+            .values({
+              id: su.id,
+              name: su.name,
+              email: su.email,
+              emailVerified: su.emailVerified,
+            })
+            .onConflictDoNothing();
 
-          await db.insert(userQuotas).values({
-            userId: su.id,
-            planId: su.planId,
-            creditsUsed: su.creditsUsed,
-            monthlyCreditsLimit: su.monthlyCreditsLimit,
-            crawlPagesUsed: su.crawlPagesUsed,
-            uptimeMonitorsCount: su.uptimeMonitorsCount,
-            resetAt: new Date(Date.now() + 30 * 86400000).toISOString(),
-            updatedAt: new Date().toISOString(),
-          }).onConflictDoNothing();
+          await db
+            .insert(userQuotas)
+            .values({
+              userId: su.id,
+              planId: su.planId,
+              creditsUsed: su.creditsUsed,
+              monthlyCreditsLimit: su.monthlyCreditsLimit,
+              crawlPagesUsed: su.crawlPagesUsed,
+              uptimeMonitorsCount: su.uptimeMonitorsCount,
+              resetAt: new Date(Date.now() + 30 * 86400000).toISOString(),
+              updatedAt: new Date().toISOString(),
+            })
+            .onConflictDoNothing();
         } catch {
           // ignore
         }
@@ -163,7 +173,9 @@ export const UserManagementService = {
       const q = allQuotas.find((quota) => quota.userId === u.id);
       const isSuper = isSuperAdminEmail(u.email);
       const role: UserRole = isSuper ? "superadmin" : "user";
-      const status: UserAccountStatus = !u.emailVerified ? "unverified" : "active";
+      const status: UserAccountStatus = !u.emailVerified
+        ? "unverified"
+        : "active";
 
       return {
         id: u.id,
@@ -177,8 +189,15 @@ export const UserManagementService = {
         monthlyCreditsLimit: q?.monthlyCreditsLimit ?? 50,
         crawlPagesUsed: q?.crawlPagesUsed ?? 0,
         uptimeMonitorsCount: q?.uptimeMonitorsCount ?? 0,
-        createdAt: u.createdAt instanceof Date ? u.createdAt.toISOString() : String(u.createdAt),
-        updatedAt: u.updatedAt ? (u.updatedAt instanceof Date ? u.updatedAt.toISOString() : String(u.updatedAt)) : undefined,
+        createdAt:
+          u.createdAt instanceof Date
+            ? u.createdAt.toISOString()
+            : String(u.createdAt),
+        updatedAt: u.updatedAt
+          ? u.updatedAt instanceof Date
+            ? u.updatedAt.toISOString()
+            : String(u.updatedAt)
+          : undefined,
         isSuperAdmin: isSuper,
       };
     });
@@ -270,7 +289,7 @@ export const UserManagementService = {
         (u) =>
           u.name.toLowerCase().includes(q) ||
           u.email.toLowerCase().includes(q) ||
-          u.id.toLowerCase().includes(q)
+          u.id.toLowerCase().includes(q),
       );
     }
 
@@ -336,7 +355,9 @@ export const UserManagementService = {
     const { eq } = await import("drizzle-orm");
 
     const now = new Date().toISOString();
-    const nextReset = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const nextReset = new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000,
+    ).toISOString();
 
     await db
       .insert(userQuotas)
@@ -365,12 +386,20 @@ export const UserManagementService = {
   /**
    * Generates a secure Magic Impersonation session token for an admin.
    */
-  async startImpersonation(targetUserId: string, adminId: string, adminEmail: string) {
+  async startImpersonation(
+    targetUserId: string,
+    adminId: string,
+    adminEmail: string,
+  ) {
     const { db } = await import("@/db");
     const { user } = await import("@/db/schema");
     const { eq } = await import("drizzle-orm");
 
-    const [target] = await db.select().from(user).where(eq(user.id, targetUserId)).limit(1);
+    const [target] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, targetUserId))
+      .limit(1);
     if (!target) {
       throw new AppError("NOT_FOUND", "Target user account not found");
     }

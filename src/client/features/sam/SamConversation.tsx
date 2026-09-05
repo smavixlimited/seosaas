@@ -134,7 +134,11 @@ export function SamConversation({
                 </h3>
               </div>
               <p className="text-xs text-base-content/70 leading-relaxed">
-                Your dedicated Brand Growth Coach, CMO &amp; Search Strategist. I diagnose ranking barriers, unlock high-intent keywords, decode competitor strategies, analyze backlink gaps, protect ad spend conversion rates, monitor your Google Maps presence, and build high-impact growth roadmaps for your Brand.
+                Your dedicated Brand Growth Coach, CMO &amp; Search Strategist.
+                I diagnose ranking barriers, unlock high-intent keywords, decode
+                competitor strategies, analyze backlink gaps, protect ad spend
+                conversion rates, monitor your Google Maps presence, and build
+                high-impact growth roadmaps for your Brand.
               </p>
               <p className="text-xs font-bold text-base-content/80 pt-1">
                 Ask me anything, or launch one of these quick growth plays:

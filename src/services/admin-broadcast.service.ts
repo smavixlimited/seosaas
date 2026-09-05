@@ -1,7 +1,10 @@
 import { db } from "@/db";
 import { user, userNotifications, userQuotas } from "@/db/schema";
 import { eq, and, inArray, desc } from "drizzle-orm";
-import { UserManagementService, AdminUserRecord } from "@/services/user-management.service";
+import {
+  UserManagementService,
+  AdminUserRecord,
+} from "@/services/user-management.service";
 
 export type BroadcastAudienceTarget =
   | "all"
@@ -46,10 +49,18 @@ export const AdminBroadcastService = {
    * Replaces dynamic merge tags for a specific user.
    */
   resolveMergeTags(template: string, recipient: AdminUserRecord): string {
-    const fullName = recipient.name || recipient.email.split("@")[0] || "Valued Customer";
-    const firstName = recipient.name ? recipient.name.split(" ")[0] : recipient.email.split("@")[0] || "there";
-    const planName = recipient.planId ? recipient.planId.toUpperCase() : "STARTER";
-    const creditsLeft = Math.max(0, (recipient.monthlyCreditsLimit || 500) - (recipient.creditsUsed || 0));
+    const fullName =
+      recipient.name || recipient.email.split("@")[0] || "Valued Customer";
+    const firstName = recipient.name
+      ? recipient.name.split(" ")[0]
+      : recipient.email.split("@")[0] || "there";
+    const planName = recipient.planId
+      ? recipient.planId.toUpperCase()
+      : "STARTER";
+    const creditsLeft = Math.max(
+      0,
+      (recipient.monthlyCreditsLimit || 500) - (recipient.creditsUsed || 0),
+    );
 
     return template
       .replace(/{{\s*first_name\s*}}/gi, firstName)
@@ -65,9 +76,11 @@ export const AdminBroadcastService = {
   async getMatchingRecipients(
     targetAudience: BroadcastAudienceTarget,
     targetUserId?: string,
-    targetCountry?: string
+    targetCountry?: string,
   ): Promise<AdminUserRecord[]> {
-    const adminUsersRes = await UserManagementService.getAdminUsers({ limit: 1000 });
+    const adminUsersRes = await UserManagementService.getAdminUsers({
+      limit: 1000,
+    });
     let recipients = adminUsersRes.users;
 
     if (targetAudience === "single_user" && targetUserId) {
@@ -75,9 +88,16 @@ export const AdminBroadcastService = {
     }
 
     if (targetAudience === "free_only") {
-      recipients = recipients.filter((u) => u.planId === "starter" || u.planId === "free");
+      recipients = recipients.filter(
+        (u) => u.planId === "starter" || u.planId === "free",
+      );
     } else if (targetAudience === "paid_only") {
-      recipients = recipients.filter((u) => u.planId === "pro" || u.planId === "agency" || u.planId === "enterprise");
+      recipients = recipients.filter(
+        (u) =>
+          u.planId === "pro" ||
+          u.planId === "agency" ||
+          u.planId === "enterprise",
+      );
     } else if (targetAudience === "starter_plan") {
       recipients = recipients.filter((u) => u.planId === "starter");
     } else if (targetAudience === "pro_plan") {
@@ -115,7 +135,7 @@ export const AdminBroadcastService = {
     const recipients = await this.getMatchingRecipients(
       payload.targetAudience,
       payload.targetUserId,
-      payload.targetCountry
+      payload.targetCountry,
     );
 
     const sample = recipients[0] || {
@@ -134,8 +154,14 @@ export const AdminBroadcastService = {
       isSuperAdmin: false,
     };
 
-    const renderedTitleSample = this.resolveMergeTags(payload.titleTemplate, sample);
-    const renderedMessageSample = this.resolveMergeTags(payload.messageTemplate, sample);
+    const renderedTitleSample = this.resolveMergeTags(
+      payload.titleTemplate,
+      sample,
+    );
+    const renderedMessageSample = this.resolveMergeTags(
+      payload.messageTemplate,
+      sample,
+    );
 
     return {
       targetUserCount: recipients.length,
@@ -162,15 +188,21 @@ export const AdminBroadcastService = {
     const recipients = await this.getMatchingRecipients(
       payload.targetAudience,
       payload.targetUserId,
-      payload.targetCountry
+      payload.targetCountry,
     );
 
     let inAppDeliveredCount = 0;
     let emailDeliveredCount = 0;
 
     for (const recipient of recipients) {
-      const personalizedTitle = this.resolveMergeTags(payload.titleTemplate, recipient);
-      const personalizedMessage = this.resolveMergeTags(payload.messageTemplate, recipient);
+      const personalizedTitle = this.resolveMergeTags(
+        payload.titleTemplate,
+        recipient,
+      );
+      const personalizedMessage = this.resolveMergeTags(
+        payload.messageTemplate,
+        recipient,
+      );
 
       // Channel 1: In-App Notification Bell
       if (payload.channels.includes("in_app")) {
@@ -180,7 +212,8 @@ export const AdminBroadcastService = {
             userId: recipient.id,
             title: personalizedTitle,
             message: personalizedMessage,
-            category: payload.category === "special_offer" ? "credits" : "system",
+            category:
+              payload.category === "special_offer" ? "credits" : "system",
             priority: payload.priority,
             isRead: false,
             actionUrl: payload.actionUrl || null,
@@ -188,7 +221,10 @@ export const AdminBroadcastService = {
           });
           inAppDeliveredCount++;
         } catch (err) {
-          console.warn(`Failed inserting in-app notification for user ${recipient.id}:`, err);
+          console.warn(
+            `Failed inserting in-app notification for user ${recipient.id}:`,
+            err,
+          );
         }
       }
 

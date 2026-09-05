@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Outlet, createFileRoute, Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import {
+  Outlet,
+  createFileRoute,
+  Link,
+  useRouterState,
+  useNavigate,
+} from "@tanstack/react-router";
 import { Icon } from "@iconify/react";
 import { BRAND_CONFIG } from "@/config/brand";
 import { useThemePreference } from "@/client/lib/theme";
@@ -151,12 +157,18 @@ function AdminLayoutShell() {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     const q = searchQuery.toLowerCase();
-    if (q.includes("plan") || q.includes("price")) void navigate({ to: "/admin/plans" });
-    else if (q.includes("brand") || q.includes("logo")) void navigate({ to: "/admin/settings/branding" });
-    else if (q.includes("blog") || q.includes("post")) void navigate({ to: "/admin/blog" });
-    else if (q.includes("user") || q.includes("account")) void navigate({ to: "/admin/users" });
-    else if (q.includes("pay") || q.includes("gate")) void navigate({ to: "/admin/gateways" });
-    else if (q.includes("api") || q.includes("firecrawl")) void navigate({ to: "/admin/settings/apis" });
+    if (q.includes("plan") || q.includes("price"))
+      void navigate({ to: "/admin/plans" });
+    else if (q.includes("brand") || q.includes("logo"))
+      void navigate({ to: "/admin/settings/branding" });
+    else if (q.includes("blog") || q.includes("post"))
+      void navigate({ to: "/admin/blog" });
+    else if (q.includes("user") || q.includes("account"))
+      void navigate({ to: "/admin/users" });
+    else if (q.includes("pay") || q.includes("gate"))
+      void navigate({ to: "/admin/gateways" });
+    else if (q.includes("api") || q.includes("firecrawl"))
+      void navigate({ to: "/admin/settings/apis" });
     else void navigate({ to: "/admin" });
   };
 
@@ -222,8 +234,13 @@ function AdminLayoutShell() {
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <Icon icon={item.icon} className="h-[18px] w-[18px] shrink-0" />
-                            {sidebarOpen && <span className="truncate">{item.title}</span>}
+                            <Icon
+                              icon={item.icon}
+                              className="h-[18px] w-[18px] shrink-0"
+                            />
+                            {sidebarOpen && (
+                              <span className="truncate">{item.title}</span>
+                            )}
                           </div>
                           {sidebarOpen && item.badge && (
                             <span
@@ -323,12 +340,20 @@ function AdminLayoutShell() {
               type="button"
               onClick={toggleTheme}
               className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-              title={isDarkActive ? "Switch to Light Theme" : "Switch to Dark Theme"}
+              title={
+                isDarkActive ? "Switch to Light Theme" : "Switch to Dark Theme"
+              }
             >
               {isDarkActive ? (
-                <Icon icon="solar:sun-2-bold-duotone" className="h-5 w-5 text-amber-400" />
+                <Icon
+                  icon="solar:sun-2-bold-duotone"
+                  className="h-5 w-5 text-amber-400"
+                />
               ) : (
-                <Icon icon="solar:moon-bold-duotone" className="h-5 w-5 text-slate-700" />
+                <Icon
+                  icon="solar:moon-bold-duotone"
+                  className="h-5 w-5 text-slate-700"
+                />
               )}
             </button>
 
@@ -350,7 +375,10 @@ function AdminLayoutShell() {
                     Superadmin
                   </p>
                 </div>
-                <Icon icon="solar:alt-arrow-down-linear" className="h-3.5 w-3.5 text-slate-400 hidden md:block" />
+                <Icon
+                  icon="solar:alt-arrow-down-linear"
+                  className="h-3.5 w-3.5 text-slate-400 hidden md:block"
+                />
               </div>
 
               <ul
@@ -365,19 +393,30 @@ function AdminLayoutShell() {
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate max-w-[190px]">
                       {userEmail}
                     </span>
-                    <span className="text-[10px] text-emerald-500 font-bold">● Full Permissions</span>
+                    <span className="text-[10px] text-emerald-500 font-bold">
+                      ● Full Permissions
+                    </span>
                   </div>
                 </li>
                 <div className="divider my-1"></div>
                 <li>
-                  <Link to="/admin/settings/branding" className="text-xs font-semibold py-2">
-                    <Icon icon="solar:settings-bold-duotone" className="h-4 w-4 text-primary" />
+                  <Link
+                    to="/admin/settings/branding"
+                    className="text-xs font-semibold py-2"
+                  >
+                    <Icon
+                      icon="solar:settings-bold-duotone"
+                      className="h-4 w-4 text-primary"
+                    />
                     <span>Global Settings</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/my-brands" className="text-xs font-semibold py-2">
-                    <Icon icon="solar:window-frame-bold-duotone" className="h-4 w-4 text-indigo-500" />
+                    <Icon
+                      icon="solar:window-frame-bold-duotone"
+                      className="h-4 w-4 text-indigo-500"
+                    />
                     <span>Client Workspace</span>
                   </Link>
                 </li>
@@ -388,7 +427,10 @@ function AdminLayoutShell() {
                     onClick={() => signOutAndRedirect()}
                     className="text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 py-2"
                   >
-                    <Icon icon="solar:logout-2-bold-duotone" className="h-4 w-4" />
+                    <Icon
+                      icon="solar:logout-2-bold-duotone"
+                      className="h-4 w-4"
+                    />
                     <span>Sign Out</span>
                   </button>
                 </li>

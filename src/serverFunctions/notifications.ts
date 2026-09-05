@@ -20,10 +20,15 @@ export const markNotificationReadServerFn = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data, context }) => {
-    return await NotificationsService.markAsRead(context.userId, data.notificationId);
+    return await NotificationsService.markAsRead(
+      context.userId,
+      data.notificationId,
+    );
   });
 
-export const markAllNotificationsReadServerFn = createServerFn({ method: "POST" })
+export const markAllNotificationsReadServerFn = createServerFn({
+  method: "POST",
+})
   .middleware(requireAuthenticatedContext)
   .validator(emptySchema)
   .handler(async ({ context }) => {

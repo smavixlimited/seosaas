@@ -2,9 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 
 vi.mock("cloudflare:workers", () => ({ env: {} }));
 
-import {
-  generateQueryHash,
-} from "@/services/caching-guardrails.service";
+import { generateQueryHash } from "@/services/caching-guardrails.service";
 
 describe("caching-guardrails.service", () => {
   it("generates deterministic SHA-256 query hashes", async () => {

@@ -61,4 +61,3 @@ export function TemplateNumbers() {
     </section>
   );
 }
-export default TemplateNumbers;

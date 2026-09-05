@@ -35,7 +35,8 @@ function ContactPage() {
               We're Here to Help You Rank
             </h1>
             <p className="text-base sm:text-lg text-base-content/70 max-w-xl mx-auto">
-              Have questions about enterprise data limits, agency white-labeling, or API access? Reach out directly.
+              Have questions about enterprise data limits, agency
+              white-labeling, or API access? Reach out directly.
             </p>
           </div>
 
@@ -43,9 +44,14 @@ function ContactPage() {
             <div className="space-y-6 md:col-span-1">
               <div className="rounded-2xl border border-base-300 bg-base-100 p-6 space-y-3">
                 <Mail className="h-6 w-6 text-primary" />
-                <h3 className="text-base font-bold text-base-content">Support & Inquiries</h3>
+                <h3 className="text-base font-bold text-base-content">
+                  Support & Inquiries
+                </h3>
                 <p className="text-xs text-base-content/70">
-                  <a href={`mailto:${BRAND_CONFIG.supportEmail}`} className="link link-primary">
+                  <a
+                    href={`mailto:${BRAND_CONFIG.supportEmail}`}
+                    className="link link-primary"
+                  >
                     {BRAND_CONFIG.supportEmail}
                   </a>
                 </p>
@@ -53,9 +59,14 @@ function ContactPage() {
 
               <div className="rounded-2xl border border-base-300 bg-base-100 p-6 space-y-3">
                 <MessageSquare className="h-6 w-6 text-secondary" />
-                <h3 className="text-base font-bold text-base-content">Sales & Enterprise</h3>
+                <h3 className="text-base font-bold text-base-content">
+                  Sales & Enterprise
+                </h3>
                 <p className="text-xs text-base-content/70">
-                  <a href={`mailto:${BRAND_CONFIG.salesEmail}`} className="link link-secondary">
+                  <a
+                    href={`mailto:${BRAND_CONFIG.salesEmail}`}
+                    className="link link-secondary"
+                  >
                     {BRAND_CONFIG.salesEmail}
                   </a>
                 </p>
@@ -68,9 +79,12 @@ function ContactPage() {
                   <div className="h-12 w-12 rounded-full bg-accent/10 text-accent flex items-center justify-center mx-auto">
                     <CheckCircle2 className="h-6 w-6" />
                   </div>
-                  <h3 className="text-xl font-bold text-base-content">Message Received!</h3>
+                  <h3 className="text-xl font-bold text-base-content">
+                    Message Received!
+                  </h3>
                   <p className="text-sm text-base-content/70">
-                    Thank you {name}. A member of our team will respond to {email} within 24 hours.
+                    Thank you {name}. A member of our team will respond to{" "}
+                    {email} within 24 hours.
                   </p>
                 </div>
               ) : (

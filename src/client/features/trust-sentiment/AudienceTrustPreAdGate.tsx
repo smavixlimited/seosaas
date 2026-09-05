@@ -12,7 +12,9 @@ interface AudienceTrustPreAdGateProps {
   projectId: string;
 }
 
-export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProps) {
+export function AudienceTrustPreAdGate({
+  projectId,
+}: AudienceTrustPreAdGateProps) {
   const queryClient = useQueryClient();
 
   const auditQuery = useQuery({
@@ -24,7 +26,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
     mutationFn: () => runAudienceTrustAudit({ data: {} }),
     onSuccess: (data) => {
       queryClient.setQueryData(["audienceTrustAudit", projectId], data);
-      toast.success("Fresh Audience Trust & Pre-Ad Gate verification completed!");
+      toast.success(
+        "Fresh Audience Trust & Pre-Ad Gate verification completed!",
+      );
     },
     onError: (err: any) => {
       toast.error(err.message || "Failed to run trust verification");
@@ -42,7 +46,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
         },
       }),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["projectRoadmap", projectId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["projectRoadmap", projectId],
+      });
       toast.success("Added pre-ad trust task to Action Roadmap!");
     },
     onError: (err: any) => {
@@ -70,7 +76,8 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
               </span>
             </div>
             <p className="text-xs text-base-content/70 mt-0.5">
-              Verify customer sentiment, testimonial proof, and trust signals before launching paid Meta, Google, or TikTok campaigns.
+              Verify customer sentiment, testimonial proof, and trust signals
+              before launching paid Meta, Google, or TikTok campaigns.
             </p>
           </div>
         </div>
@@ -85,7 +92,11 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
             icon="solar:radar-bold"
             className={`h-4 w-4 ${runAuditMutation.isPending ? "animate-spin" : ""}`}
           />
-          <span>{runAuditMutation.isPending ? "Verifying Signals..." : "Run Pre-Ad Scan"}</span>
+          <span>
+            {runAuditMutation.isPending
+              ? "Verifying Signals..."
+              : "Run Pre-Ad Scan"}
+          </span>
         </button>
       </div>
 
@@ -97,7 +108,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
         </div>
       ) : !audit ? (
         <div className="rounded-3xl border border-base-300 bg-base-100 p-12 text-center space-y-3">
-          <p className="text-xs text-base-content/60">No audience trust scan found.</p>
+          <p className="text-xs text-base-content/60">
+            No audience trust scan found.
+          </p>
           <button
             type="button"
             onClick={() => runAuditMutation.mutate()}
@@ -125,17 +138,26 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                 <div className="flex flex-wrap items-center gap-3">
                   {audit.preAdGateStatus === "approved" ? (
                     <div className="badge badge-lg badge-success text-white font-black text-sm px-4 py-4 gap-2 rounded-2xl shadow-sm">
-                      <Icon icon="solar:check-circle-bold" className="h-5 w-5" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-5 w-5"
+                      />
                       <span>GATE APPROVED &bull; AD-READY</span>
                     </div>
                   ) : audit.preAdGateStatus === "caution" ? (
                     <div className="badge badge-lg badge-warning text-slate-900 font-black text-sm px-4 py-4 gap-2 rounded-2xl shadow-sm">
-                      <Icon icon="solar:danger-triangle-bold" className="h-5 w-5" />
+                      <Icon
+                        icon="solar:danger-triangle-bold"
+                        className="h-5 w-5"
+                      />
                       <span>CAUTION &bull; MINOR TRUST FRICTION</span>
                     </div>
                   ) : (
                     <div className="badge badge-lg badge-error text-white font-black text-sm px-4 py-4 gap-2 rounded-2xl shadow-sm">
-                      <Icon icon="solar:close-circle-bold" className="h-5 w-5" />
+                      <Icon
+                        icon="solar:close-circle-bold"
+                        className="h-5 w-5"
+                      />
                       <span>GATE BLOCKED &bull; HIGH CHURN RISK</span>
                     </div>
                   )}
@@ -149,7 +171,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
               {/* Sentiment Distribution Bars */}
               <div className="space-y-2 pt-3 border-t border-base-200">
                 <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="text-base-content/70">Audience Sentiment Distribution</span>
+                  <span className="text-base-content/70">
+                    Audience Sentiment Distribution
+                  </span>
                   <div className="flex items-center gap-4 text-[11px]">
                     <span className="text-emerald-600 font-bold">
                       {audit.sentimentDistribution.positive}% Positive
@@ -165,7 +189,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
 
                 <div className="h-3 w-full rounded-full bg-base-200 flex overflow-hidden">
                   <div
-                    style={{ width: `${audit.sentimentDistribution.positive}%` }}
+                    style={{
+                      width: `${audit.sentimentDistribution.positive}%`,
+                    }}
                     className="bg-emerald-500 h-full transition-all"
                   />
                   <div
@@ -173,7 +199,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                     className="bg-slate-400 h-full transition-all"
                   />
                   <div
-                    style={{ width: `${audit.sentimentDistribution.negative}%` }}
+                    style={{
+                      width: `${audit.sentimentDistribution.negative}%`,
+                    }}
                     className="bg-rose-500 h-full transition-all"
                   />
                 </div>
@@ -197,7 +225,9 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                   role="progressbar"
                 >
                   {audit.trustScore}
-                  <span className="text-xs text-base-content/50 block font-normal">/100</span>
+                  <span className="text-xs text-base-content/50 block font-normal">
+                    /100
+                  </span>
                 </div>
               </div>
 
@@ -205,8 +235,8 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                 {audit.trustScore >= 80
                   ? "Superior Brand Trust"
                   : audit.trustScore >= 60
-                  ? "Moderate Brand Trust"
-                  : "Needs Optimization"}
+                    ? "Moderate Brand Trust"
+                    : "Needs Optimization"}
               </div>
             </div>
           </div>
@@ -216,7 +246,10 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
             {/* Pre-Ad Launch Checklist */}
             <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xs space-y-4">
               <div className="flex items-center gap-2 text-primary">
-                <Icon icon="solar:checklist-minimalistic-bold-duotone" className="h-6 w-6" />
+                <Icon
+                  icon="solar:checklist-minimalistic-bold-duotone"
+                  className="h-6 w-6"
+                />
                 <h3 className="text-base font-black text-base-content">
                   Pre-Campaign Launch Checklist
                 </h3>
@@ -234,12 +267,22 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                   >
                     <div className="flex items-start gap-2">
                       <Icon
-                        icon={item.passed ? "solar:check-circle-bold" : "solar:close-circle-bold"}
+                        icon={
+                          item.passed
+                            ? "solar:check-circle-bold"
+                            : "solar:close-circle-bold"
+                        }
                         className={`h-4 w-4 shrink-0 mt-0.5 ${
                           item.passed ? "text-emerald-500" : "text-rose-500"
                         }`}
                       />
-                      <span className={item.passed ? "text-base-content" : "text-rose-600 font-bold"}>
+                      <span
+                        className={
+                          item.passed
+                            ? "text-base-content"
+                            : "text-rose-600 font-bold"
+                        }
+                      >
                         {item.item}
                       </span>
                     </div>
@@ -266,7 +309,10 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
             {/* Risk Alerts & Ad Comment Toxicity */}
             <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xs space-y-4">
               <div className="flex items-center gap-2 text-amber-500">
-                <Icon icon="solar:danger-triangle-bold-duotone" className="h-6 w-6" />
+                <Icon
+                  icon="solar:danger-triangle-bold-duotone"
+                  className="h-6 w-6"
+                />
                 <h3 className="text-base font-black text-base-content">
                   Ad Comment &amp; Brand Risk Alerts
                 </h3>
@@ -285,8 +331,8 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                             alert.severity === "high"
                               ? "bg-rose-500"
                               : alert.severity === "moderate"
-                              ? "bg-amber-500"
-                              : "bg-emerald-500"
+                                ? "bg-amber-500"
+                                : "bg-emerald-500"
                           }`}
                         />
                         {alert.title}
@@ -326,14 +372,19 @@ export function AudienceTrustPreAdGate({ projectId }: AudienceTrustPreAdGateProp
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-base-content flex items-center gap-1.5">
-                      <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-emerald-500" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-4 w-4 text-emerald-500"
+                      />
                       {sig.title}
                     </span>
                     <span className="badge badge-xs badge-neutral text-[9px] font-mono">
                       {sig.source}
                     </span>
                   </div>
-                  <p className="text-base-content/70 font-medium">{sig.snippet}</p>
+                  <p className="text-base-content/70 font-medium">
+                    {sig.snippet}
+                  </p>
                 </div>
               ))}
             </div>

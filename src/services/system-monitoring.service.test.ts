@@ -55,14 +55,14 @@ describe("SystemMonitoringService (Infrastructure & Webhook Error Logger)", () =
       const retryRes = await SystemMonitoringService.retryWebhook(
         logged.id,
         "usr_superadmin_01",
-        "admin@skorvia.com"
+        "admin@skorvia.com",
       );
       expect(retryRes.success).toBe(true);
 
       const resolved = await SystemMonitoringService.resolveWebhook(
         logged.id,
         "usr_superadmin_01",
-        "admin@skorvia.com"
+        "admin@skorvia.com",
       );
       expect(resolved).toBe(true);
     });

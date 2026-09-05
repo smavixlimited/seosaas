@@ -9,6 +9,12 @@
     "src/router.tsx",
     "src/routes/**/*.ts",
     "src/routes/**/*.tsx",
+    // TanStack Start Server Functions & Services
+    "src/serverFunctions/**/*.ts",
+    "src/services/**/*.ts",
+    // Client components and features
+    "src/client/**/*.tsx",
+    "src/client/**/*.ts",
     // Drizzle config (plugin disabled due to cloudflare:workers import issues)
     "drizzle.config.ts",
     "drizzle-pg.config.ts",
@@ -17,7 +23,12 @@
     "src/db/schema.ts",
     "src/db/app.schema.ts",
     "src/db/better-auth-schema.ts",
+    "src/db/saas.schema.ts",
     "src/db/pg/schema.ts",
+    // App utilities, config and types
+    "src/lib/**/*.ts",
+    "src/config/**/*.ts",
+    "src/types/**/*.ts",
     // Standalone CLI/dev scripts, invoked via package.json scripts
     "scripts/**",
     // DataForSEO section barrel — consumed via the dynamic import in
@@ -34,6 +45,9 @@
     // Alchemy state/bundle artifacts (gitignored)
     "!.alchemy/**",
     "!badseo/**",
+    "!dashboard/**",
+    "!template/**",
+    "!analytics-reporting/**",
   ],
   "ignore": ["drizzle-prod.config.ts"],
   // Disable Drizzle plugin - it tries to load drizzle.config.ts which imports cloudflare:workers

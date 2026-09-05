@@ -91,4 +91,3 @@ export function TemplateIntegration() {
     </section>
   );
 }
-export default TemplateIntegration;

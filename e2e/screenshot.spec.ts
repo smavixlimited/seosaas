@@ -1,12 +1,13 @@
-import { test } from '@playwright/test';
+import { test } from "@playwright/test";
 
-test('capture screenshots of template homepage', async ({ page }) => {
-  const artifactDir = '/Users/rasheedmac/.gemini/antigravity/brain/ad832c28-1255-42a9-8e38-db6b75ee544e';
-  
+test("capture screenshots of template homepage", async ({ page }) => {
+  const artifactDir =
+    "/Users/rasheedmac/.gemini/antigravity/brain/ad832c28-1255-42a9-8e38-db6b75ee544e";
+
   // Set Desktop viewport
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('h1', { state: 'visible', timeout: 15000 });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForSelector("h1", { state: "visible", timeout: 15000 });
   await page.waitForTimeout(2000);
 
   // Scroll down smoothly to load all lazy images
@@ -30,10 +31,16 @@ test('capture screenshots of template homepage', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // 1. Full Page
-  await page.screenshot({ path: `${artifactDir}/homepage_full_page.png`, fullPage: true });
+  await page.screenshot({
+    path: `${artifactDir}/homepage_full_page.png`,
+    fullPage: true,
+  });
 
   // 2. Hero Viewport
-  await page.screenshot({ path: `${artifactDir}/homepage_desktop.png`, fullPage: false });
+  await page.screenshot({
+    path: `${artifactDir}/homepage_desktop.png`,
+    fullPage: false,
+  });
 
   // 3. Test interactive scanner preset
   const ecomBtn = page.locator('button:has-text("E-Commerce")').first();
@@ -48,12 +55,17 @@ test('capture screenshots of template homepage', async ({ page }) => {
     await gapsTab.click();
     await page.waitForTimeout(500);
   }
-  await page.screenshot({ path: `${artifactDir}/homepage_interactive_sandbox.png` });
+  await page.screenshot({
+    path: `${artifactDir}/homepage_interactive_sandbox.png`,
+  });
 
   // 5. Mobile
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('h1', { state: 'visible', timeout: 15000 });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForSelector("h1", { state: "visible", timeout: 15000 });
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: `${artifactDir}/homepage_mobile.png`, fullPage: false });
+  await page.screenshot({
+    path: `${artifactDir}/homepage_mobile.png`,
+    fullPage: false,
+  });
 });

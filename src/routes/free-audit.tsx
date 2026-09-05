@@ -70,7 +70,8 @@ function FreeAuditPage() {
               Audit Any Website's On-Page & Technical SEO in Seconds.
             </h1>
             <p className="text-sm sm:text-base text-base-content/70">
-              Enter your website URL and email to get a breakdown of critical indexation, performance, and ranking factors.
+              Enter your website URL and email to get a breakdown of critical
+              indexation, performance, and ranking factors.
             </p>
           </div>
 
@@ -82,7 +83,9 @@ function FreeAuditPage() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-base-content/70">Website URL</label>
+                  <label className="text-xs font-bold text-base-content/70">
+                    Website URL
+                  </label>
                   <div className="relative">
                     <Globe2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-base-content/40" />
                     <input
@@ -97,7 +100,9 @@ function FreeAuditPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-base-content/70">Work Email</label>
+                  <label className="text-xs font-bold text-base-content/70">
+                    Work Email
+                  </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-base-content/40" />
                     <input
@@ -119,7 +124,8 @@ function FreeAuditPage() {
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <RefreshCw className="h-4 w-4 animate-spin" /> Analyzing Technical & Content Signals...
+                    <RefreshCw className="h-4 w-4 animate-spin" /> Analyzing
+                    Technical & Content Signals...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
@@ -147,7 +153,9 @@ function FreeAuditPage() {
                     }`}
                   >
                     <span>{result.overallScore}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-base-content/60">/100</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-base-content/60">
+                      /100
+                    </span>
                   </div>
 
                   <div className="space-y-1">
@@ -159,10 +167,12 @@ function FreeAuditPage() {
                     </h2>
                     <div className="flex items-center gap-3 text-xs pt-1">
                       <span className="badge badge-success badge-sm font-bold gap-1">
-                        <CheckCircle2 className="h-3 w-3" /> {passedCount} Passed
+                        <CheckCircle2 className="h-3 w-3" /> {passedCount}{" "}
+                        Passed
                       </span>
                       <span className="badge badge-error badge-sm font-bold gap-1">
-                        <AlertTriangle className="h-3 w-3" /> {issueCount} Action Items
+                        <AlertTriangle className="h-3 w-3" /> {issueCount}{" "}
+                        Action Items
                       </span>
                     </div>
                   </div>
@@ -174,30 +184,34 @@ function FreeAuditPage() {
                     to="/sign-up"
                     className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/25 gap-2"
                   >
-                    Unlock Full 200-Point Audit <ArrowRight className="h-4 w-4" />
+                    Unlock Full 200-Point Audit{" "}
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
                   <p className="text-[11px] text-base-content/60 mt-1.5">
-                    Includes Backlink Velocity, Keyword Rankings, and 1-Click Fixes.
+                    Includes Backlink Velocity, Keyword Rankings, and 1-Click
+                    Fixes.
                   </p>
                 </div>
               </div>
 
               {/* Category Filter Tabs */}
               <div className="flex items-center gap-2 border-b border-base-300 pb-3 overflow-x-auto text-xs font-bold">
-                {["all", "technical", "content", "performance", "mobile"].map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    className={`rounded-xl px-3.5 py-1.5 capitalize transition-all ${
-                      activeCategory === cat
-                        ? "bg-primary text-white shadow-xs"
-                        : "bg-base-200 text-base-content/70 hover:text-base-content"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {["all", "technical", "content", "performance", "mobile"].map(
+                  (cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setActiveCategory(cat)}
+                      className={`rounded-xl px-3.5 py-1.5 capitalize transition-all ${
+                        activeCategory === cat
+                          ? "bg-primary text-white shadow-xs"
+                          : "bg-base-200 text-base-content/70 hover:text-base-content"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ),
+                )}
               </div>
 
               {/* Checks Grid */}
@@ -214,21 +228,29 @@ function FreeAuditPage() {
                         ) : (
                           <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" />
                         )}
-                        <h3 className="text-sm font-bold text-base-content">{chk.title}</h3>
+                        <h3 className="text-sm font-bold text-base-content">
+                          {chk.title}
+                        </h3>
                       </div>
                       <span
                         className={`badge badge-sm font-black ${
-                          chk.passed ? "badge-success text-white" : "badge-warning"
+                          chk.passed
+                            ? "badge-success text-white"
+                            : "badge-warning"
                         }`}
                       >
                         {chk.score}%
                       </span>
                     </div>
 
-                    <p className="text-xs text-base-content/80">{chk.details}</p>
+                    <p className="text-xs text-base-content/80">
+                      {chk.details}
+                    </p>
 
                     <div className="rounded-xl bg-base-200/60 p-2.5 text-[11px] text-base-content/70 border border-base-300/40">
-                      <span className="font-bold text-primary">Recommendation: </span>
+                      <span className="font-bold text-primary">
+                        Recommendation:{" "}
+                      </span>
                       {chk.recommendation}
                     </div>
                   </div>

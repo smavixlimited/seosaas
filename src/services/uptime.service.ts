@@ -13,7 +13,7 @@ export async function getUserUptimeMonitors(userId: string) {
 
 export async function addUptimeMonitor(
   userId: string,
-  params: { url: string; projectId?: string | null }
+  params: { url: string; projectId?: string | null },
 ) {
   let targetUrl = params.url.trim();
   if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
@@ -33,7 +33,9 @@ export async function addUptimeMonitor(
       status: "up",
       lastCheckedAt: now,
       lastStatusCode: 200,
-      sslExpiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+      sslExpiresAt: new Date(
+        Date.now() + 90 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       isActive: true,
       createdAt: now,
     })
@@ -45,7 +47,9 @@ export async function addUptimeMonitor(
 export async function deleteUptimeMonitor(userId: string, monitorId: string) {
   await db
     .delete(uptimeMonitors)
-    .where(and(eq(uptimeMonitors.id, monitorId), eq(uptimeMonitors.userId, userId)));
+    .where(
+      and(eq(uptimeMonitors.id, monitorId), eq(uptimeMonitors.userId, userId)),
+    );
 
   return { success: true };
 }

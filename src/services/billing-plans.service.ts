@@ -52,7 +52,8 @@ export interface AdminPlanRecord {
 }
 
 const DEFAULT_PLANS: AdminPlanRecord[] = BRAND_CONFIG.pricing.tiers.map((t) => {
-  const isAgency = (t.id as string) === "agency" || (t.id as string) === "enterprise";
+  const isAgency =
+    (t.id as string) === "agency" || (t.id as string) === "enterprise";
   const isProOrAbove = (t.id as string) !== "starter";
 
   return {
@@ -183,7 +184,7 @@ export const BillingPlansService = {
   async upsertPlan(
     plan: AdminPlanRecord,
     adminId: string,
-    adminEmail: string
+    adminEmail: string,
   ): Promise<AdminPlanRecord> {
     const limitsJson = JSON.stringify(plan.limits);
     const featuresJson = JSON.stringify(plan.features);
@@ -254,7 +255,7 @@ export const BillingPlansService = {
     planId: string,
     isActive: boolean,
     adminId: string,
-    adminEmail: string
+    adminEmail: string,
   ): Promise<boolean> {
     try {
       const { db } = await import("@/db");

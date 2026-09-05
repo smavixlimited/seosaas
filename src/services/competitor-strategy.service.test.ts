@@ -6,7 +6,7 @@ describe("CompetitorStrategyService", () => {
     const report = await CompetitorStrategyService.generateTeardown(
       "test-proj-123",
       "competitor.com",
-      2840
+      2840,
     );
 
     expect(report).toBeDefined();
@@ -30,7 +30,9 @@ describe("CompetitorStrategyService", () => {
 
     // Pillar 4: Vulnerabilities
     expect(report.vulnerabilities).toBeDefined();
-    expect(report.vulnerabilities.strikingDistanceKeywords.length).toBeGreaterThan(0);
+    expect(
+      report.vulnerabilities.strikingDistanceKeywords.length,
+    ).toBeGreaterThan(0);
     expect(report.vulnerabilities.contentWeaknesses.length).toBeGreaterThan(0);
 
     // Pillar 5: Attack Playbook & SAM AI Integration

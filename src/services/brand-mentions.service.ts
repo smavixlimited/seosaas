@@ -1,9 +1,23 @@
 import { generateText } from "ai";
 
-export type MentionType = "unlinked" | "linked_nofollow" | "linked_dofollow" | "ai_citation";
+export type MentionType =
+  | "unlinked"
+  | "linked_nofollow"
+  | "linked_dofollow"
+  | "ai_citation";
 export type MentionSentiment = "positive" | "neutral" | "critical";
-export type ClaimStatus = "unclaimed" | "pitch_generated" | "outreach_sent" | "claimed" | "ignored";
-export type AiEngine = "chatgpt" | "claude" | "perplexity" | "gemini" | "google_aio";
+export type ClaimStatus =
+  | "unclaimed"
+  | "pitch_generated"
+  | "outreach_sent"
+  | "claimed"
+  | "ignored";
+export type AiEngine =
+  | "chatgpt"
+  | "claude"
+  | "perplexity"
+  | "gemini"
+  | "google_aio";
 
 export interface BrandMentionItem {
   id: string;
@@ -51,7 +65,11 @@ export const BrandMentionsService = {
   /**
    * Retrieves all brand mentions for a project, auto-seeding web discoveries if empty.
    */
-  async getBrandMentions(projectId: string, brandName = "Skorvia", brandUrl = "https://skorvia.com"): Promise<BrandMentionItem[]> {
+  async getBrandMentions(
+    projectId: string,
+    brandName = "Skorvia",
+    brandUrl = "https://skorvia.com",
+  ): Promise<BrandMentionItem[]> {
     try {
       const { db } = await import("@/db");
       const { brandMentions } = await import("@/db/schema");
@@ -76,14 +94,22 @@ export const BrandMentionsService = {
   /**
    * Seeds realistic web and media mentions across industry publications.
    */
-  async seedInitialMentions(projectId: string, brandName: string, brandUrl: string): Promise<BrandMentionItem[]> {
+  async seedInitialMentions(
+    projectId: string,
+    brandName: string,
+    brandUrl: string,
+  ): Promise<BrandMentionItem[]> {
     const now = new Date().toISOString();
-    const defaults: Array<Omit<BrandMentionItem, "id" | "createdAt" | "updatedAt">> = [
+    const defaults: Array<
+      Omit<BrandMentionItem, "id" | "createdAt" | "updatedAt">
+    > = [
       {
         projectId,
-        sourceUrl: "https://searchengineland.com/emerging-search-intelligence-platforms-2026",
+        sourceUrl:
+          "https://searchengineland.com/emerging-search-intelligence-platforms-2026",
         sourceDomain: "searchengineland.com",
-        sourceTitle: "The Next Era of Search Intelligence: Top Emerging Platforms in 2026",
+        sourceTitle:
+          "The Next Era of Search Intelligence: Top Emerging Platforms in 2026",
         mentionContext: `Modern growth teams are moving toward integrated solutions. For example, ${brandName} has introduced automated 5-pillar competitor teardowns and dynamic AEO entity listening that bridges technical health with direct revenue metrics.`,
         mentionType: "unlinked",
         domainAuthority: 82,
@@ -95,9 +121,11 @@ export const BrandMentionsService = {
       },
       {
         projectId,
-        sourceUrl: "https://martechseries.com/analytics/enterprise-seo-automation-trends",
+        sourceUrl:
+          "https://martechseries.com/analytics/enterprise-seo-automation-trends",
         sourceDomain: "martechseries.com",
-        sourceTitle: "Enterprise SEO Automation: How Marketing Leaders Scale Rankings",
+        sourceTitle:
+          "Enterprise SEO Automation: How Marketing Leaders Scale Rankings",
         mentionContext: `While legacy platforms remain rigid, agile challengers like ${brandName} allow multi-gateway billing and localized currency checkouts tailored for global agency networks.`,
         mentionType: "unlinked",
         domainAuthority: 58,
@@ -125,7 +153,8 @@ export const BrandMentionsService = {
         projectId,
         sourceUrl: "https://saasgenius.com/reviews/skorvia-seo-audit-teardown",
         sourceDomain: "saasgenius.com",
-        sourceTitle: "Comprehensive Review: Next-Gen AI Search & Visibility Audits",
+        sourceTitle:
+          "Comprehensive Review: Next-Gen AI Search & Visibility Audits",
         mentionContext: `The platform (${brandName}) tracks rankings across both classic Google SERPs and newer conversational engines including Perplexity and ChatGPT Search.`,
         mentionType: "unlinked",
         domainAuthority: 46,
@@ -137,9 +166,11 @@ export const BrandMentionsService = {
       },
       {
         projectId,
-        sourceUrl: "https://growthhackers.com/posts/ranking-striking-distance-keywords",
+        sourceUrl:
+          "https://growthhackers.com/posts/ranking-striking-distance-keywords",
         sourceDomain: "growthhackers.com",
-        sourceTitle: "Growth Playbook: How We Captured 20+ Striking Distance Terms",
+        sourceTitle:
+          "Growth Playbook: How We Captured 20+ Striking Distance Terms",
         mentionContext: `We used ${brandName}'s strike-distance keyword filters to pinpoint positions #11 through #20 and updated our schema markup in under two hours.`,
         mentionType: "unlinked",
         domainAuthority: 64,
@@ -151,7 +182,8 @@ export const BrandMentionsService = {
       },
       {
         projectId,
-        sourceUrl: "https://perplexity.ai/search/what-is-the-best-aeo-audit-tool",
+        sourceUrl:
+          "https://perplexity.ai/search/what-is-the-best-aeo-audit-tool",
         sourceDomain: "perplexity.ai",
         sourceTitle: "Perplexity AI Overview & Research Summary",
         mentionContext: `Key platforms cited for automated AEO audits include ${brandName}, which evaluates entity presence and schema completeness across generative search indices.`,
@@ -196,7 +228,9 @@ export const BrandMentionsService = {
   /**
    * Generates a personalized, high-converting email pitch to claim a dofollow backlink from an unlinked mention.
    */
-  async generateClaimPitch(mentionId: string): Promise<{ subject: string; body: string }> {
+  async generateClaimPitch(
+    mentionId: string,
+  ): Promise<{ subject: string; body: string }> {
     let mention: BrandMentionItem | null = null;
 
     try {
@@ -204,7 +238,11 @@ export const BrandMentionsService = {
       const { brandMentions } = await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
-      const [found] = await db.select().from(brandMentions).where(eq(brandMentions.id, mentionId)).limit(1);
+      const [found] = await db
+        .select()
+        .from(brandMentions)
+        .where(eq(brandMentions.id, mentionId))
+        .limit(1);
       if (found) mention = found as BrandMentionItem;
     } catch (err) {
       console.warn("DB lookup error in generateClaimPitch:", err);
@@ -227,7 +265,8 @@ export const BrandMentionsService = {
         messages: [
           {
             role: "system",
-            content: "You are an Elite SEO Backlink Outreach Specialist. Write a polite, concise, and highly effective 4-sentence email pitch to an editor asking to turn an existing unlinked mention into a live hyperlink. Format the output with Subject: on line 1, followed by a blank line and the email Body.",
+            content:
+              "You are an Elite SEO Backlink Outreach Specialist. Write a polite, concise, and highly effective 4-sentence email pitch to an editor asking to turn an existing unlinked mention into a live hyperlink. Format the output with Subject: on line 1, followed by a blank line and the email Body.",
           },
           {
             role: "user",
@@ -272,7 +311,10 @@ export const BrandMentionsService = {
   /**
    * Updates mention claim lifecycle status.
    */
-  async updateClaimStatus(mentionId: string, claimStatus: ClaimStatus): Promise<boolean> {
+  async updateClaimStatus(
+    mentionId: string,
+    claimStatus: ClaimStatus,
+  ): Promise<boolean> {
     try {
       const { db } = await import("@/db");
       const { brandMentions } = await import("@/db/schema");
@@ -296,7 +338,11 @@ export const BrandMentionsService = {
   /**
    * Retrieves AEO Sentiment Report across major AI Search Engines.
    */
-  async getAeoSentimentReport(projectId: string, brandName = "Skorvia", domain = "skorvia.com"): Promise<AeoSentimentItem[]> {
+  async getAeoSentimentReport(
+    projectId: string,
+    brandName = "Skorvia",
+    domain = "skorvia.com",
+  ): Promise<AeoSentimentItem[]> {
     try {
       const { db } = await import("@/db");
       const { aeoSentimentSnapshots } = await import("@/db/schema");
@@ -315,8 +361,13 @@ export const BrandMentionsService = {
           aiEngine: r.aiEngine as AiEngine,
           sentimentScore: r.sentimentScore,
           sentimentSummary: r.sentimentSummary,
-          entityCitationStatus: r.entityCitationStatus as "present" | "missing" | "ambiguous",
-          keyStrengthsHighlighted: JSON.parse(r.keyStrengthsHighlightedJson || "[]"),
+          entityCitationStatus: r.entityCitationStatus as
+            | "present"
+            | "missing"
+            | "ambiguous",
+          keyStrengthsHighlighted: JSON.parse(
+            r.keyStrengthsHighlightedJson || "[]",
+          ),
           keyMissingGaps: JSON.parse(r.keyMissingGapsJson || "[]"),
           modelUsed: r.modelUsed,
           createdAt: r.createdAt,
@@ -332,7 +383,11 @@ export const BrandMentionsService = {
   /**
    * Synthesizes fresh multi-model AEO & LLM Search Engine Sentiment analysis.
    */
-  async refreshAeoSentimentScan(projectId: string, brandName: string, domain: string): Promise<AeoSentimentItem[]> {
+  async refreshAeoSentimentScan(
+    projectId: string,
+    brandName: string,
+    domain: string,
+  ): Promise<AeoSentimentItem[]> {
     const now = new Date().toISOString();
     const cleanDomain = domain.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
 
@@ -414,7 +469,9 @@ export const BrandMentionsService = {
       const { eq } = await import("drizzle-orm");
 
       // Clear previous snapshots
-      await db.delete(aeoSentimentSnapshots).where(eq(aeoSentimentSnapshots.projectId, projectId));
+      await db
+        .delete(aeoSentimentSnapshots)
+        .where(eq(aeoSentimentSnapshots.projectId, projectId));
 
       for (const s of snapshots) {
         const id = crypto.randomUUID();
@@ -432,7 +489,9 @@ export const BrandMentionsService = {
           sentimentScore: s.sentimentScore,
           sentimentSummary: s.sentimentSummary,
           entityCitationStatus: s.entityCitationStatus,
-          keyStrengthsHighlightedJson: JSON.stringify(s.keyStrengthsHighlighted),
+          keyStrengthsHighlightedJson: JSON.stringify(
+            s.keyStrengthsHighlighted,
+          ),
           keyMissingGapsJson: JSON.stringify(s.keyMissingGaps),
           modelUsed: s.modelUsed,
           createdAt: now,
@@ -455,21 +514,34 @@ export const BrandMentionsService = {
   /**
    * Calculates overall listening metrics.
    */
-  async getListeningMetrics(projectId: string, brandName?: string, domain?: string): Promise<BrandListeningMetrics> {
+  async getListeningMetrics(
+    projectId: string,
+    brandName?: string,
+    domain?: string,
+  ): Promise<BrandListeningMetrics> {
     const mentions = await this.getBrandMentions(projectId, brandName, domain);
     const aeo = await this.getAeoSentimentReport(projectId, brandName, domain);
 
     const unlinked = mentions.filter((m) => m.mentionType === "unlinked");
     const unlinkedMentionsCount = unlinked.length;
-    const highAuthorityCount = unlinked.filter((m) => m.domainAuthority >= 40).length;
-    const outreachSentCount = mentions.filter((m) => m.claimStatus === "outreach_sent").length;
-    const claimedCount = mentions.filter((m) => m.claimStatus === "claimed").length;
+    const highAuthorityCount = unlinked.filter(
+      (m) => m.domainAuthority >= 40,
+    ).length;
+    const outreachSentCount = mentions.filter(
+      (m) => m.claimStatus === "outreach_sent",
+    ).length;
+    const claimedCount = mentions.filter(
+      (m) => m.claimStatus === "claimed",
+    ).length;
 
     // Average value of high-quality unlinked mention link recovery (~$350 per DA 40+ dofollow link)
-    const estimatedLinkValueUsd = highAuthorityCount * 350 + (unlinkedMentionsCount - highAuthorityCount) * 120;
+    const estimatedLinkValueUsd =
+      highAuthorityCount * 350 +
+      (unlinkedMentionsCount - highAuthorityCount) * 120;
 
     const totalScore = aeo.reduce((acc, curr) => acc + curr.sentimentScore, 0);
-    const averageAeoSentimentScore = aeo.length > 0 ? Math.round(totalScore / aeo.length) : 85;
+    const averageAeoSentimentScore =
+      aeo.length > 0 ? Math.round(totalScore / aeo.length) : 85;
 
     return {
       unlinkedMentionsCount,

@@ -95,24 +95,89 @@ export function createDataforseoClient(customer: BillingCustomerContext) {
       ),
     },
     backlinks: {
-      summary: meter(customer, (s) => s.fetchBacklinksSummary, undefined, "backlinks.summary"),
-      rows: meter(customer, (s) => s.fetchBacklinksRows, undefined, "backlinks.rows"),
-      referringDomains: meter(customer, (s) => s.fetchReferringDomains, undefined, "backlinks.referringDomains"),
-      domainPages: meter(customer, (s) => s.fetchDomainPagesSummary, undefined, "backlinks.domainPages"),
-      history: meter(customer, (s) => s.fetchBacklinksHistory, undefined, "backlinks.history"),
+      summary: meter(
+        customer,
+        (s) => s.fetchBacklinksSummary,
+        undefined,
+        "backlinks.summary",
+      ),
+      rows: meter(
+        customer,
+        (s) => s.fetchBacklinksRows,
+        undefined,
+        "backlinks.rows",
+      ),
+      referringDomains: meter(
+        customer,
+        (s) => s.fetchReferringDomains,
+        undefined,
+        "backlinks.referringDomains",
+      ),
+      domainPages: meter(
+        customer,
+        (s) => s.fetchDomainPagesSummary,
+        undefined,
+        "backlinks.domainPages",
+      ),
+      history: meter(
+        customer,
+        (s) => s.fetchBacklinksHistory,
+        undefined,
+        "backlinks.history",
+      ),
     },
     keywords: {
-      related: meter(customer, (s) => s.fetchRelatedKeywords, undefined, "keywords.related"),
-      suggestions: meter(customer, (s) => s.fetchKeywordSuggestions, undefined, "keywords.suggestions"),
-      ideas: meter(customer, (s) => s.fetchKeywordIdeas, undefined, "keywords.ideas"),
+      related: meter(
+        customer,
+        (s) => s.fetchRelatedKeywords,
+        undefined,
+        "keywords.related",
+      ),
+      suggestions: meter(
+        customer,
+        (s) => s.fetchKeywordSuggestions,
+        undefined,
+        "keywords.suggestions",
+      ),
+      ideas: meter(
+        customer,
+        (s) => s.fetchKeywordIdeas,
+        undefined,
+        "keywords.ideas",
+      ),
       // Google Ads endpoints for countries Labs doesn't support.
-      adsIdeas: meter(customer, (s) => s.fetchAdsKeywordIdeas, undefined, "keywords.adsIdeas"),
-      adsSearchVolume: meter(customer, (s) => s.fetchAdsSearchVolume, undefined, "keywords.adsSearchVolume"),
+      adsIdeas: meter(
+        customer,
+        (s) => s.fetchAdsKeywordIdeas,
+        undefined,
+        "keywords.adsIdeas",
+      ),
+      adsSearchVolume: meter(
+        customer,
+        (s) => s.fetchAdsSearchVolume,
+        undefined,
+        "keywords.adsSearchVolume",
+      ),
     },
     domain: {
-      rankOverview: meter(customer, (s) => s.fetchDomainRankOverview, undefined, "domain.rankOverview"),
-      rankedKeywords: meter(customer, (s) => s.fetchRankedKeywords, undefined, "domain.rankedKeywords"),
-      relevantPages: meter(customer, (s) => s.fetchRelevantPages, undefined, "domain.relevantPages"),
+      rankOverview: meter(
+        customer,
+        (s) => s.fetchDomainRankOverview,
+        undefined,
+        "domain.rankOverview",
+      ),
+      rankedKeywords: meter(
+        customer,
+        (s) => s.fetchRankedKeywords,
+        undefined,
+        "domain.rankedKeywords",
+      ),
+      relevantPages: meter(
+        customer,
+        (s) => s.fetchRelevantPages,
+        undefined,
+        "domain.relevantPages",
+      ),
     },
     serp: {
       live: meter(customer, (s) => s.fetchLiveSerp, undefined, "serp.live"),
@@ -125,7 +190,12 @@ export function createDataforseoClient(customer: BillingCustomerContext) {
         (s) => s.postRankCheckTasks,
         "rank_tracking",
       ),
-      local: meter(customer, (s) => s.fetchLocalSerp, "local_seo", "serp.local"),
+      local: meter(
+        customer,
+        (s) => s.fetchLocalSerp,
+        "local_seo",
+        "serp.local",
+      ),
     },
     labs: {
       // Callers (e.g. the keyword-metrics MCP tool) can attribute the spend to
@@ -137,7 +207,12 @@ export function createDataforseoClient(customer: BillingCustomerContext) {
         "rank_tracking",
         "labs.keywordOverview",
       ),
-      serpCompetitors: meter(customer, (s) => s.fetchSerpCompetitors, undefined, "labs.serpCompetitors"),
+      serpCompetitors: meter(
+        customer,
+        (s) => s.fetchSerpCompetitors,
+        undefined,
+        "labs.serpCompetitors",
+      ),
     },
     lighthouse: {
       live: meter(customer, (s) => s.fetchLighthouseResult),
@@ -159,9 +234,11 @@ async function meterDataforseoCall<T>(
   customer: BillingCustomerContext,
   execute: () => Promise<DataforseoApiResponse<T>>,
   creditFeature?: CreditFeature,
-  cacheInfo?: { endpoint: string; params: unknown }
+  cacheInfo?: { endpoint: string; params: unknown },
 ): Promise<T> {
-  let cachingService: typeof import("@/services/caching-guardrails.service") | null = null;
+  let cachingService:
+    | typeof import("@/services/caching-guardrails.service")
+    | null = null;
   try {
     cachingService = await import("@/services/caching-guardrails.service");
   } catch {
@@ -171,7 +248,10 @@ async function meterDataforseoCall<T>(
   // Check cached queries first
   if (cacheInfo && cachingService) {
     try {
-      const cached = await cachingService.getCachedQuery<T>(cacheInfo.endpoint, cacheInfo.params);
+      const cached = await cachingService.getCachedQuery<T>(
+        cacheInfo.endpoint,
+        cacheInfo.params,
+      );
       if (cached) return cached.data;
     } catch {
       // Fall through on cache error
@@ -193,7 +273,13 @@ async function meterDataforseoCall<T>(
     const result = await execute();
     if (cacheInfo && result?.data && cachingService) {
       try {
-        await cachingService.setCachedQuery(cacheInfo.endpoint, cacheInfo.params, result.data, 14, 0.05);
+        await cachingService.setCachedQuery(
+          cacheInfo.endpoint,
+          cacheInfo.params,
+          result.data,
+          14,
+          0.05,
+        );
       } catch {
         // Ignore cache storage error
       }
@@ -244,7 +330,13 @@ async function meterDataforseoCall<T>(
 
   if (cacheInfo && result?.data && cachingService) {
     try {
-      await cachingService.setCachedQuery(cacheInfo.endpoint, cacheInfo.params, result.data, 14, result.billing.costUsd);
+      await cachingService.setCachedQuery(
+        cacheInfo.endpoint,
+        cacheInfo.params,
+        result.data,
+        14,
+        result.billing.costUsd,
+      );
     } catch {
       // Ignore cache storage error
     }

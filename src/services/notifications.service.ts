@@ -50,7 +50,10 @@ export const NotificationsService = {
       // Seed smart notifications for new user
       return await this.seedDefaultNotifications(userId);
     } catch {
-      if (!MEMORY_NOTIFICATIONS.has(userId) || (MEMORY_NOTIFICATIONS.get(userId)?.length ?? 0) === 0) {
+      if (
+        !MEMORY_NOTIFICATIONS.has(userId) ||
+        (MEMORY_NOTIFICATIONS.get(userId)?.length ?? 0) === 0
+      ) {
         MEMORY_NOTIFICATIONS.set(userId, this.getMockNotifications(userId));
       }
       return MEMORY_NOTIFICATIONS.get(userId) || [];
@@ -69,7 +72,12 @@ export const NotificationsService = {
       await db
         .update(userNotifications)
         .set({ isRead: true })
-        .where(and(eq(userNotifications.userId, userId), eq(userNotifications.id, notificationId)));
+        .where(
+          and(
+            eq(userNotifications.userId, userId),
+            eq(userNotifications.id, notificationId),
+          ),
+        );
       return true;
     } catch {
       const items = MEMORY_NOTIFICATIONS.get(userId);
@@ -126,7 +134,9 @@ export const NotificationsService = {
   /**
    * Seeds initial realistic notifications for a new user.
    */
-  async seedDefaultNotifications(userId: string): Promise<UserNotificationItem[]> {
+  async seedDefaultNotifications(
+    userId: string,
+  ): Promise<UserNotificationItem[]> {
     const items = this.getMockNotifications(userId);
 
     try {
@@ -161,12 +171,14 @@ export const NotificationsService = {
         id: `notif_pixel_${Date.now()}_1`,
         userId,
         title: "Ad Readiness: Tracking Pixel Missing",
-        message: "No Meta Pixel or Google Ads tag detected on your sales landing page.",
+        message:
+          "No Meta Pixel or Google Ads tag detected on your sales landing page.",
         category: "pixel",
         priority: "warning",
         isRead: false,
         actionUrl: "/billing",
-        details: "Running paid ad campaigns (Meta Ads, Google Ads, TikTok) without active conversion pixels blinds the ad optimization algorithm. You cannot track purchases, optimize for lower CPA, or build custom retargeting audiences. Install your conversion tags before launching ad spend.",
+        details:
+          "Running paid ad campaigns (Meta Ads, Google Ads, TikTok) without active conversion pixels blinds the ad optimization algorithm. You cannot track purchases, optimize for lower CPA, or build custom retargeting audiences. Install your conversion tags before launching ad spend.",
         createdAt: new Date(now.getTime() - 15 * 60 * 1000).toISOString(),
       },
       {
@@ -178,19 +190,22 @@ export const NotificationsService = {
         priority: "success",
         isRead: false,
         actionUrl: "/projects",
-        details: "Technical crawl finished successfully. HTTPS, canonical tags, responsive viewports, and page response times are all within optimal thresholds. 2 advisory items remaining.",
+        details:
+          "Technical crawl finished successfully. HTTPS, canonical tags, responsive viewports, and page response times are all within optimal thresholds. 2 advisory items remaining.",
         createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
       },
       {
         id: `notif_gbp_${Date.now()}_3`,
         userId,
         title: "Local Business & Google Profile Synced",
-        message: "Google Business Profile connected. 33 directory citations analyzed.",
+        message:
+          "Google Business Profile connected. 33 directory citations analyzed.",
         category: "gbp",
         priority: "info",
         isRead: false,
         actionUrl: "/projects",
-        details: "Your Google Business Profile was verified. 30 directory mismatches and missing citations were identified across Apple Maps, Bing Places, Facebook, and Waze. Sync your citations to boost local pack rankings.",
+        details:
+          "Your Google Business Profile was verified. 30 directory mismatches and missing citations were identified across Apple Maps, Bing Places, Facebook, and Waze. Sync your citations to boost local pack rankings.",
         createdAt: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
       },
     ];

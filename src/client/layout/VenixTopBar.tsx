@@ -42,7 +42,9 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
   const navigate = useNavigate();
   const session = useSession();
   const { themePreference, setThemePreference } = useThemePreference();
-  const [selectedLang, setSelectedLang] = React.useState<LanguageOption>(LANGUAGES[0]);
+  const [selectedLang, setSelectedLang] = React.useState<LanguageOption>(
+    LANGUAGES[0],
+  );
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const creditUsageQuery = useQuery({
@@ -60,12 +62,18 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
   const isDepleted = creditData ? creditData.isDepleted : false;
 
   const queryClient = useQueryClient();
-  const [selectedNotification, setSelectedNotification] = React.useState<UserNotificationItem | null>(null);
-  const [notificationFilter, setNotificationFilter] = React.useState<"all" | "unread">("all");
+  const [selectedNotification, setSelectedNotification] =
+    React.useState<UserNotificationItem | null>(null);
+  const [notificationFilter, setNotificationFilter] = React.useState<
+    "all" | "unread"
+  >("all");
 
   const notificationsQuery = useQuery<UserNotificationItem[]>({
     queryKey: ["userNotifications"],
-    queryFn: () => listNotificationsServerFn({ data: {} }) as Promise<UserNotificationItem[]>,
+    queryFn: () =>
+      listNotificationsServerFn({ data: {} }) as Promise<
+        UserNotificationItem[]
+      >,
     refetchInterval: 20000,
     refetchOnWindowFocus: true,
   });
@@ -73,10 +81,13 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
   const notifications = notificationsQuery.data || [];
   const unreadCount = notifications.filter((n) => !n.isRead).length;
   const filteredNotifications =
-    notificationFilter === "unread" ? notifications.filter((n) => !n.isRead) : notifications;
+    notificationFilter === "unread"
+      ? notifications.filter((n) => !n.isRead)
+      : notifications;
 
   const markOneReadMutation = useMutation({
-    mutationFn: (id: string) => markNotificationReadServerFn({ data: { notificationId: id } }),
+    mutationFn: (id: string) =>
+      markNotificationReadServerFn({ data: { notificationId: id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["userNotifications"] });
     },
@@ -98,7 +109,9 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
       toast.success("All notifications cleared");
     },
   });
-  const currentPlan = creditData?.planId ? creditData.planId.toUpperCase() : "STARTER";
+  const currentPlan = creditData?.planId
+    ? creditData.planId.toUpperCase()
+    : "STARTER";
 
   const isDark =
     themePreference === "dark" ||
@@ -151,7 +164,6 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
         </form>
       </div>
 
-
       {/* Right: Actions (Credit Meter, Language, Theme, Notifications, User Profile) */}
       <div className="flex items-center gap-2 md:gap-3">
         {/* Contextual Topbar Credit Meter & Quick Refill/Upgrade Pill */}
@@ -161,18 +173,39 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
             className="flex items-center gap-1.5 text-xs font-black text-base-content/90 hover:text-primary transition-colors cursor-pointer"
             title={`${currentPlan} Plan: ${creditsRemaining} of ${creditsLimit} credits available`}
           >
-            <span className={isDepleted ? "text-error animate-pulse" : isNearLimit ? "text-amber-500" : "text-primary"}>
-              <Icon icon="solar:bolt-bold-duotone" className="h-3.5 w-3.5 shrink-0" />
+            <span
+              className={
+                isDepleted
+                  ? "text-error animate-pulse"
+                  : isNearLimit
+                    ? "text-amber-500"
+                    : "text-primary"
+              }
+            >
+              <Icon
+                icon="solar:bolt-bold-duotone"
+                className="h-3.5 w-3.5 shrink-0"
+              />
             </span>
-            <span className="font-mono">{creditsRemaining.toLocaleString()}</span>
-            <span className="text-base-content/40 font-mono text-[11px]">/ {creditsLimit.toLocaleString()}</span>
-            <span className="text-[10px] text-base-content/50 uppercase font-bold tracking-wider hidden sm:inline">Credits</span>
+            <span className="font-mono">
+              {creditsRemaining.toLocaleString()}
+            </span>
+            <span className="text-base-content/40 font-mono text-[11px]">
+              / {creditsLimit.toLocaleString()}
+            </span>
+            <span className="text-[10px] text-base-content/50 uppercase font-bold tracking-wider hidden sm:inline">
+              Credits
+            </span>
           </Link>
 
           <div className="w-10 sm:w-14 bg-base-300 rounded-full h-1.5 overflow-hidden hidden xs:block">
             <div
               className={`h-1.5 rounded-full transition-all duration-500 ${
-                isDepleted ? "bg-error" : isNearLimit ? "bg-amber-500" : "bg-primary"
+                isDepleted
+                  ? "bg-error"
+                  : isNearLimit
+                    ? "bg-amber-500"
+                    : "bg-primary"
               }`}
               style={{ width: `${Math.max(0, 100 - percentUsed)}%` }}
             />
@@ -184,8 +217,8 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
               isDepleted
                 ? "btn-error text-white animate-bounce"
                 : isNearLimit
-                ? "btn-warning text-white"
-                : "btn-primary text-white"
+                  ? "btn-warning text-white"
+                  : "btn-primary text-white"
             }`}
           >
             <Icon icon="solar:rocket-bold" className="h-3 w-3" />
@@ -226,10 +259,16 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                     closeDropdown();
                   }}
                   className={`flex items-center gap-2 rounded-xl py-1.5 px-2.5 ${
-                    selectedLang.code === lang.code ? "active font-bold bg-primary text-white" : ""
+                    selectedLang.code === lang.code
+                      ? "active font-bold bg-primary text-white"
+                      : ""
                   }`}
                 >
-                  <img src={lang.flag} alt="" className="h-3.5 w-3.5 rounded-full" />
+                  <img
+                    src={lang.flag}
+                    alt=""
+                    className="h-3.5 w-3.5 rounded-full"
+                  />
                   <span>{lang.label}</span>
                 </button>
               </li>
@@ -245,9 +284,15 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
           className="btn btn-ghost btn-circle btn-sm text-base-content/80 hover:bg-base-200"
         >
           {isDark ? (
-            <Icon icon="solar:sun-2-bold-duotone" className="h-5 w-5 text-amber-400" />
+            <Icon
+              icon="solar:sun-2-bold-duotone"
+              className="h-5 w-5 text-amber-400"
+            />
           ) : (
-            <Icon icon="solar:moon-bold-duotone" className="h-5 w-5 text-indigo-600" />
+            <Icon
+              icon="solar:moon-bold-duotone"
+              className="h-5 w-5 text-indigo-600"
+            />
           )}
         </button>
 
@@ -271,7 +316,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
           >
             <div className="flex items-center justify-between border-b border-base-300 pb-2.5">
               <div className="flex items-center gap-1.5">
-                <Icon icon="solar:bell-bold-duotone" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:bell-bold-duotone"
+                  className="h-4 w-4 text-primary"
+                />
                 <span className="text-xs font-black tracking-tight text-base-content">
                   Notifications
                 </span>
@@ -338,13 +386,17 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
             <div className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
               {filteredNotifications.length === 0 ? (
                 <div className="py-8 text-center text-base-content/50 space-y-1">
-                  <Icon icon="solar:bell-linear" className="h-8 w-8 mx-auto opacity-40" />
+                  <Icon
+                    icon="solar:bell-linear"
+                    className="h-8 w-8 mx-auto opacity-40"
+                  />
                   <p className="text-xs font-semibold">No notifications</p>
                   <p className="text-[10px]">You&rsquo;re all caught up!</p>
                 </div>
               ) : (
                 filteredNotifications.map((n) => {
-                  const isWarning = n.priority === "warning" || n.priority === "critical";
+                  const isWarning =
+                    n.priority === "warning" || n.priority === "critical";
                   const isSuccess = n.priority === "success";
                   return (
                     <div
@@ -365,7 +417,11 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                       <div className="flex items-center justify-between font-semibold text-base-content">
                         <span
                           className={`flex items-center gap-1.5 font-bold text-xs ${
-                            isWarning ? "text-amber-500" : isSuccess ? "text-emerald-500" : "text-primary"
+                            isWarning
+                              ? "text-amber-500"
+                              : isSuccess
+                                ? "text-emerald-500"
+                                : "text-primary"
                           }`}
                         >
                           <Icon
@@ -373,10 +429,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                               n.category === "pixel"
                                 ? "solar:radar-bold"
                                 : n.category === "audit"
-                                ? "solar:shield-check-bold"
-                                : n.category === "gbp"
-                                ? "solar:shop-bold"
-                                : "solar:bell-bold"
+                                  ? "solar:shield-check-bold"
+                                  : n.category === "gbp"
+                                    ? "solar:shop-bold"
+                                    : "solar:bell-bold"
                             }
                             className="h-3.5 w-3.5 shrink-0"
                           />
@@ -388,7 +444,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                             <span className="size-2 rounded-full bg-primary shrink-0" />
                           )}
                           <span className="text-[10px] text-base-content/40 font-mono">
-                            {new Date(n.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
+                            {new Date(n.createdAt).toLocaleDateString([], {
+                              month: "short",
+                              day: "numeric",
+                            })}
                           </span>
                         </div>
                       </div>
@@ -419,13 +478,19 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
           >
             <li className="border-b border-base-300 pb-2 mb-1 px-2 pt-1">
               <div className="flex flex-col p-0 hover:bg-transparent">
-                <span className="font-bold text-sm text-base-content">{userName}</span>
-                <span className="text-[11px] text-base-content/60 truncate">{userEmail}</span>
+                <span className="font-bold text-sm text-base-content">
+                  {userName}
+                </span>
+                <span className="text-[11px] text-base-content/60 truncate">
+                  {userEmail}
+                </span>
                 <div className="mt-1.5 flex items-center gap-1.5">
                   <span className="badge badge-primary badge-xs py-1 px-2 rounded-md font-bold text-[9px]">
                     PRO PLAN
                   </span>
-                  <span className="text-[10px] text-base-content/50">{BRAND_CONFIG.name}</span>
+                  <span className="text-[10px] text-base-content/50">
+                    {BRAND_CONFIG.name}
+                  </span>
                 </div>
               </div>
             </li>
@@ -436,7 +501,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon icon="solar:folder-with-files-bold-duotone" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:folder-with-files-bold-duotone"
+                  className="h-4 w-4 text-primary"
+                />
                 <span>My Brands</span>
               </Link>
             </li>
@@ -447,7 +515,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon icon="solar:card-2-bold-duotone" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:card-2-bold-duotone"
+                  className="h-4 w-4 text-primary"
+                />
                 <span>Billing & Subscription</span>
               </Link>
             </li>
@@ -458,7 +529,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon icon="solar:settings-bold-duotone" className="h-4 w-4 text-primary" />
+                <Icon
+                  icon="solar:settings-bold-duotone"
+                  className="h-4 w-4 text-primary"
+                />
                 <span>Settings</span>
               </Link>
             </li>
@@ -470,7 +544,10 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                   onClick={() => signOutAndRedirect()}
                   className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-bold text-error hover:bg-error/10"
                 >
-                  <Icon icon="solar:logout-2-bold-duotone" className="h-4 w-4" />
+                  <Icon
+                    icon="solar:logout-2-bold-duotone"
+                    className="h-4 w-4"
+                  />
                   <span>Log Out</span>
                 </button>
               </li>
@@ -487,11 +564,12 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
               <div className="flex items-center gap-2">
                 <div
                   className={`h-8 w-8 rounded-xl flex items-center justify-center ${
-                    selectedNotification.priority === "warning" || selectedNotification.priority === "critical"
+                    selectedNotification.priority === "warning" ||
+                    selectedNotification.priority === "critical"
                       ? "bg-amber-500/10 text-amber-500"
                       : selectedNotification.priority === "success"
-                      ? "bg-emerald-500/10 text-emerald-500"
-                      : "bg-primary/10 text-primary"
+                        ? "bg-emerald-500/10 text-emerald-500"
+                        : "bg-primary/10 text-primary"
                   }`}
                 >
                   <Icon
@@ -499,20 +577,28 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                       selectedNotification.category === "pixel"
                         ? "solar:radar-bold"
                         : selectedNotification.category === "audit"
-                        ? "solar:shield-check-bold"
-                        : selectedNotification.category === "gbp"
-                        ? "solar:shop-bold"
-                        : "solar:bell-bold"
+                          ? "solar:shield-check-bold"
+                          : selectedNotification.category === "gbp"
+                            ? "solar:shop-bold"
+                            : "solar:bell-bold"
                     }
                     className="h-5 w-5"
                   />
                 </div>
                 <div>
-                  <h3 className="font-black text-sm text-base-content line-clamp-1">{selectedNotification.title}</h3>
+                  <h3 className="font-black text-sm text-base-content line-clamp-1">
+                    {selectedNotification.title}
+                  </h3>
                   <div className="flex items-center gap-2 text-[10px] text-base-content/50 font-mono">
-                    <span>{new Date(selectedNotification.createdAt).toLocaleString()}</span>
+                    <span>
+                      {new Date(
+                        selectedNotification.createdAt,
+                      ).toLocaleString()}
+                    </span>
                     <span>•</span>
-                    <span className="uppercase font-bold tracking-wider">{selectedNotification.category}</span>
+                    <span className="uppercase font-bold tracking-wider">
+                      {selectedNotification.category}
+                    </span>
                   </div>
                 </div>
               </div>

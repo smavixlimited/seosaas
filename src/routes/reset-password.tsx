@@ -113,7 +113,9 @@ function ResetPasswordPage() {
         if (result.error) {
           formApi.setErrorMap({
             onSubmit: {
-              form: result.error.message || "This reset link is no longer valid. Request a new one and try again.",
+              form:
+                result.error.message ||
+                "This reset link is no longer valid. Request a new one and try again.",
               fields: {},
             },
           });
@@ -155,7 +157,8 @@ function ResetPasswordPage() {
             : isComplete
               ? "Your password has been successfully updated. You can now sign in."
               : routeError || !token
-                ? routeError || "This password reset link is invalid or has expired."
+                ? routeError ||
+                  "This password reset link is invalid or has expired."
                 : "Choose a secure, strong password for your Skorvia account.";
 
           return (
@@ -178,13 +181,17 @@ function ResetPasswordPage() {
                 <div className="space-y-5">
                   <div className="flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
                     <div className="size-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-3">
-                      <Icon icon="solar:shield-check-bold-duotone" className="size-8" />
+                      <Icon
+                        icon="solar:shield-check-bold-duotone"
+                        className="size-8"
+                      />
                     </div>
                     <p className="text-tagline-1 font-bold text-secondary dark:text-accent">
                       Security Credentials Refreshed
                     </p>
                     <p className="mt-2 text-xs text-secondary/70 dark:text-accent/70">
-                      Your new password is now active. Use it on your next login.
+                      Your new password is now active. Use it on your next
+                      login.
                     </p>
                   </div>
 
@@ -204,7 +211,10 @@ function ResetPasswordPage() {
                 <div className="space-y-4">
                   <div className="flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
                     <div className="size-14 rounded-2xl bg-rose-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/20 mb-3">
-                      <Icon icon="solar:history-bold-duotone" className="size-8" />
+                      <Icon
+                        icon="solar:history-bold-duotone"
+                        className="size-8"
+                      />
                     </div>
                     <p className="text-tagline-2 text-secondary dark:text-accent font-medium">
                       {routeError || "This link is no longer valid."}
@@ -261,7 +271,11 @@ function ResetPasswordPage() {
                               className="absolute right-3.5 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-secondary dark:text-accent/50 dark:hover:text-accent transition-colors"
                             >
                               <Icon
-                                icon={showPassword ? "solar:eye-bold" : "solar:eye-closed-bold"}
+                                icon={
+                                  showPassword
+                                    ? "solar:eye-bold"
+                                    : "solar:eye-closed-bold"
+                                }
                                 className="size-5"
                               />
                             </button>
@@ -271,7 +285,13 @@ function ResetPasswordPage() {
                             <div className="pt-1.5 space-y-1">
                               <div className="flex items-center justify-between text-[11px] font-semibold text-secondary/70 dark:text-accent/70">
                                 <span>Strength</span>
-                                <span className={strength.score >= 75 ? "text-emerald-500 font-bold" : ""}>
+                                <span
+                                  className={
+                                    strength.score >= 75
+                                      ? "text-emerald-500 font-bold"
+                                      : ""
+                                  }
+                                >
                                   {strength.label}
                                 </span>
                               </div>
@@ -285,7 +305,9 @@ function ResetPasswordPage() {
                           ) : null}
 
                           {error ? (
-                            <p className="mt-1 text-xs text-rose-500 font-medium">{error}</p>
+                            <p className="mt-1 text-xs text-rose-500 font-medium">
+                              {error}
+                            </p>
                           ) : null}
                         </div>
                       );
@@ -321,17 +343,25 @@ function ResetPasswordPage() {
                             />
                             <button
                               type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
                               className="absolute right-3.5 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-secondary dark:text-accent/50 dark:hover:text-accent transition-colors"
                             >
                               <Icon
-                                icon={showConfirmPassword ? "solar:eye-bold" : "solar:eye-closed-bold"}
+                                icon={
+                                  showConfirmPassword
+                                    ? "solar:eye-bold"
+                                    : "solar:eye-closed-bold"
+                                }
                                 className="size-5"
                               />
                             </button>
                           </div>
                           {error ? (
-                            <p className="mt-1 text-xs text-rose-500 font-medium">{error}</p>
+                            <p className="mt-1 text-xs text-rose-500 font-medium">
+                              {error}
+                            </p>
                           ) : null}
                         </div>
                       );
@@ -356,7 +386,10 @@ function ResetPasswordPage() {
                       </>
                     ) : (
                       <>
-                        <Icon icon="solar:check-square-bold-duotone" className="size-4" />
+                        <Icon
+                          icon="solar:check-square-bold-duotone"
+                          className="size-4"
+                        />
                         <span>Update Password</span>
                       </>
                     )}

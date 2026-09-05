@@ -13,7 +13,11 @@ export const WebhookIdempotencyService = {
   /**
    * Validates Paystack HMAC-SHA512 signature.
    */
-  async verifyPaystackSignature(payload: string, signature: string, secretKey: string): Promise<boolean> {
+  async verifyPaystackSignature(
+    payload: string,
+    signature: string,
+    secretKey: string,
+  ): Promise<boolean> {
     if (!signature || !secretKey) return false;
 
     try {
@@ -24,11 +28,17 @@ export const WebhookIdempotencyService = {
           encoder.encode(secretKey),
           { name: "HMAC", hash: "SHA-512" },
           false,
-          ["sign"]
+          ["sign"],
         );
-        const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+        const signed = await crypto.subtle.sign(
+          "HMAC",
+          key,
+          encoder.encode(payload),
+        );
         const hashArray = Array.from(new Uint8Array(signed));
-        const computed = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        const computed = hashArray
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
         return computed.toLowerCase() === signature.toLowerCase();
       }
     } catch {}
@@ -39,7 +49,10 @@ export const WebhookIdempotencyService = {
   /**
    * Validates Flutterwave secret hash.
    */
-  verifyFlutterwaveSignature(receivedHash: string, configuredSecretHash: string): boolean {
+  verifyFlutterwaveSignature(
+    receivedHash: string,
+    configuredSecretHash: string,
+  ): boolean {
     if (!receivedHash || !configuredSecretHash) return false;
     return receivedHash.trim() === configuredSecretHash.trim();
   },
@@ -47,7 +60,11 @@ export const WebhookIdempotencyService = {
   /**
    * Validates LemonSqueezy HMAC-SHA256 signature.
    */
-  async verifyLemonSqueezySignature(payload: string, signature: string, secret: string): Promise<boolean> {
+  async verifyLemonSqueezySignature(
+    payload: string,
+    signature: string,
+    secret: string,
+  ): Promise<boolean> {
     if (!signature || !secret) return false;
 
     try {
@@ -58,11 +75,17 @@ export const WebhookIdempotencyService = {
           encoder.encode(secret),
           { name: "HMAC", hash: "SHA-256" },
           false,
-          ["sign"]
+          ["sign"],
         );
-        const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+        const signed = await crypto.subtle.sign(
+          "HMAC",
+          key,
+          encoder.encode(payload),
+        );
         const hashArray = Array.from(new Uint8Array(signed));
-        const computed = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        const computed = hashArray
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
         return computed.toLowerCase() === signature.toLowerCase();
       }
     } catch {}
@@ -115,7 +138,11 @@ export const WebhookIdempotencyService = {
       return { isDuplicate: false, eventId };
     } catch (err: unknown) {
       const errStr = String(err);
-      if (errStr.includes("UNIQUE") || errStr.includes("unique") || errStr.includes("duplicate")) {
+      if (
+        errStr.includes("UNIQUE") ||
+        errStr.includes("unique") ||
+        errStr.includes("duplicate")
+      ) {
         processedEventIds.add(`${gateway}:${eventId}`);
         return { isDuplicate: true, eventId };
       }

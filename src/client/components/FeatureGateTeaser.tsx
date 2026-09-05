@@ -58,8 +58,14 @@ export function FeatureGateTeaser({
           {bulletPoints.length > 0 && (
             <div className="p-4 rounded-2xl bg-base-200/60 border border-base-300 text-left space-y-2 text-xs">
               {bulletPoints.map((point, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-base-content/80">
-                  <Icon icon="solar:check-circle-bold" className="h-4 w-4 text-primary shrink-0" />
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 text-base-content/80"
+                >
+                  <Icon
+                    icon="solar:check-circle-bold"
+                    className="h-4 w-4 text-primary shrink-0"
+                  />
                   <span className="font-medium">{point}</span>
                 </div>
               ))}

@@ -125,4 +125,3 @@ export function TemplateTeam() {
     </section>
   );
 }
-export default TemplateTeam;

@@ -79,7 +79,9 @@ function SkorviaVsAhrefsPage() {
               {BRAND_CONFIG.name} vs. Ahrefs
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
-              Tired of unexpected credit overage fees and expensive user seat penalties? Discover why top growth teams are switching from Ahrefs to {BRAND_CONFIG.name}.
+              Tired of unexpected credit overage fees and expensive user seat
+              penalties? Discover why top growth teams are switching from Ahrefs
+              to {BRAND_CONFIG.name}.
             </p>
           </div>
 
@@ -87,13 +89,17 @@ function SkorviaVsAhrefsPage() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
               <div className="size-12 rounded-2xl bg-primary/10 text-primary dark:text-brand-300 flex items-center justify-center">
-                <Icon icon="solar:lock-unlocked-bold-duotone" className="size-6" />
+                <Icon
+                  icon="solar:lock-unlocked-bold-duotone"
+                  className="size-6"
+                />
               </div>
               <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
                 No Credit Traps
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Never get locked out of your reports mid-month. Enjoy predictable pricing without aggressive credit caps.
+                Never get locked out of your reports mid-month. Enjoy
+                predictable pricing without aggressive credit caps.
               </p>
             </div>
 
@@ -105,19 +111,24 @@ function SkorviaVsAhrefsPage() {
                 Future-Proof AEO Tracking
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Monitor and defend your brand’s AI answer engine citations across ChatGPT, Perplexity, and Claude in real time.
+                Monitor and defend your brand’s AI answer engine citations
+                across ChatGPT, Perplexity, and Claude in real time.
               </p>
             </div>
 
             <div className="rounded-[24px] border border-stroke-3/70 dark:border-stroke-7 bg-white dark:bg-background-6 p-7 shadow-xl space-y-3">
               <div className="size-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                <Icon icon="solar:users-group-rounded-bold-duotone" className="size-6" />
+                <Icon
+                  icon="solar:users-group-rounded-bold-duotone"
+                  className="size-6"
+                />
               </div>
               <h3 className="text-heading-5 font-bold text-secondary dark:text-accent font-interTight">
                 Unlimited Seats
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Invite your entire team, agency clients, and freelancers without paying $30/month for every extra user account.
+                Invite your entire team, agency clients, and freelancers without
+                paying $30/month for every extra user account.
               </p>
             </div>
           </div>
@@ -130,7 +141,8 @@ function SkorviaVsAhrefsPage() {
                   Detailed Feature Comparison
                 </h3>
                 <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
-                  Side-by-side assessment of capabilities, limits, and pricing structures.
+                  Side-by-side assessment of capabilities, limits, and pricing
+                  structures.
                 </p>
               </div>
               <Link
@@ -154,7 +166,10 @@ function SkorviaVsAhrefsPage() {
                 </thead>
                 <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
                   {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors"
+                    >
                       <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
                         {row.feature}
                       </td>

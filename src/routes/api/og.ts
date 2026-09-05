@@ -6,7 +6,11 @@ function generateOgSvg(params: {
   description?: string;
   badge?: string;
 }): string {
-  const { title, description, badge = "Enterprise SEO & AEO Platform" } = params;
+  const {
+    title,
+    description,
+    badge = "Enterprise SEO & AEO Platform",
+  } = params;
 
   // Escape XML entities
   const safeTitle = title
@@ -16,7 +20,10 @@ function generateOgSvg(params: {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 
-  const safeDesc = (description || "Next-generation keyword tracking, local map geo-grid, and AI answer engine optimization.")
+  const safeDesc = (
+    description ||
+    "Next-generation keyword tracking, local map geo-grid, and AI answer engine optimization."
+  )
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -107,7 +114,9 @@ export const Route = createFileRoute("/api/og")({
     handlers: {
       GET: ({ request }) => {
         const url = new URL(request.url);
-        const title = url.searchParams.get("title") || `${BRAND_CONFIG.name} — Modern SEO & AI Visibility Platform`;
+        const title =
+          url.searchParams.get("title") ||
+          `${BRAND_CONFIG.name} — Modern SEO & AI Visibility Platform`;
         const description = url.searchParams.get("description") || undefined;
         const badge = url.searchParams.get("badge") || undefined;
 
@@ -117,7 +126,8 @@ export const Route = createFileRoute("/api/og")({
           status: 200,
           headers: {
             "Content-Type": "image/svg+xml; charset=utf-8",
-            "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
+            "Cache-Control":
+              "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
           },
         });
       },

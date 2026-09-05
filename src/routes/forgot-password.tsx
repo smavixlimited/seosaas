@@ -103,7 +103,10 @@ function ForgotPasswordPage() {
                 <div className="space-y-5">
                   <div className="flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
                     <div className="size-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20 mb-3">
-                      <Icon icon="solar:letter-check-bold-duotone" className="size-8" />
+                      <Icon
+                        icon="solar:letter-check-bold-duotone"
+                        className="size-8"
+                      />
                     </div>
                     <p className="text-tagline-2 font-medium text-secondary dark:text-accent">
                       Check your inbox at:
@@ -112,7 +115,8 @@ function ForgotPasswordPage() {
                       {submittedEmail}
                     </p>
                     <p className="mt-3 text-xs text-secondary/70 dark:text-accent/70 leading-relaxed">
-                      Click the link inside to set a new password. The link will expire in 1 hour.
+                      Click the link inside to set a new password. The link will
+                      expire in 1 hour.
                     </p>
                   </div>
 
@@ -161,7 +165,9 @@ function ForgotPasswordPage() {
                             />
                           </div>
                           {error ? (
-                            <p className="mt-1 text-xs text-rose-500 font-medium">{error}</p>
+                            <p className="mt-1 text-xs text-rose-500 font-medium">
+                              {error}
+                            </p>
                           ) : null}
                         </div>
                       );
@@ -186,7 +192,10 @@ function ForgotPasswordPage() {
                       </>
                     ) : (
                       <>
-                        <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                        <Icon
+                          icon="solar:plain-2-bold-duotone"
+                          className="size-4"
+                        />
                         <span>Send Reset Instructions</span>
                       </>
                     )}

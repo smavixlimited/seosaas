@@ -24,10 +24,14 @@ function UptimeMonitoringFeaturePage() {
               5-Minute Uptime Monitoring & Instant Outage Alerts
             </h1>
             <p className="text-base sm:text-lg text-base-content/70">
-              Never lose search engine ranking signals due to undetected downtime or expired SSL certificates.
+              Never lose search engine ranking signals due to undetected
+              downtime or expired SSL certificates.
             </p>
             <div className="pt-2 flex justify-center gap-3">
-              <Link to="/sign-up" className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary">
+              <Link
+                to="/sign-up"
+                className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary"
+              >
                 Start Uptime Monitoring
               </Link>
             </div>
@@ -38,9 +42,12 @@ function UptimeMonitoringFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center">
                 <Clock className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Global 5-Minute Pings</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Global 5-Minute Pings
+              </h3>
               <p className="text-sm text-base-content/70">
-                Distributed edge checks across North America, Europe, and Asia to verify DNS resolution and server response codes.
+                Distributed edge checks across North America, Europe, and Asia
+                to verify DNS resolution and server response codes.
               </p>
             </div>
 
@@ -48,9 +55,12 @@ function UptimeMonitoringFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Lock className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">SSL Expiry Warnings</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                SSL Expiry Warnings
+              </h3>
               <p className="text-sm text-base-content/70">
-                Receive proactive reminders 30, 14, and 3 days before your TLS/SSL certificates expire to prevent browser warning blocks.
+                Receive proactive reminders 30, 14, and 3 days before your
+                TLS/SSL certificates expire to prevent browser warning blocks.
               </p>
             </div>
 
@@ -58,9 +68,12 @@ function UptimeMonitoringFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
                 <Bell className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Instant Slack & Webhook Alerts</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Instant Slack & Webhook Alerts
+              </h3>
               <p className="text-sm text-base-content/70">
-                Trigger real-time incidents to Discord, Slack, PagerDuty, or custom webhook endpoints the moment response times spike.
+                Trigger real-time incidents to Discord, Slack, PagerDuty, or
+                custom webhook endpoints the moment response times spike.
               </p>
             </div>
           </div>

@@ -37,7 +37,8 @@ function AdminOverviewPage() {
             CRM Dashboard
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Real-time SaaS operational metrics, revenue volume, and subscription analytics.
+            Real-time SaaS operational metrics, revenue volume, and subscription
+            analytics.
           </p>
         </div>
 
@@ -46,14 +47,20 @@ function AdminOverviewPage() {
             to="/admin/blog"
             className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-1.5 transition-colors shadow-2xs"
           >
-            <Icon icon="solar:pen-new-square-bold-duotone" className="h-4 w-4 text-primary" />
+            <Icon
+              icon="solar:pen-new-square-bold-duotone"
+              className="h-4 w-4 text-primary"
+            />
             <span>Create Article</span>
           </Link>
           <Link
             to="/admin/plans"
             className="px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
           >
-            <Icon icon="solar:layers-minimalistic-bold-duotone" className="h-4 w-4" />
+            <Icon
+              icon="solar:layers-minimalistic-bold-duotone"
+              className="h-4 w-4"
+            />
             <span>Manage 18+ Plans</span>
           </Link>
         </div>
@@ -67,10 +74,15 @@ function AdminOverviewPage() {
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
           <div className="p-5 flex items-center gap-4">
             <div className="p-3 bg-primary/10 rounded-lg border-t-2 border-primary shadow-xs shrink-0">
-              <Icon icon="solar:users-group-two-rounded-broken" className="h-7 w-7 text-primary" />
+              <Icon
+                icon="solar:users-group-two-rounded-broken"
+                className="h-7 w-7 text-primary"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Active Users</span>
+              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Active Users
+              </span>
               <span className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">
                 {metrics.totalUsers.toLocaleString()}
               </span>
@@ -78,10 +90,15 @@ function AdminOverviewPage() {
           </div>
           <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs">
             <span className="text-emerald-600 font-bold flex items-center gap-0.5">
-              <Icon icon="solar:arrow-up-bold-duotone" className="h-3.5 w-3.5" />
+              <Icon
+                icon="solar:arrow-up-bold-duotone"
+                className="h-3.5 w-3.5"
+              />
               12%
             </span>
-            <span className="text-slate-500 dark:text-slate-400 text-[11px]">From last month</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              From last month
+            </span>
           </div>
         </div>
 
@@ -89,10 +106,15 @@ function AdminOverviewPage() {
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
           <div className="p-5 flex items-center gap-4">
             <div className="p-3 bg-emerald-500/10 rounded-lg border-t-2 border-emerald-500 shadow-xs shrink-0">
-              <Icon icon="solar:verified-check-broken" className="h-7 w-7 text-emerald-500" />
+              <Icon
+                icon="solar:verified-check-broken"
+                className="h-7 w-7 text-emerald-500"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Collected Revenue (USD)</span>
+              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Collected Revenue (USD)
+              </span>
               <span className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">
                 ${metrics.totalRevenueUSD.toLocaleString()}
               </span>
@@ -100,10 +122,15 @@ function AdminOverviewPage() {
           </div>
           <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs">
             <span className="text-emerald-600 font-bold flex items-center gap-0.5">
-              <Icon icon="solar:arrow-up-bold-duotone" className="h-3.5 w-3.5" />
+              <Icon
+                icon="solar:arrow-up-bold-duotone"
+                className="h-3.5 w-3.5"
+              />
               24%
             </span>
-            <span className="text-slate-500 dark:text-slate-400 text-[11px]">Global Subscriptions</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              Global Subscriptions
+            </span>
           </div>
         </div>
 
@@ -111,10 +138,15 @@ function AdminOverviewPage() {
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
           <div className="p-5 flex items-center gap-4">
             <div className="p-3 bg-indigo-500/10 rounded-lg border-t-2 border-indigo-500 shadow-xs shrink-0">
-              <Icon icon="solar:chat-round-money-broken" className="h-7 w-7 text-indigo-500" />
+              <Icon
+                icon="solar:chat-round-money-broken"
+                className="h-7 w-7 text-indigo-500"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Collected Revenue (NGN)</span>
+              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Collected Revenue (NGN)
+              </span>
               <span className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">
                 ₦{metrics.totalRevenueNGN.toLocaleString()}
               </span>
@@ -122,10 +154,15 @@ function AdminOverviewPage() {
           </div>
           <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs">
             <span className="text-emerald-600 font-bold flex items-center gap-0.5">
-              <Icon icon="solar:arrow-up-bold-duotone" className="h-3.5 w-3.5" />
+              <Icon
+                icon="solar:arrow-up-bold-duotone"
+                className="h-3.5 w-3.5"
+              />
               31%
             </span>
-            <span className="text-slate-500 dark:text-slate-400 text-[11px]">Paystack &amp; Transfers</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              Paystack &amp; Transfers
+            </span>
           </div>
         </div>
 
@@ -133,10 +170,15 @@ function AdminOverviewPage() {
         <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
           <div className="p-5 flex items-center gap-4">
             <div className="p-3 bg-amber-500/10 rounded-lg border-t-2 border-amber-500 shadow-xs shrink-0">
-              <Icon icon="solar:phone-rounded-broken" className="h-7 w-7 text-amber-500" />
+              <Icon
+                icon="solar:phone-rounded-broken"
+                className="h-7 w-7 text-amber-500"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Pending Bank Receipts</span>
+              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Pending Bank Receipts
+              </span>
               <span className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-0.5">
                 {metrics.pendingManualPayments}
               </span>
@@ -144,13 +186,18 @@ function AdminOverviewPage() {
           </div>
           <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs">
             {metrics.pendingManualPayments > 0 ? (
-              <Link to="/admin/payments" className="text-amber-600 font-bold hover:underline flex items-center gap-1">
+              <Link
+                to="/admin/payments"
+                className="text-amber-600 font-bold hover:underline flex items-center gap-1"
+              >
                 <span>Review receipts &rarr;</span>
               </Link>
             ) : (
               <span className="text-emerald-600 font-bold">All Verified</span>
             )}
-            <span className="text-slate-500 dark:text-slate-400 text-[11px]">Queue Status</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              Queue Status
+            </span>
           </div>
         </div>
       </div>
@@ -162,7 +209,9 @@ function AdminOverviewPage() {
         {/* Left 7 Cols: Revenue Summary */}
         <div className="lg:col-span-7 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs flex flex-col">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
-            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">Revenue Summary</h5>
+            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+              Revenue Summary
+            </h5>
             <span className="px-2 py-0.5 text-[11px] font-bold rounded bg-emerald-500/10 text-emerald-600">
               ● Live Sync
             </span>
@@ -171,19 +220,37 @@ function AdminOverviewPage() {
           <div className="p-6 space-y-5 flex-1 flex flex-col justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Total Monthly MRR</span>
-                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">$14,850</p>
-                <span className="text-[10px] text-emerald-600 font-semibold">+18.2% vs last mo</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  Total Monthly MRR
+                </span>
+                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">
+                  $14,850
+                </p>
+                <span className="text-[10px] text-emerald-600 font-semibold">
+                  +18.2% vs last mo
+                </span>
               </div>
               <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Active Paid Seats</span>
-                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">128 Teams</p>
-                <span className="text-[10px] text-emerald-600 font-semibold">+8 new this week</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  Active Paid Seats
+                </span>
+                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">
+                  128 Teams
+                </p>
+                <span className="text-[10px] text-emerald-600 font-semibold">
+                  +8 new this week
+                </span>
               </div>
               <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Churn Rate</span>
-                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">1.2%</p>
-                <span className="text-[10px] text-emerald-600 font-semibold">Healthy SaaS Metric</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  Churn Rate
+                </span>
+                <p className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1">
+                  1.2%
+                </p>
+                <span className="text-[10px] text-emerald-600 font-semibold">
+                  Healthy SaaS Metric
+                </span>
               </div>
             </div>
 
@@ -191,31 +258,46 @@ function AdminOverviewPage() {
             <div className="space-y-3 pt-2">
               <div>
                 <div className="flex justify-between text-xs font-semibold mb-1">
-                  <span className="text-slate-700 dark:text-slate-200">Paystack Subscriptions (NGN)</span>
+                  <span className="text-slate-700 dark:text-slate-200">
+                    Paystack Subscriptions (NGN)
+                  </span>
                   <span className="text-slate-500">62% of volume</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary rounded-full" style={{ width: "62%" }}></div>
+                  <div
+                    className="h-full bg-primary rounded-full"
+                    style={{ width: "62%" }}
+                  ></div>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-semibold mb-1">
-                  <span className="text-slate-700 dark:text-slate-200">Global Credit Cards (USD)</span>
+                  <span className="text-slate-700 dark:text-slate-200">
+                    Global Credit Cards (USD)
+                  </span>
                   <span className="text-slate-500">28% of volume</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: "28%" }}></div>
+                  <div
+                    className="h-full bg-emerald-500 rounded-full"
+                    style={{ width: "28%" }}
+                  ></div>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-semibold mb-1">
-                  <span className="text-slate-700 dark:text-slate-200">Manual Direct Bank Transfers</span>
+                  <span className="text-slate-700 dark:text-slate-200">
+                    Manual Direct Bank Transfers
+                  </span>
                   <span className="text-slate-500">10% of volume</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-amber-500 rounded-full" style={{ width: "10%" }}></div>
+                  <div
+                    className="h-full bg-amber-500 rounded-full"
+                    style={{ width: "10%" }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -225,7 +307,9 @@ function AdminOverviewPage() {
         {/* Right 5 Cols: Recent Activity */}
         <div className="lg:col-span-5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs flex flex-col">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
-            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">Recent Activity</h5>
+            <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+              Recent Activity
+            </h5>
           </div>
 
           <div className="p-4 space-y-3 flex-1 overflow-y-auto">
@@ -235,7 +319,9 @@ function AdminOverviewPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">Sophia Zhang</h6>
+                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+                    Sophia Zhang
+                  </h6>
                   <span className="text-[10px] text-slate-400">45m ago</span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
@@ -250,7 +336,9 @@ function AdminOverviewPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">Adeline Wijaya</h6>
+                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+                    Adeline Wijaya
+                  </h6>
                   <span className="text-[10px] text-slate-400">3h ago</span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
@@ -265,7 +353,9 @@ function AdminOverviewPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">Michael Lee</h6>
+                  <h6 className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+                    Michael Lee
+                  </h6>
                   <span className="text-[10px] text-slate-400">5h ago</span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
@@ -282,8 +372,13 @@ function AdminOverviewPage() {
       {/* -------------------------------------------------------------- */}
       <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 overflow-hidden shadow-2xs">
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
-          <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">Recent Transactions &amp; Orders</h5>
-          <Link to="/admin/payments" className="text-xs font-bold text-primary hover:underline">
+          <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100">
+            Recent Transactions &amp; Orders
+          </h5>
+          <Link
+            to="/admin/payments"
+            className="text-xs font-bold text-primary hover:underline"
+          >
             View All &rarr;
           </Link>
         </div>
@@ -305,16 +400,27 @@ function AdminOverviewPage() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold">
-                      <Icon icon="solar:layers-minimalistic-bold-duotone" className="h-4 w-4" />
+                      <Icon
+                        icon="solar:layers-minimalistic-bold-duotone"
+                        className="h-4 w-4"
+                      />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-800 dark:text-slate-100">Agency &amp; Scale Plan</p>
-                      <p className="text-[11px] text-slate-400">18+ Granular Features, Unlimited Seats</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">
+                        Agency &amp; Scale Plan
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        18+ Granular Features, Unlimited Seats
+                      </p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">$199.00</td>
-                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">Sophia Zhang</td>
+                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
+                  $199.00
+                </td>
+                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">
+                  Sophia Zhang
+                </td>
                 <td className="px-6 py-3.5 text-slate-400">Just now</td>
                 <td className="px-6 py-3.5">
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600">
@@ -337,16 +443,27 @@ function AdminOverviewPage() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold">
-                      <Icon icon="solar:layers-minimalistic-bold-duotone" className="h-4 w-4" />
+                      <Icon
+                        icon="solar:layers-minimalistic-bold-duotone"
+                        className="h-4 w-4"
+                      />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-800 dark:text-slate-100">Pro SEO Growth Plan</p>
-                      <p className="text-[11px] text-slate-400">1,000 Monthly AI &amp; Crawl Credits</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">
+                        Pro SEO Growth Plan
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        1,000 Monthly AI &amp; Crawl Credits
+                      </p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">₦120,000</td>
-                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">Adeline Wijaya</td>
+                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
+                  ₦120,000
+                </td>
+                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">
+                  Adeline Wijaya
+                </td>
                 <td className="px-6 py-3.5 text-slate-400">2 hours ago</td>
                 <td className="px-6 py-3.5">
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600">
@@ -369,16 +486,27 @@ function AdminOverviewPage() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
-                      <Icon icon="solar:bill-list-bold-duotone" className="h-4 w-4" />
+                      <Icon
+                        icon="solar:bill-list-bold-duotone"
+                        className="h-4 w-4"
+                      />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-800 dark:text-slate-100">Starter Plan (Bank Transfer)</p>
-                      <p className="text-[11px] text-slate-400">Direct Wire Verification Queue</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100">
+                        Starter Plan (Bank Transfer)
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        Direct Wire Verification Queue
+                      </p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">₦45,000</td>
-                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">Michael Lee</td>
+                <td className="px-6 py-3.5 font-bold text-slate-800 dark:text-slate-100">
+                  ₦45,000
+                </td>
+                <td className="px-6 py-3.5 text-slate-600 dark:text-slate-300">
+                  Michael Lee
+                </td>
                 <td className="px-6 py-3.5 text-slate-400">5 hours ago</td>
                 <td className="px-6 py-3.5">
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-600">

@@ -11,7 +11,13 @@ const generatePitchSchema = z.object({
 
 const updateClaimStatusSchema = z.object({
   mentionId: z.string().min(1),
-  claimStatus: z.enum(["unclaimed", "pitch_generated", "outreach_sent", "claimed", "ignored"]),
+  claimStatus: z.enum([
+    "unclaimed",
+    "pitch_generated",
+    "outreach_sent",
+    "claimed",
+    "ignored",
+  ]),
 });
 
 /**
@@ -22,18 +28,20 @@ export const getBrandMentionsHub = createServerFn({ method: "POST" })
   .validator(brandMentionsQuerySchema)
   .handler(async ({ context }) => {
     const brandName = context.project.name || "YourBrand";
-    const brandUrl = context.project.domain ? `https://${context.project.domain}` : "https://yourbrand.com";
+    const brandUrl = context.project.domain
+      ? `https://${context.project.domain}`
+      : "https://yourbrand.com";
 
     const mentions = await BrandMentionsService.getBrandMentions(
       context.projectId,
       brandName,
-      brandUrl
+      brandUrl,
     );
 
     const metrics = await BrandMentionsService.getListeningMetrics(
       context.projectId,
       brandName,
-      context.project.domain || undefined
+      context.project.domain || undefined,
     );
 
     return {
@@ -59,7 +67,10 @@ export const updateMentionClaimStatus = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
   .validator(updateClaimStatusSchema)
   .handler(async ({ data }) => {
-    return BrandMentionsService.updateClaimStatus(data.mentionId, data.claimStatus);
+    return BrandMentionsService.updateClaimStatus(
+      data.mentionId,
+      data.claimStatus,
+    );
   });
 
 /**
@@ -75,7 +86,7 @@ export const getAeoSentiment = createServerFn({ method: "POST" })
     return BrandMentionsService.getAeoSentimentReport(
       context.projectId,
       brandName,
-      domain
+      domain,
     );
   });
 
@@ -92,6 +103,6 @@ export const refreshAeoSentimentScan = createServerFn({ method: "POST" })
     return BrandMentionsService.refreshAeoSentimentScan(
       context.projectId,
       brandName,
-      domain
+      domain,
     );
   });

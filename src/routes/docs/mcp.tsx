@@ -27,7 +27,7 @@ function McpDocPage() {
       },
     },
     null,
-    2
+    2,
   );
 
   const handleCopy = () => {
@@ -48,13 +48,17 @@ function McpDocPage() {
                 Docs
               </Link>
               <span className="text-secondary/30 dark:text-accent/30">/</span>
-              <span className="text-secondary/60 dark:text-accent/60">Model Context Protocol</span>
+              <span className="text-secondary/60 dark:text-accent/60">
+                Model Context Protocol
+              </span>
             </div>
             <h1 className="text-heading-2 font-bold text-secondary dark:text-accent font-interTight">
               Connect {BRAND_CONFIG.name} MCP to AI Clients
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70">
-              Query live keyword difficulty, SERP rankings, backlink velocity, and site audits directly from Claude Code, Cursor, and custom agent workflows.
+              Query live keyword difficulty, SERP rankings, backlink velocity,
+              and site audits directly from Claude Code, Cursor, and custom
+              agent workflows.
             </p>
           </div>
 
@@ -71,7 +75,10 @@ function McpDocPage() {
               >
                 {copied ? (
                   <>
-                    <Icon icon="solar:check-circle-bold" className="size-4 text-ns-green" />
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="size-4 text-ns-green"
+                    />
                     Copied
                   </>
                 ) : (

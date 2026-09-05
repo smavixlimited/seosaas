@@ -48,7 +48,8 @@ describe("Phase 24: Hierarchical Team Management & Quota Service Suite", () => {
     });
 
     it("resolves invitation details by token for public acceptance", async () => {
-      const resolved = await TeamManagementService.getInvitationByToken(createdToken);
+      const resolved =
+        await TeamManagementService.getInvitationByToken(createdToken);
       expect(resolved).toBeDefined();
       expect(resolved?.email).toBe(testInviteeEmail);
       expect(resolved?.role).toBe("editor");
@@ -68,7 +69,8 @@ describe("Phase 24: Hierarchical Team Management & Quota Service Suite", () => {
       expect(member.memberEmail).toBe(testInviteeEmail);
 
       // Verify token is now marked accepted
-      const resolvedAfter = await TeamManagementService.getInvitationByToken(createdToken);
+      const resolvedAfter =
+        await TeamManagementService.getInvitationByToken(createdToken);
       expect(resolvedAfter?.status).toBe("accepted");
     });
 
@@ -77,7 +79,7 @@ describe("Phase 24: Hierarchical Team Management & Quota Service Suite", () => {
         "usr_pro_owner_01",
         "tmb_sample_01",
         "admin",
-        ["proj_123"]
+        ["proj_123"],
       );
       expect(updated).toBe(true);
     });
@@ -85,7 +87,7 @@ describe("Phase 24: Hierarchical Team Management & Quota Service Suite", () => {
     it("removes a member cleanly from the team", async () => {
       const removed = await TeamManagementService.removeMember(
         "usr_pro_owner_01",
-        "tmb_sample_01"
+        "tmb_sample_01",
       );
       expect(removed).toBe(true);
     });

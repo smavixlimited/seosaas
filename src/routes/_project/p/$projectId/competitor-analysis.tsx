@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Icon } from "@iconify/react";
 
-export const Route = createFileRoute("/_project/p/$projectId/competitor-analysis")({
+export const Route = createFileRoute(
+  "/_project/p/$projectId/competitor-analysis",
+)({
   component: CompetitorAnalysisRoute,
 });
 
@@ -19,17 +21,24 @@ function CompetitorAnalysisRoute() {
               1-on-1 Competitor Strategy & Decoder
             </h1>
             <p className="text-xs text-base-content/60">
-              Run deep head-to-head comparisons against a rival to uncover keyword gaps, ad hooks, and ranking weaknesses.
+              Run deep head-to-head comparisons against a rival to uncover
+              keyword gaps, ad hooks, and ranking weaknesses.
             </p>
           </div>
         </div>
       </div>
 
       <div className="rounded-3xl border border-base-300 bg-base-100 p-8 text-center space-y-4 shadow-sm">
-        <Icon icon="solar:chart-square-bold-duotone" className="h-12 w-12 text-primary mx-auto animate-pulse" />
-        <h3 className="text-lg font-bold text-base-content">Head-to-Head Comparative Intelligence</h3>
+        <Icon
+          icon="solar:chart-square-bold-duotone"
+          className="h-12 w-12 text-primary mx-auto animate-pulse"
+        />
+        <h3 className="text-lg font-bold text-base-content">
+          Head-to-Head Comparative Intelligence
+        </h3>
         <p className="text-xs text-base-content/60 max-w-md mx-auto">
-          Select a competitor from your directory to generate side-by-side keyword overlap, backlink benchmarks, and AI-powered attack plays.
+          Select a competitor from your directory to generate side-by-side
+          keyword overlap, backlink benchmarks, and AI-powered attack plays.
         </p>
       </div>
     </div>

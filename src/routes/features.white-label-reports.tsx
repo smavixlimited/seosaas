@@ -24,10 +24,14 @@ function WhiteLabelReportsFeaturePage() {
               Automated White-Label Client PDF Reports
             </h1>
             <p className="text-base sm:text-lg text-base-content/70">
-              Deliver gorgeous, branded SEO audit and ranking performance PDFs under your agency's logo, colors, and custom domain.
+              Deliver gorgeous, branded SEO audit and ranking performance PDFs
+              under your agency's logo, colors, and custom domain.
             </p>
             <div className="pt-2 flex justify-center gap-3">
-              <Link to="/sign-up" className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary">
+              <Link
+                to="/sign-up"
+                className="btn btn-primary rounded-xl px-6 font-bold text-white bg-primary"
+              >
                 Create Client PDF Free
               </Link>
             </div>
@@ -38,9 +42,12 @@ function WhiteLabelReportsFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 <Palette className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">100% Custom Brand Styling</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                100% Custom Brand Styling
+              </h3>
               <p className="text-sm text-base-content/70">
-                Upload your agency logo, set custom primary/secondary color schemes, and remove all references to {BRAND_CONFIG.name}.
+                Upload your agency logo, set custom primary/secondary color
+                schemes, and remove all references to {BRAND_CONFIG.name}.
               </p>
             </div>
 
@@ -48,9 +55,12 @@ function WhiteLabelReportsFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
                 <Send className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Scheduled Email Delivery</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Scheduled Email Delivery
+              </h3>
               <p className="text-sm text-base-content/70">
-                Automatically email weekly or monthly executive PDF summaries directly to your clients on autopilot.
+                Automatically email weekly or monthly executive PDF summaries
+                directly to your clients on autopilot.
               </p>
             </div>
 
@@ -58,9 +68,12 @@ function WhiteLabelReportsFeaturePage() {
               <div className="h-10 w-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center">
                 <Globe className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-base-content">Custom Domain Portals</h3>
+              <h3 className="text-lg font-bold text-base-content">
+                Custom Domain Portals
+              </h3>
               <p className="text-sm text-base-content/70">
-                Give your clients interactive dashboard access under `reports.youragency.com` with restricted read-only permissions.
+                Give your clients interactive dashboard access under
+                `reports.youragency.com` with restricted read-only permissions.
               </p>
             </div>
           </div>

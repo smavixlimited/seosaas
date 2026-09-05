@@ -4,10 +4,7 @@ import { Info, Loader2, X } from "lucide-react";
 import { Modal } from "@/client/components/Modal";
 import type { RankTrackingConfig } from "@/types/schemas/rank-tracking";
 import { domainField, normalizeDomain } from "@/types/schemas/domain";
-import {
-  depthToPages,
-  pagesToDepth,
-} from "@/shared/rank-tracking";
+import { depthToPages, pagesToDepth } from "@/shared/rank-tracking";
 import { getLanguageCode } from "@/client/features/keywords/locations";
 import {
   SERP_LANGUAGE_OPTIONS,

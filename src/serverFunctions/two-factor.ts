@@ -42,7 +42,11 @@ export const enable2FAServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(verifyCodeSchema)
   .handler(async ({ data, context }) => {
-    return TwoFactorService.verifyAndEnable2FA(context.userId, data.code, context.userEmail);
+    return TwoFactorService.verifyAndEnable2FA(
+      context.userId,
+      data.code,
+      context.userEmail,
+    );
   });
 
 /**
@@ -52,7 +56,11 @@ export const disable2FAServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(verifyCodeSchema)
   .handler(async ({ data, context }) => {
-    return TwoFactorService.disable2FA(context.userId, data.code, context.userEmail);
+    return TwoFactorService.disable2FA(
+      context.userId,
+      data.code,
+      context.userEmail,
+    );
   });
 
 /**
@@ -61,7 +69,10 @@ export const disable2FAServerFn = createServerFn({ method: "POST" })
 export const verify2FALoginServerFn = createServerFn({ method: "POST" })
   .validator(login2FASchema)
   .handler(async ({ data }) => {
-    const isValid = await TwoFactorService.verifyLogin2FA(data.userId, data.code);
+    const isValid = await TwoFactorService.verifyLogin2FA(
+      data.userId,
+      data.code,
+    );
     return { isValid };
   });
 
@@ -81,7 +92,11 @@ export const revokeSessionServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(revokeSessionSchema)
   .handler(async ({ data, context }) => {
-    return SessionManagerService.revokeSession(data.sessionId, context.userId, context.userEmail);
+    return SessionManagerService.revokeSession(
+      data.sessionId,
+      context.userId,
+      context.userEmail,
+    );
   });
 
 /**
@@ -91,5 +106,9 @@ export const revokeAllOtherSessionsServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(revokeSessionSchema)
   .handler(async ({ data, context }) => {
-    return SessionManagerService.revokeAllOtherSessions(data.sessionId, context.userId, context.userEmail);
+    return SessionManagerService.revokeAllOtherSessions(
+      data.sessionId,
+      context.userId,
+      context.userEmail,
+    );
   });

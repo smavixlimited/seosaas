@@ -116,7 +116,10 @@ function VerifyEmailPage() {
         callbackURL: callbackURL.toString(),
       });
       if (result.error) {
-        toast.error(result.error.message || "We couldn't send another verification email.");
+        toast.error(
+          result.error.message ||
+            "We couldn't send another verification email.",
+        );
         return;
       }
       captureClientEvent("auth:verification_resend");
@@ -196,12 +199,18 @@ function VerifyEmailPage() {
                     </>
                   ) : countdown > 0 ? (
                     <>
-                      <Icon icon="solar:history-bold-duotone" className="size-4" />
+                      <Icon
+                        icon="solar:history-bold-duotone"
+                        className="size-4"
+                      />
                       <span>Resend in {countdown}s</span>
                     </>
                   ) : (
                     <>
-                      <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                      <Icon
+                        icon="solar:plain-2-bold-duotone"
+                        className="size-4"
+                      />
                       <span>Request new verification link</span>
                     </>
                   )}
@@ -220,7 +229,10 @@ function VerifyEmailPage() {
           ) : isPending || isRedirecting ? (
             <div className="flex flex-col items-center justify-center py-6 space-y-4">
               <div className="size-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                <Icon icon="solar:check-circle-bold-duotone" className="size-8" />
+                <Icon
+                  icon="solar:check-circle-bold-duotone"
+                  className="size-8"
+                />
               </div>
               <span className="loading loading-spinner loading-md text-primary" />
             </div>
@@ -228,7 +240,10 @@ function VerifyEmailPage() {
             <div className="space-y-4">
               <div className="flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/15">
                 <div className="size-14 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20 mb-3">
-                  <Icon icon="solar:letter-opened-bold-duotone" className="size-7" />
+                  <Icon
+                    icon="solar:letter-opened-bold-duotone"
+                    className="size-7"
+                  />
                 </div>
                 <p className="text-tagline-2 text-secondary/70 dark:text-accent/70">
                   Confirmation sent to:
@@ -252,12 +267,18 @@ function VerifyEmailPage() {
                     </>
                   ) : countdown > 0 ? (
                     <>
-                      <Icon icon="solar:history-bold-duotone" className="size-4" />
+                      <Icon
+                        icon="solar:history-bold-duotone"
+                        className="size-4"
+                      />
                       <span>Resend in {countdown}s</span>
                     </>
                   ) : (
                     <>
-                      <Icon icon="solar:plain-2-bold-duotone" className="size-4" />
+                      <Icon
+                        icon="solar:plain-2-bold-duotone"
+                        className="size-4"
+                      />
                       <span>Resend confirmation email</span>
                     </>
                   )}

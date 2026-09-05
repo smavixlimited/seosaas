@@ -22,8 +22,12 @@ export const Route = createFileRoute("/blogs/$")({
   },
   head: ({ loaderData }) => {
     const blog = loaderData as BlogPostRecord | null;
-    const title = blog?.metaTitle || blog?.title || `SEO & AEO Research — ${BRAND_CONFIG.name}`;
-    const description = blog?.metaDescription || blog?.description || BRAND_CONFIG.description;
+    const title =
+      blog?.metaTitle ||
+      blog?.title ||
+      `SEO & AEO Research — ${BRAND_CONFIG.name}`;
+    const description =
+      blog?.metaDescription || blog?.description || BRAND_CONFIG.description;
     const ogImage = blog?.coverImageUrl || BRAND_CONFIG.logoUrl;
 
     return {
@@ -38,7 +42,9 @@ export const Route = createFileRoute("/blogs/$")({
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
       ],
-      links: blog?.canonicalUrl ? [{ rel: "canonical", href: blog.canonicalUrl }] : [],
+      links: blog?.canonicalUrl
+        ? [{ rel: "canonical", href: blog.canonicalUrl }]
+        : [],
     };
   },
   component: BlogPostReaderPage,
@@ -60,8 +66,12 @@ function BlogPostReaderPage() {
         <div className="main-container max-w-4xl space-y-8">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-tagline-3 font-semibold text-primary-500">
-            <Link to="/blogs" className="hover:underline flex items-center gap-1.5">
-              <Icon icon="solar:arrow-left-linear" className="size-4" /> All Articles
+            <Link
+              to="/blogs"
+              className="hover:underline flex items-center gap-1.5"
+            >
+              <Icon icon="solar:arrow-left-linear" className="size-4" /> All
+              Articles
             </Link>
             <span className="text-secondary/30 dark:text-accent/30">/</span>
             <span className="text-secondary/60 dark:text-accent/60 capitalize truncate">
@@ -76,7 +86,8 @@ function BlogPostReaderPage() {
                 <div className="flex items-center gap-3">
                   <span className="badge badge-green">{blog.category}</span>
                   <span className="text-tagline-3 text-secondary/60 dark:text-accent/60 flex items-center gap-1">
-                    <Icon icon="solar:clock-circle-linear" className="size-4" /> {blog.readingTimeMinutes} min read
+                    <Icon icon="solar:clock-circle-linear" className="size-4" />{" "}
+                    {blog.readingTimeMinutes} min read
                   </span>
                 </div>
 
@@ -139,12 +150,15 @@ function BlogPostReaderPage() {
 
               {/* Bottom Conversion CTA */}
               <div className="rounded-[24px] border border-primary-500/30 bg-secondary dark:bg-background-5 p-8 sm:p-10 text-center space-y-4 shadow-xl text-white">
-                <span className="badge badge-yellow">Scale Your Search Footprint</span>
+                <span className="badge badge-yellow">
+                  Scale Your Search Footprint
+                </span>
                 <h3 className="text-heading-3 font-bold font-interTight text-white">
                   Boost your organic visibility with {BRAND_CONFIG.name}
                 </h3>
                 <p className="text-tagline-1 text-accent/80 max-w-lg mx-auto">
-                  Access live SERP keyword tracking, AI Search citations, backlink discovery, and automated technical audits today.
+                  Access live SERP keyword tracking, AI Search citations,
+                  backlink discovery, and automated technical audits today.
                 </p>
                 <div className="pt-3">
                   <Link
@@ -164,7 +178,10 @@ function BlogPostReaderPage() {
               <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
                 The requested blog post could not be located.
               </p>
-              <Link to="/blogs" className="btn btn-primary btn-md rounded-full font-bold">
+              <Link
+                to="/blogs"
+                className="btn btn-primary btn-md rounded-full font-bold"
+              >
                 Return to Blog Hub
               </Link>
             </div>

@@ -146,4 +146,3 @@ export function TemplateBlog() {
     </section>
   );
 }
-export default TemplateBlog;

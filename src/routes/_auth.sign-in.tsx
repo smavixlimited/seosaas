@@ -79,7 +79,10 @@ function SignInPage() {
         }
 
         // Check if 2FA code is required
-        if (result.error.message?.toLowerCase().includes("two factor") || result.error.message?.toLowerCase().includes("2fa")) {
+        if (
+          result.error.message?.toLowerCase().includes("two factor") ||
+          result.error.message?.toLowerCase().includes("2fa")
+        ) {
           setPendingUserId(email);
           setShow2FAChallenge(true);
           return;
@@ -137,10 +140,14 @@ function SignInPage() {
 
       if (res.isValid) {
         toast.success("Two-Factor Authentication verified!");
-        captureClientEvent("auth:2fa_verified", { redirect_to: targetRedirect });
+        captureClientEvent("auth:2fa_verified", {
+          redirect_to: targetRedirect,
+        });
         window.location.replace(targetRedirect);
       } else {
-        setTfaError("Invalid 6-digit authentication code or backup recovery code.");
+        setTfaError(
+          "Invalid 6-digit authentication code or backup recovery code.",
+        );
       }
     } catch {
       setTfaError("Failed to verify code. Please check and try again.");
@@ -176,7 +183,9 @@ function SignInPage() {
 
   return (
     <AuthPageCard
-      title={show2FAChallenge ? "Two-Factor Verification" : "Sign in to your account"}
+      title={
+        show2FAChallenge ? "Two-Factor Verification" : "Sign in to your account"
+      }
       helperText={
         show2FAChallenge
           ? "Enter the 6-digit TOTP code from your authenticator app or backup recovery code."
@@ -214,7 +223,10 @@ function SignInPage() {
         <form onSubmit={handleVerify2FASubmit} className="space-y-4">
           <div className="flex justify-center my-2">
             <div className="size-12 rounded-2xl bg-primary/10 text-primary dark:text-brand-300 flex items-center justify-center">
-              <Icon icon="solar:shield-keyhole-bold-duotone" className="size-6" />
+              <Icon
+                icon="solar:shield-keyhole-bold-duotone"
+                className="size-6"
+              />
             </div>
           </div>
 
@@ -393,4 +405,3 @@ function SignInPage() {
     </AuthPageCard>
   );
 }
-

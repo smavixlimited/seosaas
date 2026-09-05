@@ -61,7 +61,8 @@ function SkorviaVsMozPage() {
               {BRAND_CONFIG.name} vs. Moz Pro
             </h1>
             <p className="text-tagline-1 text-secondary/70 dark:text-accent/70 max-w-2xl mx-auto leading-relaxed">
-              Why modern brands are replacing slow, legacy SEO suites with {BRAND_CONFIG.name}'s multi-channel intelligence workspace.
+              Why modern brands are replacing slow, legacy SEO suites with{" "}
+              {BRAND_CONFIG.name}'s multi-channel intelligence workspace.
             </p>
           </div>
 
@@ -74,7 +75,8 @@ function SkorviaVsMozPage() {
                 Real-Time Data
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                No more waiting a week for index updates. Get fresh daily rank updates and instant on-demand site audits.
+                No more waiting a week for index updates. Get fresh daily rank
+                updates and instant on-demand site audits.
               </p>
             </div>
 
@@ -86,7 +88,8 @@ function SkorviaVsMozPage() {
                 Multi-Channel Scope
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Combine organic SERP, Google Maps local packs, multi-network competitor ads, and AI Answer Engine citations in one place.
+                Combine organic SERP, Google Maps local packs, multi-network
+                competitor ads, and AI Answer Engine citations in one place.
               </p>
             </div>
 
@@ -98,7 +101,8 @@ function SkorviaVsMozPage() {
                 70% Better Value
               </h3>
               <p className="text-tagline-3 text-secondary/70 dark:text-accent/70 leading-relaxed">
-                Start at $29/mo with full feature access and unlimited team seats instead of $99/mo for restrictive legacy limits.
+                Start at $29/mo with full feature access and unlimited team
+                seats instead of $99/mo for restrictive legacy limits.
               </p>
             </div>
           </div>
@@ -110,7 +114,8 @@ function SkorviaVsMozPage() {
                   Moz Pro vs. {BRAND_CONFIG.name} Matrix
                 </h3>
                 <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 mt-1">
-                  Side-by-side feature comparison based on current published capabilities.
+                  Side-by-side feature comparison based on current published
+                  capabilities.
                 </p>
               </div>
               <Link
@@ -134,7 +139,10 @@ function SkorviaVsMozPage() {
                 </thead>
                 <tbody className="divide-y divide-stroke-3/40 dark:divide-stroke-7/60 text-xs sm:text-sm">
                   {comparisonRows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-background-2/40 dark:hover:bg-secondary/20 transition-colors"
+                    >
                       <td className="py-4 px-6 font-semibold text-secondary dark:text-accent">
                         {row.feature}
                       </td>

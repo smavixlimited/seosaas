@@ -6,7 +6,7 @@ describe("BrandMentionsService (Unlinked Mentions & AEO Listening Hub)", () => {
     const mentions = await BrandMentionsService.seedInitialMentions(
       "test-proj-888",
       "Skorvia SaaS",
-      "https://skorvia.com"
+      "https://skorvia.com",
     );
 
     expect(mentions).toBeDefined();
@@ -28,7 +28,7 @@ describe("BrandMentionsService (Unlinked Mentions & AEO Listening Hub)", () => {
     const metrics = await BrandMentionsService.getListeningMetrics(
       "test-proj-888",
       "Skorvia SaaS",
-      "skorvia.com"
+      "skorvia.com",
     );
 
     expect(metrics).toBeDefined();
@@ -42,7 +42,7 @@ describe("BrandMentionsService (Unlinked Mentions & AEO Listening Hub)", () => {
     const aeoReport = await BrandMentionsService.refreshAeoSentimentScan(
       "test-proj-888",
       "Skorvia",
-      "skorvia.com"
+      "skorvia.com",
     );
 
     expect(aeoReport).toBeDefined();
@@ -57,7 +57,9 @@ describe("BrandMentionsService (Unlinked Mentions & AEO Listening Hub)", () => {
     aeoReport.forEach((item) => {
       expect(item.sentimentScore).toBeGreaterThan(0);
       expect(item.keyStrengthsHighlighted.length).toBeGreaterThan(0);
-      expect(["present", "missing", "ambiguous"]).toContain(item.entityCitationStatus);
+      expect(["present", "missing", "ambiguous"]).toContain(
+        item.entityCitationStatus,
+      );
     });
   });
 });

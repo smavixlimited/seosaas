@@ -64,19 +64,26 @@ export function SessionTimeoutModal({
               Session Timed Out
             </h3>
             <p className="mt-1 text-tagline-2 text-secondary/70 dark:text-accent/70">
-              For your security, please confirm your password to resume where you left off.
+              For your security, please confirm your password to resume where
+              you left off.
             </p>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={(e) => void handleReAuthenticate(e)} className="space-y-4">
+        <form
+          onSubmit={(e) => void handleReAuthenticate(e)}
+          className="space-y-4"
+        >
           <div className="space-y-1.5">
             <label className="text-tagline-3 font-semibold text-secondary/80 dark:text-accent/80 block">
               Signed in as
             </label>
             <div className="p-3 rounded-xl bg-background-2 dark:bg-secondary/40 border border-stroke-3/50 text-xs font-semibold text-secondary dark:text-accent flex items-center gap-2">
-              <Icon icon="solar:user-circle-bold" className="size-4 text-primary shrink-0" />
+              <Icon
+                icon="solar:user-circle-bold"
+                className="size-4 text-primary shrink-0"
+              />
               <span className="truncate">{email || "Your Account"}</span>
             </div>
           </div>
@@ -121,7 +128,10 @@ export function SessionTimeoutModal({
                 </>
               ) : (
                 <>
-                  <Icon icon="solar:shield-check-bold-duotone" className="size-4" />
+                  <Icon
+                    icon="solar:shield-check-bold-duotone"
+                    className="size-4"
+                  />
                   <span>Resume Workspace</span>
                 </>
               )}

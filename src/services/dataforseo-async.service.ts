@@ -72,13 +72,21 @@ export const DataForSeoAsyncService = {
 
     // Find task in registry
     for (const [id, record] of asyncTaskRegistry.entries()) {
-      if (record.taskId === payload.id || record.id === payload.id || id === payload.id) {
-        record.status = (payload.status_code === 20000 || payload.status_code === 200) ? "completed" : "failed";
+      if (
+        record.taskId === payload.id ||
+        record.id === payload.id ||
+        id === payload.id
+      ) {
+        record.status =
+          payload.status_code === 20000 || payload.status_code === 200
+            ? "completed"
+            : "failed";
         record.progressPercent = 100;
         record.resultJson = JSON.stringify(payload.result || []);
         record.completedAt = new Date().toISOString();
         if (payload.status_code !== 20000 && payload.status_code !== 200) {
-          record.errorMessage = payload.status_message || "DataForSEO task failed";
+          record.errorMessage =
+            payload.status_message || "DataForSEO task failed";
         }
         asyncTaskRegistry.set(id, record);
         return { handled: true, taskId: id };
@@ -114,7 +122,10 @@ export const DataForSeoAsyncService = {
   /**
    * Simulates/Forces task completion (useful for tests and instant results).
    */
-  markTaskComplete(taskId: string, resultData: Record<string, unknown>): boolean {
+  markTaskComplete(
+    taskId: string,
+    resultData: Record<string, unknown>,
+  ): boolean {
     const task = asyncTaskRegistry.get(taskId);
     if (!task) return false;
 

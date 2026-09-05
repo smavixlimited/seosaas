@@ -72,7 +72,9 @@ import { LOCATION_OPTIONS } from "@/shared/keyword-locations";
 export const ALL_COUNTRY_OPTIONS = Array.from(
   new Map(
     LOCATION_OPTIONS.map((opt) => {
-      const iso = (opt.shortLabel === "UK" ? "GB" : opt.shortLabel).toUpperCase();
+      const iso = (
+        opt.shortLabel === "UK" ? "GB" : opt.shortLabel
+      ).toUpperCase();
       return [iso, { code: iso, label: opt.label }];
     }),
   ).values(),

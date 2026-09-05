@@ -97,7 +97,13 @@ export interface GooglePlaceSearchResult {
 
 export interface DirectoryCoverageItem {
   directory: string;
-  status: "Wrong Address" | "No Address" | "Wrong Business Name" | "No Phone Number" | "Not Present" | "Matched";
+  status:
+    | "Wrong Address"
+    | "No Address"
+    | "Wrong Business Name"
+    | "No Phone Number"
+    | "Not Present"
+    | "Matched";
   details: string;
 }
 
@@ -164,27 +170,72 @@ export interface LocalBusinessData {
   };
 }
 
-const LOCAL_CACHE = new Map<string, { data: LocalBusinessData; expiresAt: number }>();
+const LOCAL_CACHE = new Map<
+  string,
+  { data: LocalBusinessData; expiresAt: number }
+>();
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 const DEFAULT_SEMRUSH_COVERAGE: DirectoryCoverageItem[] = [
-  { directory: "Facebook", status: "Wrong Business Name", details: "Wrong business name or address mismatch" },
-  { directory: "Google Assistant", status: "Wrong Address", details: "Voice query address needs verification" },
-  { directory: "Google Business Profile", status: "Matched", details: "Active verified primary business profile" },
-  { directory: "Google Search", status: "Matched", details: "Indexed in local search 3-pack" },
-  { directory: "Apple Maps", status: "Not Present", details: "Missed opportunity. Submit to Apple Business Connect." },
-  { directory: "Bing Places", status: "Not Present", details: "Missed opportunity. Syndicate from Google Profile." },
-  { directory: "Instagram", status: "Not Present", details: "Missed opportunity. Link location to Instagram profile." },
-  { directory: "Siri", status: "Not Present", details: "Missed opportunity for Apple voice assistant." },
-  { directory: "Waze", status: "Wrong Address", details: "Driver GPS navigation coordinates need updating" },
-  { directory: "Where To?", status: "No Address", details: "Missed opportunity for in-car GPS devices." },
+  {
+    directory: "Facebook",
+    status: "Wrong Business Name",
+    details: "Wrong business name or address mismatch",
+  },
+  {
+    directory: "Google Assistant",
+    status: "Wrong Address",
+    details: "Voice query address needs verification",
+  },
+  {
+    directory: "Google Business Profile",
+    status: "Matched",
+    details: "Active verified primary business profile",
+  },
+  {
+    directory: "Google Search",
+    status: "Matched",
+    details: "Indexed in local search 3-pack",
+  },
+  {
+    directory: "Apple Maps",
+    status: "Not Present",
+    details: "Missed opportunity. Submit to Apple Business Connect.",
+  },
+  {
+    directory: "Bing Places",
+    status: "Not Present",
+    details: "Missed opportunity. Syndicate from Google Profile.",
+  },
+  {
+    directory: "Instagram",
+    status: "Not Present",
+    details: "Missed opportunity. Link location to Instagram profile.",
+  },
+  {
+    directory: "Siri",
+    status: "Not Present",
+    details: "Missed opportunity for Apple voice assistant.",
+  },
+  {
+    directory: "Waze",
+    status: "Wrong Address",
+    details: "Driver GPS navigation coordinates need updating",
+  },
+  {
+    directory: "Where To?",
+    status: "No Address",
+    details: "Missed opportunity for in-car GPS devices.",
+  },
 ];
 
 export class LocalBusinessService {
   /**
    * Get or initialize the local business profile for a brand/project with multi-location support
    */
-  static async getLocalBusinessDashboard(projectId: string): Promise<LocalBusinessData> {
+  static async getLocalBusinessDashboard(
+    projectId: string,
+  ): Promise<LocalBusinessData> {
     const cached = LOCAL_CACHE.get(projectId);
     if (cached && cached.expiresAt > Date.now()) {
       return cached.data;
@@ -243,7 +294,8 @@ export class LocalBusinessService {
               locationName: `${existingProfile.businessName} (Main)`,
               placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
               businessName: existingProfile.businessName,
-              streetAddress: existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
+              streetAddress:
+                existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
               city: existingProfile.city || "Lagos",
               state: existingProfile.state || "LA",
               postalCode: existingProfile.postalCode || "106104",
@@ -263,9 +315,13 @@ export class LocalBusinessService {
           ];
         }
 
-        const rawPoints = JSON.parse(existingGrid.gridPointsJson || "[]") as LocalGridPoint[];
+        const rawPoints = JSON.parse(
+          existingGrid.gridPointsJson || "[]",
+        ) as LocalGridPoint[];
         const pointsWithDeltas = rawPoints.map((pt, idx) => {
-          const prevRank = pt.previousRank ?? Math.min(20, pt.rank + (idx % 3 === 0 ? 3 : idx % 2 === 0 ? 1 : 0));
+          const prevRank =
+            pt.previousRank ??
+            Math.min(20, pt.rank + (idx % 3 === 0 ? 3 : idx % 2 === 0 ? 1 : 0));
           return {
             ...pt,
             previousRank: prevRank,
@@ -277,7 +333,8 @@ export class LocalBusinessService {
           profile: {
             id: existingProfile.id,
             businessName: existingProfile.businessName,
-            streetAddress: existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
+            streetAddress:
+              existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
             city: existingProfile.city || "Lagos",
             state: existingProfile.state || "LA",
             postalCode: existingProfile.postalCode || "106104",
@@ -290,13 +347,20 @@ export class LocalBusinessService {
             averageRating: existingProfile.averageRating,
             totalReviews: existingProfile.totalReviews,
             napConsistencyScore: existingProfile.napConsistencyScore,
-            onlineAssessment: existingProfile.totalReviews > 20 ? "Good" : "Poor",
+            onlineAssessment:
+              existingProfile.totalReviews > 20 ? "Good" : "Poor",
             listingsToFixCount: 30,
             totalListingsCount: 33,
             directoriesCoverage: DEFAULT_SEMRUSH_COVERAGE,
-            citations: JSON.parse(existingProfile.citationsListJson || "[]") as LocalCitationItem[],
-            reviews: JSON.parse(existingProfile.reviewsListJson || "[]") as LocalReviewItem[],
-            auditHighlights: JSON.parse(existingProfile.auditHighlightsJson || "[]") as string[],
+            citations: JSON.parse(
+              existingProfile.citationsListJson || "[]",
+            ) as LocalCitationItem[],
+            reviews: JSON.parse(
+              existingProfile.reviewsListJson || "[]",
+            ) as LocalReviewItem[],
+            auditHighlights: JSON.parse(
+              existingProfile.auditHighlightsJson || "[]",
+            ) as string[],
             isConnectedToGoogle: existingProfile.gbpClaimed,
           },
           locations: locationsList,
@@ -315,17 +379,29 @@ export class LocalBusinessService {
           },
         };
 
-        LOCAL_CACHE.set(projectId, { data: result, expiresAt: Date.now() + CACHE_TTL_MS });
+        LOCAL_CACHE.set(projectId, {
+          data: result,
+          expiresAt: Date.now() + CACHE_TTL_MS,
+        });
         return result;
       }
 
       const seeded = await this.seedDefaultLocalBusiness(projectId);
-      LOCAL_CACHE.set(projectId, { data: seeded, expiresAt: Date.now() + CACHE_TTL_MS });
+      LOCAL_CACHE.set(projectId, {
+        data: seeded,
+        expiresAt: Date.now() + CACHE_TTL_MS,
+      });
       return seeded;
     } catch (err) {
-      console.warn("LocalBusinessService.getLocalBusinessDashboard fallback used:", err);
+      console.warn(
+        "LocalBusinessService.getLocalBusinessDashboard fallback used:",
+        err,
+      );
       const mock = this.generateMockDashboard(projectId);
-      LOCAL_CACHE.set(projectId, { data: mock, expiresAt: Date.now() + CACHE_TTL_MS });
+      LOCAL_CACHE.set(projectId, {
+        data: mock,
+        expiresAt: Date.now() + CACHE_TTL_MS,
+      });
       return mock;
     }
   }
@@ -333,7 +409,9 @@ export class LocalBusinessService {
   /**
    * Auto-detect all Google Business Profiles managed by the authenticated Google Account (Semrush style)
    */
-  static async detectGoogleBusinessProfiles(userEmail?: string): Promise<DetectedGoogleBusinessProfile[]> {
+  static async detectGoogleBusinessProfiles(
+    userEmail?: string,
+  ): Promise<DetectedGoogleBusinessProfile[]> {
     return [
       {
         id: "gbp_detected_smavix",
@@ -354,16 +432,56 @@ export class LocalBusinessService {
         listingsToFixCount: 30,
         totalListingsCount: 33,
         coverage: [
-          { directory: "Facebook", status: "Wrong Business Name", details: "N & D Giftery Private Limited" },
-          { directory: "Google Assistant", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Google Business Profile", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Google Search", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Apple Maps", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Bing", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Instagram", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Siri", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Waze", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Where To?", status: "No Address", details: "Missed opportunity." },
+          {
+            directory: "Facebook",
+            status: "Wrong Business Name",
+            details: "N & D Giftery Private Limited",
+          },
+          {
+            directory: "Google Assistant",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Google Business Profile",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Google Search",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Apple Maps",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Bing",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Instagram",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Siri",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Waze",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Where To?",
+            status: "No Address",
+            details: "Missed opportunity.",
+          },
         ],
       },
       {
@@ -417,7 +535,8 @@ export class LocalBusinessService {
     profileId: string;
   }): Promise<LocalBusinessData> {
     const detectedList = await this.detectGoogleBusinessProfiles();
-    const selected = detectedList.find((p) => p.id === params.profileId) || detectedList[0];
+    const selected =
+      detectedList.find((p) => p.id === params.profileId) || detectedList[0];
 
     const data = await this.getLocalBusinessDashboard(params.projectId);
     data.profile.businessName = selected.businessName;
@@ -431,7 +550,8 @@ export class LocalBusinessService {
     data.profile.averageRating = selected.averageRating;
     data.profile.totalReviews = selected.totalReviews;
     data.profile.gbpClaimed = true;
-    data.profile.gbpHealthScore = selected.onlineAssessment === "Poor" ? 68 : 94;
+    data.profile.gbpHealthScore =
+      selected.onlineAssessment === "Poor" ? 68 : 94;
     data.profile.onlineAssessment = selected.onlineAssessment;
     data.profile.listingsToFixCount = selected.listingsToFixCount;
     data.profile.totalListingsCount = selected.totalListingsCount;
@@ -482,14 +602,19 @@ export class LocalBusinessService {
       console.warn("Failed to update connected GBP:", e);
     }
 
-    LOCAL_CACHE.set(params.projectId, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+    LOCAL_CACHE.set(params.projectId, {
+      data,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    });
     return data;
   }
 
   /**
    * Search Google Places API simulation for instant auto-lookup
    */
-  static async searchGooglePlaces(query: string): Promise<GooglePlaceSearchResult[]> {
+  static async searchGooglePlaces(
+    query: string,
+  ): Promise<GooglePlaceSearchResult[]> {
     const clean = query.trim().toLowerCase();
     if (!clean) return [];
 
@@ -608,7 +733,10 @@ export class LocalBusinessService {
   /**
    * Get Review Generation Kit (short review link, QR code, and SMS/Email templates)
    */
-  static getReviewCampaignKit(businessName: string, locationId = "primary"): ReviewCampaignKit {
+  static getReviewCampaignKit(
+    businessName: string,
+    locationId = "primary",
+  ): ReviewCampaignKit {
     const slug = businessName.toLowerCase().replace(/[^a-z0-9]/g, "");
     const shortReviewUrl = `https://g.page/r/${slug || "brand"}/review`;
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(shortReviewUrl)}`;
@@ -669,7 +797,10 @@ export class LocalBusinessService {
       console.warn("Failed to persist published review reply:", e);
     }
 
-    LOCAL_CACHE.set(params.projectId, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+    LOCAL_CACHE.set(params.projectId, {
+      data,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    });
     return { success: true, publishedAt };
   }
 
@@ -694,7 +825,8 @@ export class LocalBusinessService {
     if (input.state) data.profile.state = input.state;
     if (input.postalCode) data.profile.postalCode = input.postalCode;
     if (input.phoneNumber) data.profile.phoneNumber = input.phoneNumber;
-    if (input.primaryCategory) data.profile.primaryCategory = input.primaryCategory;
+    if (input.primaryCategory)
+      data.profile.primaryCategory = input.primaryCategory;
     data.profile.gbpClaimed = true;
     data.profile.gbpHealthScore = 96;
     data.profile.isConnectedToGoogle = true;
@@ -727,14 +859,20 @@ export class LocalBusinessService {
       console.warn("Failed to persist connected GBP:", e);
     }
 
-    LOCAL_CACHE.set(input.projectId, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+    LOCAL_CACHE.set(input.projectId, {
+      data,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    });
     return data;
   }
 
   /**
    * Seed a new local business snapshot
    */
-  static async seedDefaultLocalBusiness(projectId: string, businessName = "Smavix Limited"): Promise<LocalBusinessData> {
+  static async seedDefaultLocalBusiness(
+    projectId: string,
+    businessName = "Smavix Limited",
+  ): Promise<LocalBusinessData> {
     const mock = this.generateMockDashboard(projectId, businessName);
 
     try {
@@ -806,7 +944,8 @@ export class LocalBusinessService {
 
     const step = radius / (dimension - 1 || 1);
     const latStep = step / 111.0;
-    const lngStep = step / (111.0 * Math.cos((input.centerLat * Math.PI) / 180));
+    const lngStep =
+      step / (111.0 * Math.cos((input.centerLat * Math.PI) / 180));
 
     const offsetHalf = (dimension - 1) / 2;
 
@@ -817,8 +956,16 @@ export class LocalBusinessService {
         const ptLat = input.centerLat + dLat;
         const ptLng = input.centerLng + dLng;
 
-        const distFromCenter = Math.sqrt(Math.pow(r - offsetHalf, 2) + Math.pow(c - offsetHalf, 2));
-        let rank = Math.max(1, Math.min(20, Math.round(1 + distFromCenter * 2 + (Math.random() * 2 - 1))));
+        const distFromCenter = Math.sqrt(
+          Math.pow(r - offsetHalf, 2) + Math.pow(c - offsetHalf, 2),
+        );
+        let rank = Math.max(
+          1,
+          Math.min(
+            20,
+            Math.round(1 + distFromCenter * 2 + (Math.random() * 2 - 1)),
+          ),
+        );
         if (r === offsetHalf && c === offsetHalf) rank = 1;
 
         if (rank <= 3) topThreeCount++;
@@ -832,7 +979,9 @@ export class LocalBusinessService {
           lat: Number(ptLat.toFixed(6)),
           lng: Number(ptLng.toFixed(6)),
           rank,
-          distanceKm: Number((distFromCenter * (radius / dimension)).toFixed(2)),
+          distanceKm: Number(
+            (distFromCenter * (radius / dimension)).toFixed(2),
+          ),
           previousRank: prevRank,
           rankDelta: prevRank - rank,
         });
@@ -840,7 +989,9 @@ export class LocalBusinessService {
     }
 
     const averageRank = Number((totalRank / points.length).toFixed(1));
-    const topThreeCoverageRate = Math.round((topThreeCount / points.length) * 100);
+    const topThreeCoverageRate = Math.round(
+      (topThreeCount / points.length) * 100,
+    );
 
     const gridResult = {
       keyword: input.keyword,
@@ -922,7 +1073,10 @@ Guidelines:
     }
   }
 
-  private static generateMockDashboard(projectId: string, businessName = "Smavix Limited"): LocalBusinessData {
+  private static generateMockDashboard(
+    projectId: string,
+    businessName = "Smavix Limited",
+  ): LocalBusinessData {
     return {
       profile: {
         id: `lb_mock_${projectId}`,
@@ -944,16 +1098,56 @@ Guidelines:
         listingsToFixCount: 30,
         totalListingsCount: 33,
         directoriesCoverage: [
-          { directory: "Facebook", status: "Wrong Business Name", details: "N & D Giftery Private Limited" },
-          { directory: "Google Assistant", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Google Business Profile", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Google Search", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Apple Maps", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Bing", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Instagram", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Siri", status: "Not Present", details: "Missed opportunity." },
-          { directory: "Waze", status: "Wrong Address", details: "KM 17 Lekki - Epe Expressway" },
-          { directory: "Where To?", status: "No Address", details: "Missed opportunity." },
+          {
+            directory: "Facebook",
+            status: "Wrong Business Name",
+            details: "N & D Giftery Private Limited",
+          },
+          {
+            directory: "Google Assistant",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Google Business Profile",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Google Search",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Apple Maps",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Bing",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Instagram",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Siri",
+            status: "Not Present",
+            details: "Missed opportunity.",
+          },
+          {
+            directory: "Waze",
+            status: "Wrong Address",
+            details: "KM 17 Lekki - Epe Expressway",
+          },
+          {
+            directory: "Where To?",
+            status: "No Address",
+            details: "Missed opportunity.",
+          },
         ],
         isConnectedToGoogle: true,
         citations: [
@@ -1001,7 +1195,8 @@ Guidelines:
             rating: 5,
             relativeTime: "3 days ago",
             text: "Fast service and very reliable team at Lekki. Highly recommended for corporate consulting!",
-            response: "Thank you so much Babatunde! We appreciate your partnership.",
+            response:
+              "Thank you so much Babatunde! We appreciate your partnership.",
             responsePublishedAt: new Date(Date.now() - 86400000).toISOString(),
             sentiment: "positive",
           },
@@ -1058,15 +1253,96 @@ Guidelines:
         previousAverageRank: 4.8,
         netGainedPositions: 9,
         points: [
-          { row: 0, col: 0, lat: 6.4624, lng: 3.4585, rank: 3, distanceKm: 2.3, previousRank: 5, rankDelta: 2 },
-          { row: 0, col: 1, lat: 6.4624, lng: 3.4735, rank: 2, distanceKm: 1.6, previousRank: 4, rankDelta: 2 },
-          { row: 0, col: 2, lat: 6.4624, lng: 3.4885, rank: 4, distanceKm: 2.3, previousRank: 6, rankDelta: 2 },
-          { row: 1, col: 0, lat: 6.4474, lng: 3.4585, rank: 2, distanceKm: 1.6, previousRank: 3, rankDelta: 1 },
-          { row: 1, col: 1, lat: 6.4474, lng: 3.4735, rank: 1, distanceKm: 0.0, previousRank: 1, rankDelta: 0 },
-          { row: 1, col: 2, lat: 6.4474, lng: 3.4885, rank: 3, distanceKm: 1.6, previousRank: 4, rankDelta: 1 },
-          { row: 2, col: 0, lat: 6.4324, lng: 3.4585, rank: 5, distanceKm: 2.3, previousRank: 7, rankDelta: 2 },
-          { row: 2, col: 1, lat: 6.4324, lng: 3.4735, rank: 3, distanceKm: 1.6, previousRank: 4, rankDelta: 1 },
-          { row: 2, col: 2, lat: 6.4324, lng: 3.4885, rank: 6, distanceKm: 2.3, previousRank: 8, rankDelta: 2 },
+          {
+            row: 0,
+            col: 0,
+            lat: 6.4624,
+            lng: 3.4585,
+            rank: 3,
+            distanceKm: 2.3,
+            previousRank: 5,
+            rankDelta: 2,
+          },
+          {
+            row: 0,
+            col: 1,
+            lat: 6.4624,
+            lng: 3.4735,
+            rank: 2,
+            distanceKm: 1.6,
+            previousRank: 4,
+            rankDelta: 2,
+          },
+          {
+            row: 0,
+            col: 2,
+            lat: 6.4624,
+            lng: 3.4885,
+            rank: 4,
+            distanceKm: 2.3,
+            previousRank: 6,
+            rankDelta: 2,
+          },
+          {
+            row: 1,
+            col: 0,
+            lat: 6.4474,
+            lng: 3.4585,
+            rank: 2,
+            distanceKm: 1.6,
+            previousRank: 3,
+            rankDelta: 1,
+          },
+          {
+            row: 1,
+            col: 1,
+            lat: 6.4474,
+            lng: 3.4735,
+            rank: 1,
+            distanceKm: 0.0,
+            previousRank: 1,
+            rankDelta: 0,
+          },
+          {
+            row: 1,
+            col: 2,
+            lat: 6.4474,
+            lng: 3.4885,
+            rank: 3,
+            distanceKm: 1.6,
+            previousRank: 4,
+            rankDelta: 1,
+          },
+          {
+            row: 2,
+            col: 0,
+            lat: 6.4324,
+            lng: 3.4585,
+            rank: 5,
+            distanceKm: 2.3,
+            previousRank: 7,
+            rankDelta: 2,
+          },
+          {
+            row: 2,
+            col: 1,
+            lat: 6.4324,
+            lng: 3.4735,
+            rank: 3,
+            distanceKm: 1.6,
+            previousRank: 4,
+            rankDelta: 1,
+          },
+          {
+            row: 2,
+            col: 2,
+            lat: 6.4324,
+            lng: 3.4885,
+            rank: 6,
+            distanceKm: 2.3,
+            previousRank: 8,
+            rankDelta: 2,
+          },
         ],
       },
     };

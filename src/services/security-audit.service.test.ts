@@ -57,7 +57,7 @@ describe("SecurityAuditService (Immutable Audit Logs & Security Policies)", () =
           ipAllowlist: "192.168.1.100, 10.0.0.50",
         },
         "usr_superadmin_001",
-        "superadmin@skorvia.com"
+        "superadmin@skorvia.com",
       );
 
       expect(updated.forceMfaForAdmins).toBe(true);

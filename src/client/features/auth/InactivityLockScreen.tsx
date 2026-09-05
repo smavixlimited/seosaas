@@ -23,7 +23,14 @@ export function useInactivityDetector(onLock: () => void, isEnabled = true) {
   React.useEffect(() => {
     if (!isEnabled) return;
 
-    const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart", "click"];
+    const events = [
+      "mousedown",
+      "mousemove",
+      "keypress",
+      "scroll",
+      "touchstart",
+      "click",
+    ];
     const handleActivity = () => resetTimer();
 
     events.forEach((event) => {
@@ -55,7 +62,8 @@ export function InactivityLockModal({
 
   if (!isOpen || !session?.user) return null;
 
-  const userName = session.user.name || session.user.email?.split("@")[0] || "User";
+  const userName =
+    session.user.name || session.user.email?.split("@")[0] || "User";
   const userEmail = session.user.email || "";
 
   const handleUnlock = async (e: React.FormEvent) => {
@@ -74,7 +82,9 @@ export function InactivityLockModal({
       });
 
       if (result.error) {
-        toast.error(result.error.message || "Incorrect password. Please try again.");
+        toast.error(
+          result.error.message || "Incorrect password. Please try again.",
+        );
       } else {
         toast.success("Welcome back! Screen unlocked.");
         setPassword("");
@@ -121,9 +131,12 @@ export function InactivityLockModal({
           </div>
 
           <div>
-            <h2 className="text-xl font-black text-base-content">Screen Locked</h2>
+            <h2 className="text-xl font-black text-base-content">
+              Screen Locked
+            </h2>
             <p className="text-xs text-base-content/60 font-medium">
-              Hi <span className="font-bold text-base-content">{userName}</span>, enter your password to resume.
+              Hi <span className="font-bold text-base-content">{userName}</span>
+              , enter your password to resume.
             </p>
           </div>
         </div>
@@ -131,7 +144,9 @@ export function InactivityLockModal({
         {/* Password Form */}
         <form onSubmit={handleUnlock} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-base-content/80">Enter Password</label>
+            <label className="text-xs font-bold text-base-content/80">
+              Enter Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -146,7 +161,14 @@ export function InactivityLockModal({
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content"
               >
-                <Icon icon={showPassword ? "solar:eye-closed-linear" : "solar:eye-linear"} className="h-4 w-4" />
+                <Icon
+                  icon={
+                    showPassword
+                      ? "solar:eye-closed-linear"
+                      : "solar:eye-linear"
+                  }
+                  className="h-4 w-4"
+                />
               </button>
             </div>
           </div>
@@ -160,7 +182,10 @@ export function InactivityLockModal({
               <span className="loading loading-spinner loading-xs" />
             ) : (
               <div className="flex items-center justify-center gap-2">
-                <Icon icon="solar:lock-unlocked-bold-duotone" className="h-4 w-4" />
+                <Icon
+                  icon="solar:lock-unlocked-bold-duotone"
+                  className="h-4 w-4"
+                />
                 <span>Unlock Screen</span>
               </div>
             )}
@@ -176,7 +201,10 @@ export function InactivityLockModal({
               onClick={handleBiometricUnlock}
               className="font-bold text-primary hover:underline inline-flex items-center gap-1"
             >
-              <Icon icon="solar:fingerprint-bold-duotone" className="h-3.5 w-3.5" />
+              <Icon
+                icon="solar:fingerprint-bold-duotone"
+                className="h-3.5 w-3.5"
+              />
               Fingerprint / Face ID
             </button>
           </p>

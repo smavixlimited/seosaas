@@ -18,34 +18,60 @@ export const Route = createFileRoute("/_project/p/$projectId/scraper")({
   component: ScraperStudioPage,
 });
 
-type ScraperTab = "scrape" | "interact" | "crawl" | "search" | "monitor" | "agent";
+type ScraperTab =
+  | "scrape"
+  | "interact"
+  | "crawl"
+  | "search"
+  | "monitor"
+  | "agent";
 
 function ScraperStudioPage() {
   const { projectId } = useParams({ from: "/_project/p/$projectId/scraper" });
   const [activeTab, setActiveTab] = React.useState<ScraperTab>("scrape");
 
   // Tab 1: Scrape State
-  const [scrapeUrl, setScrapeUrl] = React.useState("https://stripe.com/pricing");
+  const [scrapeUrl, setScrapeUrl] = React.useState(
+    "https://stripe.com/pricing",
+  );
   const [onlyMainContent, setOnlyMainContent] = React.useState(true);
-  const [scrapeResult, setScrapeResult] = React.useState<FirecrawlScrapeResult | null>(null);
+  const [scrapeResult, setScrapeResult] =
+    React.useState<FirecrawlScrapeResult | null>(null);
 
   // Tab 3: Map State
   const [mapDomain, setMapDomain] = React.useState("stripe.com");
-  const [mapResult, setMapResult] = React.useState<FirecrawlMapResult | null>(null);
+  const [mapResult, setMapResult] = React.useState<FirecrawlMapResult | null>(
+    null,
+  );
 
   // Tab 4: Search State
-  const [searchQuery, setSearchQuery] = React.useState("best b2b seo software 2026");
-  const [searchResult, setSearchResult] = React.useState<FirecrawlSearchResult | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState(
+    "best b2b seo software 2026",
+  );
+  const [searchResult, setSearchResult] =
+    React.useState<FirecrawlSearchResult | null>(null);
 
   // Tab 5: Monitor State
   const [monitoredUrls, setMonitoredUrls] = React.useState([
-    { url: "https://stripe.com/pricing", lastCheck: "10 mins ago", status: "Active 🟢", changes: "No changes detected" },
-    { url: "https://paystack.com/pricing", lastCheck: "1 hour ago", status: "Active 🟢", changes: "Updated pricing tiers" },
+    {
+      url: "https://stripe.com/pricing",
+      lastCheck: "10 mins ago",
+      status: "Active 🟢",
+      changes: "No changes detected",
+    },
+    {
+      url: "https://paystack.com/pricing",
+      lastCheck: "1 hour ago",
+      status: "Active 🟢",
+      changes: "Updated pricing tiers",
+    },
   ]);
   const [newMonitorUrl, setNewMonitorUrl] = React.useState("");
 
   // Tab 6: Agent State
-  const [agentPrompt, setAgentPrompt] = React.useState("Compare Stripe vs Paystack pricing in West Africa and generate an executive summary.");
+  const [agentPrompt, setAgentPrompt] = React.useState(
+    "Compare Stripe vs Paystack pricing in West Africa and generate an executive summary.",
+  );
   const [agentRunning, setAgentRunning] = React.useState(false);
   const [agentReport, setAgentReport] = React.useState<string | null>(null);
 
@@ -63,7 +89,9 @@ function ScraperStudioPage() {
     onSuccess: (data: FirecrawlScrapeResult) => {
       setScrapeResult(data);
       if (data.success) {
-        toast.success(`Scraped in ${data.wordCount} words (${data.tokensSaved.toLocaleString()} tokens saved)`);
+        toast.success(
+          `Scraped in ${data.wordCount} words (${data.tokensSaved.toLocaleString()} tokens saved)`,
+        );
       } else {
         toast.error(data.error || "Scrape failed");
       }
@@ -99,7 +127,9 @@ function ScraperStudioPage() {
     },
     onSuccess: (data: FirecrawlSearchResult) => {
       setSearchResult(data);
-      toast.success(`Found and scraped ${data.results.length} top search results`);
+      toast.success(
+        `Found and scraped ${data.results.length} top search results`,
+      );
     },
   });
 
@@ -134,10 +164,14 @@ function ScraperStudioPage() {
               <div>
                 <h1 className="text-xl font-black text-base-content flex items-center gap-2">
                   <span>Competitor Page Decoder</span>
-                  <span className="badge badge-primary badge-xs font-bold">Deep Intelligence</span>
+                  <span className="badge badge-primary badge-xs font-bold">
+                    Deep Intelligence
+                  </span>
                 </h1>
                 <p className="text-xs text-base-content/60">
-                  Powered by Firecrawl — Decode competitor landing pages, inspect structural markup, and ingest clean Markdown into Skorvia AI.
+                  Powered by Firecrawl — Decode competitor landing pages,
+                  inspect structural markup, and ingest clean Markdown into
+                  Skorvia AI.
                 </p>
               </div>
             </div>
@@ -147,12 +181,36 @@ function ScraperStudioPage() {
         {/* 6-Tab Navigation Bar */}
         <div className="flex items-center gap-2 border-b border-base-300 pb-2 overflow-x-auto text-xs font-bold">
           {[
-            { id: "scrape", label: "Scrape & PDF Parse", icon: "solar:document-text-bold" },
-            { id: "interact", label: "Interactive Actions", icon: "solar:cursor-bold" },
-            { id: "crawl", label: "Crawl & Visual Map", icon: "solar:map-point-wave-bold" },
-            { id: "search", label: "Live Web Search", icon: "solar:magnifer-bold" },
-            { id: "monitor", label: "Web Change Monitor", icon: "solar:bell-bold" },
-            { id: "agent", label: "Autonomous Research Agent", icon: "solar:stars-bold" },
+            {
+              id: "scrape",
+              label: "Scrape & PDF Parse",
+              icon: "solar:document-text-bold",
+            },
+            {
+              id: "interact",
+              label: "Interactive Actions",
+              icon: "solar:cursor-bold",
+            },
+            {
+              id: "crawl",
+              label: "Crawl & Visual Map",
+              icon: "solar:map-point-wave-bold",
+            },
+            {
+              id: "search",
+              label: "Live Web Search",
+              icon: "solar:magnifer-bold",
+            },
+            {
+              id: "monitor",
+              label: "Web Change Monitor",
+              icon: "solar:bell-bold",
+            },
+            {
+              id: "agent",
+              label: "Autonomous Research Agent",
+              icon: "solar:stars-bold",
+            },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -204,10 +262,18 @@ function ScraperStudioPage() {
                     className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
                   >
                     <Icon
-                      icon={scrapeMutation.isPending ? "solar:refresh-circle-bold" : "solar:bolt-bold"}
+                      icon={
+                        scrapeMutation.isPending
+                          ? "solar:refresh-circle-bold"
+                          : "solar:bolt-bold"
+                      }
                       className={`h-4 w-4 ${scrapeMutation.isPending ? "animate-spin" : ""}`}
                     />
-                    <span>{scrapeMutation.isPending ? "Scraping..." : "Scrape Markdown"}</span>
+                    <span>
+                      {scrapeMutation.isPending
+                        ? "Scraping..."
+                        : "Scrape Markdown"}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -217,10 +283,17 @@ function ScraperStudioPage() {
               <div className="p-6 rounded-3xl border border-base-300 bg-base-100 shadow-sm space-y-4 animate-in fade-in duration-200">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-base-200 pb-3">
                   <div>
-                    <h3 className="font-extrabold text-sm text-base-content">{scrapeResult.title}</h3>
+                    <h3 className="font-extrabold text-sm text-base-content">
+                      {scrapeResult.title}
+                    </h3>
                     <div className="text-xs text-base-content/60 flex items-center gap-3 mt-0.5">
-                      <span>📊 {scrapeResult.wordCount.toLocaleString()} words</span>
-                      <span>⚡ ~{scrapeResult.tokensSaved.toLocaleString()} tokens saved</span>
+                      <span>
+                        📊 {scrapeResult.wordCount.toLocaleString()} words
+                      </span>
+                      <span>
+                        ⚡ ~{scrapeResult.tokensSaved.toLocaleString()} tokens
+                        saved
+                      </span>
                       <span>🟢 HTTP {scrapeResult.statusCode}</span>
                     </div>
                   </div>
@@ -248,17 +321,31 @@ function ScraperStudioPage() {
         {activeTab === "interact" && (
           <div className="p-6 rounded-3xl border border-base-300 bg-base-100 shadow-sm space-y-4">
             <div className="space-y-1">
-              <h3 className="font-extrabold text-sm text-base-content">Browser Actions &amp; SPA Interaction</h3>
+              <h3 className="font-extrabold text-sm text-base-content">
+                Browser Actions &amp; SPA Interaction
+              </h3>
               <p className="text-xs text-base-content/60">
-                Execute automated clicks, accordion expansions, and dynamic JavaScript form fills before extracting page content.
+                Execute automated clicks, accordion expansions, and dynamic
+                JavaScript form fills before extracting page content.
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-base-200/40 border border-base-200 text-xs space-y-2">
-              <div className="font-bold text-base-content">Supported Interaction Actions:</div>
+              <div className="font-bold text-base-content">
+                Supported Interaction Actions:
+              </div>
               <ul className="list-disc list-inside text-base-content/70 space-y-1 pl-2 font-mono text-[11px]">
-                <li><code>click: &quot;.faq-accordion-toggle&quot;</code> — Expands hidden questions</li>
-                <li><code>scroll: 1500</code> — Triggers infinite scroll lazy-loading</li>
-                <li><code>wait: 2000</code> — Allows dynamic React hydration to finish</li>
+                <li>
+                  <code>click: &quot;.faq-accordion-toggle&quot;</code> —
+                  Expands hidden questions
+                </li>
+                <li>
+                  <code>scroll: 1500</code> — Triggers infinite scroll
+                  lazy-loading
+                </li>
+                <li>
+                  <code>wait: 2000</code> — Allows dynamic React hydration to
+                  finish
+                </li>
               </ul>
             </div>
           </div>
@@ -288,10 +375,16 @@ function ScraperStudioPage() {
                   className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 self-end"
                 >
                   <Icon
-                    icon={mapMutation.isPending ? "solar:refresh-circle-bold" : "solar:map-point-bold"}
+                    icon={
+                      mapMutation.isPending
+                        ? "solar:refresh-circle-bold"
+                        : "solar:map-point-bold"
+                    }
                     className={`h-4 w-4 ${mapMutation.isPending ? "animate-spin" : ""}`}
                   />
-                  <span>{mapMutation.isPending ? "Mapping..." : "Map All URLs"}</span>
+                  <span>
+                    {mapMutation.isPending ? "Mapping..." : "Map All URLs"}
+                  </span>
                 </button>
               </div>
             </div>
@@ -305,7 +398,9 @@ function ScraperStudioPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      void navigator.clipboard.writeText(mapResult.links.join("\n"));
+                      void navigator.clipboard.writeText(
+                        mapResult.links.join("\n"),
+                      );
                       toast.success("All URLs copied to clipboard!");
                     }}
                     className="btn btn-outline btn-xs rounded-xl font-bold gap-1"
@@ -320,7 +415,10 @@ function ScraperStudioPage() {
                       key={idx}
                       className="p-2.5 rounded-xl border border-base-200 bg-base-200/30 text-xs font-mono text-base-content/80 truncate flex items-center gap-2"
                     >
-                      <Icon icon="solar:link-linear" className="h-3.5 w-3.5 text-primary shrink-0" />
+                      <Icon
+                        icon="solar:link-linear"
+                        className="h-3.5 w-3.5 text-primary shrink-0"
+                      />
                       <span className="truncate">{link}</span>
                     </div>
                   ))}
@@ -354,10 +452,18 @@ function ScraperStudioPage() {
                   className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 self-end"
                 >
                   <Icon
-                    icon={searchMutation.isPending ? "solar:refresh-circle-bold" : "solar:magnifer-bold"}
+                    icon={
+                      searchMutation.isPending
+                        ? "solar:refresh-circle-bold"
+                        : "solar:magnifer-bold"
+                    }
                     className={`h-4 w-4 ${searchMutation.isPending ? "animate-spin" : ""}`}
                   />
-                  <span>{searchMutation.isPending ? "Searching..." : "Search & Scrape"}</span>
+                  <span>
+                    {searchMutation.isPending
+                      ? "Searching..."
+                      : "Search & Scrape"}
+                  </span>
                 </button>
               </div>
             </div>
@@ -365,12 +471,21 @@ function ScraperStudioPage() {
             {searchResult && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 {searchResult.results.map((res, idx) => (
-                  <div key={idx} className="p-5 rounded-2xl border border-base-300 bg-base-100 space-y-2 shadow-xs">
+                  <div
+                    key={idx}
+                    className="p-5 rounded-2xl border border-base-300 bg-base-100 space-y-2 shadow-xs"
+                  >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-extrabold text-sm text-primary">{res.title}</h4>
-                      <span className="text-[11px] font-mono text-base-content/50">{res.url}</span>
+                      <h4 className="font-extrabold text-sm text-primary">
+                        {res.title}
+                      </h4>
+                      <span className="text-[11px] font-mono text-base-content/50">
+                        {res.url}
+                      </span>
                     </div>
-                    <p className="text-xs text-base-content/70 leading-relaxed">{res.description}</p>
+                    <p className="text-xs text-base-content/70 leading-relaxed">
+                      {res.description}
+                    </p>
                     <pre className="p-3 rounded-xl bg-base-200/40 text-[11px] font-mono whitespace-pre-wrap max-h-32 overflow-y-auto border border-base-200">
                       {res.markdown}
                     </pre>
@@ -386,9 +501,12 @@ function ScraperStudioPage() {
           <div className="p-6 rounded-3xl border border-base-300 bg-base-100 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-base-200 pb-4">
               <div>
-                <h3 className="font-extrabold text-sm text-base-content">Competitor Web Change Monitor</h3>
+                <h3 className="font-extrabold text-sm text-base-content">
+                  Competitor Web Change Monitor
+                </h3>
                 <p className="text-xs text-base-content/60">
-                  Monitors competitor landing pages for pricing shifts, schema changes, and heading edits every 24 hours.
+                  Monitors competitor landing pages for pricing shifts, schema
+                  changes, and heading edits every 24 hours.
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -405,7 +523,12 @@ function ScraperStudioPage() {
                     if (!newMonitorUrl) return;
                     setMonitoredUrls([
                       ...monitoredUrls,
-                      { url: newMonitorUrl, lastCheck: "Just now", status: "Active 🟢", changes: "Monitoring started" },
+                      {
+                        url: newMonitorUrl,
+                        lastCheck: "Just now",
+                        status: "Active 🟢",
+                        changes: "Monitoring started",
+                      },
                     ]);
                     setNewMonitorUrl("");
                     toast.success("Competitor URL added to monitor queue");
@@ -430,12 +553,18 @@ function ScraperStudioPage() {
                 <tbody className="divide-y divide-base-200">
                   {monitoredUrls.map((item, idx) => (
                     <tr key={idx}>
-                      <td className="font-mono text-xs font-bold text-base-content">{item.url}</td>
+                      <td className="font-mono text-xs font-bold text-base-content">
+                        {item.url}
+                      </td>
                       <td className="text-base-content/60">{item.lastCheck}</td>
                       <td>
-                        <span className="badge badge-sm font-bold badge-success text-[10px]">{item.status}</span>
+                        <span className="badge badge-sm font-bold badge-success text-[10px]">
+                          {item.status}
+                        </span>
                       </td>
-                      <td className="text-base-content/80 font-medium">{item.changes}</td>
+                      <td className="text-base-content/80 font-medium">
+                        {item.changes}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -449,11 +578,16 @@ function ScraperStudioPage() {
           <div className="p-6 rounded-3xl border border-base-300 bg-base-100 shadow-sm space-y-6">
             <div className="space-y-2">
               <h3 className="font-extrabold text-sm text-base-content flex items-center gap-2">
-                <Icon icon="solar:stars-bold" className="h-5 w-5 text-primary" />
+                <Icon
+                  icon="solar:stars-bold"
+                  className="h-5 w-5 text-primary"
+                />
                 <span>Autonomous AI Web Research Agent</span>
               </h3>
               <p className="text-xs text-base-content/60">
-                Give the agent a complex competitor research task. It autonomously searches, crawls multiple domains, and compiles an executive report.
+                Give the agent a complex competitor research task. It
+                autonomously searches, crawls multiple domains, and compiles an
+                executive report.
               </p>
             </div>
 
@@ -472,17 +606,27 @@ function ScraperStudioPage() {
                 className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/25 gap-2"
               >
                 <Icon
-                  icon={agentRunning ? "solar:refresh-circle-bold" : "solar:magic-stick-3-bold"}
+                  icon={
+                    agentRunning
+                      ? "solar:refresh-circle-bold"
+                      : "solar:magic-stick-3-bold"
+                  }
                   className={`h-4 w-4 ${agentRunning ? "animate-spin" : ""}`}
                 />
-                <span>{agentRunning ? "Agent is Researching Live Web..." : "Run Autonomous Research"}</span>
+                <span>
+                  {agentRunning
+                    ? "Agent is Researching Live Web..."
+                    : "Run Autonomous Research"}
+                </span>
               </button>
             </div>
 
             {agentReport && (
               <div className="p-5 rounded-2xl border border-primary/20 bg-primary/5 space-y-3 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between border-b border-primary/10 pb-2">
-                  <div className="text-xs font-black uppercase text-primary">Executive Research Briefing</div>
+                  <div className="text-xs font-black uppercase text-primary">
+                    Executive Research Briefing
+                  </div>
                   <button
                     type="button"
                     onClick={() => {

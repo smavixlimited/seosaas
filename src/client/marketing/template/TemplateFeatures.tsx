@@ -185,4 +185,3 @@ export function TemplateFeatures() {
     </section>
   );
 }
-export default TemplateFeatures;
