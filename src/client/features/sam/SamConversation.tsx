@@ -93,13 +93,18 @@ export function SamConversation({
       !messageHasVisibleContent(lastMessage));
   const showSuggestions = messages.length === 0 && !isBusy;
 
-  // Auto-execute pending strategy prompt passed from Strategy Decoder
+  // Auto-execute pending strategy prompt passed from Roadmap, Strategy Decoder, or Ad Readiness
+  const executedPendingPromptRef = useRef(false);
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || executedPendingPromptRef.current) return;
     const pendingPrompt = sessionStorage.getItem("sam_pending_prompt");
     if (pendingPrompt && !isBusy) {
+      executedPendingPromptRef.current = true;
       sessionStorage.removeItem("sam_pending_prompt");
-      sendText(pendingPrompt);
+      const timer = setTimeout(() => {
+        sendText(pendingPrompt);
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [isBusy]);
 

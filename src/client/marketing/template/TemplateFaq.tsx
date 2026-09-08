@@ -62,7 +62,7 @@ export function TemplateFaq() {
                       </span>
                     </div>
                     {isOpen && (
-                      <p className="mt-3 text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed border-t border-stroke-3/50 dark:border-stroke-7 pt-3">
+                      <p className="mt-3 text-tagline-2 text-secondary dark:text-accent leading-relaxed border-t border-stroke-3/50 dark:border-stroke-7 pt-3">
                         {item.a}
                       </p>
                     )}
@@ -85,7 +85,7 @@ export function TemplateFaq() {
                   <span className="size-3 rounded-full bg-rose-500 inline-block" />
                   <span className="size-3 rounded-full bg-amber-500 inline-block" />
                   <span className="size-3 rounded-full bg-emerald-500 inline-block" />
-                  <span className="text-xs font-bold text-secondary/60 dark:text-accent/60 ml-2 font-mono">
+                  <span className="text-xs font-bold text-secondary dark:text-accent ml-2 font-mono">
                     skorvia.intelligence.live
                   </span>
                 </div>
@@ -95,23 +95,23 @@ export function TemplateFaq() {
               {/* Central Visual Graphic */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-2xl border border-stroke-3/60 dark:border-stroke-7 bg-white/80 dark:bg-background-6/80 p-4 shadow-2xs space-y-2">
-                  <div className="flex items-center justify-between text-xs text-secondary/60 dark:text-accent/60 font-semibold">
+                  <div className="flex items-center justify-between text-xs text-secondary dark:text-accent font-semibold">
                     <span>Rank Health</span>
                     <span className="text-emerald-500 font-bold">+18.4%</span>
                   </div>
-                  <div className="text-2xl font-black text-secondary dark:text-accent">94.8<span className="text-xs text-secondary/50 dark:text-accent/50">/100</span></div>
+                  <div className="text-2xl font-black text-secondary dark:text-accent">94.8<span className="text-xs text-secondary dark:text-accent">/100</span></div>
                   <div className="w-full bg-stroke-3 dark:bg-stroke-7 h-1.5 rounded-full overflow-hidden">
                     <div className="bg-emerald-500 h-full w-[94.8%]" />
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-stroke-3/60 dark:border-stroke-7 bg-white/80 dark:bg-background-6/80 p-4 shadow-2xs space-y-2">
-                  <div className="flex items-center justify-between text-xs text-secondary/60 dark:text-accent/60 font-semibold">
+                  <div className="flex items-center justify-between text-xs text-secondary dark:text-accent font-semibold">
                     <span>AI Citations</span>
                     <span className="badge badge-green text-[10px]">#1 Ranked</span>
                   </div>
                   <div className="text-2xl font-black text-secondary dark:text-accent">4 LLMs</div>
-                  <p className="text-[11px] text-secondary/50 dark:text-accent/50">ChatGPT, Claude, Perplexity</p>
+                  <p className="text-[11px] text-secondary dark:text-accent">ChatGPT, Claude, Perplexity</p>
                 </div>
               </div>
 
@@ -128,7 +128,7 @@ export function TemplateFaq() {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-secondary dark:text-accent">{pillar.title}</h4>
-                      <p className="text-[11px] text-secondary/60 dark:text-accent/60">{pillar.subtitle}</p>
+                      <p className="text-[11px] text-secondary dark:text-accent">{pillar.subtitle}</p>
                     </div>
                   </div>
                 ))}

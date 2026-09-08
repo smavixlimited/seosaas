@@ -12,7 +12,7 @@ export function TemplateNumbers() {
               <h2 className="text-heading-4 sm:text-heading-3 md:text-heading-2 font-bold text-secondary dark:text-accent">
                 Proven search impact that compounds monthly.
               </h2>
-              <p className="max-w-[780px] text-tagline-1 text-secondary/60 dark:text-accent/60 leading-relaxed">
+              <p className="max-w-[780px] text-tagline-1 text-secondary dark:text-accent leading-relaxed">
                 Our high-throughput data engines process millions of daily SERP data points, competitor ad variations, and citation graphs with enterprise precision.
               </p>
             </div>
@@ -32,7 +32,7 @@ export function TemplateNumbers() {
                 <p className="text-heading-2 font-bold text-secondary dark:text-accent flex items-center">
                   83<span className="text-primary-500 font-bold ml-0.5">%</span>
                 </p>
-                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 font-medium">
+                <p className="text-tagline-2 text-secondary dark:text-accent font-medium">
                   Avg. Page-1 Opportunity Win Rate
                 </p>
               </div>
@@ -50,7 +50,7 @@ export function TemplateNumbers() {
                 <p className="text-heading-2 font-bold text-secondary dark:text-accent flex items-center">
                   99.8<span className="text-primary-500 font-bold ml-0.5">%</span>
                 </p>
-                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60 font-medium">
+                <p className="text-tagline-2 text-secondary dark:text-accent font-medium">
                   Real-Time Verified Accuracy
                 </p>
               </div>

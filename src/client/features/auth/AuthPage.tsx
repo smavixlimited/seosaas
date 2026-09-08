@@ -33,13 +33,11 @@ export function AuthMethodChooser({
   isBusy,
   disabled,
   onContinueWithGoogle,
-  onContinueWithEmail,
 }: {
   googleLabel: string;
   isBusy?: boolean;
   disabled?: boolean;
   onContinueWithGoogle: () => void;
-  onContinueWithEmail?: () => void;
 }) {
   return (
     <div className="space-y-3 w-full">
@@ -60,16 +58,6 @@ export function AuthMethodChooser({
         >
           <GoogleLogo />
           <span>{googleLabel || "Continue with Google"}</span>
-        </button>
-
-        <button
-          type="button"
-          className="btn-social-auth"
-          onClick={onContinueWithGoogle}
-          disabled={disabled || isBusy}
-        >
-          <Icon icon="solar:apple-bold" className="size-5" />
-          <span>Continue with Apple</span>
         </button>
       </div>
     </div>

@@ -21,14 +21,36 @@ export const authClient = createAuthClient({
 
 export const { useSession } = authClient;
 
-export function signOutAndRedirect() {
-  const signInHref = getSignInHrefForLocation(window.location);
+export function signOutAndRedirect(targetHref = "/sign-in") {
   captureClientEvent("auth:sign_out");
   resetAnalyticsUser();
+
+  if (typeof window !== "undefined") {
+    try {
+      // Cleanly destroy all active browser session and cache state
+      sessionStorage.clear();
+      localStorage.removeItem("sam_pending_prompt");
+      localStorage.removeItem("better-auth.session_data");
+      localStorage.removeItem("open_seo_session");
+    } catch {
+      // Ignore storage errors
+    }
+  }
+
+  const navigateToCleanSignIn = () => {
+    if (typeof window !== "undefined") {
+      // Use clean URL without any redirect parameter
+      window.location.assign(targetHref);
+    }
+  };
+
   void authClient.signOut({
     fetchOptions: {
       onSuccess: () => {
-        window.location.assign(signInHref);
+        navigateToCleanSignIn();
+      },
+      onError: () => {
+        navigateToCleanSignIn();
       },
     },
   });

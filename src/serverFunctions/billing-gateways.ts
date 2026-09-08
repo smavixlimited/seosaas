@@ -34,9 +34,11 @@ export const getPublicGatewaysServerFn = createServerFn({
   };
 });
 
-const checkoutSchema = z.object({
+const paystackCheckoutSchema = z.object({
   planId: z.string(),
   amountNgn: z.number(),
+  organizationId: z.string().optional(),
+  couponCode: z.string().optional(),
   callbackUrl: z.string().optional(),
 });
 
@@ -44,13 +46,67 @@ export const initializePaystackCheckoutServerFn = createServerFn({
   method: "POST",
 })
   .middleware(requireAuthenticatedContext)
-  .validator((d: unknown) => checkoutSchema.parse(d))
+  .validator((d: unknown) => paystackCheckoutSchema.parse(d))
   .handler(async ({ data, context }) => {
     return initializePaystackCheckout({
       email: context.userEmail,
       userId: context.userId,
       planId: data.planId,
       amountNgn: data.amountNgn,
+      organizationId: data.organizationId || context.organizationId,
+      couponCode: data.couponCode,
+      callbackUrl: data.callbackUrl,
+    });
+  });
+
+const flutterwaveCheckoutSchema = z.object({
+  planId: z.string(),
+  amount: z.number(),
+  currency: z.string().optional(),
+  organizationId: z.string().optional(),
+  couponCode: z.string().optional(),
+  callbackUrl: z.string().optional(),
+});
+
+export const initializeFlutterwaveCheckoutServerFn = createServerFn({
+  method: "POST",
+})
+  .middleware(requireAuthenticatedContext)
+  .validator((d: unknown) => flutterwaveCheckoutSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    const { initializeFlutterwaveCheckout } = await import("@/services/billing.service");
+    return initializeFlutterwaveCheckout({
+      email: context.userEmail,
+      userId: context.userId,
+      planId: data.planId,
+      amount: data.amount,
+      currency: data.currency,
+      organizationId: data.organizationId || context.organizationId,
+      couponCode: data.couponCode,
+      callbackUrl: data.callbackUrl,
+    });
+  });
+
+const lemonsqueezyCheckoutSchema = z.object({
+  planId: z.string(),
+  organizationId: z.string().optional(),
+  couponCode: z.string().optional(),
+  callbackUrl: z.string().optional(),
+});
+
+export const initializeLemonSqueezyCheckoutServerFn = createServerFn({
+  method: "POST",
+})
+  .middleware(requireAuthenticatedContext)
+  .validator((d: unknown) => lemonsqueezyCheckoutSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    const { initializeLemonSqueezyCheckout } = await import("@/services/billing.service");
+    return initializeLemonSqueezyCheckout({
+      email: context.userEmail,
+      userId: context.userId,
+      planId: data.planId,
+      organizationId: data.organizationId || context.organizationId,
+      couponCode: data.couponCode,
       callbackUrl: data.callbackUrl,
     });
   });

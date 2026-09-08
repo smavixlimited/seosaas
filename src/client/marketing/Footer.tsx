@@ -23,7 +23,7 @@ export function MarketingFooter() {
                 {BRAND_CONFIG.name}
               </span>
             </Link>
-            <p className="text-tagline-2 text-white/60 max-w-[280px] leading-relaxed">
+            <p className="text-tagline-2 text-white max-w-[280px] leading-relaxed">
               The modern search intelligence workspace. Flat-rate search data,
               multi-network competitor ad spying, and AI citation radar with
               zero user seat taxes.
@@ -40,7 +40,7 @@ export function MarketingFooter() {
             <h4 className="text-tagline-1 font-bold text-white uppercase tracking-wider text-xs font-interTight">
               Product
             </h4>
-            <ul className="space-y-2.5 text-tagline-2 text-white/70">
+            <ul className="space-y-2.5 text-tagline-2 text-white">
               <li>
                 <Link
                   to="/features/competitor-page-decoder"
@@ -97,7 +97,7 @@ export function MarketingFooter() {
             <h4 className="text-tagline-1 font-bold text-white uppercase tracking-wider text-xs font-interTight">
               Solutions
             </h4>
-            <ul className="space-y-2.5 text-tagline-2 text-white/70">
+            <ul className="space-y-2.5 text-tagline-2 text-white">
               <li>
                 <Link
                   to="/solutions/for-agencies"
@@ -146,13 +146,13 @@ export function MarketingFooter() {
             <h4 className="text-tagline-1 font-bold text-white uppercase tracking-wider text-xs font-interTight">
               Comparisons
             </h4>
-            <ul className="space-y-2.5 text-tagline-2 text-white/70">
+            <ul className="space-y-2.5 text-tagline-2 text-white">
               <li>
                 <Link
                   to="/vs-ahrefs-semrush"
                   className="hover:text-white transition-colors"
                 >
-                  vs Semrush
+                  vs Ahrefs &amp; Semrush
                 </Link>
               </li>
               <li>
@@ -179,14 +179,6 @@ export function MarketingFooter() {
                   vs SE Ranking
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/vs-ahrefs-semrush"
-                  className="hover:text-white transition-colors"
-                >
-                  Feature Matrix
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -195,7 +187,7 @@ export function MarketingFooter() {
             <h4 className="text-tagline-1 font-bold text-white uppercase tracking-wider text-xs font-interTight">
               Resources
             </h4>
-            <ul className="space-y-2.5 text-tagline-2 text-white/70">
+            <ul className="space-y-2.5 text-tagline-2 text-white">
               <li>
                 <Link
                   to="/blogs"
@@ -233,7 +225,7 @@ export function MarketingFooter() {
             <h4 className="text-tagline-1 font-bold text-white uppercase tracking-wider text-xs font-interTight">
               Company
             </h4>
-            <ul className="space-y-2.5 text-tagline-2 text-white/70">
+            <ul className="space-y-2.5 text-tagline-2 text-white">
               <li>
                 <Link
                   to="/about"

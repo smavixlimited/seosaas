@@ -7,6 +7,8 @@ import {
   getConversionReadiness,
   runConversionReadinessAudit,
 } from "@/serverFunctions/conversion-readiness";
+import { createSamSession } from "@/serverFunctions/sam";
+import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import type {
   ConversionAuditResult,
   RecommendedFixItem,
@@ -24,26 +26,34 @@ export function AdReadinessScoreWidget({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isLaunchingAi, setIsLaunchingAi] = React.useState(false);
+
+  const cleanDomain = (targetDomain || "yourdomain.com")
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/\/.*$/, "");
+
+  const targetUrl = `https://${cleanDomain}`;
 
   const auditQuery = useQuery({
-    queryKey: ["conversionReadiness", projectId],
-    queryFn: () => getConversionReadiness({ data: {} }),
-    staleTime: 5 * 60 * 1000,
+    queryKey: ["conversionReadiness", projectId, cleanDomain],
+    queryFn: () =>
+      getConversionReadiness({
+        data: { projectId, targetUrl },
+      }),
   });
 
   const runAuditMutation = useMutation({
     mutationFn: () =>
       runConversionReadinessAudit({
-        data: {
-          targetUrl: targetDomain
-            ? targetDomain.startsWith("http")
-              ? targetDomain
-              : `https://${targetDomain}`
-            : "https://yourdomain.com",
-        },
+        data: { projectId, targetUrl },
       }),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["conversionReadiness", projectId], data);
+    onSuccess: (freshData) => {
+      queryClient.setQueryData(
+        ["conversionReadiness", projectId, cleanDomain],
+        freshData,
+      );
       toast.success("Conversion & Ad Readiness Audit completed!");
     },
     onError: (err: Error) => {
@@ -51,16 +61,32 @@ export function AdReadinessScoreWidget({
     },
   });
 
-  const handleLaunchSamForFix = (fix: RecommendedFixItem) => {
+  const handleLaunchSamForFix = async (fix: RecommendedFixItem) => {
+    setIsLaunchingAi(true);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("sam_pending_prompt", fix.suggestedPromptForSam);
     }
-    toast.success("Opening SAM AI with conversion optimization prompt...");
-    void navigate({
-      to: "/p/$projectId/sam",
-      params: { projectId },
-      search: { s: undefined },
-    });
+    toast.success("Starting new chat with Skorvia AI...");
+    try {
+      const { id: newSessionId } = await createSamSession({
+        data: { projectId },
+      });
+      invalidateSamSessions(projectId);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: newSessionId },
+      });
+    } catch (err) {
+      console.warn("Error creating chat session:", err);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: undefined },
+      });
+    } finally {
+      setIsLaunchingAi(false);
+    }
   };
 
   const report = auditQuery.data as ConversionAuditResult | undefined;
@@ -367,6 +393,7 @@ export function AdReadinessScoreWidget({
 
                     <button
                       type="button"
+                      disabled={isLaunchingAi}
                       onClick={() => {
                         setIsModalOpen(false);
                         handleLaunchSamForFix(fix);
@@ -377,7 +404,7 @@ export function AdReadinessScoreWidget({
                         icon="solar:bolt-circle-bold"
                         className="h-3.5 w-3.5"
                       />
-                      <span>Fix with SAM AI</span>
+                      <span>Fix with Skorvia AI</span>
                     </button>
                   </div>
                 ))}

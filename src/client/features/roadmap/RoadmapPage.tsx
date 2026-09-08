@@ -10,6 +10,8 @@ import {
   createRoadmapTask,
   syncRoadmapLiveCrawl,
 } from "@/serverFunctions/roadmap";
+import { createSamSession } from "@/serverFunctions/sam";
+import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import type {
   RoadmapTaskItem,
   RoadmapCategory,
@@ -37,7 +39,7 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
 
   const roadmapQuery = useQuery({
     queryKey: ["projectRoadmap", projectId],
-    queryFn: () => getProjectRoadmap({}),
+    queryFn: () => getProjectRoadmap({ data: { projectId } }),
     staleTime: 60 * 1000,
   });
 
@@ -45,6 +47,7 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
     mutationFn: (vars: { taskId: string; status: RoadmapStatus }) =>
       updateRoadmapTask({
         data: {
+          projectId,
           taskId: vars.taskId,
           status: vars.status,
           verificationType: "manual",
@@ -68,7 +71,7 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
   const aiFixMutation = useMutation({
     mutationFn: (vars: { taskId: string }) =>
       generateRoadmapAiFix({
-        data: { taskId: vars.taskId },
+        data: { projectId, taskId: vars.taskId },
       }),
     onSuccess: (res) => {
       void queryClient.invalidateQueries({
@@ -83,7 +86,7 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
   });
 
   const syncCrawlMutation = useMutation({
-    mutationFn: () => syncRoadmapLiveCrawl({}),
+    mutationFn: () => syncRoadmapLiveCrawl({ data: { projectId } }),
     onSuccess: (res) => {
       void queryClient.invalidateQueries({
         queryKey: ["projectRoadmap", projectId],
@@ -103,16 +106,41 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
     },
   });
 
-  const handleLaunchSam = (task: RoadmapTaskItem) => {
-    if (typeof window !== "undefined" && task.aiPrompt) {
-      sessionStorage.setItem("sam_pending_prompt", task.aiPrompt);
+  const [launchingTaskId, setLaunchingTaskId] = React.useState<string | null>(
+    null,
+  );
+
+  const handleLaunchSam = async (task: RoadmapTaskItem) => {
+    setLaunchingTaskId(task.id);
+    const prompt =
+      task.aiPrompt?.trim() ||
+      `I need help fixing this Roadmap item: "${task.title}".\n\nProblem Description: ${task.description}\nCategory: ${task.category.toUpperCase()}\nPriority: ${task.priority.toUpperCase()}\n${task.targetUrl ? `Target URL: ${task.targetUrl}\n` : ""}Source: ${task.sourceType}\n\nPlease analyze our brand context, diagnose the core issue, and provide a complete, verified, high-converting fix and implementation plan.`;
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("sam_pending_prompt", prompt);
     }
-    toast.success("Opening SAM AI with task context...");
-    void navigate({
-      to: "/p/$projectId/sam",
-      params: { projectId },
-      search: { s: undefined },
-    });
+    toast.success("Starting new chat with Skorvia AI...");
+
+    try {
+      const { id: newSessionId } = await createSamSession({
+        data: { projectId },
+      });
+      invalidateSamSessions(projectId);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: newSessionId },
+      });
+    } catch (err: any) {
+      console.warn("Failed to create new chat session:", err);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: undefined },
+      });
+    } finally {
+      setLaunchingTaskId(null);
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -519,14 +547,25 @@ export function RoadmapPage({ projectId }: RoadmapPageProps) {
 
                       <button
                         type="button"
+                        disabled={launchingTaskId === task.id}
                         onClick={() => handleLaunchSam(task)}
-                        className="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary/90 text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary/90 text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs transition-colors disabled:opacity-50"
                       >
                         <Icon
-                          icon="solar:chat-round-line-bold"
-                          className="h-3.5 w-3.5"
+                          icon={
+                            launchingTaskId === task.id
+                              ? "solar:restart-bold"
+                              : "solar:chat-round-line-bold"
+                          }
+                          className={`h-3.5 w-3.5 ${
+                            launchingTaskId === task.id ? "animate-spin" : ""
+                          }`}
                         />
-                        <span>Fix with SAM AI</span>
+                        <span>
+                          {launchingTaskId === task.id
+                            ? "Starting Skorvia AI..."
+                            : "Fix with Skorvia AI"}
+                        </span>
                       </button>
                     </div>
                   </div>

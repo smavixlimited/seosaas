@@ -7,6 +7,8 @@ import {
   getCompetitorStrategy,
   regenerateCompetitorStrategy,
 } from "@/serverFunctions/competitor-strategy";
+import { createSamSession } from "@/serverFunctions/sam";
+import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import type {
   CompetitorStrategyTeardown,
   AttackPlayItem,
@@ -25,6 +27,7 @@ export function CompetitorStrategyTab({
 }: CompetitorStrategyTabProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isLaunchingAi, setIsLaunchingAi] = React.useState(false);
 
   const strategyQuery = useQuery({
     queryKey: ["competitorStrategy", projectId, domain, locationCode],
@@ -58,21 +61,39 @@ export function CompetitorStrategyTab({
     },
   });
 
-  const handleExecuteWithSam = (play: AttackPlayItem) => {
+  const handleExecuteWithSam = async (play: AttackPlayItem) => {
+    setIsLaunchingAi(true);
     // Store in session storage so SAM chat can grab and execute
     if (typeof window !== "undefined") {
       sessionStorage.setItem("sam_pending_prompt", play.suggestedPromptForSam);
     }
 
-    toast.success(`Strategy play loaded! Launching SAM AI...`);
+    toast.success(`Starting new chat with Skorvia AI...`);
 
-    void navigate({
-      to: "/p/$projectId/sam",
-      params: { projectId },
-      search: {
-        s: undefined,
-      },
-    });
+    try {
+      const { id: newSessionId } = await createSamSession({
+        data: { projectId },
+      });
+      invalidateSamSessions(projectId);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: {
+          s: newSessionId,
+        },
+      });
+    } catch (err) {
+      console.warn("Failed to create chat session:", err);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: {
+          s: undefined,
+        },
+      });
+    } finally {
+      setIsLaunchingAi(false);
+    }
   };
 
   const report = strategyQuery.data as CompetitorStrategyTeardown | undefined;
@@ -597,14 +618,15 @@ export function CompetitorStrategyTab({
                 </div>
               </div>
 
-              {/* 1-Click SAM AI Execution Button */}
+              {/* 1-Click Skorvia AI Execution Button */}
               <button
                 type="button"
+                disabled={isLaunchingAi}
                 onClick={() => handleExecuteWithSam(play)}
                 className="w-full py-2 px-3 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold shadow-sm flex items-center justify-center gap-1.5 transition-all"
               >
                 <Icon icon="solar:bolt-circle-bold" className="h-4 w-4" />
-                <span>Execute with SAM AI</span>
+                <span>Execute with Skorvia AI</span>
               </button>
             </div>
           ))}

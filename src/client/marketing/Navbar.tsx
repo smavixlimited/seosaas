@@ -5,7 +5,6 @@ import { BRAND_CONFIG } from "@/config/brand";
 import { useSession } from "@/lib/auth-client";
 import { useThemePreference } from "@/client/lib/theme";
 import { CurrencyDropdown } from "@/client/lib/currency";
-import { LanguageDropdown } from "@/client/lib/language";
 
 interface MenuItemLinkProps {
   href: string;
@@ -375,7 +374,7 @@ export function MarketingNavbar() {
             >
               <button
                 type="button"
-                className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
+                className={`text-tagline-2 text-secondary hover:text-secondary dark:text-accent dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
                   activeDropdown === "platform"
                     ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
                     : ""
@@ -402,7 +401,7 @@ export function MarketingNavbar() {
             >
               <button
                 type="button"
-                className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
+                className={`text-tagline-2 text-secondary hover:text-secondary dark:text-accent dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
                   activeDropdown === "solutions"
                     ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
                     : ""
@@ -429,7 +428,7 @@ export function MarketingNavbar() {
             >
               <button
                 type="button"
-                className={`text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
+                className={`text-tagline-2 text-secondary hover:text-secondary dark:text-accent dark:hover:text-accent flex items-center gap-1.5 rounded-full px-4 py-2 font-medium transition-colors ${
                   activeDropdown === "resources"
                     ? "text-secondary dark:text-accent bg-base-200/60 dark:bg-white/10"
                     : ""
@@ -453,7 +452,7 @@ export function MarketingNavbar() {
               <Link
                 to="/pricing"
                 onClick={closeDropdown}
-                className="text-tagline-2 text-secondary/70 hover:text-secondary dark:text-accent/70 dark:hover:text-accent px-4 py-2 font-medium transition-colors rounded-full block"
+                className="text-tagline-2 text-secondary hover:text-secondary dark:text-accent dark:hover:text-accent px-4 py-2 font-medium transition-colors rounded-full block"
               >
                 Pricing
               </Link>
@@ -466,15 +465,12 @@ export function MarketingNavbar() {
           <div className="hidden md:block">
             <CurrencyDropdown />
           </div>
-          <div className="hidden lg:block">
-            <LanguageDropdown />
-          </div>
 
           {/* Theme Switcher */}
           <button
             type="button"
             onClick={toggleTheme}
-            className="size-8 rounded-full flex items-center justify-center text-secondary/70 dark:text-accent/70 hover:bg-stroke-3/50 dark:hover:bg-stroke-7 transition-colors cursor-pointer"
+            className="size-8 rounded-full flex items-center justify-center text-secondary dark:text-accent hover:bg-stroke-3/50 dark:hover:bg-stroke-7 transition-colors cursor-pointer"
             aria-label="Toggle theme"
           >
             <Icon
@@ -619,13 +615,17 @@ export function MarketingNavbar() {
             </div>
           </div>
 
+          <div className="pt-2 border-t border-stroke-3/50 flex items-center justify-between gap-2">
+            <CurrencyDropdown />
+          </div>
+
           <div className="pt-2 border-t border-stroke-3/50 flex flex-col gap-2">
             {!session?.user ? (
               <>
                 <Link
                   to="/sign-in"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="btn btn-soft w-full rounded-full text-xs font-bold py-2.5 text-center"
+                  className="btn border border-stroke-3 dark:border-stroke-7 bg-base-100 hover:bg-base-200 dark:bg-background-7 text-secondary dark:text-accent w-full rounded-full text-xs font-bold py-2.5 text-center transition-all"
                 >
                   Sign In
                 </Link>

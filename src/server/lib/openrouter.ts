@@ -4,61 +4,140 @@ import {
 } from "@openrouter/ai-sdk-provider";
 import {
   getOptionalEnvValue,
-  getRequiredEnvValue,
 } from "@/server/lib/runtime-env";
 
 // OpenRouter model slug used for the in-app chat agents (onboarding + SAM).
 // Override with OPENROUTER_MODEL to swap models without a code change.
 const DEFAULT_CHAT_AGENT_MODEL = "minimax/minimax-m3";
 
-/**
- * Returns the AI SDK LanguageModel for the chat agents. `usage: { include: true }`
- * turns on OpenRouter usage accounting so each response carries its real USD
- * cost (providerMetadata.openrouter.usage.cost) — which we meter against the
- * shared usage-credit pool. `provider.order` prefers Together, then Atlas
- * Cloud (fp8); `zdr: true` restricts routing to Zero-Data-Retention endpoints
- * (prompts are never retained), which is the actual constraint — it excludes
- * MiniMax first-party without a hand-maintained allowlist. The account also
- * enforces this ("Non-frontier requires ZDR" data policy); the request-level
- * flag is belt-and-braces so the constraint survives a dashboard change.
- * Fallbacks stay on within the ZDR set because pinning providers caused a
- * prod outage (Jul 2026: Together upstream-rate-limited m3 and every chat
- * turn 429'd); as of Jul 2026 the ZDR set for m3 is Together/AtlasCloud/
- * Novita/Parasail at the same price plus Morph at 2x output as a last resort.
- *
- * `reasoning` turns on OpenRouter's reasoning-token channel so the model's
- * chain-of-thought comes back as a separate reasoning stream instead of
- * leaking into the visible answer text (MiniMax M3 otherwise dumps its
- * `<think>` trace inline). `effort: "medium"` is OpenRouter's default —
- * stated explicitly only because the SDK type requires one once the channel
- * is configured.
- */
-export async function getChatAgentModel(): Promise<LanguageModelV3> {
-  let apiKey: string | undefined;
-  let modelId: string | undefined;
+export interface ResolvedLlmConfig {
+  provider: "openrouter" | "openai" | "gemini" | "anthropic";
+  apiKey: string;
+  modelId: string;
+  baseURL?: string;
+}
 
+/**
+ * Resolves the active LLM configuration by checking configured API keys in priority:
+ * 1. OpenRouter (Default / Preferred)
+ * 2. OpenAI
+ * 3. Google Gemini
+ * 4. Anthropic
+ */
+export async function resolveActiveLlmConfig(): Promise<ResolvedLlmConfig | null> {
+  let aiSettings: any = null;
   try {
-    const { SystemSettingsService } =
-      await import("@/services/system-settings.service");
-    const aiSettings = await SystemSettingsService.getAiApis();
-    if (aiSettings?.openrouterApiKey) {
-      apiKey = aiSettings.openrouterApiKey;
-    }
-    if (aiSettings?.defaultModel) {
-      modelId = aiSettings.defaultModel;
-    }
+    const { SystemSettingsService } = await import(
+      "@/services/system-settings.service"
+    );
+    aiSettings = await SystemSettingsService.getAiApis();
   } catch {
     // fallback to env
   }
 
-  if (!apiKey) {
-    apiKey = await getRequiredEnvValue("OPENROUTER_API_KEY");
-  }
-  if (!modelId) {
-    modelId = await getOptionalEnvValue("OPENROUTER_MODEL");
+  // 1. OpenRouter (Default)
+  const openrouterKey =
+    aiSettings?.openrouterApiKey ||
+    (await getOptionalEnvValue("OPENROUTER_API_KEY"));
+  if (openrouterKey && openrouterKey.trim().length > 0) {
+    const modelId =
+      aiSettings?.defaultModel ||
+      (await getOptionalEnvValue("OPENROUTER_MODEL")) ||
+      DEFAULT_CHAT_AGENT_MODEL;
+    return {
+      provider: "openrouter",
+      apiKey: openrouterKey.trim(),
+      modelId,
+    };
   }
 
-  return buildChatAgentModel(apiKey, modelId);
+  // 2. OpenAI
+  const openaiKey =
+    aiSettings?.openaiApiKey ||
+    (await getOptionalEnvValue("OPENAI_API_KEY"));
+  if (openaiKey && openaiKey.trim().length > 0) {
+    const modelId =
+      (aiSettings?.defaultModel &&
+      (aiSettings.defaultModel.startsWith("gpt-") ||
+        aiSettings.defaultModel.startsWith("o1") ||
+        aiSettings.defaultModel.startsWith("o3"))
+        ? aiSettings.defaultModel
+        : null) ||
+      (await getOptionalEnvValue("OPENAI_MODEL")) ||
+      "gpt-4o-mini";
+    return {
+      provider: "openai",
+      apiKey: openaiKey.trim(),
+      modelId,
+      baseURL: "https://api.openai.com/v1",
+    };
+  }
+
+  // 3. Google Gemini
+  const geminiKey =
+    aiSettings?.geminiApiKey ||
+    (await getOptionalEnvValue("GEMINI_API_KEY")) ||
+    (await getOptionalEnvValue("GOOGLE_GENERATIVE_AI_API_KEY"));
+  if (geminiKey && geminiKey.trim().length > 0) {
+    const modelId =
+      (aiSettings?.defaultModel &&
+      aiSettings.defaultModel.startsWith("gemini-")
+        ? aiSettings.defaultModel
+        : null) ||
+      (await getOptionalEnvValue("GEMINI_MODEL")) ||
+      "gemini-2.0-flash";
+    return {
+      provider: "gemini",
+      apiKey: geminiKey.trim(),
+      modelId,
+      baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
+    };
+  }
+
+  // 4. Anthropic
+  const anthropicKey =
+    aiSettings?.anthropicApiKey ||
+    (await getOptionalEnvValue("ANTHROPIC_API_KEY"));
+  if (anthropicKey && anthropicKey.trim().length > 0) {
+    const modelId =
+      (aiSettings?.defaultModel &&
+      aiSettings.defaultModel.startsWith("claude-")
+        ? aiSettings.defaultModel
+        : null) ||
+      (await getOptionalEnvValue("ANTHROPIC_MODEL")) ||
+      "claude-3-5-sonnet";
+    return {
+      provider: "anthropic",
+      apiKey: anthropicKey.trim(),
+      modelId,
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Returns the AI SDK LanguageModel for chat agents and generative services.
+ * Automatically checks OpenRouter, OpenAI, Gemini, Anthropic in priority order.
+ */
+export async function getChatAgentModel(): Promise<LanguageModelV3> {
+  const resolved = await resolveActiveLlmConfig();
+
+  if (!resolved) {
+    throw new Error(
+      "No active AI provider key configured. Please set an OpenRouter, OpenAI, or Gemini API key in System Settings or environment variables.",
+    );
+  }
+
+  if (resolved.provider === "openrouter") {
+    return buildChatAgentModel(resolved.apiKey, resolved.modelId);
+  }
+
+  // OpenAI / Gemini OpenAI-compatible endpoints
+  return createOpenRouter({
+    apiKey: resolved.apiKey,
+    baseURL: resolved.baseURL,
+  })(resolved.modelId);
 }
 
 /**
@@ -80,3 +159,4 @@ export function buildChatAgentModel(
     },
   });
 }
+

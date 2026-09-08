@@ -101,6 +101,9 @@ export const uptimeMonitors = pgTable(
     lastCheckedAt: text("last_checked_at"),
     lastStatusCode: integer("last_status_code"),
     sslExpiresAt: text("ssl_expires_at"),
+    reminderFrequency: text("reminder_frequency").notNull().default("both"), // 'weekly' | 'ssl_expiry' | 'both' | 'none'
+    reminderEmail: text("reminder_email"),
+    lastReminderSentAt: text("last_reminder_sent_at"),
     isActive: boolean("is_active").notNull().default(true),
     createdAt: text("created_at").notNull().default(isoNow),
   },
@@ -809,5 +812,27 @@ export const competitorTrackedAds = pgTable(
     index("competitor_ads_project_idx").on(table.projectId),
     index("competitor_ads_competitor_domain_idx").on(table.competitorDomain),
     index("competitor_ads_platform_idx").on(table.platform),
+  ],
+);
+
+export const waitlistUsers = pgTable(
+  "waitlist_users",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    name: text("name"),
+    company: text("company"),
+    website: text("website"),
+    useCase: text("use_case"),
+    status: text("status").notNull().default("pending"), // 'pending' | 'invited' | 'approved' | 'rejected'
+    ipAddress: text("ip_address"),
+    notes: text("notes"),
+    invitedAt: text("invited_at"),
+    createdAt: text("created_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("pg_waitlist_email_idx").on(table.email),
+    index("pg_waitlist_status_idx").on(table.status),
+    index("pg_waitlist_created_at_idx").on(table.createdAt),
   ],
 );

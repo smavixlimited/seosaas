@@ -3,9 +3,14 @@ import { z } from "zod";
 import { requireProjectContext } from "@/serverFunctions/middleware";
 import { RoadmapService } from "@/services/roadmap.service";
 
-const roadmapQuerySchema = z.object({}).optional();
+const roadmapQuerySchema = z
+  .object({
+    projectId: z.string().optional(),
+  })
+  .optional();
 
 const updateTaskStatusSchema = z.object({
+  projectId: z.string().optional(),
   taskId: z.string().min(1),
   status: z.enum(["todo", "in_progress", "completed", "dismissed"]),
   verificationType: z
@@ -14,10 +19,12 @@ const updateTaskStatusSchema = z.object({
 });
 
 const generateAiFixSchema = z.object({
+  projectId: z.string().optional(),
   taskId: z.string().min(1),
 });
 
 const createCustomTaskSchema = z.object({
+  projectId: z.string().optional(),
   title: z.string().min(1).max(255),
   description: z.string().min(1).max(2000),
   category: z.enum([
@@ -32,6 +39,7 @@ const createCustomTaskSchema = z.object({
   targetUrl: z.string().url().optional().or(z.literal("")),
   aiPrompt: z.string().optional(),
 });
+
 
 /**
  * Fetch all tasks and metrics for a project's Action Roadmap.

@@ -27,6 +27,7 @@ import {
   refreshDashboardBacklinkSnapshot,
 } from "@/serverFunctions/dashboard";
 import { setProjectDomain } from "@/serverFunctions/projects";
+import { getUserCreditUsageServerFn } from "@/serverFunctions/retention";
 import type { DashboardHeroStep } from "@/types/schemas/dashboard";
 
 const HERO_COPY: Record<
@@ -139,7 +140,7 @@ function OnboardingChecklist({
     <div className="card rounded-3xl border border-base-300 bg-base-100 shadow-sm overflow-hidden">
       <div className="flex items-center justify-between border-b border-base-300/80 bg-base-200/30 px-5 py-3">
         <div className="flex items-center gap-2">
-          <Icon icon="solar:checklist-minimalistic-bold-duotone" className="h-4 w-4 text-primary" />
+          <Icon icon="icon-park-outline:list-checkbox" className="h-4 w-4 text-primary" />
           <span className="text-xs font-bold uppercase tracking-wider text-base-content/70">
             Setup Guide & Next Actions
           </span>
@@ -249,9 +250,14 @@ export function DashboardPage({ projectId }: { projectId: string }) {
     queryKey: ["dashboardOverview", projectId],
     queryFn: () => getDashboardOverview({ data: { projectId } }),
   });
+  const creditUsageQuery = useQuery({
+    queryKey: ["userCreditUsageDashboard"],
+    queryFn: () => getUserCreditUsageServerFn(),
+  });
 
   const activation = activationQuery.data;
   const overview = overviewQuery.data;
+  const creditData = creditUsageQuery.data;
 
   const refreshMutation = useMutation({
     mutationFn: () => refreshDashboardBacklinkSnapshot({ data: { projectId } }),
@@ -310,7 +316,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-300/60 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <Icon icon="solar:widget-6-bold-duotone" className="h-6 w-6 text-primary" />
+              <Icon icon="icon-park-outline:dashboard-one" className="h-6 w-6 text-primary" />
               <h1 className="text-2xl font-black tracking-tight text-base-content">
                 Brand Analytics &amp; Growth Hub
               </h1>
@@ -327,28 +333,28 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               params={{ projectId }}
               className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5"
             >
-              <Icon icon="solar:shield-check-bold-duotone" className="h-4 w-4" /> Run Full Audit
+              <Icon icon="icon-park-outline:protect" className="h-4 w-4" /> Run Full Audit
             </Link>
             <Link
               to="/p/$projectId/keywords"
               params={{ projectId }}
               className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
             >
-              <Icon icon="solar:minimalistic-magnifer-bold-duotone" className="h-4 w-4" /> Explore Keywords
+              <Icon icon="icon-park-outline:search" className="h-4 w-4" /> Explore Keywords
             </Link>
           </div>
         </div>
 
         <WorkspaceMergeBanner />
 
-        {/* Venix 4-Card KPI Metric Grid */}
+        {/* Venix 4-Card KPI Metric Grid with Live Backend Data */}
         <VenixKpiCards
           projectId={projectId}
-          healthScore={overview?.audit ? 92 : null}
-          trackedKeywordsCount={1420}
-          backlinksCount={overview?.backlinks ? 8920 : 0}
-          creditsRemaining={2450}
-          creditsLimit={2500}
+          audit={overview?.audit ?? null}
+          rankSummary={overview?.rank ?? null}
+          backlinks={overview?.backlinks ?? null}
+          creditsRemaining={creditData?.creditsRemaining ?? 500}
+          creditsLimit={creditData?.monthlyCreditsLimit ?? 500}
         />
 
         {/* Growth & Strategic Tools Quick Hub */}
@@ -376,7 +382,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <Icon icon="solar:checklist-minimalistic-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:list-checkbox" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">Actionable</span>
                 </div>
@@ -389,7 +395,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-primary gap-1">
                 <span>Open Roadmap</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
@@ -401,7 +407,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                    <Icon icon="solar:shop-2-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:shop" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">Google Maps</span>
                 </div>
@@ -414,7 +420,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 gap-1">
                 <span>Manage Local Business</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
@@ -426,7 +432,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                    <Icon icon="solar:chart-square-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:ranking" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">0–100 Index</span>
                 </div>
@@ -439,7 +445,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 gap-1">
                 <span>View Scorecard</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
@@ -451,7 +457,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-500 group-hover:bg-violet-500 group-hover:text-white transition-colors">
-                    <Icon icon="solar:chat-round-line-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:comments" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">AEO Radar</span>
                 </div>
@@ -464,7 +470,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-violet-600 dark:text-violet-400 gap-1">
                 <span>Monitor Mentions</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
@@ -476,7 +482,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                    <Icon icon="solar:fire-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:fire" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">Firecrawl</span>
                 </div>
@@ -489,7 +495,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-orange-600 dark:text-orange-400 gap-1">
                 <span>Decode Competitor</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
@@ -500,7 +506,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                    <Icon icon="solar:bolt-bold-duotone" className="h-5 w-5" />
+                    <Icon icon="icon-park-outline:lightning" className="h-5 w-5" />
                   </div>
                   <span className="badge badge-sm badge-ghost text-[10px] font-bold">&lt; 15 min</span>
                 </div>
@@ -513,7 +519,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-amber-600 dark:text-amber-400 gap-1">
                 <span>Launch Indexing</span>
-                <Icon icon="solar:arrow-right-line-duotone" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
           </div>

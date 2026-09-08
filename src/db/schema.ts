@@ -134,4 +134,5 @@ export const {
   trustSentimentAudits,
   viralContentItems,
   competitorTrackedAds,
+  waitlistUsers,
 } = schema;

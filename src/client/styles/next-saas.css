@@ -416,17 +416,23 @@
 /* =========================
    Direct Color Overrides (Ensures 1:1 match regardless of DaisyUI)
    ========================= */
-.text-secondary {
+.text-secondary,
+[class*="text-secondary/"] {
   color: #000000 !important;
 }
-.dark .text-secondary {
-  color: #ffffff !important;
-}
 
-.text-accent {
-  color: #ffffff !important;
-}
-.dark .text-accent {
+[data-theme="skorvia-dark"] .text-secondary,
+[data-theme="skorvia-dark"] [class*="text-secondary/"],
+[data-theme="skorvia-dark"] .text-accent,
+[data-theme="skorvia-dark"] [class*="text-accent/"],
+[data-theme="skorvia-dark"] [class*="dark:text-accent"],
+[data-theme="skorvia-dark"] [class*="dark:text-accent/"],
+.dark .text-secondary,
+.dark [class*="text-secondary/"],
+.dark .text-accent,
+.dark [class*="text-accent/"],
+.dark [class*="dark:text-accent"],
+.dark [class*="dark:text-accent/"] {
   color: #ffffff !important;
 }
 

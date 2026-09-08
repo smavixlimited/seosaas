@@ -6,15 +6,34 @@ import { AppError } from "@/server/lib/errors";
 import { ProjectRepository } from "@/server/features/projects/repositories/ProjectRepository";
 
 function extractProjectId(data: unknown) {
-  if (!data || typeof data !== "object" || !("projectId" in data)) {
+  if (!data || typeof data !== "object") {
     return null;
   }
 
-  const projectId = (data as { projectId?: unknown }).projectId;
-  return typeof projectId === "string" && projectId.length > 0
-    ? projectId
-    : null;
+  // 1. Direct { projectId: "..." }
+  if ("projectId" in data) {
+    const projectId = (data as { projectId?: unknown }).projectId;
+    if (typeof projectId === "string" && projectId.length > 0) {
+      return projectId;
+    }
+  }
+
+  // 2. Nested TanStack Start shape { data: { projectId: "..." } }
+  if (
+    "data" in data &&
+    typeof (data as any).data === "object" &&
+    (data as any).data !== null &&
+    "projectId" in (data as any).data
+  ) {
+    const projectId = (data as { data: { projectId?: unknown } }).data.projectId;
+    if (typeof projectId === "string" && projectId.length > 0) {
+      return projectId;
+    }
+  }
+
+  return null;
 }
+
 
 export const ensureUserMiddleware = createMiddleware({
   type: "function",

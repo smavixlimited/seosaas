@@ -62,12 +62,34 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
       "usr_admin_001",
       "admin@skorvia.com",
     );
-
     expect(saved.id).toBe("test-agency-plan");
-    expect(saved.priceUsd).toBe(149);
-    expect(saved.priceNgn).toBe(180000);
-    expect(saved.limits.monthlyCredits).toBe(8000);
-    expect(saved.features.whiteLabelPdf).toBe(true);
+    expect(saved.limits.maxDomains).toBe(50);
+  });
+
+  it("verifies webhook idempotency and signature validation for Paystack, Flutterwave, and LemonSqueezy", async () => {
+    const { WebhookIdempotencyService } = await import("@/services/webhook-idempotency.service");
+
+    // Flutterwave secret hash check
+    expect(WebhookIdempotencyService.verifyFlutterwaveSignature("secret_123", "secret_123")).toBe(true);
+    expect(WebhookIdempotencyService.verifyFlutterwaveSignature("wrong", "secret_123")).toBe(false);
+
+    // Idempotent event claim check
+    const eventId = `test_evt_${Date.now()}`;
+    const claim1 = await WebhookIdempotencyService.claimWebhookEvent({
+      gateway: "flutterwave",
+      eventId,
+      eventType: "charge.completed",
+      payload: { amount: 50 },
+    });
+    expect(claim1.isDuplicate).toBe(false);
+
+    const claim2 = await WebhookIdempotencyService.claimWebhookEvent({
+      gateway: "flutterwave",
+      eventId,
+      eventType: "charge.completed",
+      payload: { amount: 50 },
+    });
+    expect(claim2.isDuplicate).toBe(true);
   });
 
   it("toggles active/archived plan status", async () => {

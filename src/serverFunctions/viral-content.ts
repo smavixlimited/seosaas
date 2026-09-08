@@ -10,9 +10,16 @@ const platformSchema = z
   .enum(["tiktok", "instagram", "youtube", "x", "linkedin"])
   .optional();
 
+const viralQuerySchema = z
+  .object({
+    projectId: z.string().optional(),
+    platform: platformSchema,
+  })
+  .optional();
+
 export const getViralOpportunities = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
-  .validator(z.object({ platform: platformSchema }).optional())
+  .validator(viralQuerySchema)
   .handler(async ({ data, context }) => {
     return ViralContentService.getOpportunities(
       context.projectId,
@@ -22,7 +29,7 @@ export const getViralOpportunities = createServerFn({ method: "POST" })
 
 export const generateViralOpportunities = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
-  .validator(z.object({ platform: platformSchema }).optional())
+  .validator(viralQuerySchema)
   .handler(async ({ data, context }) => {
     return ViralContentService.generateOpportunities(
       context.projectId,
@@ -34,6 +41,7 @@ export const updateViralOpportunityStatus = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
   .validator(
     z.object({
+      projectId: z.string().optional(),
       opportunityId: z.string().min(1),
       status: z.enum(["suggested", "saved", "created", "dismissed"]),
     }),
@@ -45,3 +53,4 @@ export const updateViralOpportunityStatus = createServerFn({ method: "POST" })
       data.status,
     );
   });
+

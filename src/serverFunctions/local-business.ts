@@ -6,7 +6,12 @@ import {
   requireAuthenticatedContext,
 } from "@/serverFunctions/middleware";
 
-const localBusinessEmptySchema = z.object({}).passthrough().optional();
+const localBusinessEmptySchema = z
+  .object({
+    projectId: z.string().optional(),
+  })
+  .passthrough()
+  .optional();
 
 export const getLocalBusinessDashboard = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
@@ -156,10 +161,40 @@ export const detectGoogleProfilesServerFn = createServerFn({ method: "POST" })
     );
   });
 
+export const saveBusinessLocationServerFn = createServerFn({
+  method: "POST",
+})
+  .middleware(requireProjectContext)
+  .validator(
+    z.object({
+      projectId: z.string().optional(),
+      businessName: z.string().min(1),
+      streetAddress: z.string().min(1),
+      city: z.string().min(1),
+      state: z.string().min(1),
+      postalCode: z.string().min(1),
+      countryCode: z.string().optional(),
+      phoneNumber: z.string().optional(),
+      websiteUrl: z.string().optional(),
+      primaryCategory: z.string().optional(),
+      placeId: z.string().optional(),
+      lat: z.number().optional(),
+      lng: z.number().optional(),
+      connectGoogle: z.boolean().optional(),
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    return await LocalBusinessService.saveBusinessLocation({
+      projectId: context.projectId,
+      ...data,
+    });
+  });
+
 export const connectDetectedProfileServerFn = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
   .validator(
     z.object({
+      projectId: z.string().optional(),
       profileId: z.string().min(1),
     }),
   )
@@ -169,3 +204,4 @@ export const connectDetectedProfileServerFn = createServerFn({ method: "POST" })
       profileId: data.profileId,
     });
   });
+

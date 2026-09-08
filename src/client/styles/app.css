@@ -201,3 +201,52 @@ select {
   backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklab, var(--color-base-300) 60%, transparent);
 }
+
+/* ==========================================================================
+   Google Translate UI Suppression & Typography Integrity
+   ========================================================================== */
+#google_translate_element {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+.goog-te-gadget-icon,
+.goog-te-gadget-simple img,
+img.goog-te-gadget-icon {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  border: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+  display: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+/* Ensure translated fonts inherit application typography without inline styling conflicts */
+font[style] {
+  color: inherit !important;
+  background: transparent !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  box-shadow: none !important;
+}

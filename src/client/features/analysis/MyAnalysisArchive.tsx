@@ -35,12 +35,12 @@ export function MyAnalysisArchive({ projectId }: MyAnalysisArchiveProps) {
 
   const conversionAuditQuery = useQuery({
     queryKey: ["conversionReadiness", projectId],
-    queryFn: () => getConversionReadiness({ data: {} }),
+    queryFn: () => getConversionReadiness({ data: { projectId } }),
   });
 
   const trustAuditQuery = useQuery({
     queryKey: ["audienceTrustAudit", projectId],
-    queryFn: () => getAudienceTrustAudit({ data: {} }),
+    queryFn: () => getAudienceTrustAudit({ data: { projectId } }),
   });
 
   const brand = brandQuery.data;

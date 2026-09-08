@@ -285,7 +285,7 @@ export const SystemSettingsService = {
 
   async isPublicRegistrationEnabled(): Promise<boolean> {
     const branding = await this.getBranding();
-    return branding.publicRegistrationEnabled;
+    return branding?.publicRegistrationEnabled !== false;
   },
 
   async getSeoApis(): Promise<SeoApiSettings> {

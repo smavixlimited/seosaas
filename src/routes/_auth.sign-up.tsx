@@ -90,8 +90,8 @@ function SignUpPage() {
   if (registrationQuery.data && registrationQuery.data.enabled === false) {
     return (
       <AuthPageCard
-        title="Registrations Closed"
-        helperText="New account sign-ups are temporarily closed."
+        title="Priority Waitlist Active"
+        helperText="Public account registrations are currently by invitation only."
         footer={
           <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70">
             Already have an account?{" "}
@@ -105,24 +105,28 @@ function SignUpPage() {
           </div>
         }
       >
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-center space-y-3">
-          <div className="mx-auto size-12 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center">
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center space-y-4">
+          <div className="mx-auto size-12 rounded-2xl bg-primary/10 text-primary dark:text-brand-300 flex items-center justify-center">
             <Lock className="size-6" />
           </div>
-          <h3 className="text-tagline-1 font-bold text-secondary dark:text-accent">
-            Sign-ups are by Invitation Only
-          </h3>
-          <p className="text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed">
-            Public registration is currently locked. If you are an enterprise
-            client or hold an invitation token, please reach out to our team.
-          </p>
-          <div className="pt-2">
-            <a
-              href="mailto:support@skorvia.com"
-              className="btn btn-primary btn-sm rounded-full font-bold text-white shadow-xs"
+          <div className="space-y-1.5">
+            <h3 className="text-tagline-1 font-bold text-secondary dark:text-accent">
+              Sign-ups are Currently Invite-Only
+            </h3>
+            <p className="text-tagline-2 text-secondary/70 dark:text-accent/70 leading-relaxed">
+              We are onboarding teams in weekly batches to guarantee search
+              intelligence infrastructure performance. Request your spot on the
+              priority queue now.
+            </p>
+          </div>
+          <div className="pt-1">
+            <Link
+              to="/waitlist"
+              className="btn btn-primary btn-md rounded-2xl w-full font-bold text-white shadow-md gap-2"
             >
-              Contact Support
-            </a>
+              <span>Join Priority Waitlist</span>
+              <span>&rarr;</span>
+            </Link>
           </div>
         </div>
       </AuthPageCard>

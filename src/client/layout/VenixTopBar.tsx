@@ -1,8 +1,25 @@
 import * as React from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Icon } from "@iconify/react";
+import {
+  Menu,
+  Search,
+  Zap,
+  Sun,
+  Moon,
+  Bell,
+  Rocket,
+  Folder,
+  CreditCard,
+  Settings,
+  LogOut,
+  ArrowRight,
+  ShieldCheck,
+  Radio,
+  Store,
+} from "lucide-react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 import { useSession, signOutAndRedirect } from "@/lib/auth-client";
 import { isHostedClientAuthMode } from "@/lib/auth-mode";
 import { closeDropdown } from "@/client/lib/dropdown";
@@ -18,34 +35,32 @@ import type { UserNotificationItem } from "@/services/notifications.service";
 
 import { useThemePreference } from "@/client/lib/theme";
 
+import { getProjects } from "@/serverFunctions/projects";
+
 interface VenixTopBarProps {
+  projectId?: string | null;
   onToggleSidebar: () => void;
   drawerOpen?: boolean;
 }
 
-interface LanguageOption {
-  code: string;
-  label: string;
-  flag: string;
-}
-
-const LANGUAGES: LanguageOption[] = [
-  { code: "en", label: "English (US)", flag: "/flags/lang-flag/circle-us.svg" },
-  { code: "de", label: "Deutsch", flag: "/flags/lang-flag/circle-de.svg" },
-  { code: "es", label: "Español", flag: "/flags/lang-flag/circle-si.svg" },
-  { code: "fr", label: "Français", flag: "/flags/lang-flag/circle-ca.svg" },
-  { code: "hi", label: "Hindi", flag: "/flags/lang-flag/circle-in.svg" },
-  { code: "ru", label: "Русский", flag: "/flags/lang-flag/circle-ru.svg" },
-];
-
-export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
+export function VenixTopBar({
+  projectId,
+  onToggleSidebar,
+}: VenixTopBarProps) {
   const navigate = useNavigate();
   const session = useSession();
   const { themePreference, setThemePreference } = useThemePreference();
-  const [selectedLang, setSelectedLang] = React.useState<LanguageOption>(
-    LANGUAGES[0],
-  );
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
+  const searchContainerRef = React.useRef<HTMLDivElement>(null);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  const projectsQuery = useQuery({
+    queryKey: ["projects"],
+    queryFn: () => getProjects(),
+  });
+  const projects = projectsQuery.data || [];
 
   const creditUsageQuery = useQuery({
     queryKey: ["userCreditUsageTopBar"],
@@ -124,45 +139,352 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
     setThemePreference(nextTheme);
   };
 
+  // Keyboard shortcut: ⌘K or Ctrl+K to focus search
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        setIsSearchOpen(true);
+      } else if (e.key === "Escape") {
+        setIsSearchOpen(false);
+        setMobileSearchOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Click outside listener for search palette
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const activePid = projectId || projects[0]?.id;
+
+  const quickTools = [
+    {
+      name: "Main Dashboard",
+      category: "Overview",
+      href: activePid ? `/p/${activePid}` : "/my-brands",
+      icon: "solar:widget-bold-duotone",
+    },
+    {
+      name: "Keyword Revenue Radar",
+      category: "SEO",
+      href: activePid ? `/p/${activePid}/keywords` : "/my-brands",
+      icon: "solar:target-bold-duotone",
+    },
+    {
+      name: "Competitor Ad Decoder",
+      category: "Competitors",
+      href: activePid ? `/p/${activePid}/competitor-analysis` : "/my-brands",
+      icon: "solar:eye-bold-duotone",
+    },
+    {
+      name: "AI Search & AEO Monitor",
+      category: "AEO",
+      href: activePid ? `/p/${activePid}/brand-lookup` : "/my-brands",
+      icon: "solar:stars-bold-duotone",
+    },
+    {
+      name: "Technical Site Audit",
+      category: "SEO",
+      href: activePid ? `/p/${activePid}/audit` : "/my-brands",
+      icon: "solar:shield-check-bold-duotone",
+    },
+    {
+      name: "Backlinks Explorer",
+      category: "Authority",
+      href: activePid ? `/p/${activePid}/backlinks` : "/my-brands",
+      icon: "solar:link-bold-duotone",
+    },
+    {
+      name: "Google Maps Local SEO",
+      category: "Local",
+      href: activePid ? `/p/${activePid}/local-business` : "/my-brands",
+      icon: "solar:map-point-bold-duotone",
+    },
+    {
+      name: "Instant Indexing Engine",
+      category: "Tools",
+      href: "/indexing",
+      icon: "solar:bolt-bold-duotone",
+    },
+    {
+      name: "Uptime & Health Monitor",
+      category: "Monitoring",
+      href: "/uptime",
+      icon: "solar:server-bold-duotone",
+    },
+    {
+      name: "My Brands Workspace",
+      category: "Workspace",
+      href: "/my-brands",
+      icon: "solar:folder-bold-duotone",
+    },
+    {
+      name: "Brand Settings",
+      category: "Settings",
+      href: activePid ? `/p/${activePid}/settings` : "/settings",
+      icon: "solar:settings-bold-duotone",
+    },
+    {
+      name: "Billing & Plans",
+      category: "Account",
+      href: "/billing",
+      icon: "solar:card-bold-duotone",
+    },
+  ];
+
+  const filteredTools = quickTools.filter((t) =>
+    t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredProjects = projects.filter((p) =>
+    (p.name || p.domain || "").toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    void navigate({ to: "/projects" });
+    if (activePid) {
+      void navigate({
+        to: "/p/$projectId/keywords",
+        params: { projectId: activePid },
+        search: { q: searchQuery.trim() },
+      });
+    } else {
+      void navigate({ to: "/my-brands" });
+    }
+    setIsSearchOpen(false);
+    setMobileSearchOpen(false);
   };
 
-  const userEmail = session.data?.user?.email || "user@skorvia.com";
-  const userName = session.data?.user?.name || userEmail.split("@")[0];
+  const userEmail = session.data?.user?.email || "";
+  const userName = session.data?.user?.name || (userEmail ? userEmail.split("@")[0] : "User");
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-base-300 bg-base-100/90 px-4 backdrop-blur-md transition-colors md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-base-300 bg-base-100/95 px-4 backdrop-blur-md transition-colors md:px-6">
       {/* Left: Sidebar Toggle & Search Bar */}
-      <div className="flex items-center gap-3 md:gap-4">
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
         <button
           type="button"
           onClick={onToggleSidebar}
           aria-label="Toggle Navigation Menu"
-          className="btn btn-ghost btn-circle btn-sm text-base-content/80 hover:bg-base-200"
+          className="btn btn-ghost btn-circle btn-sm text-base-content hover:bg-base-200 border border-base-300 shadow-xs flex items-center justify-center h-9 w-9 min-h-[36px] min-w-[36px]"
         >
-          <Icon icon="solar:hamburger-menu-linear" className="h-5 w-5" />
+          <Menu size={20} className="text-base-content shrink-0" />
         </button>
 
-        {/* Global Search Bar (Venix Style) */}
-        <form onSubmit={handleSearchSubmit} className="hidden sm:block">
-          <div className="relative flex items-center">
-            <Icon
-              icon="solar:minimalistic-magnifer-line-duotone"
-              className="absolute left-3.5 h-4 w-4 text-base-content/60"
-            />
-            <input
-              type="text"
-              placeholder="Search tools, keywords, or brands..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="input input-bordered h-10 w-64 md:w-72 rounded-2xl pl-10 pr-3 text-xs font-medium focus:w-80 focus:border-primary focus:outline-none transition-all duration-200 bg-base-200/60 border-base-300"
-            />
-          </div>
-        </form>
+        {/* Mobile Search Icon Trigger */}
+        <button
+          type="button"
+          onClick={() => setMobileSearchOpen(true)}
+          className="sm:hidden btn btn-ghost btn-circle btn-sm text-base-content hover:bg-base-200 border border-base-300 shadow-xs flex items-center justify-center h-9 w-9 min-h-[36px] min-w-[36px]"
+          aria-label="Open Search"
+        >
+          <Search size={17} className="text-base-content shrink-0" />
+        </button>
+
+        {/* Redesigned Desktop Global Command/Search Palette (Venix Style) */}
+        <div ref={searchContainerRef} className="relative hidden sm:block">
+          <form onSubmit={handleSearchSubmit}>
+            <div className="relative flex items-center">
+              <Search
+                size={16}
+                className="absolute left-3.5 text-base-content/60 shrink-0 pointer-events-none"
+              />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search tools, keywords, brands..."
+                value={searchQuery}
+                onFocus={() => setIsSearchOpen(true)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setIsSearchOpen(true);
+                }}
+                className="input input-bordered h-10 w-64 md:w-80 lg:w-96 rounded-2xl pl-10 pr-16 text-xs font-medium focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 bg-base-200/60 hover:bg-base-200/80 border-base-300 text-base-content"
+              />
+              <div className="absolute right-2.5 flex items-center gap-1">
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      searchInputRef.current?.focus();
+                    }}
+                    className="p-1 text-base-content/50 hover:text-base-content rounded-full hover:bg-base-300/50 transition-colors"
+                  >
+                    <Icon icon="solar:close-circle-bold" className="size-3.5" />
+                  </button>
+                ) : (
+                  <kbd className="kbd kbd-xs bg-base-100 border border-base-300 text-[10px] text-base-content/60 font-mono px-1.5 py-0.5 rounded-md shadow-2xs">
+                    ⌘K
+                  </kbd>
+                )}
+              </div>
+            </div>
+          </form>
+
+          {/* Interactive Search Results & Quick Actions Dropdown */}
+          {isSearchOpen && (
+            <div className="absolute left-0 top-full mt-2 w-80 md:w-96 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 max-h-96 overflow-y-auto">
+              {searchQuery.trim() && (
+                <div className="p-1 mb-2 border-b border-base-200">
+                  <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-base-content/50">
+                    Direct Actions
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activePid) {
+                        void navigate({
+                          to: "/p/$projectId/keywords",
+                          params: { projectId: activePid },
+                          search: { q: searchQuery.trim() },
+                        });
+                      }
+                      setIsSearchOpen(false);
+                    }}
+                    className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-xs font-semibold text-primary hover:bg-primary/10 transition-colors text-left"
+                  >
+                    <Icon icon="solar:target-bold-duotone" className="size-4 shrink-0" />
+                    <span className="truncate">Search &ldquo;{searchQuery}&rdquo; in Keyword Radar</span>
+                    <ArrowRight className="size-3.5 ml-auto shrink-0 opacity-70" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activePid) {
+                        void navigate({
+                          to: "/p/$projectId/competitor-analysis",
+                          params: { projectId: activePid },
+                        });
+                      }
+                      setIsSearchOpen(false);
+                    }}
+                    className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-xs font-semibold text-secondary dark:text-accent hover:bg-base-200 transition-colors text-left"
+                  >
+                    <Icon icon="solar:eye-bold-duotone" className="size-4 shrink-0" />
+                    <span className="truncate">Decode Competitor &ldquo;{searchQuery}&rdquo;</span>
+                    <ArrowRight className="size-3.5 ml-auto shrink-0 opacity-70" />
+                  </button>
+                </div>
+              )}
+
+              {/* Brands / Projects Section */}
+              {filteredProjects.length > 0 && (
+                <div className="p-1 mb-2 border-b border-base-200">
+                  <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-base-content/50">
+                    Brands ({filteredProjects.length})
+                  </div>
+                  {filteredProjects.slice(0, 3).map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        void navigate({
+                          to: "/p/$projectId",
+                          params: { projectId: p.id },
+                        });
+                        setIsSearchOpen(false);
+                      }}
+                      className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl text-xs font-medium text-base-content hover:bg-base-200 transition-colors text-left"
+                    >
+                      <Icon icon="solar:folder-bold-duotone" className="size-4 text-primary shrink-0" />
+                      <div className="truncate">
+                        <div className="font-bold text-xs truncate">{p.name || p.domain}</div>
+                        <div className="text-[10px] text-base-content/60 truncate">{p.domain}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Tools & Navigation */}
+              <div className="p-1">
+                <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-base-content/50">
+                  {searchQuery ? "Matching Tools" : "Quick Launch"}
+                </div>
+                <div className="grid grid-cols-1 gap-0.5">
+                  {filteredTools.slice(0, 6).map((tool) => (
+                    <Link
+                      key={tool.name}
+                      to={tool.href}
+                      onClick={() => setIsSearchOpen(false)}
+                      className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-base-content hover:bg-base-200 transition-colors"
+                    >
+                      <Icon icon={tool.icon} className="size-4 text-primary shrink-0" />
+                      <span className="truncate">{tool.name}</span>
+                      <span className="ml-auto text-[10px] text-base-content/50 font-semibold px-1.5 py-0.5 rounded-md bg-base-200">
+                        {tool.category}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Mobile Search Modal */}
+      {mobileSearchOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-base-100/98 p-4 backdrop-blur-lg sm:hidden animate-in fade-in duration-150">
+          <div className="flex items-center gap-2 pb-3 border-b border-base-300">
+            <form onSubmit={handleSearchSubmit} className="flex-1 relative">
+              <Search size={16} className="absolute left-3 top-3 text-base-content/60" />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search tools, keywords, brands..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="input input-bordered h-10 w-full rounded-2xl pl-9 pr-3 text-xs bg-base-200"
+              />
+            </form>
+            <button
+              type="button"
+              onClick={() => setMobileSearchOpen(false)}
+              className="btn btn-ghost btn-circle btn-sm"
+            >
+              <Icon icon="solar:close-circle-bold" className="size-6" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto pt-3 space-y-3">
+            <div className="space-y-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-base-content/50 px-2">
+                Tools &amp; Features
+              </div>
+              {filteredTools.map((tool) => (
+                <Link
+                  key={tool.name}
+                  to={tool.href}
+                  onClick={() => setMobileSearchOpen(false)}
+                  className="flex items-center gap-3 p-2 rounded-xl text-xs font-semibold text-base-content hover:bg-base-200 block"
+                >
+                  <Icon icon={tool.icon} className="size-4 text-primary shrink-0" />
+                  <span>{tool.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Right: Actions (Credit Meter, Language, Theme, Notifications, User Profile) */}
       <div className="flex items-center gap-2 md:gap-3">
@@ -170,7 +492,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-base-200/60 border border-base-300 shadow-2xs">
           <Link
             to="/billing"
-            className="flex items-center gap-1.5 text-xs font-black text-base-content/90 hover:text-primary transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-black text-base-content hover:text-primary transition-colors cursor-pointer"
             title={`${currentPlan} Plan: ${creditsRemaining} of ${creditsLimit} credits available`}
           >
             <span
@@ -182,18 +504,15 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                     : "text-primary"
               }
             >
-              <Icon
-                icon="solar:bolt-bold-duotone"
-                className="h-3.5 w-3.5 shrink-0"
-              />
+              <Zap size={14} className="shrink-0 fill-current" />
             </span>
             <span className="font-mono">
               {creditsRemaining.toLocaleString()}
             </span>
-            <span className="text-base-content/40 font-mono text-[11px]">
+            <span className="text-base-content/60 font-mono text-[11px]">
               / {creditsLimit.toLocaleString()}
             </span>
-            <span className="text-[10px] text-base-content/50 uppercase font-bold tracking-wider hidden sm:inline">
+            <span className="text-[10px] text-base-content/70 uppercase font-bold tracking-wider hidden sm:inline">
               Credits
             </span>
           </Link>
@@ -221,77 +540,26 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                   : "btn-primary text-white"
             }`}
           >
-            <Icon icon="solar:rocket-bold" className="h-3 w-3" />
+            <Rocket size={12} className="shrink-0" />
             <span>{isDepleted ? "Refill" : "Refill"}</span>
           </Link>
         </div>
 
-        {/* Language Selector Dropdown */}
-        <div className="dropdown dropdown-end">
-          <button
-            tabIndex={0}
-            className="btn btn-ghost btn-circle btn-sm text-base-content/80 hover:bg-base-200"
-            aria-label="Language Selector"
-          >
-            <img
-              src={selectedLang.flag}
-              alt={selectedLang.label}
-              className="h-4 w-4 rounded-full object-cover"
-              onError={(e) => {
-                // Fallback to globe icon if image path fails
-                (e.currentTarget as HTMLElement).style.display = "none";
-              }}
-            />
-          </button>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu z-50 mt-2 w-48 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl text-xs space-y-1"
-          >
-            <li className="menu-title text-[10px] uppercase font-bold tracking-wider text-base-content/50 px-2 py-1">
-              Select Language
-            </li>
-            {LANGUAGES.map((lang) => (
-              <li key={lang.code}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedLang(lang);
-                    closeDropdown();
-                  }}
-                  className={`flex items-center gap-2 rounded-xl py-1.5 px-2.5 ${
-                    selectedLang.code === lang.code
-                      ? "active font-bold bg-primary text-white"
-                      : ""
-                  }`}
-                >
-                  <img
-                    src={lang.flag}
-                    alt=""
-                    className="h-3.5 w-3.5 rounded-full"
-                  />
-                  <span>{lang.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
 
         {/* 1-Click Dark/Light Mode Switcher */}
         <button
           type="button"
           onClick={toggleTheme}
           aria-label="Toggle Theme"
-          className="btn btn-ghost btn-circle btn-sm text-base-content/80 hover:bg-base-200"
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          className="btn btn-ghost btn-circle btn-sm text-base-content hover:bg-base-200 border border-base-300 shadow-xs flex items-center justify-center h-9 w-9 min-h-[36px] min-w-[36px]"
         >
           {isDark ? (
-            <Icon
-              icon="solar:sun-2-bold-duotone"
-              className="h-5 w-5 text-amber-400"
-            />
+            <Sun size={18} className="text-amber-500 fill-amber-500 shrink-0" />
           ) : (
-            <Icon
-              icon="solar:moon-bold-duotone"
-              className="h-5 w-5 text-indigo-600"
+            <Moon
+              size={18}
+              className="text-slate-800 dark:text-slate-200 fill-slate-800 dark:fill-slate-200 shrink-0"
             />
           )}
         </button>
@@ -300,12 +568,13 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
         <div className="dropdown dropdown-end">
           <button
             tabIndex={0}
-            className="btn btn-ghost btn-circle btn-sm relative text-base-content/80 hover:bg-base-200"
+            className="btn btn-ghost btn-circle btn-sm relative text-base-content hover:bg-base-200 border border-base-300 shadow-xs flex items-center justify-center h-9 w-9 min-h-[36px] min-w-[36px]"
             aria-label="Notifications"
+            title="Notifications"
           >
-            <Icon icon="solar:bell-bing-bold-duotone" className="h-5 w-5" />
+            <Bell size={18} className="text-base-content shrink-0" />
             {unreadCount > 0 && (
-              <span className="badge badge-primary badge-xs absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full text-[9px] font-bold">
+              <span className="badge badge-primary badge-xs absolute -top-1 -right-1 h-4 min-w-[16px] px-1 rounded-full text-[9px] font-bold text-white shadow-xs">
                 {unreadCount}
               </span>
             )}
@@ -316,10 +585,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
           >
             <div className="flex items-center justify-between border-b border-base-300 pb-2.5">
               <div className="flex items-center gap-1.5">
-                <Icon
-                  icon="solar:bell-bold-duotone"
-                  className="h-4 w-4 text-primary"
-                />
+                <Bell size={16} className="text-primary shrink-0" />
                 <span className="text-xs font-black tracking-tight text-base-content">
                   Notifications
                 </span>
@@ -386,10 +652,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
             <div className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
               {filteredNotifications.length === 0 ? (
                 <div className="py-8 text-center text-base-content/50 space-y-1">
-                  <Icon
-                    icon="solar:bell-linear"
-                    className="h-8 w-8 mx-auto opacity-40"
-                  />
+                  <Bell size={32} className="mx-auto opacity-40 shrink-0" />
                   <p className="text-xs font-semibold">No notifications</p>
                   <p className="text-[10px]">You&rsquo;re all caught up!</p>
                 </div>
@@ -424,18 +687,15 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                                 : "text-primary"
                           }`}
                         >
-                          <Icon
-                            icon={
-                              n.category === "pixel"
-                                ? "solar:radar-bold"
-                                : n.category === "audit"
-                                  ? "solar:shield-check-bold"
-                                  : n.category === "gbp"
-                                    ? "solar:shop-bold"
-                                    : "solar:bell-bold"
-                            }
-                            className="h-3.5 w-3.5 shrink-0"
-                          />
+                          {n.category === "pixel" ? (
+                            <Radio size={14} className="shrink-0" />
+                          ) : n.category === "audit" ? (
+                            <ShieldCheck size={14} className="shrink-0" />
+                          ) : n.category === "gbp" ? (
+                            <Store size={14} className="shrink-0" />
+                          ) : (
+                            <Bell size={14} className="shrink-0" />
+                          )}
                           <span className="line-clamp-1">{n.title}</span>
                         </span>
 
@@ -467,7 +727,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
         <div className="dropdown dropdown-end">
           <button
             tabIndex={0}
-            className="btn btn-ghost btn-circle avatar btn-sm border border-base-300/80 bg-primary/10 text-primary font-bold text-xs"
+            className="btn btn-ghost btn-circle avatar btn-sm border border-base-300 bg-primary/10 text-primary font-bold text-xs flex items-center justify-center h-9 w-9 min-h-[36px] min-w-[36px]"
             aria-label="User Profile Menu"
           >
             <span>{userName.slice(0, 2).toUpperCase()}</span>
@@ -486,7 +746,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 </span>
                 <div className="mt-1.5 flex items-center gap-1.5">
                   <span className="badge badge-primary badge-xs py-1 px-2 rounded-md font-bold text-[9px]">
-                    PRO PLAN
+                    {currentPlan} PLAN
                   </span>
                   <span className="text-[10px] text-base-content/50">
                     {BRAND_CONFIG.name}
@@ -501,10 +761,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon
-                  icon="solar:folder-with-files-bold-duotone"
-                  className="h-4 w-4 text-primary"
-                />
+                <Folder size={16} className="text-primary shrink-0" />
                 <span>My Brands</span>
               </Link>
             </li>
@@ -515,10 +772,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon
-                  icon="solar:card-2-bold-duotone"
-                  className="h-4 w-4 text-primary"
-                />
+                <CreditCard size={16} className="text-primary shrink-0" />
                 <span>Billing & Subscription</span>
               </Link>
             </li>
@@ -529,10 +783,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
               >
-                <Icon
-                  icon="solar:settings-bold-duotone"
-                  className="h-4 w-4 text-primary"
-                />
+                <Settings size={16} className="text-primary shrink-0" />
                 <span>Settings</span>
               </Link>
             </li>
@@ -544,10 +795,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                   onClick={() => signOutAndRedirect()}
                   className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-bold text-error hover:bg-error/10"
                 >
-                  <Icon
-                    icon="solar:logout-2-bold-duotone"
-                    className="h-4 w-4"
-                  />
+                  <LogOut size={16} className="shrink-0" />
                   <span>Log Out</span>
                 </button>
               </li>
@@ -572,18 +820,15 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                         : "bg-primary/10 text-primary"
                   }`}
                 >
-                  <Icon
-                    icon={
-                      selectedNotification.category === "pixel"
-                        ? "solar:radar-bold"
-                        : selectedNotification.category === "audit"
-                          ? "solar:shield-check-bold"
-                          : selectedNotification.category === "gbp"
-                            ? "solar:shop-bold"
-                            : "solar:bell-bold"
-                    }
-                    className="h-5 w-5"
-                  />
+                  {selectedNotification.category === "pixel" ? (
+                    <Radio size={20} className="shrink-0" />
+                  ) : selectedNotification.category === "audit" ? (
+                    <ShieldCheck size={20} className="shrink-0" />
+                  ) : selectedNotification.category === "gbp" ? (
+                    <Store size={20} className="shrink-0" />
+                  ) : (
+                    <Bell size={20} className="shrink-0" />
+                  )}
                 </div>
                 <div>
                   <h3 className="font-black text-sm text-base-content line-clamp-1">
@@ -638,7 +883,7 @@ export function VenixTopBar({ onToggleSidebar }: VenixTopBarProps) {
                   className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
                 >
                   <span>View Details</span>
-                  <Icon icon="solar:arrow-right-bold" className="h-4 w-4" />
+                  <ArrowRight size={16} className="shrink-0" />
                 </Link>
               )}
             </div>

@@ -73,6 +73,75 @@ Approve the login when prompted.
 3. Paste `https://app.skorvia.com/mcp`.
 4. Approve the Skorvia login when prompted.
 
+## Google Antigravity (AGY)
+
+1. Open Antigravity Settings -> MCP Servers.
+2. Add a new MCP server configuration in `agy.config.json` or through the CLI:
+
+```json
+{
+  "mcpServers": {
+    "skorvia": {
+      "url": "https://app.skorvia.com/mcp",
+      "headers": {
+        "Authorization": "Bearer skorvia_YOUR_KEY"
+      }
+    }
+  }
+}
+```
+
+3. Skorvia MCP tools and SEO skills will immediately be available in your Antigravity conversation.
+
+## Windsurf / Cascade
+
+1. Open Windsurf Settings -> Cascade -> MCP Servers.
+2. Add the Skorvia endpoint to your configuration:
+
+```json
+{
+  "mcpServers": {
+    "skorvia": {
+      "serverUrl": "https://app.skorvia.com/mcp",
+      "headers": {
+        "Authorization": "Bearer skorvia_YOUR_KEY"
+      }
+    }
+  }
+}
+```
+
+3. Restart Cascade to start using SEO research, site audits, and rank tracking tools.
+
+## Custom MCP Clients & SDKs
+
+Any MCP-compatible agent or application (using the official Python or TypeScript MCP SDKs, LangChain, or LlamaIndex) can connect directly:
+
+### Python (mcp SDK)
+```python
+from mcp.client.session import ClientSession
+from mcp.client.sse import sse_client
+
+async with sse_client("https://app.skorvia.com/mcp", headers={"Authorization": "Bearer skorvia_YOUR_KEY"}) as (read, write):
+    async with ClientSession(read, write) as session:
+        await session.initialize()
+        tools = await session.list_tools()
+        print(f"Available tools: {[t.name for t in tools.tools]}")
+```
+
+### TypeScript / Node.js
+```typescript
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+
+const transport = new SSEClientTransport(
+  new URL("https://app.skorvia.com/mcp"),
+  { requestInit: { headers: { Authorization: "Bearer skorvia_YOUR_KEY" } } }
+);
+const client = new Client({ name: "my-seo-agent", version: "1.0.0" }, { capabilities: {} });
+await client.connect(transport);
+```
+
 ## Connect with an API key
 
 Use an API key in headless environments, CI, or clients where OAuth is inconvenient. API keys are personal: anything an agent does with your key acts as you in your workspace.

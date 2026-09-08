@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BrandMentionsPage } from "@/client/features/brand-mentions/BrandMentionsPage";
+import { AudienceTrustPreAdGate } from "@/client/features/trust-sentiment/AudienceTrustPreAdGate";
 
 export const Route = createFileRoute("/_project/p/$projectId/trust-sentiment")({
   component: TrustSentimentRoute,
@@ -7,5 +7,10 @@ export const Route = createFileRoute("/_project/p/$projectId/trust-sentiment")({
 
 function TrustSentimentRoute() {
   const { projectId } = Route.useParams();
-  return <BrandMentionsPage projectId={projectId} />;
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      <AudienceTrustPreAdGate projectId={projectId} />
+    </div>
+  );
 }
+

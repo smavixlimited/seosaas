@@ -59,6 +59,26 @@ function MyBrandsPage() {
           <div className="flex justify-center py-10">
             <span className="loading loading-spinner loading-md text-primary" />
           </div>
+        ) : projects.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-base-300 bg-base-100 p-8 text-center space-y-4 shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Plus className="size-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-base-content">No Brands configured yet</h3>
+              <p className="text-xs text-base-content/60 max-w-sm mx-auto">
+                Create your first Brand workspace to unlock competitor ad spying, keyword radar, and automated site audits.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setCreating(true)}
+              className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+            >
+              <Plus className="size-4" />
+              <span>Create First Brand</span>
+            </button>
+          </div>
         ) : (
           <ul className="divide-y divide-base-300 overflow-hidden rounded-2xl border border-base-300 shadow-xs">
             {projects.map((project) => (

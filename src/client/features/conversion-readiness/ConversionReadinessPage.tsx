@@ -26,7 +26,7 @@ export function ConversionReadinessPage({
 
   const auditQuery = useQuery<ConversionAuditResult>({
     queryKey: ["conversionReadiness", projectId],
-    queryFn: () => getConversionReadiness({ data: {} }),
+    queryFn: () => getConversionReadiness({ data: { projectId } }),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -36,6 +36,7 @@ export function ConversionReadinessPage({
     mutationFn: (fix: RecommendedFixItem) =>
       createRoadmapTask({
         data: {
+          projectId,
           title: fix.title,
           description: fix.action,
           category:
@@ -64,6 +65,7 @@ export function ConversionReadinessPage({
       for (const fix of fixes) {
         await createRoadmapTask({
           data: {
+            projectId,
             title: fix.title,
             description: fix.action,
             category:
@@ -93,6 +95,7 @@ export function ConversionReadinessPage({
     mutationFn: () =>
       runConversionReadinessAudit({
         data: {
+          projectId,
           targetUrl: targetUrl
             ? targetUrl.startsWith("http")
               ? targetUrl

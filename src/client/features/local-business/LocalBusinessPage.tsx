@@ -13,6 +13,8 @@ import {
   publishReviewReplyServerFn,
   detectGoogleProfilesServerFn,
   connectDetectedProfileServerFn,
+  saveBusinessLocationServerFn,
+  searchGooglePlacesServerFn,
 } from "@/serverFunctions/local-business";
 import type {
   LocalReviewItem,
@@ -60,282 +62,232 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
     "login" | "detecting" | "select"
   >("login");
 
-  const fallbackData: LocalBusinessData = React.useMemo(
-    () => ({
-      profile: {
-        id: `lb_${projectId}`,
-        businessName: "Smavix Limited",
-        streetAddress: "KM 17 Lekki - Epe Expressway",
-        city: "Lagos",
-        state: "Lagos State",
-        postalCode: "106104",
-        countryCode: "NG",
-        phoneNumber: "+234 805 716 2832",
-        websiteUrl: "https://smavix.com",
-        primaryCategory: "Corporate Office & Services",
-        gbpClaimed: true,
-        gbpHealthScore: 68,
-        averageRating: 0,
-        totalReviews: 0,
-        napConsistencyScore: 30,
-        onlineAssessment: "Poor",
-        listingsToFixCount: 30,
-        totalListingsCount: 33,
-        directoriesCoverage: [
-          {
-            directory: "Facebook",
-            status: "Wrong Business Name",
-            details: "N & D Giftery Private Limited",
-          },
-          {
-            directory: "Google Assistant",
-            status: "Wrong Address",
-            details: "KM 17 Lekki - Epe Expressway",
-          },
-          {
-            directory: "Google Business Profile",
-            status: "Wrong Address",
-            details: "KM 17 Lekki - Epe Expressway",
-          },
-          {
-            directory: "Google Search",
-            status: "Wrong Address",
-            details: "KM 17 Lekki - Epe Expressway",
-          },
-          {
-            directory: "Apple Maps",
-            status: "Not Present",
-            details: "Missed opportunity.",
-          },
-          {
-            directory: "Bing",
-            status: "Not Present",
-            details: "Missed opportunity.",
-          },
-          {
-            directory: "Instagram",
-            status: "Not Present",
-            details: "Missed opportunity.",
-          },
-          {
-            directory: "Siri",
-            status: "Not Present",
-            details: "Missed opportunity.",
-          },
-          {
-            directory: "Waze",
-            status: "Wrong Address",
-            details: "KM 17 Lekki - Epe Expressway",
-          },
-          {
-            directory: "Where To?",
-            status: "No Address",
-            details: "Missed opportunity.",
-          },
-        ],
-        isConnectedToGoogle: true,
-        citations: [
-          {
-            directory: "Google Business Profile",
-            url: "https://maps.google.com",
-            name: "Smavix Limited",
-            address: "KM 17 Lekki - Epe Expressway, Lagos, 106104, NG",
-            phone: "+234 805 716 2832",
-            status: "mismatch",
-          },
-          {
-            directory: "Apple Maps",
-            url: "https://maps.apple.com",
-            name: "Smavix Limited",
-            address: "KM 17 Lekki - Epe Expressway, Lagos",
-            phone: "+234 805 716 2832",
-            status: "missing",
-          },
-          {
-            directory: "Bing Places",
-            url: "https://bingplaces.com",
-            name: "Smavix Limited",
-            address: "KM 17 Lekki - Epe Expressway, Lagos",
-            phone: "+234 805 716 2832",
-            status: "missing",
-          },
-          {
-            directory: "Facebook",
-            url: "https://facebook.com",
-            name: "N & D Giftery Private Limited",
-            address: "KM 17 Lekki - Epe Expressway, Lagos",
-            phone: "+234 805 716 2832",
-            status: "mismatch",
-          },
-        ],
-        reviews: [
-          {
-            id: "rev_1",
-            author: "Babatunde Adebayo",
-            rating: 5,
-            relativeTime: "3 days ago",
-            text: "Fast service and very reliable team at Lekki. Highly recommended for corporate consulting!",
-            response: "Thank you so much Babatunde!",
-            responsePublishedAt: new Date(Date.now() - 86400000).toISOString(),
-            sentiment: "positive",
-          },
-        ],
-        auditHighlights: [
-          "Primary GBP connected via verified Google Account",
-          "Online presence overall assessment: Poor (30 of 33 listings require sync)",
-          "Recommended: Syndicate NAP to Apple Maps and Bing to gain +40% local visibility",
-          "Direct API response active for incoming customer queries",
-        ],
-      },
-      locations: [
-        {
-          id: `loc_mock_1_${projectId}`,
-          projectId,
-          locationName: "Lekki Flagship (HQ)",
-          placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
-          businessName: "Smavix Limited",
-          streetAddress: "KM 17 Lekki - Epe Expressway",
-          city: "Lagos",
-          state: "LA",
-          postalCode: "106104",
-          countryCode: "NG",
-          phoneNumber: "+234 805 716 2832",
-          websiteUrl: "https://smavix.com",
-          primaryCategory: "Corporate Office",
-          lat: 6.4474,
-          lng: 3.4735,
-          reviewLink: "https://g.page/r/smavix/review",
-          isPrimary: true,
-          gbpHealthScore: 68,
-          averageRating: 0,
-          totalReviews: 0,
-          napConsistencyScore: 30,
-        },
-      ],
-      activeLocationId: `loc_mock_1_${projectId}`,
-      grid: {
-        keyword: "corporate office near me",
-        gridSize: "3x3",
-        centerLat: 6.4474,
-        centerLng: 3.4735,
-        radiusKm: 5.0,
-        averageRank: 3.2,
-        topThreeCoverageRate: 67,
-        previousAverageRank: 4.8,
-        netGainedPositions: 9,
-        points: [
-          {
-            row: 0,
-            col: 0,
-            lat: 6.4624,
-            lng: 3.4585,
-            rank: 3,
-            distanceKm: 2.3,
-            previousRank: 5,
-            rankDelta: 2,
-          },
-          {
-            row: 0,
-            col: 1,
-            lat: 6.4624,
-            lng: 3.4735,
-            rank: 2,
-            distanceKm: 1.6,
-            previousRank: 4,
-            rankDelta: 2,
-          },
-          {
-            row: 0,
-            col: 2,
-            lat: 6.4624,
-            lng: 3.4885,
-            rank: 4,
-            distanceKm: 2.3,
-            previousRank: 6,
-            rankDelta: 2,
-          },
-          {
-            row: 1,
-            col: 0,
-            lat: 6.4474,
-            lng: 3.4585,
-            rank: 2,
-            distanceKm: 1.6,
-            previousRank: 3,
-            rankDelta: 1,
-          },
-          {
-            row: 1,
-            col: 1,
-            lat: 6.4474,
-            lng: 3.4735,
-            rank: 1,
-            distanceKm: 0.0,
-            previousRank: 1,
-            rankDelta: 0,
-          },
-          {
-            row: 1,
-            col: 2,
-            lat: 6.4474,
-            lng: 3.4885,
-            rank: 3,
-            distanceKm: 1.6,
-            previousRank: 4,
-            rankDelta: 1,
-          },
-          {
-            row: 2,
-            col: 0,
-            lat: 6.4324,
-            lng: 3.4585,
-            rank: 5,
-            distanceKm: 2.3,
-            previousRank: 7,
-            rankDelta: 2,
-          },
-          {
-            row: 2,
-            col: 1,
-            lat: 6.4324,
-            lng: 3.4735,
-            rank: 3,
-            distanceKm: 1.6,
-            previousRank: 4,
-            rankDelta: 1,
-          },
-          {
-            row: 2,
-            col: 2,
-            lat: 6.4324,
-            lng: 3.4885,
-            rank: 6,
-            distanceKm: 2.3,
-            previousRank: 8,
-            rankDelta: 2,
-          },
-        ],
-      },
-    }),
-    [projectId],
-  );
+  // Onboarding & Preview Mode State
+  const [isPreviewMode, setIsPreviewMode] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [isSearchingPlaces, setIsSearchingPlaces] = React.useState(false);
+  const [searchResults, setSearchResults] = React.useState<any[]>([]);
+
+  // Manual Form State
+  const [formData, setFormData] = React.useState({
+    businessName: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    countryCode: "US",
+    phoneNumber: "",
+    websiteUrl: "",
+    primaryCategory: "Local Business / Services",
+    placeId: "",
+    lat: 37.7749,
+    lng: -122.4194,
+  });
 
   const localQuery = useQuery<LocalBusinessData>({
     queryKey: ["localBusinessDashboard", projectId],
     queryFn: () =>
-      getLocalBusinessDashboard({ data: {} }) as Promise<LocalBusinessData>,
-    placeholderData: fallbackData,
+      getLocalBusinessDashboard({ data: { projectId } }) as Promise<LocalBusinessData>,
     staleTime: 5 * 60 * 1000,
   });
 
-  const data = localQuery.data ?? fallbackData;
-  const profile = data.profile;
-  const grid = data.grid;
-  const locations = data.locations ?? [];
+  // Sync form defaults from project profile data when loaded
+  React.useEffect(() => {
+    if (localQuery.data?.profile) {
+      setFormData((prev) => ({
+        ...prev,
+        businessName: prev.businessName || localQuery.data.profile.businessName || "",
+        websiteUrl: prev.websiteUrl || localQuery.data.profile.websiteUrl || "",
+        countryCode: prev.countryCode !== "US" ? prev.countryCode : (localQuery.data.profile.countryCode || "US"),
+        streetAddress: prev.streetAddress || localQuery.data.profile.streetAddress || "",
+        city: prev.city || localQuery.data.profile.city || "",
+        state: prev.state || localQuery.data.profile.state || "",
+        postalCode: prev.postalCode || localQuery.data.profile.postalCode || "",
+        phoneNumber: prev.phoneNumber || localQuery.data.profile.phoneNumber || "",
+        primaryCategory: prev.primaryCategory !== "Local Business / Services" ? prev.primaryCategory : (localQuery.data.profile.primaryCategory || "Local Business / Services"),
+      }));
+    }
+  }, [localQuery.data]);
+
+  // Handle Google Places Search Debounce
+  React.useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.trim().length < 2) {
+      setSearchResults([]);
+      setIsSearchingPlaces(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearchingPlaces(true);
+      try {
+        const results = await searchGooglePlacesServerFn({
+          data: { query: searchQuery.trim() },
+        });
+        setSearchResults(results || []);
+      } catch (err) {
+        console.error("Place search error:", err);
+      } finally {
+        setIsSearchingPlaces(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Save Business Location Mutation
+  const saveLocationMutation = useMutation({
+    mutationFn: (vars: typeof formData & { connectGoogle?: boolean }) =>
+      saveBusinessLocationServerFn({
+        data: {
+          projectId,
+          ...vars,
+        },
+      }),
+    onSuccess: (updatedData, vars) => {
+      queryClient.setQueryData(
+        ["localBusinessDashboard", projectId],
+        updatedData,
+      );
+      setIsPreviewMode(false);
+      toast.success(
+        `Business location "${vars.businessName}" saved successfully!`,
+      );
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || "Failed to save business location");
+    },
+  });
+
+  const sampleDemoData: LocalBusinessData = React.useMemo(() => {
+    const brand = localQuery.data?.profile?.businessName || "Acme Services";
+    return {
+      isConfigured: true,
+      profile: {
+        id: `lb_demo_${projectId}`,
+        businessName: brand,
+        streetAddress: "100 Market Street, Suite 300",
+        city: "San Francisco",
+        state: "CA",
+        postalCode: "94105",
+        countryCode: localQuery.data?.profile?.countryCode || "US",
+        phoneNumber: "+1 (415) 555-0199",
+        websiteUrl: localQuery.data?.profile?.websiteUrl || `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
+        primaryCategory: "Corporate Office & Services",
+        gbpClaimed: true,
+        gbpHealthScore: 78,
+        averageRating: 4.8,
+        totalReviews: 24,
+        napConsistencyScore: 72,
+        onlineAssessment: "Fair",
+        listingsToFixCount: 14,
+        totalListingsCount: 33,
+        directoriesCoverage: [
+          { directory: "Google Business Profile", status: "Matched", details: "Active verified profile" },
+          { directory: "Google Search", status: "Matched", details: "Ranking in local 3-pack" },
+          { directory: "Google Assistant", status: "Matched", details: "Voice query verified" },
+          { directory: "Apple Maps", status: "Not Present", details: "Missed opportunity. Submit to Apple Business Connect." },
+          { directory: "Bing Places", status: "Not Present", details: "Missed opportunity. Syndicate from Google Profile." },
+          { directory: "Facebook", status: "Wrong Address", details: "Address mismatch on Facebook Page" },
+          { directory: "Instagram", status: "Not Present", details: "Link location to Instagram profile" },
+          { directory: "Siri", status: "Not Present", details: "Missed opportunity for Apple voice queries" },
+          { directory: "Waze", status: "Wrong Address", details: "Navigation coordinates need updating" },
+          { directory: "Where To?", status: "No Address", details: "Missed opportunity for in-car GPS" },
+        ],
+        citations: [
+          { directory: "Google Business Profile", url: "https://maps.google.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "consistent" },
+          { directory: "Apple Maps", url: "https://maps.apple.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "missing" },
+          { directory: "Bing Places", url: "https://bingplaces.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "missing" },
+          { directory: "Facebook", url: "https://facebook.com", name: `${brand} Inc`, address: "88 Market St, San Francisco, CA", phone: "+1 (415) 555-0199", status: "mismatch" },
+        ],
+        reviews: [
+          {
+            id: "demo_rev_1",
+            author: "Sarah Jenkins",
+            rating: 5,
+            relativeTime: "2 days ago",
+            text: `Outstanding team and fast turnaround. Would highly recommend ${brand} to anyone looking for professional service!`,
+            response: `Thank you so much Sarah! Our team was thrilled to work with you.`,
+            responsePublishedAt: new Date(Date.now() - 86400000).toISOString(),
+            sentiment: "positive",
+          },
+          {
+            id: "demo_rev_2",
+            author: "Marcus Chen",
+            rating: 4,
+            relativeTime: "1 week ago",
+            text: "Great experience overall, communication was clear and project was delivered ahead of schedule.",
+            sentiment: "positive",
+          },
+        ],
+        auditHighlights: [
+          "Primary Google Business Profile verified and linked",
+          "NAP directory consistency at 72% across 33 key directories",
+          "Recommended: Submit profile to Apple Maps and Bing Places to gain +35% local visibility",
+          "AI Review Auto-Responder enabled and monitoring incoming reviews",
+        ],
+        isConnectedToGoogle: true,
+      },
+      locations: [
+        {
+          id: `loc_demo_1_${projectId}`,
+          projectId,
+          locationName: `${brand} (HQ)`,
+          placeId: "ChIJ_sample_demo_1",
+          businessName: brand,
+          streetAddress: "100 Market Street, Suite 300",
+          city: "San Francisco",
+          state: "CA",
+          postalCode: "94105",
+          countryCode: localQuery.data?.profile?.countryCode || "US",
+          phoneNumber: "+1 (415) 555-0199",
+          websiteUrl: localQuery.data?.profile?.websiteUrl || `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
+          primaryCategory: "Corporate Office & Services",
+          lat: 37.7749,
+          lng: -122.4194,
+          reviewLink: `https://g.page/r/${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}/review`,
+          isPrimary: true,
+          gbpHealthScore: 78,
+          averageRating: 4.8,
+          totalReviews: 24,
+          napConsistencyScore: 72,
+        },
+      ],
+      activeLocationId: `loc_demo_1_${projectId}`,
+      grid: {
+        keyword: `${brand} near me`,
+        gridSize: "3x3",
+        centerLat: 37.7749,
+        centerLng: -122.4194,
+        radiusKm: 5.0,
+        averageRank: 2.3,
+        topThreeCoverageRate: 78,
+        previousAverageRank: 3.8,
+        netGainedPositions: 8,
+        points: [
+          { row: 0, col: 0, lat: 37.7949, lng: -122.4394, rank: 2, distanceKm: 2.3, previousRank: 4, rankDelta: 2 },
+          { row: 0, col: 1, lat: 37.7949, lng: -122.4194, rank: 1, distanceKm: 1.6, previousRank: 2, rankDelta: 1 },
+          { row: 0, col: 2, lat: 37.7949, lng: -122.3994, rank: 3, distanceKm: 2.3, previousRank: 5, rankDelta: 2 },
+          { row: 1, col: 0, lat: 37.7749, lng: -122.4394, rank: 2, distanceKm: 1.6, previousRank: 3, rankDelta: 1 },
+          { row: 1, col: 1, lat: 37.7749, lng: -122.4194, rank: 1, distanceKm: 0.0, previousRank: 1, rankDelta: 0 },
+          { row: 1, col: 2, lat: 37.7749, lng: -122.3994, rank: 2, distanceKm: 1.6, previousRank: 3, rankDelta: 1 },
+          { row: 2, col: 0, lat: 37.7549, lng: -122.4394, rank: 4, distanceKm: 2.3, previousRank: 6, rankDelta: 2 },
+          { row: 2, col: 1, lat: 37.7549, lng: -122.4194, rank: 3, distanceKm: 1.6, previousRank: 4, rankDelta: 1 },
+          { row: 2, col: 2, lat: 37.7549, lng: -122.3994, rank: 3, distanceKm: 2.3, previousRank: 5, rankDelta: 2 },
+        ],
+      },
+    };
+  }, [localQuery.data, projectId]);
+
+  const rawData = localQuery.data;
+  const isConfigured = rawData?.isConfigured === true;
+  const data = isConfigured ? rawData : (isPreviewMode ? sampleDemoData : rawData);
+  const profile = data?.profile;
+  const grid = data?.grid;
+  const locations = data?.locations ?? [];
 
   const activeLocation =
     locations.find(
-      (l) => l.id === (selectedLocationId || data.activeLocationId),
+      (l) => l.id === (selectedLocationId || data?.activeLocationId),
     ) || locations[0];
 
   // Detect Profiles Query
@@ -507,6 +459,17 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
 
         {/* Connect Action & Refresh */}
         <div className="flex items-center gap-2 flex-wrap">
+          {isConfigured && (
+            <button
+              type="button"
+              onClick={() => setIsPreviewMode(false)}
+              className="btn btn-sm btn-outline rounded-xl font-bold text-xs gap-1.5"
+            >
+              <Icon icon="solar:pen-bold" className="h-4 w-4" />
+              <span>Edit Business Location</span>
+            </button>
+          )}
+
           {/* 1-Click Google OAuth Trigger (No Manual Typing) */}
           <button
             type="button"
@@ -516,7 +479,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
             }}
             className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
           >
-            <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0" />
+            <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
             <span>Connect Google Business</span>
           </button>
 
@@ -535,73 +498,424 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
         </div>
       </div>
 
-      {/* 5-Tab Switcher */}
-      <div className="tabs tabs-boxed bg-base-200/60 p-1 rounded-2xl w-fit flex-wrap">
-        <button
-          type="button"
-          onClick={() => setActiveTab("overview")}
-          className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
-            activeTab === "overview"
-              ? "tab-active !bg-primary !text-white shadow-sm"
-              : "text-base-content/70"
-          }`}
-        >
-          <Icon icon="solar:widget-2-bold" className="h-4 w-4" />
-          <span>Overview &amp; Listings</span>
-        </button>
+      {/* Conditional: Show Onboarding / Setup Hero when Not Configured & Not Preview */}
+      {!isConfigured && !isPreviewMode ? (
+        <div className="space-y-8 animate-in fade-in duration-200">
+          {/* Hero Banner */}
+          <div className="rounded-3xl border border-base-300 bg-gradient-to-br from-base-100 via-base-100 to-base-200/50 p-6 md:p-10 shadow-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">
+                  <Icon icon="solar:shop-2-bold" className="h-4 w-4" />
+                  <span>Local SEO &amp; Google Maps Suite</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-black tracking-tight text-base-content">
+                  Connect &amp; Track Your Local Business
+                </h2>
+                <p className="text-xs md:text-sm text-base-content/70 leading-relaxed">
+                  Start tracking your local Google Map Pack rankings, syndicate NAP across 33 key business directories, automate customer review requests, and publish AI replies straight to Google.
+                </p>
+              </div>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab("grid")}
-          className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
-            activeTab === "grid"
-              ? "tab-active !bg-primary !text-white shadow-sm"
-              : "text-base-content/70"
-          }`}
-        >
-          <Icon icon="solar:map-point-wave-bold" className="h-4 w-4" />
-          <span>Geo-Grid Rank Tracker</span>
-        </button>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsPreviewMode(true)}
+                  className="btn btn-outline rounded-2xl font-bold text-xs gap-2"
+                >
+                  <Icon icon="solar:eye-bold" className="h-4 w-4 text-primary" />
+                  <span>Preview Interactive Demo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOauthStep("login");
+                    setIsOAuthModalOpen(true);
+                  }}
+                  className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/20 text-xs gap-2"
+                >
+                  <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
+                  <span>Connect Google Account</span>
+                </button>
+              </div>
+            </div>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab("reviews")}
-          className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
-            activeTab === "reviews"
-              ? "tab-active !bg-primary !text-white shadow-sm"
-              : "text-base-content/70"
-          }`}
-        >
-          <Icon icon="solar:chat-round-line-bold" className="h-4 w-4" />
-          <span>Reviews &amp; AI Reply</span>
-        </button>
+          {/* 2 Setup Columns: Google Places Quick Lookup & Manual Form */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Card: 1-Click Search on Google Places */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Icon icon="solar:magnifer-bold" className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-base-content">
+                      Quick Place Search
+                    </h3>
+                    <p className="text-xs text-base-content/60">
+                      Search Google Maps to auto-populate your details.
+                    </p>
+                  </div>
+                </div>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab("campaign")}
-          className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
-            activeTab === "campaign"
-              ? "tab-active !bg-primary !text-white shadow-sm"
-              : "text-base-content/70"
-          }`}
-        >
-          <Icon icon="solar:qr-code-bold" className="h-4 w-4" />
-          <span>Review Gen &amp; QR</span>
-        </button>
+                {/* Search Input with Live Dropdown */}
+                <div className="relative space-y-2">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="e.g. Acme Consulting, New York"
+                      className="input input-bordered w-full rounded-2xl text-xs pl-10 pr-10 font-medium"
+                    />
+                    <Icon
+                      icon="solar:magnifer-linear"
+                      className="h-4 w-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40"
+                    />
+                    {isSearchingPlaces && (
+                      <Icon
+                        icon="solar:refresh-circle-bold"
+                        className="h-4 w-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-primary animate-spin"
+                      />
+                    )}
+                  </div>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab("nap")}
-          className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
-            activeTab === "nap"
-              ? "tab-active !bg-primary !text-white shadow-sm"
-              : "text-base-content/70"
-          }`}
-        >
-          <Icon icon="solar:checklist-bold" className="h-4 w-4" />
-          <span>NAP Consistency</span>
-        </button>
-      </div>
+                  {/* Search Results Dropdown */}
+                  {searchResults.length > 0 && (
+                    <div className="rounded-2xl border border-base-300 bg-base-100 shadow-xl divide-y divide-base-200 overflow-hidden max-h-72 overflow-y-auto">
+                      {searchResults.map((res: any) => (
+                        <button
+                          key={res.placeId}
+                          type="button"
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              businessName: res.name,
+                              streetAddress: res.formattedAddress.split(",")[0] || res.formattedAddress,
+                              city: res.city,
+                              state: res.state,
+                              postalCode: res.postalCode,
+                              phoneNumber: res.phoneNumber || prev.phoneNumber,
+                              websiteUrl: res.websiteUrl || prev.websiteUrl,
+                              primaryCategory: res.primaryCategory || prev.primaryCategory,
+                              placeId: res.placeId,
+                              lat: res.lat,
+                              lng: res.lng,
+                            }));
+                            setSearchResults([]);
+                            setSearchQuery(res.name);
+                            toast.success(`Selected "${res.name}". Form auto-filled!`);
+                          }}
+                          className="w-full text-left p-3.5 hover:bg-base-200/60 transition-colors flex items-start gap-3"
+                        >
+                          <Icon icon="solar:map-point-bold" className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          <div className="space-y-0.5 flex-1 min-w-0">
+                            <div className="text-xs font-bold text-base-content truncate">{res.name}</div>
+                            <div className="text-[11px] text-base-content/60 truncate">{res.formattedAddress}</div>
+                            <div className="text-[10px] text-primary font-mono">{res.primaryCategory}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Feature highlights */}
+                <div className="p-4 rounded-2xl bg-base-200/50 border border-base-300 space-y-2.5 text-xs text-base-content/70">
+                  <div className="font-bold text-base-content flex items-center gap-1.5">
+                    <Icon icon="solar:shield-check-bold" className="h-4 w-4 text-emerald-500" />
+                    <span>Included in Local SEO Suite:</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Live 3x3 and 5x5 Geo-Grid ranking heatmap</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>33-Directory NAP consistency &amp; syndication audit</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>AI Review Auto-Responder with 1-click Google publishing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <span>Printable review QR flyer &amp; SMS campaign generator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Card: Manual Entry Form */}
+            <div className="lg:col-span-7">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 md:p-8 shadow-sm space-y-5">
+                <div>
+                  <h3 className="text-base font-black text-base-content">
+                    Location &amp; Business Details
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Verify and save your primary physical store or service area details.
+                  </p>
+                </div>
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!formData.businessName.trim()) {
+                      toast.error("Please enter a business name");
+                      return;
+                    }
+                    if (!formData.streetAddress.trim() || !formData.city.trim()) {
+                      toast.error("Please enter street address and city");
+                      return;
+                    }
+                    saveLocationMutation.mutate(formData);
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1 sm:col-span-2">
+                      <label className="text-xs font-bold text-base-content/80">Business Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.businessName}
+                        onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                        placeholder="e.g. Acme Dental & Orthodontics"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1 sm:col-span-2">
+                      <label className="text-xs font-bold text-base-content/80">Street Address *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.streetAddress}
+                        onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
+                        placeholder="e.g. 100 Market Street, Suite 300"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">City *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        placeholder="e.g. San Francisco"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">State / Region *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        placeholder="e.g. CA or Lagos State"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">Postal / ZIP Code *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.postalCode}
+                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                        placeholder="e.g. 94105"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">Country Code</label>
+                      <input
+                        type="text"
+                        value={formData.countryCode}
+                        onChange={(e) => setFormData({ ...formData, countryCode: e.target.value.toUpperCase() })}
+                        placeholder="e.g. US, GB, CA, NG"
+                        maxLength={2}
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">Phone Number</label>
+                      <input
+                        type="tel"
+                        value={formData.phoneNumber}
+                        onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                        placeholder="e.g. +1 (415) 555-0199"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-mono"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-base-content/80">Primary Business Category</label>
+                      <input
+                        type="text"
+                        value={formData.primaryCategory}
+                        onChange={(e) => setFormData({ ...formData, primaryCategory: e.target.value })}
+                        placeholder="e.g. Dental Clinic, Corporate Office, Restaurant"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1 sm:col-span-2">
+                      <label className="text-xs font-bold text-base-content/80">Website URL</label>
+                      <input
+                        type="url"
+                        value={formData.websiteUrl}
+                        onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                        placeholder="https://example.com"
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsPreviewMode(true)}
+                      className="btn btn-sm btn-ghost text-xs font-bold"
+                    >
+                      Preview Sample Demo First
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={saveLocationMutation.isPending}
+                      className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-2 px-6"
+                    >
+                      {saveLocationMutation.isPending ? (
+                        <>
+                          <Icon icon="solar:refresh-circle-bold" className="h-4 w-4 animate-spin" />
+                          <span>Saving Location...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Icon icon="solar:check-read-bold" className="h-4 w-4" />
+                          <span>Save &amp; Track Location</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Configured or Interactive Preview Mode: Render Full 5-Tab Suite */
+        <div className="space-y-6">
+          {/* Sample Demo Mode Warning Banner */}
+          {isPreviewMode && !isConfigured && (
+            <div className="alert alert-warning shadow-sm rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <Icon icon="solar:info-circle-bold" className="h-5 w-5 text-warning-content shrink-0" />
+                <span>
+                  <strong>Interactive Sample Demo:</strong> You are exploring sample data for{" "}
+                  <strong>{profile?.businessName}</strong>. Connect your real location to start tracking live Google rankings and sync directory citations.
+                </span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsPreviewMode(false)}
+                  className="btn btn-xs btn-neutral rounded-xl font-bold"
+                >
+                  Configure Real Location
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOauthStep("login");
+                    setIsOAuthModalOpen(true);
+                  }}
+                  className="btn btn-xs btn-primary rounded-xl font-bold text-white"
+                >
+                  Connect Google
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 5-Tab Switcher */}
+          <div className="tabs tabs-boxed bg-base-200/60 p-1 rounded-2xl w-fit flex-wrap">
+            <button
+              type="button"
+              onClick={() => setActiveTab("overview")}
+              className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
+                activeTab === "overview"
+                  ? "tab-active !bg-primary !text-white shadow-sm"
+                  : "text-base-content/70"
+              }`}
+            >
+              <Icon icon="solar:widget-2-bold" className="h-4 w-4" />
+              <span>Overview &amp; Listings</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("grid")}
+              className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
+                activeTab === "grid"
+                  ? "tab-active !bg-primary !text-white shadow-sm"
+                  : "text-base-content/70"
+              }`}
+            >
+              <Icon icon="solar:map-point-wave-bold" className="h-4 w-4" />
+              <span>Geo-Grid Rank Tracker</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("reviews")}
+              className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
+                activeTab === "reviews"
+                  ? "tab-active !bg-primary !text-white shadow-sm"
+                  : "text-base-content/70"
+              }`}
+            >
+              <Icon icon="solar:chat-round-line-bold" className="h-4 w-4" />
+              <span>Reviews &amp; AI Reply</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("campaign")}
+              className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
+                activeTab === "campaign"
+                  ? "tab-active !bg-primary !text-white shadow-sm"
+                  : "text-base-content/70"
+              }`}
+            >
+              <Icon icon="solar:qr-code-bold" className="h-4 w-4" />
+              <span>Review Gen &amp; QR</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("nap")}
+              className={`tab tab-sm font-bold rounded-xl gap-1.5 transition-all ${
+                activeTab === "nap"
+                  ? "tab-active !bg-primary !text-white shadow-sm"
+                  : "text-base-content/70"
+              }`}
+            >
+              <Icon icon="solar:checklist-bold" className="h-4 w-4" />
+              <span>NAP Consistency</span>
+            </button>
+          </div>
 
       {/* TAB 1: Semrush Local Overview Screen (Matching User Images 1 & 2) */}
       {activeTab === "overview" && (
@@ -1245,6 +1559,8 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
               </table>
             </div>
           </div>
+        </div>
+      )}
         </div>
       )}
 

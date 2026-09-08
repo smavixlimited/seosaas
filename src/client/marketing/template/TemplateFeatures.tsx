@@ -13,7 +13,7 @@ export function TemplateFeatures() {
               <h2 className="text-heading-4 sm:text-heading-3 md:text-heading-2 font-bold text-secondary dark:text-accent">
                 Discover our cutting-edge SEO &amp; growth features.
               </h2>
-              <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
+              <p className="text-tagline-1 text-secondary dark:text-accent">
                 Eliminate the 50 confusing submenus of legacy suites. Focus on the core revenue drivers that win.
               </p>
             </div>
@@ -27,7 +27,7 @@ export function TemplateFeatures() {
                 <h3 className="text-heading-5 font-bold text-secondary dark:text-accent">
                   Multi-Network Ad Spying
                 </h3>
-                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60">
+                <p className="text-tagline-2 text-secondary dark:text-accent">
                   Spy on winning Meta, Google, TikTok, and LinkedIn ad creatives from any competitor with zero user ad accounts needed.
                 </p>
               </div>
@@ -64,7 +64,7 @@ export function TemplateFeatures() {
                     <p className="text-heading-6 font-bold text-secondary dark:text-accent">
                       20k+ Winning Ads
                     </p>
-                    <p className="text-tagline-3 text-secondary/70 dark:text-accent/70">
+                    <p className="text-tagline-3 text-secondary dark:text-accent">
                       Real-time competitor creative monitoring
                     </p>
                   </div>
@@ -92,7 +92,7 @@ export function TemplateFeatures() {
                 <h3 className="text-secondary text-heading-5 font-bold">
                   Revenue Leak Recovery
                 </h3>
-                <p className="text-secondary/70 text-tagline-2">
+                <p className="text-secondary text-tagline-2">
                   Push position 11-20 keywords to Page 1 for high-intent buyers ready to purchase today.
                 </p>
               </div>
@@ -104,7 +104,7 @@ export function TemplateFeatures() {
                     <h4 className="text-accent text-heading-6 font-bold">Pipeline Revenue</h4>
                     <p className="text-ns-green text-tagline-2 font-bold">+185%</p>
                   </div>
-                  <p className="text-accent/60 text-heading-5 font-black">+$14,850/mo</p>
+                  <p className="text-accent text-heading-5 font-black">+$14,850/mo</p>
                 </div>
 
                 {/* 7 Vertical Bars */}
@@ -126,7 +126,7 @@ export function TemplateFeatures() {
                 <h3 className="text-heading-5 font-bold text-secondary dark:text-accent">
                   AI Answer Engine Citations
                 </h3>
-                <p className="text-tagline-2 text-secondary/60 dark:text-accent/60">
+                <p className="text-tagline-2 text-secondary dark:text-accent">
                   Ensure ChatGPT, Perplexity, and Claude cite and recommend your brand for high-value queries.
                 </p>
               </div>

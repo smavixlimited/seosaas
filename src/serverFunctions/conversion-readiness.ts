@@ -3,11 +3,15 @@ import { z } from "zod";
 import { requireProjectContext } from "@/serverFunctions/middleware";
 import { ConversionAdReadinessService } from "@/services/conversion-ad-readiness.service";
 
-const conversionQuerySchema = z.object({
-  targetUrl: z.string().optional(),
-});
+const conversionQuerySchema = z
+  .object({
+    projectId: z.string().optional(),
+    targetUrl: z.string().optional(),
+  })
+  .optional();
 
 const runAuditSchema = z.object({
+  projectId: z.string().optional(),
   targetUrl: z.string().min(1),
 });
 

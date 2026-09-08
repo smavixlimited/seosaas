@@ -9,7 +9,6 @@ import {
   PROSE_MAX_CHARS,
   type ProjectContextSectionKey,
 } from "@/types/schemas/projectContext";
-import { CompetitorsSection } from "./CompetitorsSection";
 import { KeyPagesSection } from "./KeyPagesSection";
 import {
   ConfirmDeleteButton,
@@ -88,11 +87,6 @@ export function ProjectContextPage({ projectId }: { projectId: string }) {
         projectId={projectId}
         sections={context.sections}
         missingSections={context.missingSections}
-      />
-
-      <CompetitorsSection
-        projectId={projectId}
-        competitors={context.competitors}
       />
 
       <KeyPagesSection projectId={projectId} keyPages={context.keyPages} />

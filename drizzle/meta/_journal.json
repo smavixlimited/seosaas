@@ -372,6 +372,20 @@
       "when": 1788448686697,
       "tag": "0052_cooing_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "6",
+      "when": 1788781205359,
+      "tag": "0053_lean_mentallo",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "6",
+      "when": 1788791825782,
+      "tag": "0054_brainy_menace",
+      "breakpoints": true
     }
   ]
 }

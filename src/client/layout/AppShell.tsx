@@ -132,6 +132,7 @@ export function AuthenticatedAppLayout({
       {/* Main Content Area with Venix TopBar */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <VenixTopBar
+          projectId={sidebarProjectId}
           onToggleSidebar={() => setDrawerOpen((prev) => !prev)}
           drawerOpen={drawerOpen}
         />

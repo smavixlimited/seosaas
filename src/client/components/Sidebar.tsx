@@ -109,21 +109,16 @@ function SidebarNavLink({
       {benefit && coords && (
         <div
           role="tooltip"
-          className="pointer-events-none fixed z-9999 w-64 -translate-y-1/2 rounded-2xl border border-base-300 bg-base-100/98 p-3 shadow-2xl backdrop-blur-xl animate-in fade-in duration-100 hidden md:block"
+          className="pointer-events-none fixed z-[9999] w-52 -translate-y-1/2 rounded-xl border border-base-300 bg-base-100/98 p-2.5 shadow-xl backdrop-blur-md animate-in fade-in duration-100 hidden md:block text-base-content"
           style={{
             top: `${coords.top}px`,
             left: `${coords.left}px`,
           }}
         >
-          <div className="flex items-center gap-1.5 pb-1.5 border-b border-base-300/60 mb-1.5">
-            <span className="badge badge-primary badge-xs font-bold text-[9px] uppercase tracking-wider">
-              {label}
-            </span>
-            <span className="text-[10px] font-bold text-base-content/50">
-              Benefit
-            </span>
+          <div className="font-bold text-[10px] text-primary uppercase tracking-wider mb-1">
+            {label}
           </div>
-          <p className="text-xs text-base-content/85 leading-relaxed font-medium">
+          <p className="text-[11px] text-base-content/80 leading-snug font-normal">
             {benefit}
           </p>
         </div>
@@ -226,14 +221,14 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
           <div role="tablist" className="tabs tabs-border w-full">
             <SidebarViewTab
               icon={LayoutGrid}
-              solarIcon="solar:widget-6-bold-duotone"
+              solarIcon="icon-park-outline:dashboard-one"
               label="Tools"
               active={view === "browse"}
               onClick={openBrowse}
             />
             <SidebarViewTab
               icon={MessageCircle}
-              solarIcon="solar:chat-round-line-bold-duotone"
+              solarIcon="icon-park-outline:comments"
               label="Skorvia AI"
               active={view === "chat"}
               onClick={openChat}
@@ -331,7 +326,7 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="shrink-0 border-t border-base-300 px-3 py-2 pb-safe space-y-1">
       <SidebarNavLink
-        solarIcon="solar:question-circle-bold-duotone"
+        solarIcon="icon-park-outline:help"
         label="Help & Documentation"
         onNavigate={onNavigate}
         linkProps={{ to: "/docs" }}
@@ -399,7 +394,7 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       ) : (
         <SidebarNavLink
-          solarIcon="solar:settings-bold-duotone"
+          solarIcon="icon-park-outline:setting-two"
           label="Settings"
           onNavigate={onNavigate}
           linkProps={{ to: "/settings" }}

@@ -106,6 +106,7 @@ export function CompetitorAnalysisDecoder({
     }) =>
       createRoadmapTask({
         data: {
+          projectId,
           title: task.title,
           description: task.description,
           category: task.category,
@@ -195,13 +196,19 @@ export function CompetitorAnalysisDecoder({
                 regenerateMutation.isPending
               }
               onClick={() => regenerateMutation.mutate()}
-              className="btn btn-outline btn-sm rounded-2xl text-xs font-bold gap-1.5 border-base-300 hover:bg-base-200 hover:text-base-content"
+              className="btn btn-primary btn-sm rounded-2xl text-xs font-bold gap-1.5 shadow-sm hover:shadow-md transition-all"
             >
               <Icon
                 icon="solar:refresh-bold"
                 className={`h-4 w-4 ${regenerateMutation.isPending ? "animate-spin" : ""}`}
               />
-              <span>Refresh Teardown</span>
+              <span>
+                {regenerateMutation.isPending
+                  ? "Analyzing..."
+                  : teardown
+                    ? "Re-run Teardown Analysis"
+                    : "Run New Analysis"}
+              </span>
             </button>
           </div>
         </div>

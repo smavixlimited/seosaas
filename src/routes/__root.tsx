@@ -30,7 +30,6 @@ import { getActiveOrganizationId } from "@/lib/auth-session";
 
 import { BRAND_CONFIG } from "@/config/brand";
 import { CurrencyProvider } from "@/client/lib/currency";
-import { LanguageProvider } from "@/client/lib/language";
 import { ImpersonationBanner } from "@/client/components/ImpersonationBanner";
 import { TrackingHeadInjector } from "@/client/components/analytics/TrackingHeadInjector";
 import { DynamicBrandingInjector } from "@/client/components/branding/DynamicBrandingInjector";
@@ -67,15 +66,6 @@ export const Route = createRootRoute({
       {
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover",
-      },
-      // Disable browser auto-translate (Google Translate) app-wide. It rewrites
-      // text nodes into <font> wrappers, which React then can't remove/insert,
-      // crashing render with NotFoundError ("removeChild"/"insertBefore"). The
-      // product UI is data-dense (keywords, domains, metrics) and not meaningful
-      // to machine-translate; the marketing site is a separate app and unaffected.
-      {
-        name: "google",
-        content: "notranslate",
       },
       {
         name: "apple-mobile-web-app-capable",
@@ -181,31 +171,29 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <AutumnProvider>
             <QueryClientProvider client={queryClient}>
               <CurrencyProvider>
-                <LanguageProvider>
-                  <PostHogBootstrap />
-                  <TrackingHeadInjector />
-                  <DynamicBrandingInjector />
-                  <ImpersonationBanner />
-                  {children}
-                  <ExportToSheetsModal />
-                  <Toaster
-                    position="bottom-right"
-                    mobileOffset={{ bottom: 100 }}
+                <PostHogBootstrap />
+                <TrackingHeadInjector />
+                <DynamicBrandingInjector />
+                <ImpersonationBanner />
+                {children}
+                <ExportToSheetsModal />
+                <Toaster
+                  position="bottom-right"
+                  mobileOffset={{ bottom: 100 }}
+                />
+                {showDevtools ? (
+                  <TanStackDevtools
+                    config={{ position: "bottom-right" }}
+                    eventBusConfig={{ connectToServerBus: true }}
+                    plugins={[
+                      {
+                        name: "TanStack Router",
+                        render: <TanStackRouterDevtoolsPanel />,
+                        defaultOpen: true,
+                      },
+                    ]}
                   />
-                  {showDevtools ? (
-                    <TanStackDevtools
-                      config={{ position: "bottom-right" }}
-                      eventBusConfig={{ connectToServerBus: true }}
-                      plugins={[
-                        {
-                          name: "TanStack Router",
-                          render: <TanStackRouterDevtoolsPanel />,
-                          defaultOpen: true,
-                        },
-                      ]}
-                    />
-                  ) : null}
-                </LanguageProvider>
+                ) : null}
               </CurrencyProvider>
             </QueryClientProvider>
           </AutumnProvider>

@@ -84,22 +84,6 @@ export function FreePlanBanner() {
     );
   }
 
-  if (isFreePlan) {
-    return (
-      <BannerShell variant="info">
-        We hope you&rsquo;re enjoying Skorvia!{" "}
-        <Link to={BILLING_ROUTE} className="link link-primary font-medium">
-          Upgrade anytime
-        </Link>{" "}
-        or{" "}
-        <Link to="/support" className="link link-primary font-medium">
-          reach out with questions
-        </Link>
-        .
-      </BannerShell>
-    );
-  }
-
   return null;
 }
 

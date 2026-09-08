@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   createFileRoute,
   stripSearchParams,
@@ -51,7 +52,16 @@ function DomainOverviewRoute() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const projectMarket = useProjectMarket(projectId);
-  const routeState = getDomainRouteState(search, projectMarket);
+
+  // Auto-bind to workspace project domain when search.domain is not explicitly passed
+  const effectiveSearch = React.useMemo(() => {
+    if (!search.domain && projectMarket?.domain) {
+      return { ...search, domain: projectMarket.domain };
+    }
+    return search;
+  }, [search, projectMarket?.domain]);
+
+  const routeState = getDomainRouteState(effectiveSearch, projectMarket);
 
   return (
     <DomainOverviewPage

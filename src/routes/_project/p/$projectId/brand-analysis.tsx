@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ConversionReadinessPage } from "@/client/features/conversion-readiness/ConversionReadinessPage";
+import { BrandAnalysisPage } from "@/client/features/brand-analysis/BrandAnalysisPage";
 
 export const Route = createFileRoute("/_project/p/$projectId/brand-analysis")({
   component: BrandAnalysisRoute,
@@ -7,5 +7,5 @@ export const Route = createFileRoute("/_project/p/$projectId/brand-analysis")({
 
 function BrandAnalysisRoute() {
   const { projectId } = Route.useParams();
-  return <ConversionReadinessPage projectId={projectId} />;
+  return <BrandAnalysisPage projectId={projectId} />;
 }

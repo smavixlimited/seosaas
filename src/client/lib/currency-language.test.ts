@@ -1,8 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { SUPPORTED_CURRENCIES } from "@/client/lib/currency";
-import { SUPPORTED_LANGUAGES } from "@/client/lib/language";
 
-describe("Internationalization: Multi-Currency & Language Suite", () => {
+describe("Internationalization: Multi-Currency Suite", () => {
   it("supports all major global and Flutterwave-supported currencies", () => {
     const codes = SUPPORTED_CURRENCIES.map((c) => c.code);
 
@@ -24,16 +23,5 @@ describe("Internationalization: Multi-Currency & Language Suite", () => {
     expect(codes).toContain("CAD"); // Canadian Dollar
     expect(codes).toContain("AUD"); // Australian Dollar
   });
-
-  it("supports global and multilingual language locales", () => {
-    const codes = SUPPORTED_LANGUAGES.map((l) => l.code);
-    expect(codes).toContain("en");
-    expect(codes).toContain("fr");
-    expect(codes).toContain("es");
-    expect(codes).toContain("de");
-    expect(codes).toContain("pt");
-    expect(codes).toContain("ar");
-    expect(codes).toContain("zh");
-    expect(codes).toContain("yo");
-  });
 });
+

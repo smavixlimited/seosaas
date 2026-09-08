@@ -387,24 +387,37 @@ export const CompetitorStrategyService = {
       ];
     }
 
+    // Fetch User Brand Profile for tailored comparison
+    let userBrandProfile: any = null;
+    try {
+      const { BrandCompetitorService } = await import(
+        "@/services/brand-competitor.service"
+      );
+      userBrandProfile = await BrandCompetitorService.getBrandProfile(projectId);
+    } catch (profileErr) {
+      console.warn("Could not load user brand profile for competitor teardown:", profileErr);
+    }
+
+    const ourBrandName = userBrandProfile?.brandName || "Our Brand";
+
     let attackPlaybook: Pillar5AttackPlaybook = {
       summary: `3 concrete, prioritized plays engineered to intercept ${cleanDomain}'s highest-converting traffic and out-position them across Search & AI.`,
       plays: [
         {
           id: "play_1",
-          title: `Deploy High-Converting '${cleanDomain} vs YourBrand' Comparison Landing Page`,
+          title: `Deploy High-Converting '${cleanDomain} vs ${ourBrandName}' Comparison Landing Page`,
           category: "comparison_page",
           priority: "HIGH",
           estimatedEffort: "45 mins",
           potentialImpact: "+1,400 High-Intent Monthly Visits & Direct Signups",
           objective: `Intercept decision-stage buyers searching for '${cleanDomain} pricing' or '${cleanDomain} alternatives' with an objective, feature-by-feature battlecard.`,
           actionSteps: [
-            "Create a dedicated `/vs/${cleanDomain}` comparison landing page.",
+            `Create a dedicated \`/vs/${cleanDomain}\` comparison landing page.`,
             "Include a transparent pricing comparison table highlighting your superior value.",
             "Add verified customer quotes highlighting migration ease and faster support.",
             "Implement SoftwareApplication & FAQ Schema for rich snippet indexing.",
           ],
-          suggestedPromptForSam: `Act as a world-class SaaS copywriter and product marketer. Write a complete, high-converting comparison page titled 'YourBrand vs ${cleanDomain}: The Complete 2026 Comparison Guide'. Include: 1) An executive summary TL;DR with an honest verdict, 2) A detailed feature matrix table, 3) 5 major advantages of YourBrand (pricing transparency, faster onboarding, modern AEO capabilities), 4) Real switch-over testimonials, and 5) An irresistible risk-free CTA.`,
+          suggestedPromptForSam: `Act as a world-class SaaS copywriter and product marketer. Write a complete, high-converting comparison page titled '${ourBrandName} vs ${cleanDomain}: The Complete 2026 Comparison Guide'. Include: 1) An executive summary TL;DR with an honest verdict, 2) A detailed feature matrix table, 3) 5 major advantages of ${ourBrandName} (pricing transparency, faster onboarding, modern AEO capabilities), 4) Real switch-over testimonials, and 5) An irresistible risk-free CTA.`,
         },
         {
           id: "play_2",
@@ -438,7 +451,7 @@ export const CompetitorStrategyService = {
             "Launch a 1-click free domain scanner to immediately deliver value before asking for signup.",
             "Target ad and organic copy directly at users frustrated by rigid annual contracts.",
           ],
-          suggestedPromptForSam: `Draft a set of high-converting marketing copy assets (hero headlines, subheaders, feature callouts, and 3 ad copy variations) positioning YourBrand as the agile, friction-free modern alternative to legacy tools like ${cleanDomain}. Emphasize instant setup, transparent pricing, and next-gen AI search capabilities.`,
+          suggestedPromptForSam: `Draft a set of high-converting marketing copy assets (hero headlines, subheaders, feature callouts, and 3 ad copy variations) positioning ${ourBrandName} as the agile, friction-free modern alternative to legacy tools like ${cleanDomain}. Emphasize instant setup, transparent pricing, and next-gen AI search capabilities.`,
         },
       ],
     };
@@ -451,8 +464,15 @@ export const CompetitorStrategyService = {
       modelName =
         (model as unknown as { modelId?: string }).modelId || modelName;
 
-      const systemPrompt = `You are a Principal SaaS Growth Strategist and Competitor Intelligence Architect. 
-Analyze the provided competitor domain metrics and generate an executive-level, sharp 5-Pillar Competitor Strategy Teardown in strict JSON format.
+      const systemPrompt = `You are an elite Senior Business Developer, Growth Architect, Master Copywriter, and SEO Director with over 25 years of multi-disciplinary experience across global technology, commerce, publishing, and service sectors.
+Your mission is to perform a rigorous head-to-head competitive teardown. Analyze the target competitor domain metrics, compare them systematically against our user's brand profile, industry strengths, and value proposition, and engineer a 5-Pillar Competitor Strategy Teardown with high-converting attack plays in strict JSON format.
+
+Synthesize deep strategic insights across:
+1. Brand Positioning & Angle Vulnerabilities (Where their messaging falls flat or sounds legacy)
+2. Funnel Friction & Pricing Arbitrage (Where buyers hesitate or seek better terms)
+3. Organic & Content Moat Structure (What thematic pillars drive their pipeline and where gaps exist)
+4. Striking Distance Keywords & Technical Vulnerabilities (Realistic search and AEO targets we can steal)
+5. Actionable Attack Playbook (Direct battlecard plays, comparison assets, and conversion hijack tactics tailored to our brand)
 
 Output JSON structure must exactly match:
 {
@@ -500,14 +520,25 @@ Output JSON structure must exactly match:
   }
 }`;
 
+      const brandContextSection = userBrandProfile
+        ? `\nOUR USER BRAND PROFILE (Compare competitor against this):
+- Brand Name: ${userBrandProfile.brandName || "My Brand"}
+- Brand Domain: ${userBrandProfile.websiteUrl || "Not specified"}
+- Industry Sector: ${userBrandProfile.industry || "SaaS / Software"}
+- Company Size: ${userBrandProfile.companySize || "1-5"}
+- Unique Value Proposition (USP): ${userBrandProfile.valueProposition || "Fast, transparent, modern AI visibility"}
+- Brand Description / Bio: ${userBrandProfile.brandDescription || "Not specified"}`
+        : "";
+
       const userPrompt = `Target Competitor Domain: ${cleanDomain}
 Estimated Organic Traffic: ${organicTraffic.toLocaleString()}
 Estimated Organic Keywords: ${organicKeywords.toLocaleString()}
 Backlinks: ${backlinks.toLocaleString()}
 Top Keywords Sample: ${JSON.stringify(topKeywordsSample.slice(0, 15))}
 Top Pages Sample: ${JSON.stringify(topPagesSample.slice(0, 8))}
+${brandContextSection}
 
-Generate the complete, high-leverage 5-pillar strategic teardown with 3 prioritized attack plays ready for instant execution with SAM AI. Return ONLY the raw JSON object.`;
+As a 25+ year Senior Business Developer, Growth Director, Copywriter, and SEO Specialist, execute a deep comparative analysis between our brand and ${cleanDomain}. Generate the high-leverage 5-pillar strategic teardown with 3 prioritized attack plays specifically tailored to out-maneuver ${cleanDomain}. Return ONLY the raw JSON object.`;
 
       const aiResponse = await generateText({
         model,

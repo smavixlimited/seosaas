@@ -22,7 +22,7 @@ export function TemplateCTA() {
               <h2 className="text-heading-4 sm:text-heading-3 md:text-heading-2 font-bold text-secondary dark:text-accent">
                 Build a complete search &amp; ad engine without seat limits.
               </h2>
-              <p className="text-tagline-1 text-secondary/60 dark:text-accent/60">
+              <p className="text-tagline-1 text-secondary dark:text-accent">
                 Start your 14-day free trial today. Connect your domain in 60 seconds and see where your competitors are making money.
               </p>
             </div>
@@ -37,7 +37,7 @@ export function TemplateCTA() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your work email"
-                className="w-full rounded-full border border-stroke-3 bg-background-1 px-5 py-3.5 text-tagline-1 text-secondary placeholder:text-secondary/50 focus:outline-none dark:border-stroke-7 dark:bg-background-5 dark:text-accent dark:placeholder:text-accent/50"
+                className="w-full rounded-full border border-stroke-3 bg-background-1 px-5 py-3.5 text-tagline-1 text-secondary placeholder:text-secondary focus:outline-none dark:border-stroke-7 dark:bg-background-5 dark:text-accent dark:placeholder:text-accent"
               />
               <button
                 type="submit"
@@ -48,7 +48,7 @@ export function TemplateCTA() {
             </form>
 
             {/* Checklist */}
-            <div className="flex flex-wrap items-center justify-center xl:justify-start gap-4 sm:gap-6 text-tagline-2 text-secondary/70 dark:text-accent/70 pt-1">
+            <div className="flex flex-wrap items-center justify-center xl:justify-start gap-4 sm:gap-6 text-tagline-2 text-secondary dark:text-accent pt-1">
               <div className="flex items-center gap-2">
                 <span className="flex size-4 items-center justify-center rounded-full bg-ns-green text-secondary font-bold text-[10px]">
                   ✓

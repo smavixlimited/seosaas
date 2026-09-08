@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { MarketingNavbar } from "@/client/marketing/Navbar";
 import { MarketingFooter } from "@/client/marketing/Footer";
+import { toast } from "sonner";
 import { runFreeLeadAuditServerFn } from "@/serverFunctions/lead-audit";
 import type { LeadAuditResult } from "@/services/lead-audit.service";
 
@@ -40,7 +41,7 @@ function FreeAuditPage() {
       });
       setResult(res);
     } catch (err) {
-      alert("Failed to run audit: " + (err as Error).message);
+      toast.error("Failed to run audit: " + (err as Error).message);
     } finally {
       setLoading(false);
     }

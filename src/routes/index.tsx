@@ -9,9 +9,10 @@ import { TemplateProcess } from "@/client/marketing/template/TemplateProcess";
 import { TemplateFaq } from "@/client/marketing/template/TemplateFaq";
 import { TemplateIntegration } from "@/client/marketing/template/TemplateIntegration";
 import { TemplateNumbers } from "@/client/marketing/template/TemplateNumbers";
-import { TemplateTeam } from "@/client/marketing/template/TemplateTeam";
+import { TemplateBenefits } from "@/client/marketing/template/TemplateBenefits";
+import { TemplateRoiCalculator } from "@/client/marketing/template/TemplateRoiCalculator";
 import { TemplateCTA } from "@/client/marketing/template/TemplateCTA";
-import { TemplateBlog } from "@/client/marketing/template/TemplateBlog";
+import { TemplateAeoShowcase } from "@/client/marketing/template/TemplateAeoShowcase";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -24,7 +25,7 @@ function HomePage() {
       <MarketingNavbar />
 
       <main>
-        {/* 1. Hero with SVG Background & Perspective Scanner Sandbox */}
+        {/* 1. Semrush-Inspired Hero with Domain & Keyword Scanner */}
         <TemplateHero />
 
         {/* 2. 3-Card Bento Features (Tilted Ad Spy, Green Revenue Bars, AEO Citations) */}
@@ -33,26 +34,29 @@ function HomePage() {
         {/* 3. 5-Card Services Grid with NextSaaS Font Icons */}
         <TemplateServices />
 
-        {/* 4. 3-Step Outcome Process Flow */}
+        {/* 4. High-Converting Benefits (Features to Bottom-Line Outcomes) */}
+        <TemplateBenefits />
+
+        {/* 5. Interactive ROI Cost Savings Calculator */}
+        <TemplateRoiCalculator />
+
+        {/* 6. 3-Step Outcome Process Flow */}
         <TemplateProcess />
 
-        {/* 5. Frequently Asked Questions with Illustration */}
+        {/* 6. Frequently Asked Questions with Illustration */}
         <TemplateFaq />
 
-        {/* 6. Integration Infinite Marquee */}
+        {/* 7. Integration Infinite Marquee */}
         <TemplateIntegration />
 
-        {/* 7. Numbers & Statistical Impact */}
+        {/* 8. Numbers & Statistical Impact */}
         <TemplateNumbers />
 
-        {/* 8. Team Showcase */}
-        <TemplateTeam />
+        {/* 9. Generative AEO & Legacy Comparison Showcase */}
+        <TemplateAeoShowcase />
 
-        {/* 9. Final Conversion CTA with Email Form */}
+        {/* 10. Final Conversion CTA with Email Form */}
         <TemplateCTA />
-
-        {/* 10. Recent Research & Playbooks Blog Grid */}
-        <TemplateBlog />
       </main>
 
       {/* Footer */}

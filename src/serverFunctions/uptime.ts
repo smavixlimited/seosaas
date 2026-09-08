@@ -3,8 +3,10 @@ import { z } from "zod";
 import {
   getUserUptimeMonitors,
   addUptimeMonitor,
+  updateMonitorReminderSettings,
   deleteUptimeMonitor,
   probeUptimeMonitor,
+  checkAndSendSslExpiryReminders,
 } from "@/services/uptime.service";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 
@@ -17,6 +19,8 @@ export const getUptimeMonitorsServerFn = createServerFn({ method: "GET" })
 const addMonitorSchema = z.object({
   url: z.string().min(3),
   projectId: z.string().optional().nullable(),
+  reminderFrequency: z.enum(["weekly", "ssl_expiry", "both", "none"]).optional(),
+  reminderEmail: z.string().email().optional().nullable().or(z.literal("")),
 });
 
 export const addUptimeMonitorServerFn = createServerFn({ method: "POST" })
@@ -24,6 +28,22 @@ export const addUptimeMonitorServerFn = createServerFn({ method: "POST" })
   .validator((d: unknown) => addMonitorSchema.parse(d))
   .handler(async ({ data, context }) => {
     return addUptimeMonitor(context.userId, data);
+  });
+
+const updateReminderSchema = z.object({
+  monitorId: z.string(),
+  reminderFrequency: z.enum(["weekly", "ssl_expiry", "both", "none"]),
+  reminderEmail: z.string().email().optional().nullable().or(z.literal("")),
+});
+
+export const updateMonitorReminderServerFn = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .validator((d: unknown) => updateReminderSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    return updateMonitorReminderSettings(context.userId, data.monitorId, {
+      reminderFrequency: data.reminderFrequency,
+      reminderEmail: data.reminderEmail,
+    });
   });
 
 const monitorIdSchema = z.object({
@@ -42,4 +62,10 @@ export const probeUptimeMonitorServerFn = createServerFn({ method: "POST" })
   .validator((d: unknown) => monitorIdSchema.parse(d))
   .handler(async ({ data }) => {
     return probeUptimeMonitor(data.monitorId);
+  });
+
+export const triggerSslExpiryCheckServerFn = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .handler(async () => {
+    return checkAndSendSslExpiryReminders();
   });

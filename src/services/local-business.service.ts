@@ -129,6 +129,7 @@ export interface DetectedGoogleBusinessProfile {
 }
 
 export interface LocalBusinessData {
+  isConfigured: boolean;
   profile: {
     id: string;
     businessName: string;
@@ -145,7 +146,7 @@ export interface LocalBusinessData {
     averageRating: number;
     totalReviews: number;
     napConsistencyScore: number;
-    onlineAssessment: "Poor" | "Fair" | "Good" | "Excellent";
+    onlineAssessment: string;
     listingsToFixCount: number;
     totalListingsCount: number;
     directoriesCoverage: DirectoryCoverageItem[];
@@ -295,16 +296,16 @@ export class LocalBusinessService {
               placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
               businessName: existingProfile.businessName,
               streetAddress:
-                existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
-              city: existingProfile.city || "Lagos",
-              state: existingProfile.state || "LA",
-              postalCode: existingProfile.postalCode || "106104",
-              countryCode: existingProfile.countryCode || "NG",
-              phoneNumber: existingProfile.phoneNumber || "+234 805 716 2832",
-              websiteUrl: existingProfile.websiteUrl || "https://example.com",
+                existingProfile.streetAddress || "",
+              city: existingProfile.city || "",
+              state: existingProfile.state || "",
+              postalCode: existingProfile.postalCode || "",
+              countryCode: existingProfile.countryCode || "US",
+              phoneNumber: existingProfile.phoneNumber || "",
+              websiteUrl: existingProfile.websiteUrl || "",
               primaryCategory: existingProfile.primaryCategory,
-              lat: 6.4474,
-              lng: 3.4735,
+              lat: 37.7749,
+              lng: -122.4194,
               reviewLink: `https://g.page/r/${existingProfile.businessName.toLowerCase().replace(/[^a-z0-9]/g, "")}/review`,
               isPrimary: true,
               gbpHealthScore: existingProfile.gbpHealthScore,
@@ -330,18 +331,18 @@ export class LocalBusinessService {
         });
 
         const result: LocalBusinessData = {
+          isConfigured: true,
           profile: {
             id: existingProfile.id,
             businessName: existingProfile.businessName,
-            streetAddress:
-              existingProfile.streetAddress || "KM 17 Lekki - Epe Expressway",
-            city: existingProfile.city || "Lagos",
-            state: existingProfile.state || "LA",
-            postalCode: existingProfile.postalCode || "106104",
-            countryCode: existingProfile.countryCode,
-            phoneNumber: existingProfile.phoneNumber || "+234 805 716 2832",
-            websiteUrl: existingProfile.websiteUrl || "https://example.com",
-            primaryCategory: existingProfile.primaryCategory,
+            streetAddress: existingProfile.streetAddress || "",
+            city: existingProfile.city || "",
+            state: existingProfile.state || "",
+            postalCode: existingProfile.postalCode || "",
+            countryCode: existingProfile.countryCode || "US",
+            phoneNumber: existingProfile.phoneNumber || "",
+            websiteUrl: existingProfile.websiteUrl || "",
+            primaryCategory: existingProfile.primaryCategory || "Local Business",
             gbpClaimed: existingProfile.gbpClaimed,
             gbpHealthScore: existingProfile.gbpHealthScore,
             averageRating: existingProfile.averageRating,
@@ -386,23 +387,102 @@ export class LocalBusinessService {
         return result;
       }
 
-      const seeded = await this.seedDefaultLocalBusiness(projectId);
-      LOCAL_CACHE.set(projectId, {
-        data: seeded,
-        expiresAt: Date.now() + CACHE_TTL_MS,
-      });
-      return seeded;
+      // No configured local business location found in DB: return clean unconfigured state
+      const { BrandCompetitorService } = await import(
+        "@/services/brand-competitor.service"
+      );
+      const brand = await BrandCompetitorService.getBrandProfile(projectId);
+      const brandName = brand.brandName || "My Business";
+      const websiteUrl = brand.websiteUrl || "";
+      const countryCode = brand.targetCountry || "US";
+
+      const unconfiguredResult: LocalBusinessData = {
+        isConfigured: false,
+        profile: {
+          id: "",
+          businessName: brandName,
+          streetAddress: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          countryCode,
+          phoneNumber: "",
+          websiteUrl,
+          primaryCategory: "Local Business / Services",
+          gbpClaimed: false,
+          gbpHealthScore: 0,
+          averageRating: 0,
+          totalReviews: 0,
+          napConsistencyScore: 0,
+          onlineAssessment: "Unlinked",
+          listingsToFixCount: 0,
+          totalListingsCount: 33,
+          directoriesCoverage: DEFAULT_SEMRUSH_COVERAGE,
+          citations: [],
+          reviews: [],
+          auditHighlights: [
+            "No Google Business Profile or physical location connected yet.",
+            "Connect your verified Google Account or enter your address below to start tracking local map pack rankings and directory sync.",
+          ],
+          isConnectedToGoogle: false,
+        },
+        locations: [],
+        grid: {
+          keyword: `${brandName} near me`,
+          gridSize: "3x3",
+          centerLat: 37.7749,
+          centerLng: -122.4194,
+          radiusKm: 5.0,
+          averageRank: 0,
+          topThreeCoverageRate: 0,
+          points: [],
+        },
+      };
+
+      return unconfiguredResult;
     } catch (err) {
       console.warn(
-        "LocalBusinessService.getLocalBusinessDashboard fallback used:",
+        "LocalBusinessService.getLocalBusinessDashboard error:",
         err,
       );
-      const mock = this.generateMockDashboard(projectId);
-      LOCAL_CACHE.set(projectId, {
-        data: mock,
-        expiresAt: Date.now() + CACHE_TTL_MS,
-      });
-      return mock;
+      return {
+        isConfigured: false,
+        profile: {
+          id: "",
+          businessName: "My Business",
+          streetAddress: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          countryCode: "US",
+          phoneNumber: "",
+          websiteUrl: "",
+          primaryCategory: "Local Business",
+          gbpClaimed: false,
+          gbpHealthScore: 0,
+          averageRating: 0,
+          totalReviews: 0,
+          napConsistencyScore: 0,
+          onlineAssessment: "Unlinked",
+          listingsToFixCount: 0,
+          totalListingsCount: 33,
+          directoriesCoverage: DEFAULT_SEMRUSH_COVERAGE,
+          citations: [],
+          reviews: [],
+          auditHighlights: [],
+        },
+        locations: [],
+        grid: {
+          keyword: "business near me",
+          gridSize: "3x3",
+          centerLat: 37.7749,
+          centerLng: -122.4194,
+          radiusKm: 5.0,
+          averageRank: 0,
+          topThreeCoverageRate: 0,
+          points: [],
+        },
+      };
     }
   }
 
@@ -528,85 +608,215 @@ export class LocalBusinessService {
   }
 
   /**
-   * 1-Click Connect a detected Google Business Profile without typing any details
+   * Connects a detected Google Business Profile to the project
    */
   static async connectDetectedGoogleProfile(params: {
     projectId: string;
     profileId: string;
   }): Promise<LocalBusinessData> {
-    const detectedList = await this.detectGoogleBusinessProfiles();
-    const selected =
-      detectedList.find((p) => p.id === params.profileId) || detectedList[0];
+    const all = await this.detectGoogleBusinessProfiles();
+    const detected = all.find((p) => p.id === params.profileId) || all[0];
+    return this.saveBusinessLocation({
+      projectId: params.projectId,
+      businessName: detected.businessName,
+      streetAddress: detected.streetAddress,
+      city: detected.city,
+      state: detected.state,
+      postalCode: detected.postalCode,
+      countryCode: detected.countryCode,
+      phoneNumber: detected.phoneNumber,
+      websiteUrl: detected.websiteUrl,
+      primaryCategory: detected.primaryCategory,
+      lat: detected.lat,
+      lng: detected.lng,
+      connectGoogle: true,
+    });
+  }
 
-    const data = await this.getLocalBusinessDashboard(params.projectId);
-    data.profile.businessName = selected.businessName;
-    data.profile.streetAddress = selected.streetAddress;
-    data.profile.city = selected.city;
-    data.profile.state = selected.state;
-    data.profile.postalCode = selected.postalCode;
-    data.profile.countryCode = selected.countryCode;
-    data.profile.phoneNumber = selected.phoneNumber;
-    data.profile.primaryCategory = selected.primaryCategory;
-    data.profile.averageRating = selected.averageRating;
-    data.profile.totalReviews = selected.totalReviews;
-    data.profile.gbpClaimed = true;
-    data.profile.gbpHealthScore =
-      selected.onlineAssessment === "Poor" ? 68 : 94;
-    data.profile.onlineAssessment = selected.onlineAssessment;
-    data.profile.listingsToFixCount = selected.listingsToFixCount;
-    data.profile.totalListingsCount = selected.totalListingsCount;
-    data.profile.directoriesCoverage = selected.coverage;
-    data.profile.isConnectedToGoogle = true;
+  /**
+   * Saves or updates the primary business location for a project from manual entry or Google Place connect
+   */
+  static async saveBusinessLocation(params: {
+    projectId: string;
+    businessName: string;
+    streetAddress: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    countryCode?: string;
+    phoneNumber?: string;
+    websiteUrl?: string;
+    primaryCategory?: string;
+    placeId?: string;
+    lat?: number;
+    lng?: number;
+    connectGoogle?: boolean;
+  }): Promise<LocalBusinessData> {
+    const { db } = await import("@/db");
+    const { localBusinessProfiles, localBusinessLocations, localRankGridSnapshots } = await import("@/db/schema");
+    const { eq } = await import("drizzle-orm");
 
-    // Update locations list
-    const primaryLoc = data.locations[0];
-    if (primaryLoc) {
-      primaryLoc.businessName = selected.businessName;
-      primaryLoc.streetAddress = selected.streetAddress;
-      primaryLoc.city = selected.city;
-      primaryLoc.state = selected.state;
-      primaryLoc.postalCode = selected.postalCode;
-      primaryLoc.countryCode = selected.countryCode;
-      primaryLoc.phoneNumber = selected.phoneNumber;
-      primaryLoc.primaryCategory = selected.primaryCategory;
-      primaryLoc.lat = selected.lat;
-      primaryLoc.lng = selected.lng;
-    }
+    const now = new Date().toISOString();
+    const profileId = `lb_${params.projectId}`;
+    const locationId = `lbloc_primary_${params.projectId}`;
+    const countryCode = params.countryCode || "US";
+    const lat = params.lat || (countryCode === "NG" ? 6.4474 : 37.7749);
+    const lng = params.lng || (countryCode === "NG" ? 3.4735 : -122.4194);
+    const category = params.primaryCategory || "Local Business";
 
-    try {
-      const { db } = await import("@/db");
+    // 1. Upsert Profile
+    const [existing] = await db
+      .select()
+      .from(localBusinessProfiles)
+      .where(eq(localBusinessProfiles.projectId, params.projectId))
+      .limit(1);
+
+    const initialAudit = [
+      `Primary business location for ${params.businessName} successfully configured`,
+      params.connectGoogle ? "Google Business Profile connection established" : "Ready for Google Business Profile connection",
+      `Active directory sync monitoring initiated for ${countryCode} directories`,
+      "Local Geo-Grid 3x3 rank scanner initialized",
+    ];
+
+    if (existing) {
       await db
         .update(localBusinessProfiles)
         .set({
-          businessName: selected.businessName,
-          streetAddress: selected.streetAddress,
-          city: selected.city,
-          state: selected.state,
-          postalCode: selected.postalCode,
-          countryCode: selected.countryCode,
-          phoneNumber: selected.phoneNumber,
-          primaryCategory: selected.primaryCategory,
-          gbpClaimed: true,
-          gbpHealthScore: data.profile.gbpHealthScore,
-          averageRating: selected.averageRating,
-          totalReviews: selected.totalReviews,
-          auditHighlightsJson: JSON.stringify([
-            `Official Google Business Profile for ${selected.businessName} actively connected`,
-            "Google OAuth permissions authorized for review sync and map tracking",
-            `Online presence assessment: ${selected.onlineAssessment}`,
-            `${selected.listingsToFixCount} directory listings identified needing address or phone synchronization`,
-          ]),
+          businessName: params.businessName,
+          streetAddress: params.streetAddress,
+          city: params.city,
+          state: params.state,
+          postalCode: params.postalCode,
+          countryCode,
+          phoneNumber: params.phoneNumber || "",
+          websiteUrl: params.websiteUrl || "",
+          primaryCategory: category,
+          gbpClaimed: Boolean(params.connectGoogle || params.placeId),
+          gbpHealthScore: params.connectGoogle ? 94 : 76,
+          auditHighlightsJson: JSON.stringify(initialAudit),
+          updatedAt: now,
         })
         .where(eq(localBusinessProfiles.projectId, params.projectId));
-    } catch (e) {
-      console.warn("Failed to update connected GBP:", e);
+    } else {
+      await db.insert(localBusinessProfiles).values({
+        id: profileId,
+        projectId: params.projectId,
+        businessName: params.businessName,
+        streetAddress: params.streetAddress,
+        city: params.city,
+        state: params.state,
+        postalCode: params.postalCode,
+        countryCode,
+        phoneNumber: params.phoneNumber || "",
+        websiteUrl: params.websiteUrl || "",
+        primaryCategory: category,
+        gbpClaimed: Boolean(params.connectGoogle || params.placeId),
+        gbpHealthScore: params.connectGoogle ? 94 : 76,
+        averageRating: 4.8,
+        totalReviews: 12,
+        napConsistencyScore: 88,
+        citationsListJson: JSON.stringify([]),
+        reviewsListJson: JSON.stringify([]),
+        auditHighlightsJson: JSON.stringify(initialAudit),
+        createdAt: now,
+        updatedAt: now,
+      });
     }
 
-    LOCAL_CACHE.set(params.projectId, {
-      data,
-      expiresAt: Date.now() + CACHE_TTL_MS,
-    });
-    return data;
+    // 2. Upsert primary location
+    const [existingLoc] = await db
+      .select()
+      .from(localBusinessLocations)
+      .where(eq(localBusinessLocations.projectId, params.projectId))
+      .limit(1);
+
+    if (existingLoc) {
+      await db
+        .update(localBusinessLocations)
+        .set({
+          locationName: `${params.businessName} (Main)`,
+          businessName: params.businessName,
+          streetAddress: params.streetAddress,
+          city: params.city,
+          state: params.state,
+          postalCode: params.postalCode,
+          countryCode,
+          phoneNumber: params.phoneNumber || "",
+          websiteUrl: params.websiteUrl || "",
+          primaryCategory: category,
+          lat,
+          lng,
+          placeId: params.placeId || existingLoc.placeId,
+          updatedAt: now,
+        })
+        .where(eq(localBusinessLocations.id, existingLoc.id));
+    } else {
+      await db.insert(localBusinessLocations).values({
+        id: locationId,
+        projectId: params.projectId,
+        locationName: `${params.businessName} (Main)`,
+        placeId: params.placeId || `ChIJ_${Math.random().toString(36).slice(2, 10)}`,
+        businessName: params.businessName,
+        streetAddress: params.streetAddress,
+        city: params.city,
+        state: params.state,
+        postalCode: params.postalCode,
+        countryCode,
+        phoneNumber: params.phoneNumber || "",
+        websiteUrl: params.websiteUrl || "",
+        primaryCategory: category,
+        lat,
+        lng,
+        reviewLink: `https://g.page/r/${params.businessName.toLowerCase().replace(/[^a-z0-9]/g, "")}/review`,
+        isPrimary: true,
+        gbpHealthScore: params.connectGoogle ? 94 : 76,
+        averageRating: 4.8,
+        totalReviews: 12,
+        napConsistencyScore: 88,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    // 3. Initialize Geo-Grid snapshot if missing
+    const [existingGrid] = await db
+      .select()
+      .from(localRankGridSnapshots)
+      .where(eq(localRankGridSnapshots.projectId, params.projectId))
+      .limit(1);
+
+    if (!existingGrid) {
+      const gridId = `lgrid_${params.projectId}`;
+      const points = [
+        { row: 0, col: 0, lat: lat + 0.02, lng: lng - 0.02, rank: 2, distanceKm: 2.8, previousRank: 3, rankDelta: 1 },
+        { row: 0, col: 1, lat: lat + 0.02, lng, rank: 1, distanceKm: 2.2, previousRank: 2, rankDelta: 1 },
+        { row: 0, col: 2, lat: lat + 0.02, lng: lng + 0.02, rank: 3, distanceKm: 2.8, previousRank: 4, rankDelta: 1 },
+        { row: 1, col: 0, lat, lng: lng - 0.02, rank: 1, distanceKm: 2.2, previousRank: 1, rankDelta: 0 },
+        { row: 1, col: 1, lat, lng, rank: 1, distanceKm: 0.0, previousRank: 1, rankDelta: 0 },
+        { row: 1, col: 2, lat, lng: lng + 0.02, rank: 2, distanceKm: 2.2, previousRank: 3, rankDelta: 1 },
+        { row: 2, col: 0, lat: lat - 0.02, lng: lng - 0.02, rank: 4, distanceKm: 2.8, previousRank: 6, rankDelta: 2 },
+        { row: 2, col: 1, lat: lat - 0.02, lng, rank: 2, distanceKm: 2.2, previousRank: 3, rankDelta: 1 },
+        { row: 2, col: 2, lat: lat - 0.02, lng: lng + 0.02, rank: 3, distanceKm: 2.8, previousRank: 5, rankDelta: 2 },
+      ];
+
+      await db.insert(localRankGridSnapshots).values({
+        id: gridId,
+        projectId: params.projectId,
+        locationId: locationId,
+        keyword: `${category} near me`,
+        gridSize: "3x3",
+        centerLat: lat,
+        centerLng: lng,
+        radiusKm: 5.0,
+        averageRank: 2.1,
+        topThreeCoverageRate: 89,
+        gridPointsJson: JSON.stringify(points),
+        createdAt: now,
+      });
+    }
+
+    LOCAL_CACHE.delete(params.projectId);
+    return this.getLocalBusinessDashboard(params.projectId);
   }
 
   /**
@@ -614,40 +824,93 @@ export class LocalBusinessService {
    */
   static async searchGooglePlaces(
     query: string,
+    countryCode = "US",
   ): Promise<GooglePlaceSearchResult[]> {
-    const clean = query.trim().toLowerCase();
+    const clean = query.trim();
     if (!clean) return [];
+
+    const slug = clean.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const city =
+      countryCode === "NG"
+        ? "Lagos"
+        : countryCode === "GB"
+          ? "London"
+          : countryCode === "CA"
+            ? "Toronto"
+            : "San Francisco";
+    const state =
+      countryCode === "NG"
+        ? "Lagos State"
+        : countryCode === "GB"
+          ? "England"
+          : countryCode === "CA"
+            ? "ON"
+            : "CA";
+    const postal =
+      countryCode === "NG"
+        ? "106104"
+        : countryCode === "GB"
+          ? "EC1A 1BB"
+          : countryCode === "CA"
+            ? "M5V 2T6"
+            : "94105";
+    const lat =
+      countryCode === "NG"
+        ? 6.4474
+        : countryCode === "GB"
+          ? 51.5074
+          : countryCode === "CA"
+            ? 43.6532
+            : 37.7749;
+    const lng =
+      countryCode === "NG"
+        ? 3.4735
+        : countryCode === "GB"
+          ? -0.1278
+          : countryCode === "CA"
+            ? -79.3832
+            : -122.4194;
 
     return [
       {
-        placeId: `ChIJ_${Math.random().toString(36).slice(2, 10)}`,
-        name: query.trim(),
-        formattedAddress: `KM 17 Lekki - Epe Expressway, Lagos 106104, Nigeria`,
-        city: "Lagos",
-        state: "LA",
-        postalCode: "106104",
-        lat: 6.4474,
-        lng: 3.4735,
-        primaryCategory: "Corporate Office",
-        phoneNumber: "+234 805 716 2832",
-        websiteUrl: `https://${clean.replace(/[^a-z0-9]/g, "")}.com`,
-        rating: 4.5,
-        userRatingsTotal: 12,
+        placeId: `ChIJ_${slug || "place"}_${Math.random().toString(36).slice(2, 7)}`,
+        name: clean,
+        formattedAddress: `120 Commercial Way, ${city}, ${state} ${postal}`,
+        city,
+        state,
+        postalCode: postal,
+        lat,
+        lng,
+        primaryCategory: "Local Business & Professional Services",
+        phoneNumber:
+          countryCode === "NG"
+            ? "+234 805 123 4567"
+            : countryCode === "GB"
+              ? "+44 20 7946 0912"
+              : "+1 (415) 555-0198",
+        websiteUrl: `https://${slug || "business"}.com`,
+        rating: 4.8,
+        userRatingsTotal: 34,
       },
       {
-        placeId: `ChIJ_${Math.random().toString(36).slice(2, 10)}_2`,
-        name: `${query.trim()} Flagship`,
-        formattedAddress: `120 Market St, Suite 400, San Francisco, CA 94105`,
-        city: "San Francisco",
-        state: "CA",
-        postalCode: "94105",
-        lat: 37.7749,
-        lng: -122.4194,
-        primaryCategory: "Professional Services",
-        phoneNumber: "+1 (415) 555-0198",
-        websiteUrl: `https://${clean.replace(/[^a-z0-9]/g, "")}.com/sf`,
-        rating: 4.8,
-        userRatingsTotal: 41,
+        placeId: `ChIJ_${slug || "place"}_main_${Math.random().toString(36).slice(2, 7)}`,
+        name: `${clean} Flagship`,
+        formattedAddress: `500 Main Boulevard, Suite 200, ${city}, ${state} ${postal}`,
+        city,
+        state,
+        postalCode: postal,
+        lat: lat + 0.015,
+        lng: lng + 0.015,
+        primaryCategory: "Corporate Office & Services",
+        phoneNumber:
+          countryCode === "NG"
+            ? "+234 805 987 6543"
+            : countryCode === "GB"
+              ? "+44 20 7946 0888"
+              : "+1 (415) 555-0277",
+        websiteUrl: `https://${slug || "business"}.com/hq`,
+        rating: 4.9,
+        userRatingsTotal: 62,
       },
     ];
   }
@@ -871,9 +1134,34 @@ export class LocalBusinessService {
    */
   static async seedDefaultLocalBusiness(
     projectId: string,
-    businessName = "Smavix Limited",
+    businessName?: string,
   ): Promise<LocalBusinessData> {
-    const mock = this.generateMockDashboard(projectId, businessName);
+    let resolvedBusinessName = businessName || "My Business";
+    let resolvedWebsiteUrl = "https://example.com";
+
+    try {
+      const { db } = await import("@/db");
+      const { projects } = await import("@/db/schema");
+      const { eq } = await import("drizzle-orm");
+      const [proj] = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, projectId))
+        .limit(1);
+
+      if (proj?.domain) {
+        resolvedWebsiteUrl = `https://${proj.domain}`;
+        const domainBase = proj.domain.replace(/^www\./i, "").split(".")[0];
+        resolvedBusinessName = domainBase.charAt(0).toUpperCase() + domainBase.slice(1);
+      }
+    } catch {
+      // Ignore db query error
+    }
+
+    const mock = this.generateMockDashboard(projectId, resolvedBusinessName);
+    mock.profile.websiteUrl = resolvedWebsiteUrl;
+    mock.profile.gbpClaimed = false;
+    mock.profile.isConnectedToGoogle = false;
 
     try {
       const { db } = await import("@/db");
@@ -892,7 +1180,7 @@ export class LocalBusinessService {
         phoneNumber: mock.profile.phoneNumber,
         websiteUrl: mock.profile.websiteUrl,
         primaryCategory: mock.profile.primaryCategory,
-        gbpClaimed: mock.profile.gbpClaimed,
+        gbpClaimed: false,
         gbpHealthScore: mock.profile.gbpHealthScore,
         averageRating: mock.profile.averageRating,
         totalReviews: mock.profile.totalReviews,
@@ -1078,6 +1366,7 @@ Guidelines:
     businessName = "Smavix Limited",
   ): LocalBusinessData {
     return {
+      isConfigured: true,
       profile: {
         id: `lb_mock_${projectId}`,
         businessName,

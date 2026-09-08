@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WaitlistRouteImport } from './routes/waitlist'
 import { Route as VsAhrefsSemrushRouteImport } from './routes/vs-ahrefs-semrush'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -86,6 +87,7 @@ import { Route as AuthenticatedOnboardingChatRouteImport } from './routes/_authe
 import { Route as AppHelpOpenrouterApiKeyRouteImport } from './routes/_app/help/openrouter-api-key'
 import { Route as AppHelpDataforseoApiKeyRouteImport } from './routes/_app/help/dataforseo-api-key'
 import { Route as AppDashboardTeamRouteImport } from './routes/_app/dashboard/team'
+import { Route as AdminAdminWaitlistRouteImport } from './routes/_admin/admin/waitlist'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin/users'
 import { Route as AdminAdminPlansRouteImport } from './routes/_admin/admin/plans'
 import { Route as AdminAdminPaymentsRouteImport } from './routes/_admin/admin/payments'
@@ -100,6 +102,7 @@ import { Route as ApiGa4OauthCallbackRouteImport } from './routes/api/ga4/oauth/
 import { Route as ApiBillingWebhookGatewayRouteImport } from './routes/api/billing.webhook.$gateway'
 import { Route as ProjectPProjectIdViralDetectorRouteImport } from './routes/_project/p/$projectId/viral-detector'
 import { Route as ProjectPProjectIdTrustSentimentRouteImport } from './routes/_project/p/$projectId/trust-sentiment'
+import { Route as ProjectPProjectIdTrendsRadarRouteImport } from './routes/_project/p/$projectId/trends-radar'
 import { Route as ProjectPProjectIdSettingsRouteImport } from './routes/_project/p/$projectId/settings'
 import { Route as ProjectPProjectIdSearchPerformanceRouteImport } from './routes/_project/p/$projectId/search-performance'
 import { Route as ProjectPProjectIdScraperRouteImport } from './routes/_project/p/$projectId/scraper'
@@ -114,6 +117,7 @@ import { Route as ProjectPProjectIdKeywordsRouteImport } from './routes/_project
 import { Route as ProjectPProjectIdDomainRouteImport } from './routes/_project/p/$projectId/domain'
 import { Route as ProjectPProjectIdCompetitorsRouteImport } from './routes/_project/p/$projectId/competitors'
 import { Route as ProjectPProjectIdCompetitorAnalysisRouteImport } from './routes/_project/p/$projectId/competitor-analysis'
+import { Route as ProjectPProjectIdCompetitorAdsRouteImport } from './routes/_project/p/$projectId/competitor-ads'
 import { Route as ProjectPProjectIdBrandMentionsRouteImport } from './routes/_project/p/$projectId/brand-mentions'
 import { Route as ProjectPProjectIdBrandLookupRouteImport } from './routes/_project/p/$projectId/brand-lookup'
 import { Route as ProjectPProjectIdBrandAnalysisRouteImport } from './routes/_project/p/$projectId/brand-analysis'
@@ -133,6 +137,11 @@ import { Route as ProjectPProjectIdSettingsBackupRouteImport } from './routes/_p
 import { Route as ProjectPProjectIdRankTrackingConfigIdRouteImport } from './routes/_project/p/$projectId/rank-tracking/$configId'
 import { Route as ProjectPProjectIdAuditIssuesResultIdRouteImport } from './routes/_project/p/$projectId/audit/issues/$resultId'
 
+const WaitlistRoute = WaitlistRouteImport.update({
+  id: '/waitlist',
+  path: '/waitlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VsAhrefsSemrushRoute = VsAhrefsSemrushRouteImport.update({
   id: '/vs-ahrefs-semrush',
   path: '/vs-ahrefs-semrush',
@@ -522,6 +531,11 @@ const AppDashboardTeamRoute = AppDashboardTeamRouteImport.update({
   path: '/dashboard/team',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AdminAdminWaitlistRoute = AdminAdminWaitlistRouteImport.update({
+  id: '/admin/waitlist',
+  path: '/admin/waitlist',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -593,6 +607,12 @@ const ProjectPProjectIdTrustSentimentRoute =
   ProjectPProjectIdTrustSentimentRouteImport.update({
     id: '/trust-sentiment',
     path: '/trust-sentiment',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
+const ProjectPProjectIdTrendsRadarRoute =
+  ProjectPProjectIdTrendsRadarRouteImport.update({
+    id: '/trends-radar',
+    path: '/trends-radar',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
 const ProjectPProjectIdSettingsRoute =
@@ -674,6 +694,12 @@ const ProjectPProjectIdCompetitorAnalysisRoute =
   ProjectPProjectIdCompetitorAnalysisRouteImport.update({
     id: '/competitor-analysis',
     path: '/competitor-analysis',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
+const ProjectPProjectIdCompetitorAdsRoute =
+  ProjectPProjectIdCompetitorAdsRouteImport.update({
+    id: '/competitor-ads',
+    path: '/competitor-ads',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
 const ProjectPProjectIdBrandMentionsRoute =
@@ -801,6 +827,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/vs-ahrefs-semrush': typeof VsAhrefsSemrushRoute
+  '/waitlist': typeof WaitlistRoute
   '/.well-known/openai-apps-challenge': typeof Char91DotwellKnownChar93OpenaiAppsChallengeRoute
   '/ai': typeof AppAiRoute
   '/billing': typeof AppBillingRoute
@@ -852,6 +879,7 @@ export interface FileRoutesByFullPath {
   '/admin/payments': typeof AdminAdminPaymentsRoute
   '/admin/plans': typeof AdminAdminPlansRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/admin/waitlist': typeof AdminAdminWaitlistRoute
   '/dashboard/team': typeof AppDashboardTeamRoute
   '/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
@@ -874,6 +902,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
@@ -888,6 +917,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
+  '/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
   '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
@@ -921,6 +951,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/vs-ahrefs-semrush': typeof VsAhrefsSemrushRoute
+  '/waitlist': typeof WaitlistRoute
   '/.well-known/openai-apps-challenge': typeof Char91DotwellKnownChar93OpenaiAppsChallengeRoute
   '/ai': typeof AppAiRoute
   '/billing': typeof AppBillingRoute
@@ -971,6 +1002,7 @@ export interface FileRoutesByTo {
   '/admin/payments': typeof AdminAdminPaymentsRoute
   '/admin/plans': typeof AdminAdminPlansRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/admin/waitlist': typeof AdminAdminWaitlistRoute
   '/dashboard/team': typeof AppDashboardTeamRoute
   '/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
@@ -992,6 +1024,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
@@ -1004,6 +1037,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/saved': typeof ProjectPProjectIdSavedRoute
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
+  '/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
   '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
@@ -1043,6 +1077,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/vs-ahrefs-semrush': typeof VsAhrefsSemrushRoute
+  '/waitlist': typeof WaitlistRoute
   '/.well-known/openai-apps-challenge': typeof Char91DotwellKnownChar93OpenaiAppsChallengeRoute
   '/_app/ai': typeof AppAiRoute
   '/_app/billing': typeof AppBillingRoute
@@ -1094,6 +1129,7 @@ export interface FileRoutesById {
   '/_admin/admin/payments': typeof AdminAdminPaymentsRoute
   '/_admin/admin/plans': typeof AdminAdminPlansRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
+  '/_admin/admin/waitlist': typeof AdminAdminWaitlistRoute
   '/_app/dashboard/team': typeof AppDashboardTeamRoute
   '/_app/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/_app/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
@@ -1116,6 +1152,7 @@ export interface FileRoutesById {
   '/_project/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/_project/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
   '/_project/p/$projectId/brand-mentions': typeof ProjectPProjectIdBrandMentionsRoute
+  '/_project/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/_project/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/_project/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
   '/_project/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
@@ -1130,6 +1167,7 @@ export interface FileRoutesById {
   '/_project/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/_project/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/_project/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
+  '/_project/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/_project/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
   '/_project/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
@@ -1165,6 +1203,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify-email'
     | '/vs-ahrefs-semrush'
+    | '/waitlist'
     | '/.well-known/openai-apps-challenge'
     | '/ai'
     | '/billing'
@@ -1216,6 +1255,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/plans'
     | '/admin/users'
+    | '/admin/waitlist'
     | '/dashboard/team'
     | '/help/dataforseo-api-key'
     | '/help/openrouter-api-key'
@@ -1238,6 +1278,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/brand-analysis'
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/brand-mentions'
+    | '/p/$projectId/competitor-ads'
     | '/p/$projectId/competitor-analysis'
     | '/p/$projectId/competitors'
     | '/p/$projectId/domain'
@@ -1252,6 +1293,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
     | '/p/$projectId/settings'
+    | '/p/$projectId/trends-radar'
     | '/p/$projectId/trust-sentiment'
     | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
@@ -1285,6 +1327,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify-email'
     | '/vs-ahrefs-semrush'
+    | '/waitlist'
     | '/.well-known/openai-apps-challenge'
     | '/ai'
     | '/billing'
@@ -1335,6 +1378,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/plans'
     | '/admin/users'
+    | '/admin/waitlist'
     | '/dashboard/team'
     | '/help/dataforseo-api-key'
     | '/help/openrouter-api-key'
@@ -1356,6 +1400,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/brand-analysis'
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/brand-mentions'
+    | '/p/$projectId/competitor-ads'
     | '/p/$projectId/competitor-analysis'
     | '/p/$projectId/competitors'
     | '/p/$projectId/domain'
@@ -1368,6 +1413,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/saved'
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
+    | '/p/$projectId/trends-radar'
     | '/p/$projectId/trust-sentiment'
     | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
@@ -1406,6 +1452,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/verify-email'
     | '/vs-ahrefs-semrush'
+    | '/waitlist'
     | '/.well-known/openai-apps-challenge'
     | '/_app/ai'
     | '/_app/billing'
@@ -1457,6 +1504,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/payments'
     | '/_admin/admin/plans'
     | '/_admin/admin/users'
+    | '/_admin/admin/waitlist'
     | '/_app/dashboard/team'
     | '/_app/help/dataforseo-api-key'
     | '/_app/help/openrouter-api-key'
@@ -1479,6 +1527,7 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/brand-analysis'
     | '/_project/p/$projectId/brand-lookup'
     | '/_project/p/$projectId/brand-mentions'
+    | '/_project/p/$projectId/competitor-ads'
     | '/_project/p/$projectId/competitor-analysis'
     | '/_project/p/$projectId/competitors'
     | '/_project/p/$projectId/domain'
@@ -1493,6 +1542,7 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/scraper'
     | '/_project/p/$projectId/search-performance'
     | '/_project/p/$projectId/settings'
+    | '/_project/p/$projectId/trends-radar'
     | '/_project/p/$projectId/trust-sentiment'
     | '/_project/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
@@ -1532,6 +1582,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   VsAhrefsSemrushRoute: typeof VsAhrefsSemrushRoute
+  WaitlistRoute: typeof WaitlistRoute
   Char91DotwellKnownChar93OpenaiAppsChallengeRoute: typeof Char91DotwellKnownChar93OpenaiAppsChallengeRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiOgRoute: typeof ApiOgRoute
@@ -1575,6 +1626,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/waitlist': {
+      id: '/waitlist'
+      path: '/waitlist'
+      fullPath: '/waitlist'
+      preLoaderRoute: typeof WaitlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vs-ahrefs-semrush': {
       id: '/vs-ahrefs-semrush'
       path: '/vs-ahrefs-semrush'
@@ -2114,6 +2172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardTeamRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_admin/admin/waitlist': {
+      id: '/_admin/admin/waitlist'
+      path: '/admin/waitlist'
+      fullPath: '/admin/waitlist'
+      preLoaderRoute: typeof AdminAdminWaitlistRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/admin/users': {
       id: '/_admin/admin/users'
       path: '/admin/users'
@@ -2212,6 +2277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectPProjectIdTrustSentimentRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
+    '/_project/p/$projectId/trends-radar': {
+      id: '/_project/p/$projectId/trends-radar'
+      path: '/trends-radar'
+      fullPath: '/p/$projectId/trends-radar'
+      preLoaderRoute: typeof ProjectPProjectIdTrendsRadarRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
     '/_project/p/$projectId/settings': {
       id: '/_project/p/$projectId/settings'
       path: '/settings'
@@ -2308,6 +2380,13 @@ declare module '@tanstack/react-router' {
       path: '/competitor-analysis'
       fullPath: '/p/$projectId/competitor-analysis'
       preLoaderRoute: typeof ProjectPProjectIdCompetitorAnalysisRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
+    '/_project/p/$projectId/competitor-ads': {
+      id: '/_project/p/$projectId/competitor-ads'
+      path: '/competitor-ads'
+      fullPath: '/p/$projectId/competitor-ads'
+      preLoaderRoute: typeof ProjectPProjectIdCompetitorAdsRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
     '/_project/p/$projectId/brand-mentions': {
@@ -2539,6 +2618,7 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdBrandAnalysisRoute: typeof ProjectPProjectIdBrandAnalysisRoute
   ProjectPProjectIdBrandLookupRoute: typeof ProjectPProjectIdBrandLookupRoute
   ProjectPProjectIdBrandMentionsRoute: typeof ProjectPProjectIdBrandMentionsRoute
+  ProjectPProjectIdCompetitorAdsRoute: typeof ProjectPProjectIdCompetitorAdsRoute
   ProjectPProjectIdCompetitorAnalysisRoute: typeof ProjectPProjectIdCompetitorAnalysisRoute
   ProjectPProjectIdCompetitorsRoute: typeof ProjectPProjectIdCompetitorsRoute
   ProjectPProjectIdDomainRoute: typeof ProjectPProjectIdDomainRoute
@@ -2553,6 +2633,7 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdScraperRoute: typeof ProjectPProjectIdScraperRoute
   ProjectPProjectIdSearchPerformanceRoute: typeof ProjectPProjectIdSearchPerformanceRoute
   ProjectPProjectIdSettingsRoute: typeof ProjectPProjectIdSettingsRouteWithChildren
+  ProjectPProjectIdTrendsRadarRoute: typeof ProjectPProjectIdTrendsRadarRoute
   ProjectPProjectIdTrustSentimentRoute: typeof ProjectPProjectIdTrustSentimentRoute
   ProjectPProjectIdViralDetectorRoute: typeof ProjectPProjectIdViralDetectorRoute
   ProjectPProjectIdIndexRoute: typeof ProjectPProjectIdIndexRoute
@@ -2566,6 +2647,7 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdBrandAnalysisRoute: ProjectPProjectIdBrandAnalysisRoute,
     ProjectPProjectIdBrandLookupRoute: ProjectPProjectIdBrandLookupRoute,
     ProjectPProjectIdBrandMentionsRoute: ProjectPProjectIdBrandMentionsRoute,
+    ProjectPProjectIdCompetitorAdsRoute: ProjectPProjectIdCompetitorAdsRoute,
     ProjectPProjectIdCompetitorAnalysisRoute:
       ProjectPProjectIdCompetitorAnalysisRoute,
     ProjectPProjectIdCompetitorsRoute: ProjectPProjectIdCompetitorsRoute,
@@ -2583,6 +2665,7 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdSearchPerformanceRoute:
       ProjectPProjectIdSearchPerformanceRoute,
     ProjectPProjectIdSettingsRoute: ProjectPProjectIdSettingsRouteWithChildren,
+    ProjectPProjectIdTrendsRadarRoute: ProjectPProjectIdTrendsRadarRoute,
     ProjectPProjectIdTrustSentimentRoute: ProjectPProjectIdTrustSentimentRoute,
     ProjectPProjectIdViralDetectorRoute: ProjectPProjectIdViralDetectorRoute,
     ProjectPProjectIdIndexRoute: ProjectPProjectIdIndexRoute,
@@ -2613,6 +2696,7 @@ interface AdminRouteChildren {
   AdminAdminPaymentsRoute: typeof AdminAdminPaymentsRoute
   AdminAdminPlansRoute: typeof AdminAdminPlansRoute
   AdminAdminUsersRoute: typeof AdminAdminUsersRoute
+  AdminAdminWaitlistRoute: typeof AdminAdminWaitlistRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
   AdminAdminSettingsApisRoute: typeof AdminAdminSettingsApisRoute
   AdminAdminSettingsBrandingRoute: typeof AdminAdminSettingsBrandingRoute
@@ -2627,6 +2711,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminPaymentsRoute: AdminAdminPaymentsRoute,
   AdminAdminPlansRoute: AdminAdminPlansRoute,
   AdminAdminUsersRoute: AdminAdminUsersRoute,
+  AdminAdminWaitlistRoute: AdminAdminWaitlistRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
   AdminAdminSettingsApisRoute: AdminAdminSettingsApisRoute,
   AdminAdminSettingsBrandingRoute: AdminAdminSettingsBrandingRoute,
@@ -2688,6 +2773,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   VsAhrefsSemrushRoute: VsAhrefsSemrushRoute,
+  WaitlistRoute: WaitlistRoute,
   Char91DotwellKnownChar93OpenaiAppsChallengeRoute:
     Char91DotwellKnownChar93OpenaiAppsChallengeRoute,
   ApiHealthRoute: ApiHealthRoute,

@@ -124,3 +124,18 @@ export const completeBrandOnboarding = createServerFn({ method: "POST" })
       competitorsList: data.competitorsList,
     });
   });
+
+export const getBrandAnalysisSummary = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(z.object({ projectId: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    return BrandCompetitorService.getBrandAnalysis(data.projectId);
+  });
+
+export const runBrandAnalysis = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(z.object({ projectId: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    return BrandCompetitorService.runBrandAnalysis(data.projectId);
+  });
+

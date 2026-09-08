@@ -11,12 +11,15 @@ import {
   Tag,
   UploadCloud,
   X,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/client/lib/currency";
 import { BRAND_CONFIG } from "@/config/brand";
 import {
   initializePaystackCheckoutServerFn,
+  initializeFlutterwaveCheckoutServerFn,
+  initializeLemonSqueezyCheckoutServerFn,
   submitManualPaymentServerFn,
 } from "@/serverFunctions/billing-gateways";
 import { validateCouponServerFn } from "@/serverFunctions/coupons";
@@ -47,7 +50,7 @@ export function CheckoutModal({
 }: CheckoutModalProps) {
   const { currency, formatPrice } = useCurrency();
   const [selectedGateway, setSelectedGateway] = React.useState<
-    "paystack" | "lemonsqueezy" | "manual"
+    "paystack" | "flutterwave" | "lemonsqueezy" | "manual"
   >("paystack");
   const [loading, setLoading] = React.useState(false);
   const [reference, setReference] = React.useState("");
@@ -124,6 +127,7 @@ export function CheckoutModal({
           planId: plan.id,
           amountNgn:
             currency === "NGN" ? currentPrice : Math.round(currentPrice * 1500),
+          couponCode: appliedCoupon?.coupon?.code,
           callbackUrl: window.location.origin + "/billing?status=success",
         },
       });
@@ -132,7 +136,51 @@ export function CheckoutModal({
         window.location.href = res.authorizationUrl;
       }
     } catch (err) {
-      alert("Checkout initialization failed: " + (err as Error).message);
+      toast.error("Checkout initialization failed: " + (err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFlutterwaveCheckout = async () => {
+    setLoading(true);
+    try {
+      const res = await initializeFlutterwaveCheckoutServerFn({
+        data: {
+          planId: plan.id,
+          amount: currentPrice,
+          currency,
+          couponCode: appliedCoupon?.coupon?.code,
+          callbackUrl: window.location.origin + "/billing?status=success",
+        },
+      });
+
+      if (res.authorizationUrl) {
+        window.location.href = res.authorizationUrl;
+      }
+    } catch (err) {
+      toast.error("Flutterwave checkout failed: " + (err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLemonSqueezyCheckout = async () => {
+    setLoading(true);
+    try {
+      const res = await initializeLemonSqueezyCheckoutServerFn({
+        data: {
+          planId: plan.id,
+          couponCode: appliedCoupon?.coupon?.code,
+          callbackUrl: window.location.origin + "/billing?status=success",
+        },
+      });
+
+      if (res.authorizationUrl) {
+        window.location.href = res.authorizationUrl;
+      }
+    } catch (err) {
+      toast.error("LemonSqueezy checkout failed: " + (err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -141,7 +189,7 @@ export function CheckoutModal({
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reference.trim()) {
-      alert("Please provide the bank transaction reference number.");
+      toast.error("Please provide the bank transaction reference number.");
       return;
     }
 
@@ -326,24 +374,45 @@ export function CheckoutModal({
                 Select Payment Method
               </label>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {/* Paystack */}
                 <button
                   type="button"
                   onClick={() => setSelectedGateway("paystack")}
-                  className={`rounded-2xl border p-3.5 text-left transition-all flex flex-col justify-between space-y-2 ${
+                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
                     selectedGateway === "paystack"
                       ? "border-primary bg-primary/5 ring-2 ring-primary/20"
                       : "border-base-300 bg-base-100 hover:border-base-content/30"
                   }`}
                 >
-                  <CreditCard className="h-5 w-5 text-primary" />
+                  <CreditCard className="h-4 w-4 text-primary" />
                   <div>
                     <div className="text-xs font-bold text-base-content">
                       Paystack
                     </div>
                     <div className="text-[10px] text-base-content/60">
-                      Cards, USSD, NGN
+                      Cards, NGN
+                    </div>
+                  </div>
+                </button>
+
+                {/* Flutterwave */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedGateway("flutterwave")}
+                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
+                    selectedGateway === "flutterwave"
+                      ? "border-orange-500 bg-orange-500/5 ring-2 ring-orange-500/20"
+                      : "border-base-300 bg-base-100 hover:border-base-content/30"
+                  }`}
+                >
+                  <Zap className="h-4 w-4 text-orange-500" />
+                  <div>
+                    <div className="text-xs font-bold text-base-content">
+                      Flutterwave
+                    </div>
+                    <div className="text-[10px] text-base-content/60">
+                      Pan-Africa & USD
                     </div>
                   </div>
                 </button>
@@ -352,16 +421,16 @@ export function CheckoutModal({
                 <button
                   type="button"
                   onClick={() => setSelectedGateway("lemonsqueezy")}
-                  className={`rounded-2xl border p-3.5 text-left transition-all flex flex-col justify-between space-y-2 ${
+                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
                     selectedGateway === "lemonsqueezy"
-                      ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                      ? "border-blue-500 bg-blue-500/5 ring-2 ring-blue-500/20"
                       : "border-base-300 bg-base-100 hover:border-base-content/30"
                   }`}
                 >
-                  <Globe className="h-5 w-5 text-blue-500" />
+                  <Globe className="h-4 w-4 text-blue-500" />
                   <div>
                     <div className="text-xs font-bold text-base-content">
-                      International
+                      Global Cards
                     </div>
                     <div className="text-[10px] text-base-content/60">
                       Stripe / USD
@@ -373,13 +442,13 @@ export function CheckoutModal({
                 <button
                   type="button"
                   onClick={() => setSelectedGateway("manual")}
-                  className={`rounded-2xl border p-3.5 text-left transition-all flex flex-col justify-between space-y-2 ${
+                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
                     selectedGateway === "manual"
-                      ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                      ? "border-emerald-500 bg-emerald-500/5 ring-2 ring-emerald-500/20"
                       : "border-base-300 bg-base-100 hover:border-base-content/30"
                   }`}
                 >
-                  <Receipt className="h-5 w-5 text-emerald-500" />
+                  <Receipt className="h-4 w-4 text-emerald-500" />
                   <div>
                     <div className="text-xs font-bold text-base-content">
                       Bank Wire
@@ -397,8 +466,7 @@ export function CheckoutModal({
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-primary flex items-center gap-1.5">
-                    <ShieldCheck className="h-4 w-4" /> Instant Activation with
-                    Paystack
+                    <ShieldCheck className="h-4 w-4" /> Instant Activation with Paystack
                   </div>
                   <p>
                     Pay securely using your Nigerian Naira debit card, USSD
@@ -415,7 +483,32 @@ export function CheckoutModal({
                 >
                   {loading
                     ? "Redirecting to Paystack..."
-                    : `Pay ${formattedFinalAmount} Now`}
+                    : `Pay ${formattedFinalAmount} with Paystack`}
+                </button>
+              </div>
+            )}
+
+            {selectedGateway === "flutterwave" && (
+              <div className="space-y-4 pt-2">
+                <div className="rounded-2xl border border-orange-500/20 bg-orange-500/5 p-4 text-xs space-y-1.5 text-base-content/80">
+                  <div className="font-bold text-orange-600 flex items-center gap-1.5">
+                    <Zap className="h-4 w-4" /> Instant Multi-Currency with Flutterwave
+                  </div>
+                  <p>
+                    Pay seamlessly across Africa and globally supporting NGN,
+                    GHS, KES, ZAR, USD, mobile money, and debit/credit cards.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleFlutterwaveCheckout}
+                  className="btn btn-warning rounded-2xl w-full font-bold text-white shadow-md shadow-orange-500/25"
+                >
+                  {loading
+                    ? "Redirecting to Flutterwave..."
+                    : `Pay ${formattedFinalAmount} with Flutterwave`}
                 </button>
               </div>
             )}
@@ -424,22 +517,23 @@ export function CheckoutModal({
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-blue-500 flex items-center gap-1.5">
-                    <Globe className="h-4 w-4" /> International Credit Card /
-                    PayPal
+                    <Globe className="h-4 w-4" /> International Credit Card / PayPal
                   </div>
                   <p>
                     Subscribe seamlessly via standard USD billing supporting
-                    Visa, MasterCard, Amex, and Apple Pay.
+                    Visa, MasterCard, Amex, PayPal, and Apple Pay powered by LemonSqueezy.
                   </p>
                 </div>
 
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={handlePaystackCheckout}
+                  onClick={handleLemonSqueezyCheckout}
                   className="btn btn-primary rounded-2xl w-full font-bold text-white shadow-md shadow-primary/25"
                 >
-                  Pay {formattedFinalAmount} with Global Card
+                  {loading
+                    ? "Redirecting to LemonSqueezy..."
+                    : `Pay ${formattedFinalAmount} with Global Card`}
                 </button>
               </div>
             )}

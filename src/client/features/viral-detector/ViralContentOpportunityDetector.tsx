@@ -8,6 +8,7 @@ import {
   updateViralOpportunityStatus,
 } from "@/serverFunctions/viral-content";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
+import { BrandSettingsCompletenessReminder } from "@/client/components/BrandSettingsCompletenessReminder";
 import type {
   ViralPlatform,
   ViralOpportunityItem,
@@ -30,6 +31,7 @@ export function ViralContentOpportunityDetector({
     queryFn: () =>
       getViralOpportunities({
         data: {
+          projectId,
           platform: selectedPlatform === "all" ? undefined : selectedPlatform,
         },
       }),
@@ -39,6 +41,7 @@ export function ViralContentOpportunityDetector({
     mutationFn: () =>
       generateViralOpportunities({
         data: {
+          projectId,
           platform: selectedPlatform === "all" ? undefined : selectedPlatform,
         },
       }),
@@ -54,16 +57,19 @@ export function ViralContentOpportunityDetector({
     },
   });
 
+
   const addRoadmapMutation = useMutation({
     mutationFn: (item: ViralOpportunityItem) =>
       createRoadmapTask({
         data: {
+          projectId,
           title: `Create Viral Content: "${item.title}" (${item.platform.toUpperCase()})`,
           description: `Hook:\n"${item.hookText}"\n\nOutline:\n${item.scriptOutline}\n\nTarget Audience: ${item.targetAudience}`,
           category: "growth",
           priority: "high",
         },
       }),
+
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: ["projectRoadmap", projectId],
@@ -108,16 +114,19 @@ export function ViralContentOpportunityDetector({
       case "youtube":
         return "text-red-500 bg-red-500/10 border-red-500/20";
       case "x":
-        return "text-slate-800 dark:text-slate-200 bg-slate-500/10 border-slate-500/20";
+        return "text-sky-500 bg-sky-500/10 border-sky-500/20";
       case "linkedin":
-        return "text-blue-600 bg-blue-600/10 border-blue-600/20";
+        return "text-blue-500 bg-blue-500/10 border-blue-500/20";
       default:
-        return "text-primary bg-primary/10 border-primary/20";
+        return "text-amber-500 bg-amber-500/10 border-amber-500/20";
     }
   };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-150">
+      {/* Brand Settings Completeness Reminder */}
+      <BrandSettingsCompletenessReminder projectId={projectId} />
+
       {/* Top Banner with Quick Actions */}
       <div className="rounded-3xl border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-base-100 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
@@ -134,8 +143,9 @@ export function ViralContentOpportunityDetector({
               </span>
             </div>
             <p className="text-xs text-base-content/70 mt-0.5">
-              Generate battle-tested video hooks, contrarian threads, and
-              high-conversion ad angles tailored to your niche.
+              Discover high-converting video hooks, contrarian threads, and
+              viral frameworks engineered from trending market stories in your
+              target country and industry.
             </p>
           </div>
         </div>

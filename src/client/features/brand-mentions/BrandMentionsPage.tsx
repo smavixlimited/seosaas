@@ -10,6 +10,8 @@ import {
   getAeoSentiment,
   refreshAeoSentimentScan,
 } from "@/serverFunctions/brand-mentions";
+import { createSamSession } from "@/serverFunctions/sam";
+import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import type {
   BrandMentionItem,
   AeoSentimentItem,
@@ -100,21 +102,39 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
     },
   });
 
-  const handleLaunchSamForAeo = (item: AeoSentimentItem) => {
+  const [isLaunchingAeo, setIsLaunchingAeo] = React.useState(false);
+
+  const handleLaunchSamForAeo = async (item: AeoSentimentItem) => {
+    setIsLaunchingAeo(true);
     if (typeof window !== "undefined") {
-      const prompt = `Act as an Elite AEO & Entity Optimization Specialist. We need to bridge entity citation gaps on ${item.aiEngine.toUpperCase()} for brand "${item.targetBrandName}". Identified gaps: ${item.keyMissingGaps.join("; ")}. Provide step-by-step schema markup, SameAs entity linkages, and a press release outline to secure consistent entity recognition.`;
+      const prompt = `Act as an Elite AEO & Entity Optimization Specialist with over 25 years of multi-disciplinary experience. We need to bridge entity citation gaps on ${item.aiEngine.toUpperCase()} for brand "${item.targetBrandName}". Identified gaps: ${item.keyMissingGaps.join("; ")}. Provide step-by-step schema markup, SameAs entity linkages, and an authoritative press release / entity linkage plan to secure consistent recognition.`;
       sessionStorage.setItem("sam_pending_prompt", prompt);
     }
 
     toast.success(
-      `Launching SAM AI for ${item.aiEngine.toUpperCase()} optimization...`,
+      `Starting new chat with Skorvia AI for ${item.aiEngine.toUpperCase()} optimization...`,
     );
 
-    void navigate({
-      to: "/p/$projectId/sam",
-      params: { projectId },
-      search: { s: undefined },
-    });
+    try {
+      const { id: newSessionId } = await createSamSession({
+        data: { projectId },
+      });
+      invalidateSamSessions(projectId);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: newSessionId },
+      });
+    } catch (err) {
+      console.warn("Failed to create chat session:", err);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: undefined },
+      });
+    } finally {
+      setIsLaunchingAeo(false);
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -563,11 +583,12 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
 
                 <button
                   type="button"
+                  disabled={isLaunchingAeo}
                   onClick={() => handleLaunchSamForAeo(item)}
                   className="w-full py-2 px-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
                 >
                   <Icon icon="solar:bolt-bold-duotone" className="h-4 w-4" />
-                  <span>Fix Entity Gaps with SAM AI</span>
+                  <span>Fix Entity Gaps with Skorvia AI</span>
                 </button>
               </div>
             ))}

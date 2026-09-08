@@ -79,13 +79,13 @@ function AdminLayoutShell() {
         {
           title: "Dashboard",
           href: "/admin",
-          icon: "solar:widget-6-bold-duotone",
+          icon: "icon-park-outline:dashboard-one",
           exact: true,
         },
         {
           title: "System Monitoring",
           href: "/admin/monitoring",
-          icon: "solar:activity-bold-duotone",
+          icon: "icon-park-outline:radar",
           badge: "Live",
           badgeColor: "bg-emerald-500 text-white",
         },
@@ -97,17 +97,17 @@ function AdminLayoutShell() {
         {
           title: "Plan Settings",
           href: "/admin/plans",
-          icon: "solar:layers-minimalistic-bold-duotone",
+          icon: "icon-park-outline:layers",
         },
         {
           title: "Automatic Payment",
           href: "/admin/gateways",
-          icon: "solar:card-2-bold-duotone",
+          icon: "icon-park-outline:bank-card",
         },
         {
           title: "Manual Bank Receipts",
           href: "/admin/payments",
-          icon: "solar:bill-list-bold-duotone",
+          icon: "icon-park-outline:bill",
         },
       ],
     },
@@ -117,7 +117,7 @@ function AdminLayoutShell() {
         {
           title: "Blog CMS & Publishing",
           href: "/admin/blog",
-          icon: "solar:pen-new-square-bold-duotone",
+          icon: "icon-park-outline:edit-two",
         },
       ],
     },
@@ -127,27 +127,34 @@ function AdminLayoutShell() {
         {
           title: "Branding & R2 Uploads",
           href: "/admin/settings/branding",
-          icon: "solar:gallery-bold-duotone",
+          icon: "icon-park-outline:pic",
         },
         {
           title: "Smart API Keys",
           href: "/admin/settings/apis",
-          icon: "solar:key-minimalistic-bold-duotone",
+          icon: "icon-park-outline:key",
         },
         {
           title: "Security Policies & 2FA",
           href: "/admin/settings/security",
-          icon: "solar:shield-check-bold-duotone",
+          icon: "icon-park-outline:protect",
         },
         {
           title: "Audit Logs",
           href: "/admin/audit-logs",
-          icon: "solar:history-bold-duotone",
+          icon: "icon-park-outline:history",
         },
         {
           title: "User Management",
           href: "/admin/users",
-          icon: "solar:users-group-rounded-bold-duotone",
+          icon: "icon-park-outline:peoples-two",
+        },
+        {
+          title: "Waitlist Applications",
+          href: "/admin/waitlist",
+          icon: "icon-park-outline:lock",
+          badge: "VIP",
+          badgeColor: "bg-primary text-white",
         },
       ],
     },
@@ -157,7 +164,9 @@ function AdminLayoutShell() {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     const q = searchQuery.toLowerCase();
-    if (q.includes("plan") || q.includes("price"))
+    if (q.includes("waitlist") || q.includes("early"))
+      void navigate({ to: "/admin/waitlist" });
+    else if (q.includes("plan") || q.includes("price"))
       void navigate({ to: "/admin/plans" });
     else if (q.includes("brand") || q.includes("logo"))
       void navigate({ to: "/admin/settings/branding" });

@@ -1,4 +1,89 @@
+export const INDUSTRY_CATEGORIES: Record<string, readonly string[]> = {
+  "Media & Publishing": [
+    "News and Media Brand",
+    "News & Digital Journalism",
+    "Publishing & Magazine",
+    "Content Creation / Media",
+    "Broadcasting & Podcast",
+  ],
+  "Technology & SaaS": [
+    "SaaS / Software",
+    "Mobile Apps",
+    "Artificial Intelligence / AI",
+    "Cybersecurity",
+    "Web3 / Blockchain",
+    "IT Services & Consulting",
+    "Hardware / Electronics",
+  ],
+  "E-commerce & Retail": [
+    "E-commerce / Online Retail",
+    "Retail / Physical Stores",
+    "Wholesale / Distribution",
+    "Marketplace / Platform",
+    "Dropshipping",
+  ],
+  "Finance & Fintech": [
+    "Fintech / Financial Technology",
+    "Banking & Financial Services",
+    "Insurance",
+    "Accounting & Bookkeeping",
+    "Investment & Wealth Management",
+    "Cryptocurrency / DeFi",
+  ],
+  "Agencies & Marketing": [
+    "Digital Marketing Agency",
+    "Advertising & PR",
+    "SEO / Growth Agency",
+    "Social Media Management",
+    "Branding & Design Agency",
+  ],
+  "Professional Services": [
+    "Consulting / Business Coaching",
+    "Legal Services",
+    "HR & Recruitment",
+    "Management Consulting",
+    "Research & Analytics",
+  ],
+  "Health & Wellness": [
+    "Healthcare / MedTech",
+    "Mental Health & Therapy",
+    "Fitness & Sports",
+    "Nutrition & Supplements",
+    "Beauty & Personal Care",
+    "Pharmaceuticals",
+  ],
+  "Education": [
+    "EdTech / Online Learning",
+    "Tutoring & Coaching",
+    "Corporate Training",
+    "Schools & Universities",
+  ],
+  "Local & Hospitality": [
+    "Local Business / Trades",
+    "Food & Beverage / Restaurant",
+    "Travel & Tourism",
+    "Hotels & Hospitality",
+    "Real Estate & Property Management",
+    "Construction & Architecture",
+  ],
+  "Other Industries": [
+    "Creator / Influencer",
+    "Non-profit / NGO",
+    "Logistics & Supply Chain",
+    "Automotive",
+    "Manufacturing",
+    "Other",
+  ],
+};
+
 export const INDUSTRIES = [
+  // News, Media & Publishing
+  "News and Media Brand",
+  "News & Digital Journalism",
+  "Publishing & Magazine",
+  "Content Creation / Media",
+  "Broadcasting & Podcast",
+
   // Technology & SaaS
   "SaaS / Software",
   "Mobile Apps",
@@ -27,7 +112,6 @@ export const INDUSTRIES = [
   "Digital Marketing Agency",
   "Advertising & PR",
   "SEO / Growth Agency",
-  "Content Creation / Media",
   "Social Media Management",
   "Branding & Design Agency",
 

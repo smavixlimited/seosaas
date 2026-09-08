@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { BRAND_CONFIG } from "@/config/brand";
 import {
   INDUSTRIES,
+  INDUSTRY_CATEGORIES,
   COMPANY_SIZES,
   TARGET_COUNTRIES,
   Industry,
@@ -86,7 +87,9 @@ export function SkorviaOnboardingWizard({
   const cleanDomain = (d: string) =>
     d
       .trim()
+      .toLowerCase()
       .replace(/^https?:\/\//i, "")
+      .replace(/^www\./i, "")
       .replace(/\/.*$/, "");
 
   const completeMutation = useMutation({
@@ -110,7 +113,7 @@ export function SkorviaOnboardingWizard({
 
       const cleanSite = cleanDomain(websiteUrl);
 
-      await completeBrandOnboarding({
+      const result = await completeBrandOnboarding({
         data: {
           projectId,
           brand: {
@@ -135,16 +138,19 @@ export function SkorviaOnboardingWizard({
         },
       });
 
-      return targetDestination;
+      return {
+        target: targetDestination,
+        projectId: result.projectId,
+      };
     },
-    onSuccess: (target) => {
+    onSuccess: ({ target, projectId: finalProjectId }) => {
       void queryClient.invalidateQueries({ queryKey: ["onboardingAnswers"] });
       void queryClient.invalidateQueries({ queryKey: ["projects"] });
       void queryClient.invalidateQueries({
-        queryKey: ["brandProfile", projectId],
+        queryKey: ["brandProfile", finalProjectId],
       });
       void queryClient.invalidateQueries({
-        queryKey: ["brandCompetitors", projectId],
+        queryKey: ["brandCompetitors", finalProjectId],
       });
 
       toast.success("Brand setup saved successfully!");
@@ -152,15 +158,15 @@ export function SkorviaOnboardingWizard({
       if (target === "brand-analysis") {
         void navigate({
           to: "/p/$projectId/brand-analysis",
-          params: { projectId },
+          params: { projectId: finalProjectId },
         });
       } else if (target === "competitor-analysis") {
         void navigate({
-          to: "/p/$projectId/competitor-analysis",
-          params: { projectId },
+          to: "/p/$projectId/competitors",
+          params: { projectId: finalProjectId },
         });
       } else {
-        void navigate({ to: "/p/$projectId", params: { projectId } });
+        void navigate({ to: "/p/$projectId", params: { projectId: finalProjectId } });
       }
     },
     onError: (err) => {
@@ -344,17 +350,31 @@ export function SkorviaOnboardingWizard({
               <label className="text-xs font-bold text-base-content/80">
                 Industry / Niche
               </label>
-              <select
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value as Industry)}
-                className="select select-bordered w-full rounded-2xl h-11 text-xs focus:border-primary bg-base-200/40"
-              >
-                {INDUSTRIES.map((ind) => (
-                  <option key={ind} value={ind}>
-                    {ind}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value as Industry)}
+                  className="select select-bordered w-full rounded-2xl h-12 text-xs font-semibold focus:border-primary bg-base-100 text-base-content dark:bg-slate-900 dark:text-white border-base-300 shadow-xs pl-3 pr-10"
+                >
+                  {Object.entries(INDUSTRY_CATEGORIES).map(([category, items]) => (
+                    <optgroup
+                      key={category}
+                      label={category}
+                      className="bg-base-200 text-base-content font-bold dark:bg-slate-800 dark:text-slate-200"
+                    >
+                      {items.map((ind) => (
+                        <option
+                          key={ind}
+                          value={ind}
+                          className="bg-base-100 text-base-content font-medium py-1.5 dark:bg-slate-900 dark:text-white"
+                        >
+                          {ind}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Company Size */}
@@ -385,17 +405,23 @@ export function SkorviaOnboardingWizard({
               <label className="text-xs font-bold text-base-content/80">
                 Primary Target Market / Country
               </label>
-              <select
-                value={targetCountry}
-                onChange={(e) => setTargetCountry(e.target.value)}
-                className="select select-bordered w-full rounded-2xl h-11 text-xs focus:border-primary bg-base-200/40"
-              >
-                {TARGET_COUNTRIES.map((cty) => (
-                  <option key={cty.code} value={cty.code}>
-                    {cty.flag} {cty.name} ({cty.code})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={targetCountry}
+                  onChange={(e) => setTargetCountry(e.target.value)}
+                  className="select select-bordered w-full rounded-2xl h-12 text-xs font-semibold focus:border-primary bg-base-100 text-base-content dark:bg-slate-900 dark:text-white border-base-300 shadow-xs pl-3 pr-10"
+                >
+                  {TARGET_COUNTRIES.map((cty) => (
+                    <option
+                      key={cty.code}
+                      value={cty.code}
+                      className="bg-base-100 text-base-content font-medium py-1.5 dark:bg-slate-900 dark:text-white"
+                    >
+                      {cty.flag} {cty.name} ({cty.code})
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 

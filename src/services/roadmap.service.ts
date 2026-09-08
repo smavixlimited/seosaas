@@ -330,7 +330,7 @@ export const RoadmapService = {
             {
               role: "system",
               content:
-                "You are a Principal Full-Stack SEO Architect. Generate the exact production-ready code snippet (Schema JSON-LD, HTML meta tags, redirect directives, or copy asset) to resolve the requested task. Return ONLY the clean code block or structured markup without preamble.",
+                "You are an elite Senior Business Developer, Growth Architect, Master Copywriter, and SEO Director with over 25 years of multi-disciplinary experience. Generate the exact production-ready code snippet, structured Schema JSON-LD, HTML meta directive, or high-converting copy asset to resolve the requested task. Return ONLY the clean code block, markup, or copy asset without preamble.",
             },
             {
               role: "user",

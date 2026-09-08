@@ -20,6 +20,8 @@ import {
   Flame,
   Users,
   Swords,
+  Target,
+  Radio,
 } from "lucide-react";
 import { linkOptions } from "@tanstack/react-router";
 import { GoogleGlyphMuted } from "@/client/features/gsc/GoogleGlyph";
@@ -41,7 +43,7 @@ const projectNavItems = [
     benefit:
       "See your entire growth trajectory at a glance—spot traffic wins, score trends, and know your #1 priority task this week.",
     icon: LayoutDashboard,
-    solarIcon: "solar:widget-6-bold-duotone",
+    solarIcon: "icon-park-outline:dashboard-one",
     activeOptions: { exact: true, includeSearch: false },
   },
   {
@@ -50,7 +52,7 @@ const projectNavItems = [
     benefit:
       "Get prioritized, step-by-step action items engineered to deliver the fastest organic traffic & conversion gains for your Brand.",
     icon: CheckSquare,
-    solarIcon: "solar:checklist-minimalistic-bold-duotone",
+    solarIcon: "icon-park-outline:list-checkbox",
   },
   {
     to: "/p/$projectId/my-analysis" as const,
@@ -58,7 +60,7 @@ const projectNavItems = [
     benefit:
       "Access and export all your historical Brand Analyses, Competitor Benchmarks, and Ad Readiness Reports with PDF download.",
     icon: FileText,
-    solarIcon: "solar:document-text-bold-duotone",
+    solarIcon: "icon-park-outline:doc-detail",
   },
 
   // 2. BRAND & AD READINESS
@@ -66,9 +68,17 @@ const projectNavItems = [
     to: "/p/$projectId/brand-analysis" as const,
     label: "Brand Analysis",
     benefit:
-      "Full 6-dimension credibility & conversion readiness audit. Get graded with actionable solutions and 1-click export to your Roadmap.",
+      "Get 360° details about your brand—social media channels, market positioning, strengths, and actionable weaknesses to improve.",
     icon: Gauge,
-    solarIcon: "solar:shield-star-bold-duotone",
+    solarIcon: "icon-park-outline:badge-two",
+  },
+  {
+    to: "/p/$projectId/ad-readiness" as const,
+    label: "Conversion & Ad Readiness",
+    benefit:
+      "Pre-Ad Audit: Check if any landing page or campaign URL is ready for ads (CTA clarity, speed, tracking pixels & compliance).",
+    icon: Target,
+    solarIcon: "icon-park-outline:target",
   },
   {
     to: "/p/$projectId/trust-sentiment" as const,
@@ -76,16 +86,26 @@ const projectNavItems = [
     benefit:
       "Pre-Ad Gate: Verify customer sentiment, review credibility, and social trust before spending paid ad budget.",
     icon: ShieldCheck,
-    solarIcon: "solar:heart-bold-duotone",
+    solarIcon: "icon-park-outline:like",
   },
   {
     to: "/p/$projectId/viral-detector" as const,
-    label: "Viral Content & Detector",
+    label: "Viral Hooks & Scripts",
     benefit:
-      "Discover trending angles, high-performing competitor hooks, and viral social patterns tailored to your niche.",
+      "Generate high-converting organic video hooks (TikTok, Reels, Shorts), contrarian Twitter/X threads, and viral frameworks tailored to your brand.",
     icon: Flame,
-    solarIcon: "solar:fire-bold-duotone",
+    solarIcon: "icon-park-outline:fire",
   },
+  {
+    to: "/p/$projectId/trends-radar" as const,
+    label: "Trending Topics & Questions",
+    benefit:
+      "Explore real-time search trends, question clusters (Who, What, Where, When, Why, How, Comparisons, Prepositions), and Google Trends breakout velocity.",
+    icon: Sparkles,
+    solarIcon: "icon-park-outline:chart-line",
+  },
+
+
 
   // 3. COMPETITOR INTELLIGENCE
   {
@@ -94,15 +114,23 @@ const projectNavItems = [
     benefit:
       "Directory of tracked competitors with website URLs and social media links. Add, edit, or delete rivals anytime.",
     icon: Users,
-    solarIcon: "solar:users-group-two-rounded-bold-duotone",
+    solarIcon: "icon-park-outline:peoples-two",
+  },
+  {
+    to: "/p/$projectId/competitor-ads" as const,
+    label: "Competitor Ad Spying",
+    benefit:
+      "Spy on winning Meta, Google, TikTok, and LinkedIn ad creatives from any competitor with zero user ad accounts needed.",
+    icon: Radio,
+    solarIcon: "icon-park-outline:radar",
   },
   {
     to: "/p/$projectId/competitor-analysis" as const,
-    label: "Competitor Analysis & Decoder",
+    label: "Competitor Analysis",
     benefit:
       "Compare your Brand 1-on-1 head-to-head against any competitor to uncover keyword gaps, ad copy hooks, and attack plays.",
     icon: Swords,
-    solarIcon: "solar:swords-bold-duotone",
+    solarIcon: "icon-park-outline:analysis",
   },
 
   // 4. ORGANIC SEARCH (SEO)
@@ -112,7 +140,7 @@ const projectNavItems = [
     benefit:
       "Find easy-to-rank keywords with real search volume that bring paying customers to your website instead of high-competition dead ends.",
     icon: Search,
-    solarIcon: "solar:minimalistic-magnifer-bold-duotone",
+    solarIcon: "icon-park-outline:search",
   },
   {
     to: "/p/$projectId/saved" as const,
@@ -120,7 +148,7 @@ const projectNavItems = [
     benefit:
       "Organize target keywords into high-value clusters, track seasonal demand, and assign them directly to content briefs.",
     icon: Bookmark,
-    solarIcon: "solar:bookmark-opened-bold-duotone",
+    solarIcon: "icon-park-outline:bookmark-one",
   },
   {
     to: "/p/$projectId/search-performance" as const,
@@ -128,7 +156,7 @@ const projectNavItems = [
     benefit:
       "Turn raw Google data into revenue. Spot high-impression keywords where quick title tweaks can immediately double your organic clicks.",
     icon: GoogleGlyphMuted,
-    solarIcon: "solar:chart-2-bold-duotone",
+    solarIcon: "icon-park-outline:chart-line",
   },
   {
     to: "/p/$projectId/rank-tracking" as const,
@@ -136,7 +164,7 @@ const projectNavItems = [
     benefit:
       "Never guess your Google positions. Track daily rank movements on mobile & desktop, and get alerted the moment you hit page #1.",
     icon: TrendingUp,
-    solarIcon: "solar:chart-square-bold-duotone",
+    solarIcon: "icon-park-outline:ranking",
   },
   {
     to: "/p/$projectId/backlinks" as const,
@@ -144,7 +172,7 @@ const projectNavItems = [
     benefit:
       "Build domain authority that Google respects. Find out who links to your competitors and claim high-impact backlinks to outrank them.",
     icon: Link2,
-    solarIcon: "solar:link-circle-bold-duotone",
+    solarIcon: "icon-park-outline:link-one",
   },
   {
     to: "/p/$projectId/audit" as const,
@@ -152,7 +180,7 @@ const projectNavItems = [
     benefit:
       "Prevent silent ranking penalties. Automatically find and fix broken links, slow pages, and technical crawl blockers before Google demotes you.",
     icon: ClipboardCheck,
-    solarIcon: "solar:shield-check-bold-duotone",
+    solarIcon: "icon-park-outline:protect",
   },
 
   // 5. LOCAL BUSINESS
@@ -162,7 +190,7 @@ const projectNavItems = [
     benefit:
       "Listing Management, Google Business Profile (GBP) Optimization, Unified Review Inbox, and Map Rank Tracker Geo-Grid Heatmap.",
     icon: Store,
-    solarIcon: "solar:shop-2-bold-duotone",
+    solarIcon: "icon-park-outline:shop",
   },
 
   // 6. AI SEARCH & RADAR
@@ -172,7 +200,7 @@ const projectNavItems = [
     benefit:
       "Evaluate brand perception and identity signals across digital channels to strengthen overall brand authority and search trust.",
     icon: Sparkles,
-    solarIcon: "solar:stars-bold-duotone",
+    solarIcon: "icon-park-outline:magic",
   },
   {
     to: "/p/$projectId/brand-mentions" as const,
@@ -180,7 +208,7 @@ const projectNavItems = [
     benefit:
       "Protect your brand authority 24/7. Get alerted when blogs, forums, or AI engines talk about your brand or your competitors.",
     icon: MessageSquare,
-    solarIcon: "solar:chat-round-line-bold-duotone",
+    solarIcon: "icon-park-outline:comments",
   },
   {
     to: "/p/$projectId/prompt-explorer" as const,
@@ -188,7 +216,7 @@ const projectNavItems = [
     benefit:
       "Get recommended by ChatGPT, Perplexity & Claude. Find the exact articles AI models cite so you can get featured and win AI buyers.",
     icon: MessageSquare,
-    solarIcon: "solar:magnifer-bug-bold-duotone",
+    solarIcon: "icon-park-outline:robot-one",
   },
 ] as const;
 
@@ -198,7 +226,7 @@ export const indexingNavItem = linkOptions({
   benefit:
     "Get Google & Bing to index your new articles in hours rather than weeks, so you capture traffic and rankings ahead of everyone else.",
   icon: Sparkles,
-  solarIcon: "solar:bolt-bold-duotone",
+  solarIcon: "icon-park-outline:lightning",
 });
 
 export const uptimeNavItem = linkOptions({
@@ -207,7 +235,7 @@ export const uptimeNavItem = linkOptions({
   benefit:
     "Never lose sales to silent website outages or expired SSL warnings with 24/7 proactive monitoring before customers bounce.",
   icon: Activity,
-  solarIcon: "solar:radar-bold-duotone",
+  solarIcon: "icon-park-outline:radar",
 });
 
 export const aiNavItem = linkOptions({
@@ -216,7 +244,7 @@ export const aiNavItem = linkOptions({
   benefit:
     "Supercharge your workflow with your personal 24/7 CMO agent and Model Context Protocol server that turns data into instant growth plays.",
   icon: Bot,
-  solarIcon: "solar:cpu-bolt-bold-duotone",
+  solarIcon: "icon-park-outline:brain",
 });
 
 export const billingNavItem = linkOptions({
@@ -225,14 +253,14 @@ export const billingNavItem = linkOptions({
   benefit:
     "Manage your subscription, credit usage balance, auto-recharge settings, and upgrade to unlock advanced agency tiers.",
   icon: CreditCard,
-  solarIcon: "solar:card-2-bold-duotone",
+  solarIcon: "icon-park-outline:bank-card",
 });
 
 export const settingsNavItem = linkOptions({
   to: "/settings" as const,
   label: "Settings",
   icon: Settings,
-  solarIcon: "solar:settings-bold-duotone",
+  solarIcon: "icon-park-outline:setting-two",
 });
 
 export const helpNavItem = linkOptions({
@@ -241,13 +269,13 @@ export const helpNavItem = linkOptions({
   benefit:
     "Guides, API credentials setup, and step-by-step tutorials to get the most out of Skorvia.",
   icon: FileText,
-  solarIcon: "solar:question-circle-bold-duotone",
+  solarIcon: "icon-park-outline:help",
 });
 
 export function getGrowthToolsNavGroup(isAgency = false) {
   return {
     label: "Growth & Platform Tools",
-    items: [indexingNavItem, uptimeNavItem, aiNavItem, helpNavItem],
+    items: [indexingNavItem, uptimeNavItem, aiNavItem],
   };
 }
 
@@ -272,7 +300,7 @@ export function getProjectNavGroups(projectId: string) {
   return [
     {
       label: "Overview",
-      solarIcon: "solar:widget-6-bold-duotone",
+      solarIcon: "icon-park-outline:dashboard-one",
       items: [
         byPath("/p/$projectId"),
         byPath("/p/$projectId/roadmap"),
@@ -281,24 +309,28 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Brand & Ad Readiness",
-      solarIcon: "solar:shield-star-bold-duotone",
+      solarIcon: "icon-park-outline:badge-two",
       items: [
         byPath("/p/$projectId/brand-analysis"),
+        byPath("/p/$projectId/ad-readiness"),
         byPath("/p/$projectId/trust-sentiment"),
         byPath("/p/$projectId/viral-detector"),
+        byPath("/p/$projectId/trends-radar"),
       ],
     },
+
     {
       label: "Competitor Intelligence",
-      solarIcon: "solar:swords-bold-duotone",
+      solarIcon: "icon-park-outline:peoples-two",
       items: [
         byPath("/p/$projectId/competitors"),
+        byPath("/p/$projectId/competitor-ads"),
         byPath("/p/$projectId/competitor-analysis"),
       ],
     },
     {
       label: "Organic Search (SEO)",
-      solarIcon: "solar:minimalistic-magnifer-bold-duotone",
+      solarIcon: "icon-park-outline:search",
       items: [
         byPath("/p/$projectId/keywords"),
         byPath("/p/$projectId/saved"),
@@ -310,12 +342,12 @@ export function getProjectNavGroups(projectId: string) {
     },
     {
       label: "Local Business",
-      solarIcon: "solar:shop-2-bold-duotone",
+      solarIcon: "icon-park-outline:shop",
       items: [byPath("/p/$projectId/local-business")],
     },
     {
       label: "AI Search & Radar",
-      solarIcon: "solar:radar-bold-duotone",
+      solarIcon: "icon-park-outline:radar",
       items: [
         byPath("/p/$projectId/brand-lookup"),
         byPath("/p/$projectId/brand-mentions"),

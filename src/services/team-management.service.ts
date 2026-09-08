@@ -41,6 +41,60 @@ export const PLAN_SEAT_LIMITS: Record<string, number> = {
 const inMemoryMembers = new Map<string, TeamMemberRecord>();
 const inMemoryInvites = new Map<string, TeamInviteRecord>();
 
+async function syncBetterAuthOrganization(
+  ownerId: string,
+  ownerName?: string,
+): Promise<string | null> {
+  try {
+    const { db } = await import("@/db");
+    const { organization, member } = await import("@/db/better-auth-schema");
+    const { eq } = await import("drizzle-orm");
+
+    // Check if owner already belongs to an organization
+    const [existingMembership] = await db
+      .select()
+      .from(member)
+      .where(eq(member.userId, ownerId))
+      .limit(1);
+
+    if (existingMembership?.organizationId) {
+      return existingMembership.organizationId;
+    }
+
+    const orgId = `org_${ownerId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 16)}`;
+    const [existingOrg] = await db
+      .select()
+      .from(organization)
+      .where(eq(organization.id, orgId))
+      .limit(1);
+
+    if (existingOrg) {
+      return existingOrg.id;
+    }
+
+    const orgSlug = `workspace-${ownerId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 10)}-${Date.now().toString(36)}`;
+    await db.insert(organization).values({
+      id: orgId,
+      name: ownerName ? `${ownerName}'s Workspace` : "My Workspace",
+      slug: orgSlug,
+      createdAt: new Date(),
+    });
+
+    await db.insert(member).values({
+      id: `mem_own_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      organizationId: orgId,
+      userId: ownerId,
+      role: "owner",
+      createdAt: new Date(),
+    });
+
+    return orgId;
+  } catch (err) {
+    console.warn("Failed to sync Better-Auth organization for owner:", err);
+    return null;
+  }
+}
+
 export const TeamManagementService = {
   /**
    * Calculates max seat quota for a given plan.
@@ -268,6 +322,22 @@ export const TeamManagementService = {
         expiresAt: inviteRecord.expiresAt,
         createdAt: inviteRecord.createdAt,
       });
+
+      // Synchronize with Better-Auth organization and invitation tables
+      const orgId = await syncBetterAuthOrganization(params.ownerId, params.inviterName);
+      if (orgId) {
+        const { invitation } = await import("@/db/better-auth-schema");
+        await db.insert(invitation).values({
+          id: inviteRecord.id,
+          organizationId: orgId,
+          email: inviteRecord.email,
+          role: params.role === "admin" ? "admin" : "member",
+          status: "pending",
+          expiresAt: new Date(expiresAt),
+          createdAt: now,
+          inviterId: params.ownerId,
+        });
+      }
     } catch (err) {
       console.warn("Failed to insert team invite to DB:", err);
     }
@@ -318,6 +388,14 @@ export const TeamManagementService = {
       const { teamMembers } = await import("@/db/schema");
       const { eq, and } = await import("drizzle-orm");
 
+      const [existingMem] = await db
+        .select()
+        .from(teamMembers)
+        .where(
+          and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
+        )
+        .limit(1);
+
       await db
         .update(teamMembers)
         .set({
@@ -330,7 +408,25 @@ export const TeamManagementService = {
         .where(
           and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
         );
-    } catch {}
+
+      if (existingMem?.memberUserId) {
+        const orgId = await syncBetterAuthOrganization(ownerId);
+        if (orgId) {
+          const { member } = await import("@/db/better-auth-schema");
+          await db
+            .update(member)
+            .set({ role: role === "admin" ? "admin" : "member" })
+            .where(
+              and(
+                eq(member.organizationId, orgId),
+                eq(member.userId, existingMem.memberUserId),
+              ),
+            );
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to update team member in DB:", err);
+    }
 
     const mem = inMemoryMembers.get(memberId);
     if (mem && mem.ownerId === ownerId) {
@@ -364,12 +460,37 @@ export const TeamManagementService = {
       const { teamMembers } = await import("@/db/schema");
       const { eq, and } = await import("drizzle-orm");
 
+      const [existingMem] = await db
+        .select()
+        .from(teamMembers)
+        .where(
+          and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
+        )
+        .limit(1);
+
       await db
         .delete(teamMembers)
         .where(
           and(eq(teamMembers.id, memberId), eq(teamMembers.ownerId, ownerId)),
         );
-    } catch {}
+
+      if (existingMem?.memberUserId) {
+        const orgId = await syncBetterAuthOrganization(ownerId);
+        if (orgId) {
+          const { member } = await import("@/db/better-auth-schema");
+          await db
+            .delete(member)
+            .where(
+              and(
+                eq(member.organizationId, orgId),
+                eq(member.userId, existingMem.memberUserId),
+              ),
+            );
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to delete team member from DB:", err);
+    }
 
     inMemoryMembers.delete(memberId);
 
@@ -407,7 +528,23 @@ export const TeamManagementService = {
             eq(teamInvitations.ownerId, ownerId),
           ),
         );
-    } catch {}
+
+      const orgId = await syncBetterAuthOrganization(ownerId);
+      if (orgId) {
+        const { invitation } = await import("@/db/better-auth-schema");
+        await db
+          .update(invitation)
+          .set({ status: "canceled" })
+          .where(
+            and(
+              eq(invitation.id, inviteId),
+              eq(invitation.organizationId, orgId),
+            ),
+          );
+      }
+    } catch (err) {
+      console.warn("Failed to revoke invitation in DB:", err);
+    }
 
     const inv = inMemoryInvites.get(inviteId);
     if (inv && inv.ownerId === ownerId) {
@@ -520,6 +657,24 @@ export const TeamManagementService = {
         .update(teamInvitations)
         .set({ status: "accepted" })
         .where(eq(teamInvitations.id, invite.id));
+
+      // Synchronize Better-Auth organization membership
+      const orgId = await syncBetterAuthOrganization(invite.ownerId);
+      if (orgId) {
+        const { member, invitation } = await import("@/db/better-auth-schema");
+        await db.insert(member).values({
+          id: memberRecord.id,
+          organizationId: orgId,
+          userId: params.userId,
+          role: invite.role === "admin" ? "admin" : "member",
+          createdAt: new Date(),
+        });
+
+        await db
+          .update(invitation)
+          .set({ status: "accepted" })
+          .where(eq(invitation.id, invite.id));
+      }
     } catch (err) {
       console.warn("Failed to insert accepted team member to DB:", err);
     }

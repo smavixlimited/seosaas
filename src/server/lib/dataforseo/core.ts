@@ -70,7 +70,28 @@ function createAuthenticatedFetch(
   maxServerErrorRetries = DATAFORSEO_MAX_RETRIES,
 ) {
   return async (url: RequestInfo, init?: RequestInit): Promise<Response> => {
-    const apiKey = await getRequiredEnvValue("DATAFORSEO_API_KEY");
+    let apiKey = "";
+    try {
+      const { SystemSettingsService } = await import(
+        "@/services/system-settings.service"
+      );
+      const seoSettings = await SystemSettingsService.getSetting<{
+        dataforseoApiKey?: string;
+        dataforseoLogin?: string;
+        dataforseoPassword?: string;
+      }>("seo_apis", {});
+      if (seoSettings.dataforseoApiKey) {
+        apiKey = seoSettings.dataforseoApiKey;
+      } else if (seoSettings.dataforseoLogin && seoSettings.dataforseoPassword) {
+        apiKey = btoa(
+          `${seoSettings.dataforseoLogin}:${seoSettings.dataforseoPassword}`,
+        );
+      }
+    } catch {}
+
+    if (!apiKey) {
+      apiKey = await getRequiredEnvValue("DATAFORSEO_API_KEY");
+    }
     const headers = new Headers(init?.headers);
     headers.set("Authorization", `Basic ${apiKey}`);
     // Resolve the signal once so retries share the overall request timeout

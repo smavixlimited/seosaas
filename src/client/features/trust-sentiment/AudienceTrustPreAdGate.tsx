@@ -16,14 +16,33 @@ export function AudienceTrustPreAdGate({
   projectId,
 }: AudienceTrustPreAdGateProps) {
   const queryClient = useQueryClient();
+  const [industry, setIndustry] = React.useState("Media / News & Publishing");
+  const [campaignGoal, setCampaignGoal] = React.useState(
+    "Site Traffic & Reader Engagement",
+  );
+  const [adPlatform, setAdPlatform] = React.useState(
+    "Meta Ads (Facebook & Instagram)",
+  );
 
   const auditQuery = useQuery({
     queryKey: ["audienceTrustAudit", projectId],
-    queryFn: () => getAudienceTrustAudit({ data: {} }),
+    queryFn: () => getAudienceTrustAudit({ data: { projectId } }),
   });
 
   const runAuditMutation = useMutation({
-    mutationFn: () => runAudienceTrustAudit({ data: {} }),
+    mutationFn: (variables?: {
+      industry?: string;
+      campaignGoal?: string;
+      adPlatform?: string;
+    }) =>
+      runAudienceTrustAudit({
+        data: {
+          projectId,
+          industry: variables?.industry || industry,
+          campaignGoal: variables?.campaignGoal || campaignGoal,
+          adPlatform: variables?.adPlatform || adPlatform,
+        },
+      }),
     onSuccess: (data) => {
       queryClient.setQueryData(["audienceTrustAudit", projectId], data);
       toast.success(
@@ -39,12 +58,14 @@ export function AudienceTrustPreAdGate({
     mutationFn: (task: { title: string; description: string }) =>
       createRoadmapTask({
         data: {
+          projectId,
           title: task.title,
           description: task.description,
           category: "high_impact",
           priority: "high",
         },
       }),
+
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: ["projectRoadmap", projectId],
@@ -58,46 +79,124 @@ export function AudienceTrustPreAdGate({
 
   const audit = auditQuery.data;
 
+  // Sync initial options from audit if available
+  React.useEffect(() => {
+    if (audit?.industry) {
+      setIndustry(audit.industry);
+    }
+    if (audit?.campaignGoal) {
+      setCampaignGoal(audit.campaignGoal);
+    }
+    if (audit?.adPlatform) {
+      setAdPlatform(audit.adPlatform);
+    }
+  }, [audit?.industry, audit?.campaignGoal, audit?.adPlatform]);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-150">
-      {/* Top Banner Notice */}
-      <div className="rounded-3xl border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-base-100 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="h-12 w-12 rounded-2xl bg-primary text-white flex items-center justify-center shrink-0 shadow-md shadow-primary/20">
-            <Icon icon="solar:shield-check-bold" className="h-7 w-7" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-base-content">
-                Pre-Ad Verification Gate
-              </h2>
-              <span className="badge badge-primary badge-xs font-bold uppercase tracking-wider">
-                Ad-Spend Security
-              </span>
+      {/* Top Banner Notice & Campaign Targeting Configurator */}
+      <div className="rounded-3xl border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-base-100 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="h-12 w-12 rounded-2xl bg-primary text-white flex items-center justify-center shrink-0 shadow-md shadow-primary/20">
+              <Icon icon="solar:shield-check-bold" className="h-7 w-7" />
             </div>
-            <p className="text-xs text-base-content/70 mt-0.5">
-              Verify customer sentiment, testimonial proof, and trust signals
-              before launching paid Meta, Google, or TikTok campaigns.
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-black text-base-content">
+                  Pre-Ad Verification Gate
+                </h2>
+                <span className="badge badge-primary badge-xs font-bold uppercase tracking-wider">
+                  25-Year Veteran AI Engine
+                </span>
+              </div>
+              <p className="text-xs text-base-content/70 mt-0.5">
+                Evaluates reader trust, core web vitals, editorial attribution, conversion tracking, return policies, and comment moderation risks specifically tailored to your brand&apos;s industry and conversion goal.
+              </p>
+            </div>
           </div>
+
+          <button
+            type="button"
+            disabled={runAuditMutation.isPending || auditQuery.isFetching}
+            onClick={() =>
+              runAuditMutation.mutate({ industry, campaignGoal, adPlatform })
+            }
+            className="btn btn-primary rounded-2xl h-11 px-6 font-bold text-xs text-white shadow-md shadow-primary/20 gap-2 shrink-0"
+          >
+            <Icon
+              icon="solar:radar-bold"
+              className={`h-4 w-4 ${runAuditMutation.isPending ? "animate-spin" : ""}`}
+            />
+            <span>
+              {runAuditMutation.isPending
+                ? "Verifying Signals..."
+                : "Run Pre-Ad Scan"}
+            </span>
+          </button>
         </div>
 
-        <button
-          type="button"
-          disabled={runAuditMutation.isPending || auditQuery.isFetching}
-          onClick={() => runAuditMutation.mutate()}
-          className="btn btn-primary rounded-2xl h-11 px-6 font-bold text-xs text-white shadow-md shadow-primary/20 gap-2 shrink-0"
-        >
-          <Icon
-            icon="solar:radar-bold"
-            className={`h-4 w-4 ${runAuditMutation.isPending ? "animate-spin" : ""}`}
-          />
-          <span>
-            {runAuditMutation.isPending
-              ? "Verifying Signals..."
-              : "Run Pre-Ad Scan"}
-          </span>
-        </button>
+        {/* Industry, Goal & Platform Selector */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-primary/20">
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
+              <Icon icon="solar:buildings-bold" className="h-3.5 w-3.5 text-primary" />
+              Brand Industry / Sector
+            </label>
+            <select
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-primary"
+            >
+              <option value="Media / News & Publishing">Media, News &amp; Publishing / Editorial Blogs</option>
+              <option value="E-Commerce / Direct-to-Consumer">E-Commerce &amp; DTC Retail</option>
+              <option value="B2B SaaS / Software & Tech">B2B SaaS / Enterprise Tech</option>
+              <option value="Local Business & Services">Local Business &amp; In-Person Services</option>
+              <option value="Lead Generation & Direct Response">Lead Generation &amp; Direct Response</option>
+              <option value="Healthcare & Wellness">Healthcare &amp; Wellness</option>
+              <option value="Financial Services & FinTech">Financial Services &amp; FinTech</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
+              <Icon icon="solar:target-bold" className="h-3.5 w-3.5 text-emerald-500" />
+              Campaign Goal / Conversion Objective
+            </label>
+            <select
+              value={campaignGoal}
+              onChange={(e) => setCampaignGoal(e.target.value)}
+              className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-primary"
+            >
+              <option value="Site Traffic & Reader Engagement">Site Traffic &amp; Reader Engagement (News/Blogs/Media)</option>
+              <option value="E-Commerce Sales / Direct Checkout (ROAS)">E-Commerce Sales / Direct Checkout (ROAS)</option>
+              <option value="Lead Generation & Inquiries">Lead Generation &amp; Inquiries</option>
+              <option value="High-Ticket B2B Demos / Sales Calls">High-Ticket B2B Demos / Sales Calls</option>
+              <option value="Local Store Footfall & Phone Calls">Local Store Footfall &amp; Phone Calls</option>
+              <option value="App Installs & User Signups">App Installs &amp; User Signups</option>
+              <option value="Brand Awareness & Video Views">Brand Awareness &amp; Video Views</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
+              <Icon icon="solar:chart-square-bold" className="h-3.5 w-3.5 text-sky-500" />
+              Target Paid Ad Platform
+            </label>
+            <select
+              value={adPlatform}
+              onChange={(e) => setAdPlatform(e.target.value)}
+              className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-secondary"
+            >
+              <option value="Meta Ads (Facebook & Instagram)">Meta Ads (Facebook &amp; Instagram)</option>
+              <option value="Google Search & Performance Max">Google Search &amp; Performance Max</option>
+              <option value="TikTok Ads">TikTok Ads</option>
+              <option value="LinkedIn Ads">LinkedIn Ads</option>
+              <option value="X (Twitter) & Native News Exchanges">X (Twitter) &amp; Native Exchanges</option>
+              <option value="Multi-Channel Paid Traffic">Multi-Channel Paid Traffic</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {auditQuery.isLoading ? (
@@ -113,7 +212,9 @@ export function AudienceTrustPreAdGate({
           </p>
           <button
             type="button"
-            onClick={() => runAuditMutation.mutate()}
+            onClick={() =>
+              runAuditMutation.mutate({ industry, campaignGoal, adPlatform })
+            }
             className="btn btn-primary btn-sm rounded-xl font-bold"
           >
             Run First Pre-Ad Gate Scan
@@ -161,6 +262,22 @@ export function AudienceTrustPreAdGate({
                       <span>GATE BLOCKED &bull; HIGH CHURN RISK</span>
                     </div>
                   )}
+                </div>
+
+                {/* Target Strategy Tags */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
+                    <Icon icon="solar:buildings-bold" className="h-3.5 w-3.5 text-primary" />
+                    Industry: <strong className="text-white">{audit.industry || "General"}</strong>
+                  </span>
+                  <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
+                    <Icon icon="solar:target-bold" className="h-3.5 w-3.5 text-emerald-400" />
+                    Goal: <strong className="text-white">{audit.campaignGoal || campaignGoal}</strong>
+                  </span>
+                  <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
+                    <Icon icon="solar:chart-square-bold" className="h-3.5 w-3.5 text-sky-400" />
+                    Platform: <strong className="text-white">{audit.adPlatform || adPlatform}</strong>
+                  </span>
                 </div>
 
                 <p className="text-xs text-base-content/80 font-medium leading-relaxed bg-base-200/40 p-3.5 rounded-2xl border border-base-300/50">

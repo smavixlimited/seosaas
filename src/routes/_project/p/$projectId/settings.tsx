@@ -26,15 +26,15 @@ function ProjectSettingsLayout() {
       <div className="mx-auto w-full max-w-2xl space-y-8 p-4 py-8 pb-24 sm:p-6 md:py-12 md:pb-12">
         <div className="space-y-4">
           <Link
-            to="/projects"
+            to="/my-brands"
             className="inline-flex items-center gap-1 text-sm text-base-content/60 transition-colors hover:text-base-content"
           >
             <ChevronLeft className="size-4" />
-            Projects
+            Brands
           </Link>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              Project settings
+              Brand settings
             </h1>
             <p className="text-sm text-base-content/60">
               {project?.name ?? " "}
