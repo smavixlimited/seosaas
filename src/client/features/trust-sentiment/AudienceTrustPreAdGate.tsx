@@ -106,9 +106,6 @@ export function AudienceTrustPreAdGate({
                 <h2 className="text-base font-black text-base-content">
                   Pre-Ad Verification Gate
                 </h2>
-                <span className="badge badge-primary badge-xs font-bold uppercase tracking-wider">
-                  25-Year Veteran AI Engine
-                </span>
               </div>
               <p className="text-xs text-base-content/70 mt-0.5">
                 Evaluates reader trust, core web vitals, editorial attribution, conversion tracking, return policies, and comment moderation risks specifically tailored to your brand&apos;s industry and conversion goal.

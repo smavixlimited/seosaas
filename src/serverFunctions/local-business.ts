@@ -148,16 +148,59 @@ export const getReviewCampaignKitServerFn = createServerFn({ method: "POST" })
     );
   });
 
+export const startGbpOAuthServerFn = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .validator(
+    z.object({
+      callbackURL: z.string().min(1),
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    const { createSelfHostedGoogleAuthorizationUrl, GBP_INTEGRATION } =
+      await import("@/server/features/google/selfHostedOAuth");
+    const { getPublicOrigin } = await import("@/server/mcp/public-origin");
+    const { getRequest } = await import("@tanstack/react-start/server");
+
+    const req = getRequest();
+    const origin = req ? getPublicOrigin(req) : (process.env.VITE_APP_URL || "http://localhost:3000");
+
+    const authUrl = await createSelfHostedGoogleAuthorizationUrl({
+      integration: GBP_INTEGRATION,
+      user: {
+        userId: context.userId,
+        userEmail: context.userEmail,
+      },
+      callbackURL: data.callbackURL,
+      publicOrigin: origin,
+    });
+
+    return { authUrl };
+  });
+
 export const detectGoogleProfilesServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(
     z.object({
+      projectId: z.string().optional(),
       userEmail: z.string().optional(),
     }),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    try {
+      const { fetchLiveGoogleBusinessProfiles } = await import(
+        "@/server/features/google/gbpClient"
+      );
+      const liveProfiles = await fetchLiveGoogleBusinessProfiles(context.userId);
+      if (liveProfiles && liveProfiles.length > 0) {
+        return liveProfiles;
+      }
+    } catch (err) {
+      console.warn("Could not query live GBP profiles:", err);
+    }
+
     return await LocalBusinessService.detectGoogleBusinessProfiles(
-      data.userEmail,
+      data?.userEmail || context.userEmail,
+      data?.projectId,
     );
   });
 

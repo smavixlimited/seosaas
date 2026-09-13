@@ -327,7 +327,14 @@ export function DashboardPage({ projectId }: { projectId: string }) {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/p/$projectId/advanced-analytics"
+              params={{ projectId }}
+              className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5"
+            >
+              <Icon icon="icon-park-outline:chart-line" className="h-4 w-4 text-emerald-500" /> Advanced Analytics
+            </Link>
             <Link
               to="/p/$projectId/audit"
               params={{ projectId }}
@@ -374,6 +381,31 @@ export function DashboardPage({ projectId }: { projectId: string }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pt-1">
+            <Link
+              to="/p/$projectId/advanced-analytics"
+              params={{ projectId }}
+              className="group rounded-2xl border border-base-300/80 bg-base-200/40 p-4.5 hover:border-emerald-500 hover:bg-base-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                    <Icon icon="icon-park-outline:chart-line" className="h-5 w-5" />
+                  </div>
+                  <span className="badge badge-sm badge-success text-[10px] text-white font-bold">Executive</span>
+                </div>
+                <h4 className="text-sm font-bold text-base-content group-hover:text-emerald-500 transition-colors">
+                  Advanced Analytics &amp; ROI
+                </h4>
+                <p className="text-xs text-base-content/60 line-clamp-2">
+                  Correlate GSC search impressions, Rank Tracker velocity, organic traffic value ($), and multi-channel attribution.
+                </p>
+              </div>
+              <div className="mt-4 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 gap-1">
+                <span>Open Analytics Command Center</span>
+                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
             <Link
               to="/p/$projectId/roadmap"
               params={{ projectId }}
@@ -484,13 +516,13 @@ export function DashboardPage({ projectId }: { projectId: string }) {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                     <Icon icon="icon-park-outline:fire" className="h-5 w-5" />
                   </div>
-                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">Firecrawl</span>
+                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">AI Scraper</span>
                 </div>
                 <h4 className="text-sm font-bold text-base-content group-hover:text-orange-500 transition-colors">
                   Competitor Page Decoder
                 </h4>
                 <p className="text-xs text-base-content/60 line-clamp-2">
-                  Extract clean markdown, SERP content, and competitor teardowns via Firecrawl.
+                  Extract clean markdown, structural content, and comprehensive competitor teardowns.
                 </p>
               </div>
               <div className="mt-4 flex items-center text-xs font-bold text-orange-600 dark:text-orange-400 gap-1">

@@ -62,6 +62,14 @@ const projectNavItems = [
     icon: FileText,
     solarIcon: "icon-park-outline:doc-detail",
   },
+  {
+    to: "/p/$projectId/advanced-analytics" as const,
+    label: "Advanced Analytics",
+    benefit:
+      "Executive Growth & SEO Command Center: Correlate GSC search impressions, Rank Tracker velocity, organic traffic value ($), and technical health with 1-click client PDF/CSV reports.",
+    icon: TrendingUp,
+    solarIcon: "icon-park-outline:chart-line",
+  },
 
   // 2. BRAND & AD READINESS
   {
@@ -74,19 +82,11 @@ const projectNavItems = [
   },
   {
     to: "/p/$projectId/ad-readiness" as const,
-    label: "Conversion & Ad Readiness",
+    label: "Ad & Conversion Gate",
     benefit:
-      "Pre-Ad Audit: Check if any landing page or campaign URL is ready for ads (CTA clarity, speed, tracking pixels & compliance).",
+      "Pre-Ad Verification: Audit landing page speed, conversion pixels, CTA clarity, trust signals & ad spend waste risk before launching campaigns.",
     icon: Target,
     solarIcon: "icon-park-outline:target",
-  },
-  {
-    to: "/p/$projectId/trust-sentiment" as const,
-    label: "Audience Trust & Sentiment",
-    benefit:
-      "Pre-Ad Gate: Verify customer sentiment, review credibility, and social trust before spending paid ad budget.",
-    icon: ShieldCheck,
-    solarIcon: "icon-park-outline:like",
   },
   {
     to: "/p/$projectId/viral-detector" as const,
@@ -196,9 +196,9 @@ const projectNavItems = [
   // 6. AI SEARCH & RADAR
   {
     to: "/p/$projectId/brand-lookup" as const,
-    label: "Brand Lookup",
+    label: "Brand Lookup & AI Search",
     benefit:
-      "Evaluate brand perception and identity signals across digital channels to strengthen overall brand authority and search trust.",
+      "Evaluate brand perception and identity signals across digital channels, test custom AI prompts, and strengthen overall search trust.",
     icon: Sparkles,
     solarIcon: "icon-park-outline:magic",
   },
@@ -209,14 +209,6 @@ const projectNavItems = [
       "Protect your brand authority 24/7. Get alerted when blogs, forums, or AI engines talk about your brand or your competitors.",
     icon: MessageSquare,
     solarIcon: "icon-park-outline:comments",
-  },
-  {
-    to: "/p/$projectId/prompt-explorer" as const,
-    label: "Prompt Explorer",
-    benefit:
-      "Get recommended by ChatGPT, Perplexity & Claude. Find the exact articles AI models cite so you can get featured and win AI buyers.",
-    icon: MessageSquare,
-    solarIcon: "icon-park-outline:robot-one",
   },
 ] as const;
 
@@ -303,6 +295,7 @@ export function getProjectNavGroups(projectId: string) {
       solarIcon: "icon-park-outline:dashboard-one",
       items: [
         byPath("/p/$projectId"),
+        byPath("/p/$projectId/advanced-analytics"),
         byPath("/p/$projectId/roadmap"),
         byPath("/p/$projectId/my-analysis"),
       ],
@@ -313,7 +306,6 @@ export function getProjectNavGroups(projectId: string) {
       items: [
         byPath("/p/$projectId/brand-analysis"),
         byPath("/p/$projectId/ad-readiness"),
-        byPath("/p/$projectId/trust-sentiment"),
         byPath("/p/$projectId/viral-detector"),
         byPath("/p/$projectId/trends-radar"),
       ],
@@ -351,7 +343,6 @@ export function getProjectNavGroups(projectId: string) {
       items: [
         byPath("/p/$projectId/brand-lookup"),
         byPath("/p/$projectId/brand-mentions"),
-        byPath("/p/$projectId/prompt-explorer"),
       ],
     },
   ];

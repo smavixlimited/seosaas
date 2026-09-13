@@ -6,7 +6,7 @@ import {
   updateMonitorReminderSettings,
   deleteUptimeMonitor,
   probeUptimeMonitor,
-  checkAndSendSslExpiryReminders,
+  checkAndSendMonitoringReminders,
 } from "@/services/uptime.service";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 
@@ -16,10 +16,12 @@ export const getUptimeMonitorsServerFn = createServerFn({ method: "GET" })
     return getUserUptimeMonitors(context.userId);
   });
 
+const frequencyEnum = z.enum(["all", "weekly", "ssl_expiry", "domain_expiry", "both", "none"]);
+
 const addMonitorSchema = z.object({
   url: z.string().min(3),
   projectId: z.string().optional().nullable(),
-  reminderFrequency: z.enum(["weekly", "ssl_expiry", "both", "none"]).optional(),
+  reminderFrequency: frequencyEnum.optional(),
   reminderEmail: z.string().email().optional().nullable().or(z.literal("")),
 });
 
@@ -32,7 +34,7 @@ export const addUptimeMonitorServerFn = createServerFn({ method: "POST" })
 
 const updateReminderSchema = z.object({
   monitorId: z.string(),
-  reminderFrequency: z.enum(["weekly", "ssl_expiry", "both", "none"]),
+  reminderFrequency: frequencyEnum,
   reminderEmail: z.string().email().optional().nullable().or(z.literal("")),
 });
 
@@ -64,8 +66,11 @@ export const probeUptimeMonitorServerFn = createServerFn({ method: "POST" })
     return probeUptimeMonitor(data.monitorId);
   });
 
-export const triggerSslExpiryCheckServerFn = createServerFn({ method: "POST" })
+export const triggerMonitoringCheckServerFn = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .handler(async () => {
-    return checkAndSendSslExpiryReminders();
+    return checkAndSendMonitoringReminders();
   });
+
+export const triggerSslExpiryCheckServerFn = triggerMonitoringCheckServerFn;
+

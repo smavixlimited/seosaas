@@ -40,22 +40,38 @@ export function BacklinksErrorState({
   errorMessage: string | null;
   onRetry: () => void;
 }) {
+  const isDataForSeoError =
+    errorMessage?.includes("DataForSEO") ||
+    errorMessage?.includes("DATAFORSEO_AUTH_FAILED") ||
+    errorMessage?.includes("credentials are not configured");
+
   return (
-    <section className="rounded-2xl border border-error/30 bg-error/5 p-6 space-y-3">
-      <div className="flex items-start gap-3">
-        <div className="rounded-xl bg-error/10 p-2.5 text-error shrink-0">
+    <section className="rounded-2xl border border-error/30 bg-error/5 p-6 space-y-4">
+      <div className="flex items-start gap-3.5">
+        <div className="rounded-xl bg-error/10 p-2.5 text-error shrink-0 mt-0.5">
           <ShieldAlert className="size-5" />
         </div>
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Could not load backlinks</h2>
-          <p className="text-sm text-base-content/70">
+        <div className="space-y-1.5 flex-1">
+          <h2 className="text-base font-bold text-base-content">
+            {isDataForSeoError
+              ? "DataForSEO API Setup Required"
+              : "Could not load backlinks"}
+          </h2>
+          <p className="text-sm text-base-content/80 max-w-2xl leading-relaxed">
             {errorMessage ?? "Please try again in a moment."}
           </p>
+          {isDataForSeoError && (
+            <p className="text-xs text-base-content/60 pt-1">
+              To query live backlinks, please provide your DataForSEO API credentials in Admin Dashboard &rarr; Settings &rarr; API Settings, or configure <code className="font-mono text-xs bg-base-300/60 px-1 py-0.5 rounded">DATAFORSEO_API_KEY</code>.
+            </p>
+          )}
         </div>
       </div>
-      <button className="btn btn-sm" onClick={onRetry}>
-        Retry
-      </button>
+      <div className="flex items-center gap-2 pt-1 pl-11">
+        <button className="btn btn-sm btn-primary rounded-xl px-4" onClick={onRetry}>
+          Retry Query
+        </button>
+      </div>
     </section>
   );
 }

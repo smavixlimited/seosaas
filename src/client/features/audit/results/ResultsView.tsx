@@ -16,6 +16,11 @@ import {
   ExportDropdown,
   PerformanceTable,
 } from "@/client/features/audit/results/ResultsTables";
+import { BRAND_CONFIG } from "@/config/brand";
+import {
+  AUDIT_ISSUE_TYPES,
+  type AuditIssueDescriptor,
+} from "@/shared/audit-issues";
 
 type ResultsTab = "issues" | "pages" | "performance";
 
@@ -40,90 +45,255 @@ export function ResultsView({
     [pages],
   );
 
+  const severityCounts = useMemo(() => {
+    const counts = { critical: 0, warning: 0, info: 0 };
+    for (const issue of issues) {
+      counts[resolveIssueSeverity(issue)] += 1;
+    }
+    return counts;
+  }, [issues]);
+
+  const healthScore = useMemo(() => {
+    const deductions = severityCounts.critical * 15 + severityCounts.warning * 5 + severityCounts.info * 1;
+    return Math.max(10, Math.min(100, 100 - deductions));
+  }, [severityCounts]);
+
+  const failedIssueTypes = useMemo(
+    () => new Set(issues.map((i) => i.issueType)),
+    [issues],
+  );
+
+  const passedTests = useMemo(() => {
+    return (Object.entries(AUDIT_ISSUE_TYPES) as [string, AuditIssueDescriptor][])
+      .filter(([typeKey]) => !failedIssueTypes.has(typeKey))
+      .map(([typeKey, desc]) => ({
+        typeKey,
+        title: desc.title
+          .replace(/^Missing /i, "Valid ")
+          .replace(/^Broken /i, "Healthy ")
+          .replace(/^Duplicate /i, "Unique ")
+          .replace(/^Crawler was blocked/i, "Crawler Access Verified"),
+        explanation: `Zero defects detected across all crawled pages. Site passes this technical SEO benchmark.`,
+      }));
+  }, [failedIssueTypes]);
+
   return (
     <>
-      {blockedCount > 0 && (
-        <div className="flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3 text-sm">
-          <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" />
-          <p>
-            <span className="font-medium">
-              We were blocked on {blockedCount}{" "}
-              {blockedCount === 1 ? "page" : "pages"}.
-            </span>{" "}
-            <span className="text-base-content/70">
-              The site's bot protection challenged our crawler, so those pages
-              couldn't be audited. We don't have a workaround for this yet.
-              Desktop crawlers run from your own machine and usually get past
-              it: try{" "}
-              <a
-                className="link link-primary"
-                href="https://github.com/PhialsBasement/LibreCrawl"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LibreCrawl
-              </a>{" "}
-              (free, open source) or{" "}
-              <a
-                className="link link-primary"
-                href="https://www.screamingfrog.co.uk/seo-spider/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Screaming Frog
-              </a>{" "}
-              (free up to 500 URLs).
-            </span>
-          </p>
+      {/* 1. Interactive Screen View */}
+      <div className="screen-only space-y-4">
+        {blockedCount > 0 && (
+          <div className="flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/5 px-4 py-3 text-sm">
+            <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" />
+            <p>
+              <span className="font-medium">
+                We were blocked on {blockedCount}{" "}
+                {blockedCount === 1 ? "page" : "pages"}.
+              </span>{" "}
+              <span className="text-base-content/70">
+                The site's bot protection challenged our crawler, so those pages
+                couldn't be audited.
+              </span>
+            </p>
+          </div>
+        )}
+
+        <StatsStrip
+          pagesCrawled={audit.pagesCrawled}
+          issues={issues}
+          totalLighthouse={lighthouse.length}
+          averageResponseMs={stats.averageResponseMs}
+          lighthouseSummary={stats.lighthouseSummary}
+        />
+
+        <div className="card bg-base-100 border border-base-300">
+          <div className="card-body gap-3">
+            <ResultsHeader
+              issueCount={issues.length}
+              pageCount={pages.length}
+              lighthouseCount={lighthouse.length}
+              hasPerformanceTab={hasPerformanceTab}
+              activeTab={activeTab}
+              onTabChange={onTabChange}
+              onExport={(format) => {
+                if (activeTab === "performance") {
+                  exportPerformance(lighthouse, pages, format);
+                  return;
+                }
+                if (activeTab === "issues") {
+                  exportIssues(issues, format);
+                  return;
+                }
+                exportPages(pages, format);
+              }}
+              onPrint={() => window.print()}
+            />
+
+            {activeTab === "issues" && (
+              <IssuesView issues={issues} projectId={projectId} />
+            )}
+            {activeTab === "pages" && (
+              <PagesTable
+                pages={pages}
+                startUrl={audit.startUrl}
+                issues={issues}
+              />
+            )}
+            {activeTab === "performance" && lighthouse.length > 0 && (
+              <PerformanceTable
+                auditId={audit.id}
+                projectId={projectId}
+                lighthouse={lighthouse}
+                pages={pages}
+              />
+            )}
+          </div>
         </div>
-      )}
+      </div>
 
-      <StatsStrip
-        pagesCrawled={audit.pagesCrawled}
-        issues={issues}
-        totalLighthouse={lighthouse.length}
-        averageResponseMs={stats.averageResponseMs}
-        lighthouseSummary={stats.lighthouseSummary}
-      />
-
-      <div className="card bg-base-100 border border-base-300">
-        <div className="card-body gap-3">
-          <ResultsHeader
-            issueCount={issues.length}
-            pageCount={pages.length}
-            lighthouseCount={lighthouse.length}
-            hasPerformanceTab={hasPerformanceTab}
-            activeTab={activeTab}
-            onTabChange={onTabChange}
-            onExport={(format) => {
-              if (activeTab === "performance") {
-                exportPerformance(lighthouse, pages, format);
-                return;
-              }
-              if (activeTab === "issues") {
-                exportIssues(issues, format);
-                return;
-              }
-              exportPages(pages, format);
-            }}
-          />
-
-          {activeTab === "issues" && <IssuesView issues={issues} />}
-          {activeTab === "pages" && (
-            <PagesTable
-              pages={pages}
-              startUrl={audit.startUrl}
-              issues={issues}
+      {/* 2. Executive Print / PDF Export View (Clean White-Label Report) */}
+      <div id="audit-printable-report" className="hidden print:block p-8 bg-white text-slate-900 space-y-8 font-sans">
+        {/* Executive Header */}
+        <div className="border-b-2 border-slate-900 pb-6 flex items-start justify-between">
+          <div className="flex items-center gap-4">
+            <img
+              src={BRAND_CONFIG.logoUrl}
+              alt={BRAND_CONFIG.name}
+              className="h-12 w-auto max-w-[160px] object-contain"
             />
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest text-indigo-900">
+                {BRAND_CONFIG.name} Search Intelligence
+              </div>
+              <h1 className="text-2xl font-black tracking-tight text-slate-900">
+                Technical SEO Site Audit Report
+              </h1>
+              <p className="text-xs text-slate-500 font-mono mt-0.5">
+                Target URL: {audit.startUrl}
+              </p>
+            </div>
+          </div>
+          <div className="text-right text-xs text-slate-600 space-y-1">
+            <div className="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 font-bold rounded text-[11px] uppercase tracking-wider">
+              Status: Completed
+            </div>
+            <p className="font-semibold text-slate-700 pt-1">
+              Date: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            </p>
+            <p className="text-[10px] text-slate-400">Audit ID: {audit.id.slice(0, 12)}</p>
+          </div>
+        </div>
+
+        {/* Executive Scorecard */}
+        <div className="grid grid-cols-6 gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200 print-break-inside-avoid">
+          <div className="col-span-2 flex flex-col justify-center border-r border-slate-200 pr-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              SEO Health Score
+            </span>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className={`text-4xl font-black tabular-nums ${healthScore >= 80 ? "text-emerald-600" : healthScore >= 50 ? "text-amber-600" : "text-rose-600"}`}>
+                {healthScore}
+              </span>
+              <span className="text-sm font-bold text-slate-400">/ 100</span>
+            </div>
+            <span className="text-xs font-medium text-slate-600 mt-0.5">
+              {healthScore >= 85 ? "Grade A — Excellent Health" : healthScore >= 70 ? "Grade B — Minor Optimizations Needed" : "Grade C — Critical Action Required"}
+            </span>
+          </div>
+
+          <div className="col-span-4 grid grid-cols-4 gap-3 text-center pl-2">
+            <div className="p-2 rounded-xl bg-white border border-slate-200">
+              <p className="text-[10px] uppercase font-bold text-slate-400">Pages Crawled</p>
+              <p className="text-xl font-bold text-slate-800 mt-1">{audit.pagesCrawled}</p>
+            </div>
+            <div className="p-2 rounded-xl bg-white border border-slate-200">
+              <p className="text-[10px] uppercase font-bold text-rose-500">Critical Issues</p>
+              <p className="text-xl font-bold text-rose-600 mt-1">{severityCounts.critical}</p>
+            </div>
+            <div className="p-2 rounded-xl bg-white border border-slate-200">
+              <p className="text-[10px] uppercase font-bold text-amber-500">Warnings</p>
+              <p className="text-xl font-bold text-amber-600 mt-1">{severityCounts.warning}</p>
+            </div>
+            <div className="p-2 rounded-xl bg-white border border-slate-200">
+              <p className="text-[10px] uppercase font-bold text-slate-400">Avg Latency</p>
+              <p className="text-xl font-bold text-slate-800 mt-1">{stats.averageResponseMs}ms</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 1: Identified Issues (Need to Fix) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
+            <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+              <span className="h-3 w-3 rounded-full bg-rose-500" />
+              <span>Issues Requiring Action ({issues.length} total)</span>
+            </h2>
+            <span className="text-xs text-slate-500 font-semibold">Prioritized by Severity</span>
+          </div>
+
+          {issues.length === 0 ? (
+            <div className="p-6 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold text-center print-break-inside-avoid">
+              ✓ No technical SEO issues detected across crawled pages.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {issues.map((issue, idx) => (
+                <div key={issue.id || idx} className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 print-break-inside-avoid shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
+                        issue.severity === "critical" ? "bg-rose-100 text-rose-800" : issue.severity === "warning" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"
+                      }`}>
+                        {issue.severity}
+                      </span>
+                      <h3 className="text-sm font-bold text-slate-900">{issue.issueType.replace(/[-_]+/g, " ").toUpperCase()}</h3>
+                    </div>
+                    <span className="text-xs font-mono text-slate-500 truncate max-w-sm">{issue.pageUrl}</span>
+                  </div>
+                  {issue.detailsJson && (
+                    <p className="text-xs font-mono text-slate-600 bg-slate-50 p-2 rounded border border-slate-150">
+                      {issue.detailsJson}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           )}
-          {activeTab === "performance" && lighthouse.length > 0 && (
-            <PerformanceTable
-              auditId={audit.id}
-              projectId={projectId}
-              lighthouse={lighthouse}
-              pages={pages}
-            />
-          )}
+        </div>
+
+        {/* Section 2: Passed Technical SEO Benchmarks */}
+        {passedTests.length > 0 && (
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
+              <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-emerald-500" />
+                <span>Passed Technical SEO Benchmarks ({passedTests.length} tests)</span>
+              </h2>
+              <span className="text-xs text-emerald-700 font-semibold">Verified Compliant</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {passedTests.map((test) => (
+                <div
+                  key={test.typeKey}
+                  className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 flex items-start gap-2.5 print-break-inside-avoid"
+                >
+                  <span className="h-5 w-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                    ✓
+                  </span>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900">{test.title}</h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{test.explanation}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Executive Footer */}
+        <div className="border-t border-slate-200 pt-4 flex items-center justify-between text-xs text-slate-400 print-break-inside-avoid">
+          <p>© {new Date().getFullYear()} {BRAND_CONFIG.legalName || BRAND_CONFIG.name} • Confidential Client Deliverable</p>
+          <p>Generated by {BRAND_CONFIG.name} Intelligence • {BRAND_CONFIG.url}</p>
         </div>
       </div>
     </>
@@ -182,6 +352,7 @@ function ResultsHeader({
   activeTab,
   onTabChange,
   onExport,
+  onPrint,
 }: {
   issueCount: number;
   pageCount: number;
@@ -190,6 +361,7 @@ function ResultsHeader({
   activeTab: string;
   onTabChange: (tab: ResultsTab) => void;
   onExport: (format: "csv" | "json" | "sheets") => void;
+  onPrint: () => void;
 }) {
   const tabs: Array<{ tab: ResultsTab; label: string }> = [
     { tab: "issues", label: `Issues (${issueCount})` },
@@ -225,7 +397,20 @@ function ResultsHeader({
         })}
       </div>
 
-      <ExportDropdown onExport={onExport} />
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onPrint}
+          className="btn btn-sm btn-outline rounded-xl font-bold gap-1.5 text-xs text-base-content/80 hover:text-base-content"
+          title="Print or Save as PDF"
+        >
+          <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          <span>Export / Print PDF</span>
+        </button>
+        <ExportDropdown onExport={onExport} />
+      </div>
     </div>
   );
 }

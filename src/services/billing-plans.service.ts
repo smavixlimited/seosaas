@@ -9,24 +9,35 @@ export interface SaasPlanLimits {
 }
 
 export interface SaasPlanFeatures {
-  // 1. Core SEO
+  // 1. Overview & Strategy
+  advanced_analytics: boolean;
+  action_roadmap: boolean;
+  my_reports_builder: boolean;
+  // 2. Brand & Ad Readiness
+  brand_analysis: boolean;
+  ad_readiness: boolean;
+  viral_detector: boolean;
+  trends_radar: boolean;
+  // 3. Competitor Intelligence
+  competitors_directory: boolean;
+  competitor_ads: boolean;
+  competitor_analysis: boolean;
+  // 4. Core SEO
   keyword_research: boolean;
   rank_tracker: boolean;
   backlink_analysis: boolean;
   site_audit: boolean;
-  // 2. Local SEO
+  // 5. Local SEO
   gbp_integration: boolean;
   map_rank_tracker: boolean;
   review_management: boolean;
   listing_management: boolean;
-  // 3. AI & Content
+  // 6. AI Engines & Enterprise
   ai_visibility: boolean;
   ai_content_studio: boolean;
   ai_seo_fixer: boolean;
   indexnow_submitter: boolean;
-  // 4. Infrastructure & Agency
   uptime_ssl_monitoring: boolean;
-  my_reports_builder: boolean;
   white_label_pdf: boolean;
   team_management: boolean;
   mcp_api_access: boolean;
@@ -70,20 +81,35 @@ const DEFAULT_PLANS: AdminPlanRecord[] = BRAND_CONFIG.pricing.tiers.map((t) => {
       uptimeMonitors: t.id === "starter" ? 0 : t.id === "pro" ? 5 : 50,
     },
     features: {
+      // 1. Overview & Strategy
+      advanced_analytics: true,
+      action_roadmap: true,
+      my_reports_builder: isAgency,
+      // 2. Brand & Ad Readiness
+      brand_analysis: true,
+      ad_readiness: isProOrAbove,
+      viral_detector: isProOrAbove,
+      trends_radar: isProOrAbove,
+      // 3. Competitor Intelligence
+      competitors_directory: true,
+      competitor_ads: isProOrAbove,
+      competitor_analysis: isProOrAbove,
+      // 4. Core SEO
       keyword_research: true,
       rank_tracker: true,
       backlink_analysis: isProOrAbove,
       site_audit: true,
+      // 5. Local SEO
       gbp_integration: isProOrAbove,
       map_rank_tracker: isProOrAbove,
       review_management: isAgency,
       listing_management: isAgency,
+      // 6. AI Engines & Enterprise
       ai_visibility: isProOrAbove,
       ai_content_studio: isProOrAbove,
       ai_seo_fixer: isAgency,
       indexnow_submitter: isProOrAbove,
       uptime_ssl_monitoring: isProOrAbove,
-      my_reports_builder: isAgency,
       white_label_pdf: isAgency,
       team_management: isAgency,
       mcp_api_access: isProOrAbove,
@@ -121,6 +147,16 @@ export const BillingPlansService = {
           uptimeMonitors: 0,
         };
         let features: SaasPlanFeatures = {
+          advanced_analytics: true,
+          action_roadmap: true,
+          my_reports_builder: false,
+          brand_analysis: true,
+          ad_readiness: false,
+          viral_detector: false,
+          trends_radar: false,
+          competitors_directory: true,
+          competitor_ads: false,
+          competitor_analysis: false,
           keyword_research: true,
           rank_tracker: true,
           backlink_analysis: true,
@@ -134,7 +170,6 @@ export const BillingPlansService = {
           ai_seo_fixer: false,
           indexnow_submitter: false,
           uptime_ssl_monitoring: false,
-          my_reports_builder: false,
           white_label_pdf: false,
           team_management: false,
           mcp_api_access: false,

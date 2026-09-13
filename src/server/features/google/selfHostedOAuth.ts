@@ -53,6 +53,21 @@ export const GA4_INTEGRATION: SelfHostedGoogleOAuthIntegration = {
   scopes: GA4_OAUTH_SCOPES,
 };
 
+export const GBP_OAUTH_PROVIDER_ID = "google-business-profile";
+export const GBP_OAUTH_SCOPES = [
+  "https://www.googleapis.com/auth/business.manage",
+  "https://www.googleapis.com/auth/userinfo.email",
+  "https://www.googleapis.com/auth/userinfo.profile",
+] as const;
+
+export const GBP_INTEGRATION: SelfHostedGoogleOAuthIntegration = {
+  providerId: GBP_OAUTH_PROVIDER_ID,
+  stateNamespace: "gbp",
+  displayName: "Google Business Profile",
+  callbackPath: "/api/gbp/oauth/callback",
+  scopes: GBP_OAUTH_SCOPES,
+};
+
 const oauthStateSchema = z.object({
   userId: z.string().min(1),
   callbackPath: z.string().min(1),

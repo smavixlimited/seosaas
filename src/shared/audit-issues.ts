@@ -8,7 +8,7 @@
 
 export type IssueSeverity = "critical" | "warning" | "info";
 
-interface AuditIssueDescriptor {
+export interface AuditIssueDescriptor {
   severity: IssueSeverity;
   title: string;
   explanation: string;

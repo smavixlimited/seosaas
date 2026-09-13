@@ -47,7 +47,6 @@ function SidebarNavLink({
   icon: FallbackIcon,
   solarIcon,
   label,
-  benefit,
   onNavigate,
   linkProps,
 }: {
@@ -58,72 +57,31 @@ function SidebarNavLink({
   onNavigate?: () => void;
   linkProps: LinkOptions;
 }) {
-  const [coords, setCoords] = useState<{ top: number; left: number } | null>(
-    null,
-  );
-
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!benefit) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCoords({
-      top: rect.top + rect.height / 2,
-      left: rect.right + 10,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setCoords(null);
-  };
-
   return (
-    <div
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <Link
+      onClick={onNavigate}
+      activeOptions={{ exact: false, includeSearch: false }}
+      {...linkProps}
+      className={navItemClass}
+      activeProps={navItemActiveProps}
     >
-      <Link
-        onClick={onNavigate}
-        activeOptions={{ exact: false, includeSearch: false }}
-        {...linkProps}
-        className={navItemClass}
-        activeProps={navItemActiveProps}
-      >
-        {({ isActive }: { isActive: boolean }) => (
-          <>
-            {isActive ? (
-              <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-md bg-primary" />
-            ) : null}
-            {solarIcon ? (
-              <Icon
-                icon={solarIcon}
-                className="h-4 w-4 shrink-0 text-inherit"
-              />
-            ) : FallbackIcon ? (
-              <FallbackIcon className="h-4 w-4 shrink-0" />
-            ) : null}
-            <span className="truncate">{label}</span>
-          </>
-        )}
-      </Link>
-
-      {benefit && coords && (
-        <div
-          role="tooltip"
-          className="pointer-events-none fixed z-[9999] w-52 -translate-y-1/2 rounded-xl border border-base-300 bg-base-100/98 p-2.5 shadow-xl backdrop-blur-md animate-in fade-in duration-100 hidden md:block text-base-content"
-          style={{
-            top: `${coords.top}px`,
-            left: `${coords.left}px`,
-          }}
-        >
-          <div className="font-bold text-[10px] text-primary uppercase tracking-wider mb-1">
-            {label}
-          </div>
-          <p className="text-[11px] text-base-content/80 leading-snug font-normal">
-            {benefit}
-          </p>
-        </div>
+      {({ isActive }: { isActive: boolean }) => (
+        <>
+          {isActive ? (
+            <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-md bg-primary" />
+          ) : null}
+          {solarIcon ? (
+            <Icon
+              icon={solarIcon}
+              className="h-4 w-4 shrink-0 text-inherit"
+            />
+          ) : FallbackIcon ? (
+            <FallbackIcon className="h-4 w-4 shrink-0" />
+          ) : null}
+          <span className="truncate">{label}</span>
+        </>
       )}
-    </div>
+    </Link>
   );
 }
 
@@ -191,9 +149,6 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
           />
           <span className="text-lg font-black tracking-tight text-base-content">
             {BRAND_CONFIG.name}
-          </span>
-          <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-extrabold text-primary ring-1 ring-inset ring-primary/20">
-            PRO
           </span>
         </Link>
         {onClose ? (

@@ -77,8 +77,8 @@ export function CompetitorContentBlueprintModal({
                 1-Click Competitor Content Blueprint &amp; Gap Dissection
               </h3>
               <p className="text-[11px] text-base-content/60">
-                Scrapes top-ranking competitor pages via Firecrawl to
-                reverse-engineer their content structure and schemas.
+                Scrapes top-ranking competitor pages to reverse-engineer their
+                content structure and schemas.
               </p>
             </div>
           </div>

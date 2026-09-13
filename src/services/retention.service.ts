@@ -51,6 +51,22 @@ export const RetentionService = {
         .limit(1);
 
       if (row) {
+        // Check for expired subscription past 24-hour grace period
+        if (
+          row.planId &&
+          row.planId !== "starter" &&
+          row.resetAt
+        ) {
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          if (SubscriptionLifecycleService.isPastGracePeriod(row.resetAt)) {
+            await SubscriptionLifecycleService.downgradeUserToStarter(userId);
+            row.planId = "starter";
+            row.monthlyCreditsLimit = 500;
+          }
+        }
+
         creditsUsed = row.creditsUsed ?? 0;
         monthlyCreditsLimit = row.monthlyCreditsLimit ?? 500;
         planId = row.planId ?? "starter";

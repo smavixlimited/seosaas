@@ -126,13 +126,37 @@ export class SamChatAgent extends Think {
   }
 
   getModel() {
-    const apiKey = getEnvValueSync(this.env, "OPENROUTER_API_KEY");
-    if (!apiKey) {
-      throw new Error("OPENROUTER_API_KEY is required for the SAM agent");
+    const openrouterKey = getEnvValueSync(this.env, "OPENROUTER_API_KEY");
+    if (openrouterKey && openrouterKey.trim().length > 0) {
+      return buildChatAgentModel(
+        openrouterKey.trim(),
+        getEnvValueSync(this.env, "OPENROUTER_MODEL"),
+      );
     }
-    return buildChatAgentModel(
-      apiKey,
-      getEnvValueSync(this.env, "OPENROUTER_MODEL"),
+
+    const openaiKey = getEnvValueSync(this.env, "OPENAI_API_KEY");
+    if (openaiKey && openaiKey.trim().length > 0) {
+      return buildChatAgentModel(
+        openaiKey.trim(),
+        getEnvValueSync(this.env, "OPENAI_MODEL") ?? "gpt-4o-mini",
+        "https://api.openai.com/v1",
+      );
+    }
+
+    const geminiKey =
+      getEnvValueSync(this.env, "GEMINI_API_KEY") ??
+      getEnvValueSync(this.env, "GOOGLE_GENERATIVE_AI_API_KEY");
+    if (geminiKey && geminiKey.trim().length > 0) {
+      return buildChatAgentModel(
+        geminiKey.trim(),
+        getEnvValueSync(this.env, "GEMINI_MODEL") ?? "gemini-2.0-flash",
+        "https://generativelanguage.googleapis.com/v1beta/openai",
+      );
+    }
+
+    // Graceful fallback when no key is configured yet in environment
+    return staticAssistantModel(
+      "👋 Hello! I am Skorvia AI, your Brand Growth Coach, CMO & Search Strategist.\n\nTo enable full live AI responses and real-time execution of MCP tools, please configure your `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, or `GEMINI_API_KEY` in your `.env` configuration or System Settings.",
     );
   }
 

@@ -172,48 +172,53 @@ async function getSuggestedKeywords(
 
   const dataforseo = createDataforseoClient(billingCustomer);
 
-  const rankedKeywordsResponse = await dataforseo.domain.rankedKeywords({
-    target: target.hostname,
-    locationCode: input.locationCode,
-    languageCode: input.languageCode,
-    limit: 100,
-    orderBy: ["ranked_serp_element.serp_item.etv,desc"],
-    filters:
-      scopeFilter.clauses.length > 0
-        ? joinClauses(scopeFilter.clauses, "and")
-        : undefined,
-    ...metering,
-  });
+  try {
+    const rankedKeywordsResponse = await dataforseo.domain.rankedKeywords({
+      target: target.hostname,
+      locationCode: input.locationCode,
+      languageCode: input.languageCode,
+      limit: 100,
+      orderBy: ["ranked_serp_element.serp_item.etv,desc"],
+      filters:
+        scopeFilter.clauses.length > 0
+          ? joinClauses(scopeFilter.clauses, "and")
+          : undefined,
+      ...metering,
+    });
 
-  const keywords = rankedKeywordsResponse.items
-    .map((item) => mapKeywordItem(item))
-    .filter(
-      (item): item is NonNullable<ReturnType<typeof mapKeywordItem>> =>
-        item != null,
-    )
-    .map((item) => ({
-      keyword: item.keyword,
-      position: item.position,
-      searchVolume: item.searchVolume,
-      traffic: item.traffic,
-      cpc: item.cpc,
-      keywordDifficulty: item.keywordDifficulty,
-    }));
+    const keywords = (rankedKeywordsResponse?.items ?? [])
+      .map((item) => mapKeywordItem(item))
+      .filter(
+        (item): item is NonNullable<ReturnType<typeof mapKeywordItem>> =>
+          item != null,
+      )
+      .map((item) => ({
+        keyword: item.keyword,
+        position: item.position,
+        searchVolume: item.searchVolume,
+        traffic: item.traffic,
+        cpc: item.cpc,
+        keywordDifficulty: item.keywordDifficulty,
+      }));
 
-  if (keywords.length > 0) {
-    waitUntil(
-      setCached(cacheKey, keywords, DOMAIN_OVERVIEW_TTL_SECONDS).catch(
-        (error) => {
-          console.error(
-            "domain.keyword-suggestions.cache-write failed:",
-            error,
-          );
-        },
-      ),
-    );
+    if (keywords.length > 0) {
+      waitUntil(
+        setCached(cacheKey, keywords, DOMAIN_OVERVIEW_TTL_SECONDS).catch(
+          (error) => {
+            console.error(
+              "domain.keyword-suggestions.cache-write failed:",
+              error,
+            );
+          },
+        ),
+      );
+    }
+
+    return keywords;
+  } catch (error) {
+    console.warn("DomainService.getSuggestedKeywords fallback to empty for:", target.hostname, error);
+    return [];
   }
-
-  return keywords;
 }
 
 export const DomainService = {

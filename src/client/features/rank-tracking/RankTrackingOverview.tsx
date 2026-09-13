@@ -34,10 +34,16 @@ export function RankTrackingOverview({
   device,
   projectId,
   configId,
+  onCheckNow,
+  isBusy,
+  isFreePlan,
 }: {
   device: "desktop" | "mobile";
   projectId: string;
   configId: string;
+  onCheckNow?: () => void;
+  isBusy?: boolean;
+  isFreePlan?: boolean;
 }) {
   const [sinceDays, setSinceDays] = useState(730);
 
@@ -91,10 +97,23 @@ export function RankTrackingOverview({
             <Loader2 className="size-4 animate-spin text-base-content/50" />
           </div>
         ) : chartData.length <= 1 ? (
-          <div className="rounded-lg border border-dashed border-base-300 p-8 text-center text-xs text-base-content/60">
-            {chartData.length === 0
-              ? "No history yet — run a check to start tracking positions over time."
-              : "Only 1 check so far — the trend fills in after the next check."}
+          <div className="rounded-lg border border-dashed border-base-300 p-6 text-center text-xs text-base-content/60 flex flex-col items-center justify-center gap-2.5">
+            <span>
+              {chartData.length === 0
+                ? "No history yet — run a check to start tracking positions over time."
+                : "Only 1 check so far — the trend fills in after the next check."}
+            </span>
+            {onCheckNow && (
+              <button
+                type="button"
+                className="btn btn-primary btn-xs gap-1.5"
+                onClick={onCheckNow}
+                disabled={isBusy || isFreePlan}
+              >
+                {isBusy && <Loader2 className="size-3 animate-spin" />}
+                {chartData.length === 0 ? "Check Rankings Now" : "Run Another Check"}
+              </button>
+            )}
           </div>
         ) : (
           <div

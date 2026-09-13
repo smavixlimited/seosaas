@@ -226,7 +226,15 @@ export default {
       console.error("[cron] Stale-audit reconcile failed:", err);
     }
     // Scope a per-request Postgres client for the cron run (no-op in D1 mode).
-    await withPgClient(() => runScheduledRankChecks(env));
+    await withPgClient(async () => {
+      await runScheduledRankChecks(env);
+      try {
+        const { runAllActiveMonitors } = await import("@/services/uptime.service");
+        await runAllActiveMonitors();
+      } catch (uptimeErr) {
+        console.error("[cron] Scheduled uptime checks failed:", uptimeErr);
+      }
+    });
     if (watchdogError) throw watchdogError;
   },
 };

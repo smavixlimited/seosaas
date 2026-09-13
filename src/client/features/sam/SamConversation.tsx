@@ -188,9 +188,16 @@ export function SamConversation({
           ) : null}
 
           {status === "error" ? (
-            <p className="text-sm text-error">
-              Something went wrong. Please try again.
-            </p>
+            <div className="rounded-xl border border-error/30 bg-error/10 p-3 text-xs text-error flex items-center justify-between gap-3">
+              <span>Could not complete AI response. Please check your API key or reset the chat.</span>
+              <button
+                type="button"
+                onClick={() => clearHistory()}
+                className="btn btn-xs btn-outline btn-error shrink-0 font-bold"
+              >
+                Reset Chat
+              </button>
+            </div>
           ) : null}
 
           {showSuggestions ? (

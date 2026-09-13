@@ -27,13 +27,22 @@ export const getViralOpportunities = createServerFn({ method: "POST" })
     );
   });
 
+const generateViralQuerySchema = z
+  .object({
+    projectId: z.string().optional(),
+    platform: platformSchema,
+    customTopic: z.string().max(300).optional(),
+  })
+  .optional();
+
 export const generateViralOpportunities = createServerFn({ method: "POST" })
   .middleware(requireProjectContext)
-  .validator(viralQuerySchema)
+  .validator(generateViralQuerySchema)
   .handler(async ({ data, context }) => {
     return ViralContentService.generateOpportunities(
       context.projectId,
       data?.platform as ViralPlatform,
+      data?.customTopic,
     );
   });
 

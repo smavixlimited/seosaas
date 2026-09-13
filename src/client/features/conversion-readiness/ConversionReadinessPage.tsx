@@ -8,6 +8,7 @@ import {
   runConversionReadinessAudit,
 } from "@/serverFunctions/conversion-readiness";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
+import { AudienceTrustPreAdGate } from "@/client/features/trust-sentiment/AudienceTrustPreAdGate";
 import type {
   RecommendedFixItem,
   ConversionAuditResult,
@@ -22,6 +23,7 @@ export function ConversionReadinessPage({
 }: ConversionReadinessPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = React.useState<"cro" | "trust">("cro");
   const [targetUrl, setTargetUrl] = React.useState("");
 
   const auditQuery = useQuery<ConversionAuditResult>({
@@ -190,7 +192,37 @@ export function ConversionReadinessPage({
         </div>
       </div>
 
-      {audit && (
+      {/* Segmented Sub-Pill Navigation */}
+      <div className="flex items-center gap-2 border-b border-base-300 pb-2">
+        <button
+          type="button"
+          onClick={() => setActiveTab("cro")}
+          className={`btn btn-sm rounded-xl text-xs font-bold gap-1.5 ${
+            activeTab === "cro"
+              ? "btn-primary text-white shadow-xs"
+              : "btn-ghost text-base-content/70 hover:text-base-content"
+          }`}
+        >
+          <Icon icon="solar:target-bold" className="h-4 w-4" />
+          <span>Conversion &amp; Pixel Audit</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("trust")}
+          className={`btn btn-sm rounded-xl text-xs font-bold gap-1.5 ${
+            activeTab === "trust"
+              ? "btn-primary text-white shadow-xs"
+              : "btn-ghost text-base-content/70 hover:text-base-content"
+          }`}
+        >
+          <Icon icon="solar:shield-check-bold" className="h-4 w-4" />
+          <span>Pre-Ad Trust &amp; Sentiment Gate</span>
+        </button>
+      </div>
+
+      {activeTab === "trust" ? (
+        <AudienceTrustPreAdGate projectId={projectId} />
+      ) : audit ? (
         <div className="space-y-6">
           {/* Top Score Banner */}
           <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
@@ -578,7 +610,7 @@ export function ConversionReadinessPage({
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

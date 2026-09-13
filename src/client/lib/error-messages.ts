@@ -10,6 +10,8 @@ const STANDARD_MESSAGES: Record<ErrorCode, string> = {
   INSUFFICIENT_CREDITS:
     "You've run out of credits. Add more credits or upgrade your plan to continue.",
   FORBIDDEN: "You do not have access to this resource.",
+  FORBIDDEN_PLAN_FEATURE:
+    "This feature is not included in your current plan. Please upgrade your subscription to unlock it.",
   NOT_FOUND: "The requested resource was not found.",
   AUDIT_CAPACITY_REACHED:
     "You've reached audit capacity for your account. Delete old audits from your projects to start a new one.",

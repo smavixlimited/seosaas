@@ -169,9 +169,8 @@ function ScraperStudioPage() {
                   </span>
                 </h1>
                 <p className="text-xs text-base-content/60">
-                  Powered by Firecrawl — Decode competitor landing pages,
-                  inspect structural markup, and ingest clean Markdown into
-                  Skorvia AI.
+                  Decode competitor landing pages, inspect structural markup,
+                  and ingest clean Markdown into Skorvia AI.
                 </p>
               </div>
             </div>

@@ -26,7 +26,7 @@ export const createProject = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(createProjectSchema)
   .handler(async ({ data, context }) =>
-    ProjectService.createProject(context.organizationId, data),
+    ProjectService.createProject(context.organizationId, data, context.userId),
   );
 
 export const updateProject = createServerFn({ method: "POST" })

@@ -98,6 +98,7 @@ import { Route as AdminAdminAuditLogsRouteImport } from './routes/_admin/admin/a
 import { Route as ProjectPProjectIdRouteRouteImport } from './routes/_project/p/$projectId/route'
 import { Route as ProjectPProjectIdIndexRouteImport } from './routes/_project/p/$projectId/index'
 import { Route as ApiGscOauthCallbackRouteImport } from './routes/api/gsc/oauth/callback'
+import { Route as ApiGbpOauthCallbackRouteImport } from './routes/api/gbp/oauth/callback'
 import { Route as ApiGa4OauthCallbackRouteImport } from './routes/api/ga4/oauth/callback'
 import { Route as ApiBillingWebhookGatewayRouteImport } from './routes/api/billing.webhook.$gateway'
 import { Route as ProjectPProjectIdViralDetectorRouteImport } from './routes/_project/p/$projectId/viral-detector'
@@ -123,6 +124,7 @@ import { Route as ProjectPProjectIdBrandLookupRouteImport } from './routes/_proj
 import { Route as ProjectPProjectIdBrandAnalysisRouteImport } from './routes/_project/p/$projectId/brand-analysis'
 import { Route as ProjectPProjectIdBacklinksRouteImport } from './routes/_project/p/$projectId/backlinks'
 import { Route as ProjectPProjectIdAuditRouteImport } from './routes/_project/p/$projectId/audit'
+import { Route as ProjectPProjectIdAdvancedAnalyticsRouteImport } from './routes/_project/p/$projectId/advanced-analytics'
 import { Route as ProjectPProjectIdAdReadinessRouteImport } from './routes/_project/p/$projectId/ad-readiness'
 import { Route as AppDashboardSettingsSecurityRouteImport } from './routes/_app/dashboard/settings/security'
 import { Route as AdminAdminSettingsSecurityRouteImport } from './routes/_admin/admin/settings/security'
@@ -586,6 +588,11 @@ const ApiGscOauthCallbackRoute = ApiGscOauthCallbackRouteImport.update({
   path: '/api/gsc/oauth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGbpOauthCallbackRoute = ApiGbpOauthCallbackRouteImport.update({
+  id: '/api/gbp/oauth/callback',
+  path: '/api/gbp/oauth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGa4OauthCallbackRoute = ApiGa4OauthCallbackRouteImport.update({
   id: '/api/ga4/oauth/callback',
   path: '/api/ga4/oauth/callback',
@@ -731,6 +738,12 @@ const ProjectPProjectIdAuditRoute = ProjectPProjectIdAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => ProjectPProjectIdRouteRoute,
 } as any)
+const ProjectPProjectIdAdvancedAnalyticsRoute =
+  ProjectPProjectIdAdvancedAnalyticsRouteImport.update({
+    id: '/advanced-analytics',
+    path: '/advanced-analytics',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
 const ProjectPProjectIdAdReadinessRoute =
   ProjectPProjectIdAdReadinessRouteImport.update({
     id: '/ad-readiness',
@@ -897,6 +910,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
   '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
+  '/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
   '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
@@ -922,6 +936,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
+  '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
   '/p/$projectId/': typeof ProjectPProjectIdIndexRoute
   '/p/$projectId/rank-tracking/$configId': typeof ProjectPProjectIdRankTrackingConfigIdRoute
@@ -1020,6 +1035,7 @@ export interface FileRoutesByTo {
   '/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
   '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
+  '/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
   '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
   '/p/$projectId/brand-lookup': typeof ProjectPProjectIdBrandLookupRoute
@@ -1042,6 +1058,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
+  '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
   '/p/$projectId': typeof ProjectPProjectIdIndexRoute
   '/p/$projectId/rank-tracking/$configId': typeof ProjectPProjectIdRankTrackingConfigIdRoute
@@ -1147,6 +1164,7 @@ export interface FileRoutesById {
   '/_admin/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/_app/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
   '/_project/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
+  '/_project/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/_project/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/_project/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
   '/_project/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
@@ -1172,6 +1190,7 @@ export interface FileRoutesById {
   '/_project/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
+  '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
   '/api/gsc/oauth/callback': typeof ApiGscOauthCallbackRoute
   '/_project/p/$projectId/': typeof ProjectPProjectIdIndexRoute
   '/_project/p/$projectId/rank-tracking/$configId': typeof ProjectPProjectIdRankTrackingConfigIdRoute
@@ -1273,6 +1292,7 @@ export interface FileRouteTypes {
     | '/admin/settings/security'
     | '/dashboard/settings/security'
     | '/p/$projectId/ad-readiness'
+    | '/p/$projectId/advanced-analytics'
     | '/p/$projectId/audit'
     | '/p/$projectId/backlinks'
     | '/p/$projectId/brand-analysis'
@@ -1298,6 +1318,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
+    | '/api/gbp/oauth/callback'
     | '/api/gsc/oauth/callback'
     | '/p/$projectId/'
     | '/p/$projectId/rank-tracking/$configId'
@@ -1396,6 +1417,7 @@ export interface FileRouteTypes {
     | '/admin/settings/security'
     | '/dashboard/settings/security'
     | '/p/$projectId/ad-readiness'
+    | '/p/$projectId/advanced-analytics'
     | '/p/$projectId/backlinks'
     | '/p/$projectId/brand-analysis'
     | '/p/$projectId/brand-lookup'
@@ -1418,6 +1440,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
+    | '/api/gbp/oauth/callback'
     | '/api/gsc/oauth/callback'
     | '/p/$projectId'
     | '/p/$projectId/rank-tracking/$configId'
@@ -1522,6 +1545,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/settings/security'
     | '/_app/dashboard/settings/security'
     | '/_project/p/$projectId/ad-readiness'
+    | '/_project/p/$projectId/advanced-analytics'
     | '/_project/p/$projectId/audit'
     | '/_project/p/$projectId/backlinks'
     | '/_project/p/$projectId/brand-analysis'
@@ -1547,6 +1571,7 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
+    | '/api/gbp/oauth/callback'
     | '/api/gsc/oauth/callback'
     | '/_project/p/$projectId/'
     | '/_project/p/$projectId/rank-tracking/$configId'
@@ -1621,6 +1646,7 @@ export interface RootRouteChildren {
   ApiWebhooksDataforseoRoute: typeof ApiWebhooksDataforseoRoute
   ApiBillingWebhookGatewayRoute: typeof ApiBillingWebhookGatewayRoute
   ApiGa4OauthCallbackRoute: typeof ApiGa4OauthCallbackRoute
+  ApiGbpOauthCallbackRoute: typeof ApiGbpOauthCallbackRoute
   ApiGscOauthCallbackRoute: typeof ApiGscOauthCallbackRoute
 }
 
@@ -2249,6 +2275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGscOauthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/gbp/oauth/callback': {
+      id: '/api/gbp/oauth/callback'
+      path: '/api/gbp/oauth/callback'
+      fullPath: '/api/gbp/oauth/callback'
+      preLoaderRoute: typeof ApiGbpOauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/ga4/oauth/callback': {
       id: '/api/ga4/oauth/callback'
       path: '/api/ga4/oauth/callback'
@@ -2422,6 +2455,13 @@ declare module '@tanstack/react-router' {
       path: '/audit'
       fullPath: '/p/$projectId/audit'
       preLoaderRoute: typeof ProjectPProjectIdAuditRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
+    '/_project/p/$projectId/advanced-analytics': {
+      id: '/_project/p/$projectId/advanced-analytics'
+      path: '/advanced-analytics'
+      fullPath: '/p/$projectId/advanced-analytics'
+      preLoaderRoute: typeof ProjectPProjectIdAdvancedAnalyticsRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
     '/_project/p/$projectId/ad-readiness': {
@@ -2613,6 +2653,7 @@ const ProjectPProjectIdSettingsRouteWithChildren =
 
 interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdAdReadinessRoute: typeof ProjectPProjectIdAdReadinessRoute
+  ProjectPProjectIdAdvancedAnalyticsRoute: typeof ProjectPProjectIdAdvancedAnalyticsRoute
   ProjectPProjectIdAuditRoute: typeof ProjectPProjectIdAuditRouteWithChildren
   ProjectPProjectIdBacklinksRoute: typeof ProjectPProjectIdBacklinksRoute
   ProjectPProjectIdBrandAnalysisRoute: typeof ProjectPProjectIdBrandAnalysisRoute
@@ -2642,6 +2683,8 @@ interface ProjectPProjectIdRouteRouteChildren {
 const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
   {
     ProjectPProjectIdAdReadinessRoute: ProjectPProjectIdAdReadinessRoute,
+    ProjectPProjectIdAdvancedAnalyticsRoute:
+      ProjectPProjectIdAdvancedAnalyticsRoute,
     ProjectPProjectIdAuditRoute: ProjectPProjectIdAuditRouteWithChildren,
     ProjectPProjectIdBacklinksRoute: ProjectPProjectIdBacklinksRoute,
     ProjectPProjectIdBrandAnalysisRoute: ProjectPProjectIdBrandAnalysisRoute,
@@ -2813,6 +2856,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiWebhooksDataforseoRoute: ApiWebhooksDataforseoRoute,
   ApiBillingWebhookGatewayRoute: ApiBillingWebhookGatewayRoute,
   ApiGa4OauthCallbackRoute: ApiGa4OauthCallbackRoute,
+  ApiGbpOauthCallbackRoute: ApiGbpOauthCallbackRoute,
   ApiGscOauthCallbackRoute: ApiGscOauthCallbackRoute,
 }
 export const routeTree = rootRouteImport

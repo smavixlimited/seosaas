@@ -3,13 +3,19 @@ import { z } from "zod";
 import { requireProjectContext } from "@/serverFunctions/middleware";
 import { BrandMentionsService } from "@/services/brand-mentions.service";
 
-const brandMentionsQuerySchema = z.object({}).optional();
+const brandMentionsQuerySchema = z
+  .object({
+    projectId: z.string().optional(),
+  })
+  .optional();
 
 const generatePitchSchema = z.object({
+  projectId: z.string().optional(),
   mentionId: z.string().min(1),
 });
 
 const updateClaimStatusSchema = z.object({
+  projectId: z.string().optional(),
   mentionId: z.string().min(1),
   claimStatus: z.enum([
     "unclaimed",

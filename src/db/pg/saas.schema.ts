@@ -97,11 +97,14 @@ export const uptimeMonitors = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     projectId: text("project_id"),
     url: text("url").notNull(),
-    status: text("status").notNull().default("up"),
+    status: text("status").notNull().default("up"), // 'up' | 'down' | 'degraded'
     lastCheckedAt: text("last_checked_at"),
     lastStatusCode: integer("last_status_code"),
     sslExpiresAt: text("ssl_expires_at"),
-    reminderFrequency: text("reminder_frequency").notNull().default("both"), // 'weekly' | 'ssl_expiry' | 'both' | 'none'
+    domainExpiresAt: text("domain_expires_at"),
+    domainRegistrar: text("domain_registrar"),
+    hostingProvider: text("hosting_provider"),
+    reminderFrequency: text("reminder_frequency").notNull().default("all"), // 'all' | 'weekly' | 'ssl_expiry' | 'domain_expiry' | 'none'
     reminderEmail: text("reminder_email"),
     lastReminderSentAt: text("last_reminder_sent_at"),
     isActive: boolean("is_active").notNull().default(true),

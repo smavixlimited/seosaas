@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   BarChart3,
   Quote,
+  Sparkles,
   TrendingUp,
 } from "lucide-react";
 import { lookupBrand } from "@/serverFunctions/ai-search";
@@ -19,10 +20,13 @@ import { BrandLookupSearchCard } from "@/client/features/ai-search/components/Br
 import { BrandLookupHistorySection } from "@/client/features/ai-search/components/BrandLookupHistorySection";
 import { AiSearchLoadingState } from "@/client/features/ai-search/components/AiSearchLoadingState";
 import { AiSearchPaidPlanGate } from "@/client/features/ai-search/components/AiSearchPaidPlanGate";
+import { PromptExplorerPageInner } from "@/client/features/ai-search/PromptExplorerPage";
 import { useBrandLookupSearchHistory } from "@/client/hooks/useBrandLookupSearchHistory";
 import {
   BRAND_LOOKUP_MAX_INPUT_LENGTH,
   parseCompetitorList,
+  type PromptExplorerModel,
+  type WebSearchCountryCode,
 } from "@/types/schemas/ai-search";
 import { detectTarget } from "@/shared/targetDetection";
 import {
@@ -79,6 +83,21 @@ function BrandLookupPageInner({
   onSearchChange,
   planGate,
 }: Props & { planGate: HostedPlanGateState }) {
+  const [activeTab, setActiveTab] = useState<"brand" | "prompt">("brand");
+  const [promptFormValues, setPromptFormValues] = useState<{
+    prompt: string;
+    highlightBrand: string;
+    models: PromptExplorerModel[];
+    webSearch: boolean;
+    webSearchCountryCode: WebSearchCountryCode;
+  }>({
+    prompt: "",
+    highlightBrand: "",
+    models: ["chat_gpt", "perplexity", "claude", "gemini"],
+    webSearch: true,
+    webSearchCountryCode: "US",
+  });
+
   const [query, setQuery] = useState(initialQuery);
   // The user's explicit scope pick, or undefined to follow the input's default.
   const [scopeChoice, setScopeChoice] = useState<ResearchScope | undefined>(
@@ -138,7 +157,7 @@ function BrandLookupPageInner({
     // Client-side gate is a UX optimization only; the paywall is enforced
     // server-side (lookupBrand → assertPaidPlan) before any DataForSEO spend,
     // so a stale free-plan window here just yields a rejected request, not cost.
-    enabled: hasActiveQuery && !planGate.isFreePlan,
+    enabled: hasActiveQuery,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
@@ -257,82 +276,111 @@ function BrandLookupPageInner({
   const resultData = hasActiveQuery ? lookupQuery.data : undefined;
 
   return (
-    <div className="px-4 py-4 pb-24 overflow-auto md:px-6 md:py-6 md:pb-8">
-      <div className="mx-auto max-w-7xl space-y-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Brand Lookup</h1>
-          <p className="text-sm text-base-content/70">
-            See how AI search cites any brand name or domain.
-          </p>
-        </div>
-
-        {planGate.isFreePlan ? (
-          <AiSearchPaidPlanGate
-            feature="Brand Lookup"
-            description="See how ChatGPT and Google AI Overview cite any brand or domain — total mentions, sample prompts where it appears, and the pages cited alongside it."
-            bullets={BRAND_LOOKUP_BULLETS}
-          />
-        ) : (
-          <>
-            <BrandLookupSearchCard
-              query={query}
-              onQueryChange={(next) => {
-                setQuery(next);
-                if (validationError) setValidationError(null);
-              }}
-              scope={selectedScope}
-              onScopeChange={setScopeChoice}
-              scopeDisabledReason={scopeDisabledReason}
-              competitors={competitorsInput}
-              onCompetitorsChange={(next) => {
-                setCompetitorsInput(next);
-                if (validationError) setValidationError(null);
-              }}
-              onSubmit={handleSubmit}
-              isLoading={isLoading}
-              validationError={validationError}
-            />
-
-            {errorMessage ? (
-              <div
-                role="alert"
-                className="flex items-start gap-2 rounded-lg border border-error/30 bg-error/10 p-3 text-sm text-error"
-              >
-                <AlertCircle className="mt-0.5 size-4 shrink-0" />
-                <span>{errorMessage}</span>
-              </div>
-            ) : null}
-
-            {isLoading ? (
-              <AiSearchLoadingState />
-            ) : resultData ? (
-              <>
-                <div>
-                  <Link
-                    from="/p/$projectId/brand-lookup"
-                    to="/p/$projectId/brand-lookup"
-                    params={{ projectId }}
-                    search={{ q: undefined, c: undefined, scope: undefined }}
-                    replace
-                    className="btn btn-ghost btn-sm gap-2 px-0 text-base-content/70 hover:bg-transparent"
-                  >
-                    <ArrowLeft className="size-4" />
-                    Recent searches
-                  </Link>
-                </div>
-                <BrandLookupResults result={resultData} projectId={projectId} />
-              </>
-            ) : !errorMessage ? (
-              <BrandLookupHistorySection
-                projectId={projectId}
-                history={history}
-                historyLoaded={historyLoaded}
-                onRemoveHistoryItem={removeHistoryItem}
-              />
-            ) : null}
-          </>
-        )}
+    <div className="w-full min-w-0 max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6 pb-24 md:pb-8 animate-in fade-in duration-150">
+      <div>
+        <h1 className="text-2xl font-black tracking-tight text-base-content">
+          AI Search &amp; Brand Authority
+        </h1>
+        <p className="text-xs text-base-content/60">
+          Monitor brand perception across ChatGPT, Perplexity &amp; Google AI Overviews, test custom prompts, and analyze citations.
+        </p>
       </div>
+
+      {/* Segmented Sub-Pill Navigation */}
+      <div className="flex items-center gap-2 border-b border-base-300 pb-2">
+        <button
+          type="button"
+          onClick={() => setActiveTab("brand")}
+          className={`btn btn-sm rounded-xl text-xs font-bold gap-1.5 ${
+            activeTab === "brand"
+              ? "btn-primary text-white shadow-xs"
+              : "btn-ghost text-base-content/70 hover:text-base-content"
+          }`}
+        >
+          <Sparkles className="h-4 w-4" />
+          <span>Brand Citation &amp; AEO Monitor</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("prompt")}
+          className={`btn btn-sm rounded-xl text-xs font-bold gap-1.5 ${
+            activeTab === "prompt"
+              ? "btn-primary text-white shadow-xs"
+              : "btn-ghost text-base-content/70 hover:text-base-content"
+          }`}
+        >
+          <Quote className="h-4 w-4" />
+          <span>Custom AI Prompt &amp; Citation Tester</span>
+        </button>
+      </div>
+
+      {activeTab === "prompt" ? (
+        <PromptExplorerPageInner
+          projectId={projectId}
+          urlState={promptFormValues}
+          onSubmit={(nextValues) => setPromptFormValues(nextValues)}
+          planGate={planGate}
+        />
+      ) : (
+        <>
+          <BrandLookupSearchCard
+            query={query}
+            onQueryChange={(next) => {
+              setQuery(next);
+              if (validationError) setValidationError(null);
+            }}
+            scope={selectedScope}
+            onScopeChange={setScopeChoice}
+            scopeDisabledReason={scopeDisabledReason}
+            competitors={competitorsInput}
+            onCompetitorsChange={(next) => {
+              setCompetitorsInput(next);
+              if (validationError) setValidationError(null);
+            }}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            validationError={validationError}
+          />
+
+          {errorMessage ? (
+            <div
+              role="alert"
+              className="flex items-start gap-2 rounded-lg border border-error/30 bg-error/10 p-3 text-sm text-error"
+            >
+              <AlertCircle className="mt-0.5 size-4 shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          ) : null}
+
+          {isLoading ? (
+            <AiSearchLoadingState />
+          ) : resultData ? (
+            <>
+              <div>
+                <Link
+                  from="/p/$projectId/brand-lookup"
+                  to="/p/$projectId/brand-lookup"
+                  params={{ projectId }}
+                  search={{ q: undefined, c: undefined, scope: undefined }}
+                  replace
+                  className="btn btn-ghost btn-sm gap-2 px-0 text-base-content/70 hover:bg-transparent"
+                >
+                  <ArrowLeft className="size-4" />
+                  Recent searches
+                </Link>
+              </div>
+              <BrandLookupResults result={resultData} projectId={projectId} />
+            </>
+          ) : !errorMessage ? (
+            <BrandLookupHistorySection
+              projectId={projectId}
+              history={history}
+              historyLoaded={historyLoaded}
+              onRemoveHistoryItem={removeHistoryItem}
+            />
+          ) : null}
+        </>
+      )}
     </div>
   );
 }

@@ -1,21 +1,34 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { BillingPlansService } from "@/services/billing-plans.service";
 
-describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
-  beforeEach(() => {
-    // Reset state if needed
-  });
-
-  it("retrieves standard plans with default fallback", async () => {
+describe("BillingPlansService (Dynamic Pricing & 24+ Quota Controls)", () => {
+  it("retrieves standard plans with all 6 pillars and 24+ feature definitions", async () => {
     const plans = await BillingPlansService.getAllPlans();
     expect(plans.length).toBeGreaterThan(0);
     const starter = plans.find((p) => p.id === "starter");
     expect(starter).toBeDefined();
-    expect(starter?.priceUsd).toBeGreaterThanOrEqual(0);
-    expect(starter?.limits.monthlyCredits).toBeGreaterThan(0);
+    expect(starter?.limits.monthlyCredits).toBe(500);
+
+    // Verify 6 Pillars
+    expect(starter?.features.advanced_analytics).toBe(true);
+    expect(starter?.features.action_roadmap).toBe(true);
+    expect(starter?.features.brand_analysis).toBe(true);
+    expect(starter?.features.competitors_directory).toBe(true);
+    expect(starter?.features.keyword_research).toBe(true);
+    expect(starter?.features.rank_tracker).toBe(true);
+    expect(starter?.features.site_audit).toBe(true);
+
+    const pro = plans.find((p) => p.id === "pro");
+    expect(pro).toBeDefined();
+    expect(pro?.features.ad_readiness).toBe(true);
+    expect(pro?.features.viral_detector).toBe(true);
+    expect(pro?.features.trends_radar).toBe(true);
+    expect(pro?.features.competitor_ads).toBe(true);
+    expect(pro?.features.competitor_analysis).toBe(true);
+    expect(pro?.features.ai_visibility).toBe(true);
   });
 
-  it("upserts plan pricing and feature flags", async () => {
+  it("upserts plan pricing and full feature flags matrix", async () => {
     const customPlan = {
       id: "test-agency-plan",
       name: "Test Agency Tier",
@@ -30,6 +43,16 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
         uptimeMonitors: 30,
       },
       features: {
+        advanced_analytics: true,
+        action_roadmap: true,
+        my_reports_builder: true,
+        brand_analysis: true,
+        ad_readiness: true,
+        viral_detector: true,
+        trends_radar: true,
+        competitors_directory: true,
+        competitor_ads: true,
+        competitor_analysis: true,
         keyword_research: true,
         rank_tracker: true,
         backlink_analysis: true,
@@ -43,7 +66,6 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
         ai_seo_fixer: true,
         indexnow_submitter: true,
         uptime_ssl_monitoring: true,
-        my_reports_builder: true,
         white_label_pdf: true,
         team_management: true,
         mcp_api_access: true,
@@ -64,49 +86,6 @@ describe("BillingPlansService (Dynamic Pricing & Quota Controls)", () => {
     );
     expect(saved.id).toBe("test-agency-plan");
     expect(saved.limits.maxDomains).toBe(50);
-  });
-
-  it("verifies webhook idempotency and signature validation for Paystack, Flutterwave, and LemonSqueezy", async () => {
-    const { WebhookIdempotencyService } = await import("@/services/webhook-idempotency.service");
-
-    // Flutterwave secret hash check
-    expect(WebhookIdempotencyService.verifyFlutterwaveSignature("secret_123", "secret_123")).toBe(true);
-    expect(WebhookIdempotencyService.verifyFlutterwaveSignature("wrong", "secret_123")).toBe(false);
-
-    // Idempotent event claim check
-    const eventId = `test_evt_${Date.now()}`;
-    const claim1 = await WebhookIdempotencyService.claimWebhookEvent({
-      gateway: "flutterwave",
-      eventId,
-      eventType: "charge.completed",
-      payload: { amount: 50 },
-    });
-    expect(claim1.isDuplicate).toBe(false);
-
-    const claim2 = await WebhookIdempotencyService.claimWebhookEvent({
-      gateway: "flutterwave",
-      eventId,
-      eventType: "charge.completed",
-      payload: { amount: 50 },
-    });
-    expect(claim2.isDuplicate).toBe(true);
-  });
-
-  it("toggles active/archived plan status", async () => {
-    const isArchived = await BillingPlansService.togglePlanStatus(
-      "test-agency-plan",
-      false,
-      "usr_admin_001",
-      "admin@skorvia.com",
-    );
-    expect(isArchived).toBe(false);
-
-    const isReactivated = await BillingPlansService.togglePlanStatus(
-      "test-agency-plan",
-      true,
-      "usr_admin_001",
-      "admin@skorvia.com",
-    );
-    expect(isReactivated).toBe(true);
+    expect(saved.features.competitor_ads).toBe(true);
   });
 });

@@ -23,7 +23,7 @@ export function CheckConfirmModal({
   onRunNow: () => void;
   onCancel: () => void;
 }) {
-  const { costUsd } = estimateRankCheckCredits(
+  const { costCredits } = estimateRankCheckCredits(
     keywordCount,
     devices,
     serpDepth,
@@ -67,7 +67,7 @@ export function CheckConfirmModal({
           </p>
         </div>
         <div className="text-right">
-          <p className="font-mono font-semibold">~${costUsd.toFixed(2)}</p>
+          <p className="font-mono font-semibold text-primary">{costCredits} Credits</p>
           {isPending && <Loader2 className="size-3 animate-spin ml-auto" />}
         </div>
       </button>

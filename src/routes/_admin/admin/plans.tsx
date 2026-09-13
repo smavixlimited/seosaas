@@ -177,20 +177,35 @@ function AdminPlansPage() {
         uptimeMonitors: 25,
       },
       features: {
+        // 1. Overview & Strategy
+        advanced_analytics: true,
+        action_roadmap: true,
+        my_reports_builder: true,
+        // 2. Brand & Ad Readiness
+        brand_analysis: true,
+        ad_readiness: true,
+        viral_detector: true,
+        trends_radar: true,
+        // 3. Competitor Intelligence
+        competitors_directory: true,
+        competitor_ads: true,
+        competitor_analysis: true,
+        // 4. Core SEO
         keyword_research: true,
         rank_tracker: true,
         backlink_analysis: true,
         site_audit: true,
+        // 5. Local SEO
         gbp_integration: true,
         map_rank_tracker: true,
         review_management: true,
         listing_management: true,
+        // 6. AI & Enterprise
         ai_visibility: true,
         ai_content_studio: true,
         ai_seo_fixer: true,
         indexnow_submitter: true,
         uptime_ssl_monitoring: true,
-        my_reports_builder: true,
         white_label_pdf: true,
         team_management: true,
         mcp_api_access: true,
@@ -460,7 +475,7 @@ function AdminPlansPage() {
             </div>
           </div>
 
-          {/* 18+ Feature Entitlement Toggles */}
+          {/* 24+ Feature Entitlement Toggles Across 6 Pillars */}
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-6 shadow-2xs space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
               <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
@@ -468,19 +483,243 @@ function AdminPlansPage() {
                   icon="solar:star-bold-duotone"
                   className="h-4 w-4 text-amber-500"
                 />
-                <span>18+ Granular Feature Entitlements Matrix</span>
+                <span>24+ Granular Feature Entitlements Matrix</span>
               </h5>
               <span className="text-xs text-slate-400">
                 Directly gates feature availability in user dashboard
               </span>
             </div>
 
-            {/* 4 Feature Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
-              {/* Category 1: Core SEO */}
-              <div className="space-y-3">
+            {/* 6 Feature Pillars Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+              {/* Category 1: Overview & Strategy */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
+                <span className="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                  1. Overview &amp; Strategy
+                </span>
+                <div className="space-y-2.5">
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.advanced_analytics ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            advanced_analytics: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Advanced Analytics &amp; PDF Command
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.action_roadmap ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            action_roadmap: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      AI Action Roadmap
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.my_reports_builder ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            my_reports_builder: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Saved Analysis &amp; Report History
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Category 2: Brand & Ad Readiness */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
+                <span className="font-bold text-xs text-purple-600 dark:text-purple-400 uppercase tracking-wider block">
+                  2. Brand &amp; Ad Readiness
+                </span>
+                <div className="space-y-2.5">
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.brand_analysis ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            brand_analysis: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      360° Brand Perception Analysis
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.ad_readiness ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            ad_readiness: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Pre-Launch Ad &amp; Conversion Gate
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.viral_detector ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            viral_detector: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Viral Video Hooks &amp; Scripts
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.trends_radar ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            trends_radar: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Trending Topics &amp; Question Radar
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Category 3: Competitor Intelligence */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
+                <span className="font-bold text-xs text-rose-600 dark:text-rose-400 uppercase tracking-wider block">
+                  3. Competitor Intelligence
+                </span>
+                <div className="space-y-2.5">
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.competitors_directory ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            competitors_directory: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Competitors Directory &amp; Social
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.competitor_ads ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            competitor_ads: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Competitor Ad Spying (Meta/Google/TikTok)
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.competitor_analysis ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            competitor_analysis: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      1-on-1 Competitor Benchmarking
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Category 4: Core SEO Suite */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
                 <span className="font-bold text-xs text-primary uppercase tracking-wider block">
-                  1. Core SEO Suite
+                  4. Core SEO Suite
                 </span>
                 <div className="space-y-2.5">
                   <label className="flex items-center gap-2.5 cursor-pointer">
@@ -499,7 +738,7 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Keyword Research
+                      Keyword Research &amp; Volume
                     </span>
                   </label>
 
@@ -539,7 +778,7 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Backlink Profile
+                      Backlink Profile &amp; Authority
                     </span>
                   </label>
 
@@ -565,10 +804,10 @@ function AdminPlansPage() {
                 </div>
               </div>
 
-              {/* Category 2: Local & Maps */}
-              <div className="space-y-3">
+              {/* Category 5: Local & Maps */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
                 <span className="font-bold text-xs text-indigo-500 uppercase tracking-wider block">
-                  2. Local &amp; Maps
+                  5. Local &amp; Maps
                 </span>
                 <div className="space-y-2.5">
                   <label className="flex items-center gap-2.5 cursor-pointer">
@@ -607,7 +846,7 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Geo-Grid Map Rank
+                      Geo-Grid Map Rank Heatmap
                     </span>
                   </label>
 
@@ -627,7 +866,7 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Review Management
+                      Review Management &amp; AI Replies
                     </span>
                   </label>
 
@@ -647,16 +886,16 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Listing Sync
+                      Directory Listing Sync
                     </span>
                   </label>
                 </div>
               </div>
 
-              {/* Category 3: AI & Optimization */}
-              <div className="space-y-3">
-                <span className="font-bold text-xs text-amber-500 uppercase tracking-wider block">
-                  3. AI &amp; AEO Engine
+              {/* Category 6: AI Engines & Enterprise */}
+              <div className="space-y-3 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-750">
+                <span className="font-bold text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
+                  6. AI &amp; Enterprise Suite
                 </span>
                 <div className="space-y-2.5">
                   <label className="flex items-center gap-2.5 cursor-pointer">
@@ -740,15 +979,7 @@ function AdminPlansPage() {
                       Instant IndexNow Push
                     </span>
                   </label>
-                </div>
-              </div>
 
-              {/* Category 4: Enterprise & Reports */}
-              <div className="space-y-3">
-                <span className="font-bold text-xs text-emerald-600 uppercase tracking-wider block">
-                  4. Enterprise &amp; Reports
-                </span>
-                <div className="space-y-2.5">
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
@@ -787,7 +1018,7 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Autonomous MCP Agents
+                      Autonomous MCP AI Server
                     </span>
                   </label>
 
@@ -829,7 +1060,28 @@ function AdminPlansPage() {
                       }
                     />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Team RBAC Management
+                      Team RBAC Multi-Seat
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-primary checkbox-xs"
+                      checked={editingPlan.features.priority_support ?? true}
+                      onChange={(e) =>
+                        setEditingPlan({
+                          ...editingPlan,
+                          features: {
+                            ...editingPlan.features,
+                            priority_support: e.target.checked,
+                            prioritySupport: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      Priority SLA Support
                     </span>
                   </label>
                 </div>

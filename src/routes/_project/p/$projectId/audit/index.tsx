@@ -132,8 +132,8 @@ function AuditDetail({
     (isComplete && status && status.pagesCrawled <= 1);
 
   return (
-    <div className="px-4 py-4 md:px-6 md:py-6 pb-24 md:pb-8 overflow-auto">
-      <div className="mx-auto max-w-5xl space-y-4">
+    <div className="w-full min-w-0 max-w-full px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-8">
+      <div className="mx-auto w-full min-w-0 max-w-7xl space-y-4">
         <div className="space-y-1">
           <button className="btn btn-ghost btn-sm px-0" onClick={onBack}>
             &larr; All audits

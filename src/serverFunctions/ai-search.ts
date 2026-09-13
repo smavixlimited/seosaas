@@ -15,13 +15,9 @@ import {
  * because each call fans out to several paid DataForSEO requests. Self-hosted
  * deployments pay DataForSEO directly and aren't gated.
  */
-async function assertPaidPlan(organizationId: string) {
-  if (!(await isHostedServerAuthMode())) return;
-  if (await customerHasPaidPlan(organizationId)) return;
-  throw new AppError(
-    "PAYMENT_REQUIRED",
-    "Upgrade to the paid plan to use AI Visibility",
-  );
+async function assertPaidPlan(_organizationId: string) {
+  // Brand Lookup and Prompt Explorer are enabled across plans
+  return;
 }
 
 export const lookupBrand = createServerFn({ method: "POST" })

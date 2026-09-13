@@ -28,6 +28,8 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
   const [stemFilter, setStemFilter] = React.useState<"all" | QuestionStem>(
     "all",
   );
+  const [selectedBriefItem, setSelectedBriefItem] =
+    React.useState<TrendingQueryItem | null>(null);
 
   const radarQuery = useQuery({
     queryKey: ["trendsRadar", projectId, activeSearch],
@@ -406,15 +408,25 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-between gap-1.5 pt-2 border-t border-base-200">
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(item.query, "Search query")}
-                  className="btn btn-ghost btn-xs text-base-content/70 hover:text-base-content rounded-lg font-bold gap-1"
-                >
-                  <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
-                  <span>Copy</span>
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-1.5 pt-2 border-t border-base-200">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBriefItem(item)}
+                    className="btn btn-outline btn-xs rounded-lg font-bold gap-1 text-primary border-primary/30 hover:bg-primary/10"
+                  >
+                    <Icon icon="solar:document-text-bold" className="h-3 w-3" />
+                    <span>Article Brief</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(item.query, "Search query")}
+                    className="btn btn-ghost btn-xs text-base-content/70 hover:text-base-content rounded-lg font-bold gap-1"
+                  >
+                    <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
+                    <span>Copy</span>
+                  </button>
+                </div>
 
                 <div className="flex items-center gap-1.5">
                   <button
@@ -440,6 +452,103 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* SEO Article Brief Modal */}
+      {selectedBriefItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+          <div className="rounded-3xl bg-base-100 border border-base-300 p-6 max-w-2xl w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-base-200 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                  <Icon icon="solar:document-text-bold" className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-base-content">
+                    SEO Content Brief &amp; Article Blueprint
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Targeting: &ldquo;{selectedBriefItem.query}&rdquo;
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedBriefItem(null)}
+                className="btn btn-ghost btn-sm btn-circle"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Keyword Meta Specs */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Search Volume</span>
+                <span className="text-sm font-black text-primary">{selectedBriefItem.searchVolume.toLocaleString()} /mo</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Difficulty (KD)</span>
+                <span className="text-sm font-black text-amber-500">{selectedBriefItem.difficulty}/100</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Search Intent</span>
+                <span className="text-xs font-black text-base-content uppercase block">{selectedBriefItem.intent}</span>
+              </div>
+            </div>
+
+            {/* Recommended Title & H1 */}
+            <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 space-y-1">
+              <span className="text-[10px] font-extrabold uppercase text-primary tracking-wider">
+                Recommended SEO Title &amp; H1:
+              </span>
+              <p className="text-sm font-black text-base-content leading-snug">
+                {selectedBriefItem.query.charAt(0).toUpperCase() + selectedBriefItem.query.slice(1)}: Complete Guide &amp; Solutions
+              </p>
+            </div>
+
+            {/* Structured H2 & Section Blueprint */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold uppercase text-base-content/60 block">Recommended H2 Section Outline:</span>
+              <div className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-2.5 font-sans text-xs leading-relaxed text-base-content/90 font-medium">
+                <p><strong>1. Introduction &amp; Core Definition:</strong> Clear, concise direct answer in the first 50 words to win Google AI Overviews and Featured Snippets.</p>
+                <p><strong>2. Why This Matters Now:</strong> Address the market shift, pain points, and rising trend demand (+{selectedBriefItem.growthRatePercent}% search velocity).</p>
+                <p><strong>3. Step-by-Step Practical Implementation:</strong> Actionable framework showing readers exactly how to resolve or implement the solution.</p>
+                <p><strong>4. Common Mistakes to Avoid:</strong> Highlight pitfalls competitors fail to mention.</p>
+                <p><strong>5. Frequently Asked Questions (FAQ Schema):</strong> Target secondary long-tail question stems for rich snippet coverage.</p>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-between pt-3 border-t border-base-200">
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    `SEO Content Brief: "${selectedBriefItem.query}"\nTarget Keyword: ${selectedBriefItem.query}\nSearch Volume: ${selectedBriefItem.searchVolume}/mo\nKeyword Difficulty: ${selectedBriefItem.difficulty}/100\nIntent: ${selectedBriefItem.intent}\n\nH1: ${selectedBriefItem.query}\n\nOutline:\n1. Direct Answer Summary\n2. Why This Matters in 2026\n3. Step-by-Step Action Plan\n4. Common Mistakes & Fixes\n5. FAQ Section`,
+                    "SEO Content Brief",
+                  )
+                }
+                className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5"
+              >
+                <Icon icon="solar:copy-bold" className="h-4 w-4" />
+                <span>Copy Brief</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  addRoadmapMutation.mutate(selectedBriefItem);
+                  setSelectedBriefItem(null);
+                }}
+                className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+              >
+                <Icon icon="solar:rocket-bold" className="h-4 w-4" />
+                <span>Add Brief to Action Roadmap</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

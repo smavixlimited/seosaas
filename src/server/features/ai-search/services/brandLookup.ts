@@ -164,23 +164,22 @@ export async function getBrandLookup(
     userLanguageCode: input.languageCode,
   });
 
-  // Only cache when every call succeeded — a platform bundle that swallowed a
-  // failed sub-call into empty fallback data is renderable but must not be
-  // frozen for 24h with no way to retry; same for a partial SoV miss when
-  // competitors were requested.
+  const finalResult = result;
+
+  // Only cache when every call succeeded
   const allSucceeded =
     platformBundles.every(
       (b) => b.status === "success" && b.bundle?.complete,
     ) && crossOutcomes.every((c) => c.status === "success");
-  if (allSucceeded && result.hasData) {
+  if (allSucceeded && finalResult.hasData) {
     waitUntil(
-      setCached(cacheKey, result, BRAND_LOOKUP_TTL_SECONDS).catch((err) => {
+      setCached(cacheKey, finalResult, BRAND_LOOKUP_TTL_SECONDS).catch((err) => {
         console.error("ai-search.brand-lookup.cache-write failed:", err);
       }),
     );
   }
 
-  return result;
+  return finalResult;
 }
 
 /**

@@ -250,3 +250,66 @@ font[style] {
   font-size: inherit !important;
   box-shadow: none !important;
 }
+
+/* ==========================================================================
+   Executive PDF & Print Styles
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 14mm 12mm;
+  }
+
+  html,
+  body,
+  #root,
+  #app,
+  main,
+  .drawer,
+  .drawer-content,
+  .flex-1 {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    position: static !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide app navigation chrome, sidebars, buttons, toolbars */
+  nav,
+  aside,
+  header,
+  footer,
+  .no-print,
+  button,
+  .btn,
+  .tabs,
+  .dropdown,
+  [role="tablist"],
+  #app-sidebar,
+  #app-navbar {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .print-break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-break-before {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+}

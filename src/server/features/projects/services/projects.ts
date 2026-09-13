@@ -106,8 +106,61 @@ function normalizeProjectDomain(domain: string | undefined) {
 export async function createProject(
   organizationId: string,
   input: CreateProjectInput,
+  userId?: string,
 ) {
   try {
+    // 1. Enforce maxDomains limit based on active plan tier
+    const existing = await ProjectRepository.listProjects(organizationId);
+    let maxDomains = 5;
+    let planName = "Starter Plan";
+
+    try {
+      const { BillingPlansService } = await import(
+        "@/services/billing-plans.service"
+      );
+      const { db } = await import("@/db");
+      const { userQuotas, member } = await import("@/db/schema");
+      const { eq } = await import("drizzle-orm");
+
+      let resolvedUserId = userId;
+      if (!resolvedUserId) {
+        const [mem] = await db
+          .select({ userId: member.userId })
+          .from(member)
+          .where(eq(member.organizationId, organizationId))
+          .limit(1);
+        resolvedUserId = mem?.userId;
+      }
+
+      if (resolvedUserId) {
+        const [quota] = await db
+          .select()
+          .from(userQuotas)
+          .where(eq(userQuotas.userId, resolvedUserId))
+          .limit(1);
+
+        const allPlans = await BillingPlansService.getAllPlans();
+        const activePlan =
+          allPlans.find((p) => p.id === quota?.planId) ||
+          allPlans.find((p) => p.id === "starter") ||
+          allPlans[0];
+
+        if (activePlan) {
+          maxDomains = activePlan.limits.maxDomains ?? 5;
+          planName = activePlan.name;
+        }
+      }
+    } catch {
+      // Fallback to default
+    }
+
+    if (existing.length >= maxDomains) {
+      throw new AppError(
+        "FORBIDDEN",
+        `Your ${planName} allows up to ${maxDomains} brand${maxDomains > 1 ? "s" : ""}. You currently have ${existing.length}. Please upgrade your plan in Billing & Quotas to create additional brands.`,
+      );
+    }
+
     const row = await ProjectRepository.createProject(
       organizationId,
       input.name,

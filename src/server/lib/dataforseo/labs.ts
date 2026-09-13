@@ -117,7 +117,7 @@ export async function fetchRelatedKeywords(input: {
       include_serp_info: false,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),
@@ -144,7 +144,7 @@ export async function fetchKeywordSuggestions(input: {
       exact_match: false,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),
@@ -170,7 +170,7 @@ export async function fetchKeywordIdeas(input: {
       closely_variants: false,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),
@@ -190,7 +190,7 @@ export async function fetchDomainRankOverview(input: {
       limit: 1,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),
@@ -227,7 +227,7 @@ export async function fetchRankedKeywords(input: {
       item_types: input.itemTypes,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: {
       items: parseTaskItems(
@@ -266,7 +266,7 @@ export async function fetchRelevantPages(input: {
       filters: input.filters,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: {
       items: task.result?.[0]?.items ?? [],
@@ -290,7 +290,7 @@ export async function fetchKeywordOverview(input: {
       include_clickstream_data: input.includeClickstreamData ?? false,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),
@@ -317,7 +317,7 @@ export async function fetchSerpCompetitors(input: {
       offset: input.offset,
     }),
   ]);
-  const task = assertOk(response);
+  const task = assertOk(response, { treatNoResultsAsEmpty: true });
   return {
     data: task.result?.[0]?.items ?? [],
     billing: buildTaskBilling(task),

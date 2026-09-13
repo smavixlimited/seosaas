@@ -41,20 +41,20 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
 
   const hubQuery = useQuery({
     queryKey: ["brandMentionsHub", projectId],
-    queryFn: () => getBrandMentionsHub({}),
+    queryFn: () => getBrandMentionsHub({ data: { projectId } }),
     staleTime: 60 * 1000,
   });
 
   const aeoQuery = useQuery({
     queryKey: ["aeoSentiment", projectId],
-    queryFn: () => getAeoSentiment({}),
+    queryFn: () => getAeoSentiment({ data: { projectId } }),
     staleTime: 5 * 60 * 1000,
   });
 
   const pitchMutation = useMutation({
     mutationFn: (vars: { mention: BrandMentionItem }) =>
       generateMentionPitch({
-        data: { mentionId: vars.mention.id },
+        data: { projectId, mentionId: vars.mention.id },
       }),
     onSuccess: (pitch, vars) => {
       void queryClient.invalidateQueries({
@@ -76,6 +76,7 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
     mutationFn: (vars: { mentionId: string; status: ClaimStatus }) =>
       updateMentionClaimStatus({
         data: {
+          projectId,
           mentionId: vars.mentionId,
           claimStatus: vars.status,
         },
@@ -92,7 +93,7 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
   });
 
   const refreshAeoMutation = useMutation({
-    mutationFn: () => refreshAeoSentimentScan({}),
+    mutationFn: () => refreshAeoSentimentScan({ data: { projectId } }),
     onSuccess: (data) => {
       queryClient.setQueryData(["aeoSentiment", projectId], data);
       toast.success("Multi-engine AI search sentiment refreshed!");
@@ -313,17 +314,22 @@ export function BrandMentionsPage({ projectId }: BrandMentionsPageProps) {
 
           {/* Mentions Feed */}
           {filteredMentions.length === 0 ? (
-            <div className="p-12 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-2">
-              <Icon
-                icon="solar:document-text-bold-duotone"
-                className="h-8 w-8 mx-auto text-slate-400"
-              />
+            <div className="p-12 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-3">
+              <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-700/50 w-fit mx-auto text-slate-400">
+                <Icon
+                  icon="solar:link-circle-bold-duotone"
+                  className="h-8 w-8"
+                />
+              </div>
               <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-                No Mentions in this Filter
+                {mentions.length === 0
+                  ? "No Web Mentions or Backlinks Detected Yet"
+                  : "No Mentions in this Filter"}
               </h4>
-              <p className="text-xs text-slate-400">
-                All brand mentions are organized by link type and claim
-                lifecycle.
+              <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+                {mentions.length === 0
+                  ? "Skorvia scans real-time live web backlinks and mentions for your domain. As search engines and publications reference your site, unlinked mentions and backlinks will automatically appear here with 1-click outreach pitch generation."
+                  : "Try selecting another link type filter (e.g. All Mentions, Unlinked, or Linked Dofollow) to view your brand mentions."}
               </p>
             </div>
           ) : (

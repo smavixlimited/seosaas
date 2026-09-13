@@ -25,6 +25,9 @@ export function ViralContentOpportunityDetector({
   const [selectedPlatform, setSelectedPlatform] = React.useState<
     ViralPlatform | "all"
   >("all");
+  const [customTopic, setCustomTopic] = React.useState("");
+  const [teleprompterItem, setTeleprompterItem] =
+    React.useState<ViralOpportunityItem | null>(null);
 
   const opportunitiesQuery = useQuery({
     queryKey: ["viralOpportunities", projectId, selectedPlatform],
@@ -38,11 +41,12 @@ export function ViralContentOpportunityDetector({
   });
 
   const generateMutation = useMutation({
-    mutationFn: () =>
+    mutationFn: (topicOverride?: string | void) =>
       generateViralOpportunities({
         data: {
           projectId,
           platform: selectedPlatform === "all" ? undefined : selectedPlatform,
+          customTopic: topicOverride ?? (customTopic.trim() || undefined),
         },
       }),
     onSuccess: (data) => {
@@ -56,6 +60,11 @@ export function ViralContentOpportunityDetector({
       toast.error(err.message || "Failed to generate viral opportunities");
     },
   });
+
+  const handleQuickTopic = (topic: string) => {
+    setCustomTopic(topic);
+    generateMutation.mutate(topic);
+  };
 
 
   const addRoadmapMutation = useMutation({
@@ -153,7 +162,7 @@ export function ViralContentOpportunityDetector({
         <button
           type="button"
           disabled={generateMutation.isPending || opportunitiesQuery.isFetching}
-          onClick={() => generateMutation.mutate()}
+          onClick={() => generateMutation.mutate(undefined)}
           className="btn btn-primary rounded-2xl h-11 px-6 font-bold text-xs text-white shadow-md shadow-primary/20 gap-2 shrink-0"
         >
           <Icon
@@ -166,6 +175,62 @@ export function ViralContentOpportunityDetector({
               : "Generate Fresh Hooks"}
           </span>
         </button>
+      </div>
+
+      {/* Custom Topic / Angle Input Bar */}
+      <div className="rounded-3xl border border-base-300 bg-base-100 p-4 sm:p-5 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={customTopic}
+              onChange={(e) => setCustomTopic(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && customTopic.trim()) {
+                  generateMutation.mutate(customTopic.trim());
+                }
+              }}
+              placeholder="e.g. Why our automated site audit saves 10 hours a week, or Ahrefs vs OpenSEO..."
+              className="input input-bordered w-full rounded-2xl text-xs pl-9 pr-4 font-medium"
+            />
+            <Icon
+              icon="solar:magnifer-linear"
+              className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40"
+            />
+          </div>
+
+          <button
+            type="button"
+            disabled={generateMutation.isPending || !customTopic.trim()}
+            onClick={() => generateMutation.mutate(customTopic.trim())}
+            className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white gap-1.5 shrink-0 px-4"
+          >
+            <Icon icon="solar:stars-bold" className="h-4 w-4" />
+            <span>Generate Custom Angle</span>
+          </button>
+        </div>
+
+        {/* Quick Inspiration Pills */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+          <span className="text-[10px] font-extrabold uppercase text-base-content/50 mr-1">
+            Try Angle:
+          </span>
+          {[
+            "⚡ Why our pricing beats legacy tools",
+            "🚀 Google AI Overviews traffic recovery",
+            "💡 3 fatal SEO mistakes in 2026",
+            "🔥 1-Click site audit teardown",
+          ].map((promptText) => (
+            <button
+              key={promptText}
+              type="button"
+              onClick={() => handleQuickTopic(promptText)}
+              className="badge badge-sm badge-ghost border border-base-300/80 hover:border-primary/50 hover:bg-primary/5 hover:text-primary transition-all text-[11px] font-semibold cursor-pointer py-2 px-2.5"
+            >
+              {promptText}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Platform Filter Buttons */}
@@ -235,7 +300,7 @@ export function ViralContentOpportunityDetector({
           </p>
           <button
             type="button"
-            onClick={() => generateMutation.mutate()}
+            onClick={() => generateMutation.mutate(undefined)}
             className="btn btn-primary btn-sm rounded-xl font-bold"
           >
             Generate Viral Hooks Now
@@ -335,34 +400,148 @@ export function ViralContentOpportunityDetector({
                 </div>
 
                 {/* Bottom Action Controls */}
-                <div className="pt-3 border-t border-base-300 flex items-center justify-between gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      copyToClipboard(
-                        `Hook:\n"${item.hookText}"\n\nOutline:\n${item.scriptOutline}\n\nTarget Audience: ${item.targetAudience}\nTags: ${item.tags.join(" ")}`,
-                        "Full Script",
-                      )
-                    }
-                    className="btn btn-outline btn-sm rounded-2xl text-xs font-bold gap-1.5 border-base-300 hover:bg-base-200 hover:text-base-content"
-                  >
-                    <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
-                    <span>Copy Full Script</span>
-                  </button>
+                <div className="pt-3 border-t border-base-300 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setTeleprompterItem(item)}
+                      className="btn btn-outline btn-sm rounded-xl text-xs font-bold gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                    >
+                      <Icon icon="solar:videocamera-record-bold" className="h-3.5 w-3.5" />
+                      <span>Teleprompter</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        copyToClipboard(
+                          `Hook:\n"${item.hookText}"\n\nOutline:\n${item.scriptOutline}\n\nTarget Audience: ${item.targetAudience}\nTags: ${item.tags.join(" ")}`,
+                          "Full Script",
+                        )
+                      }
+                      className="btn btn-ghost btn-sm rounded-xl text-xs font-bold gap-1 border-base-300 hover:bg-base-200"
+                    >
+                      <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
+                      <span>Copy</span>
+                    </button>
+                  </div>
 
                   <button
                     type="button"
                     disabled={addRoadmapMutation.isPending}
                     onClick={() => addRoadmapMutation.mutate(item)}
-                    className="btn btn-primary btn-sm rounded-2xl text-xs font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+                    className="btn btn-primary btn-sm rounded-xl text-xs font-bold text-white shadow-md shadow-primary/20 gap-1.5"
                   >
                     <Icon icon="solar:rocket-bold" className="h-3.5 w-3.5" />
-                    <span>Add to Action Roadmap</span>
+                    <span>Add to Roadmap</span>
                   </button>
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Interactive Teleprompter / Creator Script Modal */}
+      {teleprompterItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+          <div className="rounded-3xl bg-base-100 border border-base-300 p-6 max-w-2xl w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-base-200 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                  <Icon icon="solar:videocamera-record-bold" className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-base-content">
+                    Teleprompter &amp; Spoken Script Mode
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Optimized for {teleprompterItem.platform.toUpperCase()} short-form recording (~35-45s)
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTeleprompterItem(null)}
+                className="btn btn-ghost btn-sm btn-circle"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Speaking Stats */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Speaking Time</span>
+                <span className="text-sm font-black text-primary">~35 - 45 sec</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Viral Score</span>
+                <span className="text-sm font-black text-amber-500">{teleprompterItem.viralPotentialScore}/100</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Target Audience</span>
+                <span className="text-xs font-black text-base-content truncate block">{teleprompterItem.targetAudience}</span>
+              </div>
+            </div>
+
+            {/* Hook Highlight */}
+            <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 space-y-1">
+              <span className="text-[10px] font-extrabold uppercase text-primary tracking-wider flex items-center gap-1">
+                <Icon icon="solar:fire-bold" className="h-3.5 w-3.5" />
+                0-3s Opening Hook (Say with intense energy):
+              </span>
+              <p className="text-base font-black text-base-content leading-snug">
+                &ldquo;{teleprompterItem.hookText}&rdquo;
+              </p>
+            </div>
+
+            {/* Full Script Text */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold uppercase text-base-content/60 block">Full Teleprompter Breakdown:</span>
+              <div className="p-4 rounded-2xl bg-base-200/40 border border-base-300 whitespace-pre-wrap font-sans text-sm leading-relaxed text-base-content/90 font-medium">
+                {teleprompterItem.scriptOutline}
+              </div>
+            </div>
+
+            {/* Hashtags */}
+            <div className="flex flex-wrap gap-1.5 items-center">
+              <span className="text-xs font-bold text-base-content/60 mr-1">Recommended Tags:</span>
+              {teleprompterItem.tags.map((tag, tIdx) => (
+                <span key={tIdx} className="badge badge-neutral text-xs font-mono py-1 px-2">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-between pt-3 border-t border-base-200">
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    `${teleprompterItem.hookText}\n\n${teleprompterItem.scriptOutline}\n\n${teleprompterItem.tags.join(" ")}`,
+                    "Full Script & Caption",
+                  )
+                }
+                className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5"
+              >
+                <Icon icon="solar:copy-bold" className="h-4 w-4" />
+                <span>Copy Caption + Script</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  addRoadmapMutation.mutate(teleprompterItem);
+                  setTeleprompterItem(null);
+                }}
+                className="btn btn-primary btn-sm rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+              >
+                <Icon icon="solar:rocket-bold" className="h-4 w-4" />
+                <span>Add to Action Roadmap</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -50,13 +50,15 @@ function AiPage() {
       : `${window.location.origin}/mcp`;
 
   return (
-    <div className="h-full overflow-auto bg-base-100 px-4 py-12 md:px-6 md:py-16 pb-24 md:pb-12">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="text-2xl font-semibold">AI & MCP</h1>
-        <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
-          Connect your AI agent to Skorvia. Run keyword research, SERP analysis,
-          domain lookups, and backlink reviews from your editor or chat.
-        </p>
+    <div className="w-full min-w-0 max-w-full h-full overflow-auto bg-base-100 p-4 md:p-6 lg:p-8 pb-24 md:pb-12 animate-in fade-in duration-150">
+      <div className="mx-auto w-full min-w-0 max-w-5xl space-y-8">
+        <div>
+          <h1 className="text-2xl font-semibold">AI & MCP</h1>
+          <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
+            Connect your AI agent to Skorvia. Run keyword research, SERP analysis,
+            domain lookups, and backlink reviews from your editor or chat.
+          </p>
+        </div>
 
         {getAuthMode(import.meta.env.AUTH_MODE) === "cloudflare_access" ? (
           <div className="alert alert-warning mt-6 text-sm" role="alert">

@@ -15,6 +15,7 @@ import {
   connectDetectedProfileServerFn,
   saveBusinessLocationServerFn,
   searchGooglePlacesServerFn,
+  startGbpOAuthServerFn,
 } from "@/serverFunctions/local-business";
 import type {
   LocalReviewItem,
@@ -292,10 +293,11 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
 
   // Detect Profiles Query
   const detectedProfilesQuery = useQuery<DetectedGoogleBusinessProfile[]>({
-    queryKey: ["detectedGoogleProfiles"],
+    queryKey: ["detectedGoogleProfiles", projectId],
     queryFn: () =>
       detectGoogleProfilesServerFn({
         data: {
+          projectId,
           userEmail: session?.user?.email || "smartwareinnovation@gmail.com",
         },
       }),
@@ -425,17 +427,30 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
     toast.success(msg);
   };
 
-  const handleStartGoogleOAuth = () => {
+  const handleStartGoogleOAuth = async () => {
     setOauthStep("detecting");
+    try {
+      const res = await startGbpOAuthServerFn({
+        data: {
+          callbackURL: window.location.href,
+        },
+      });
+      if (res?.authUrl) {
+        window.location.href = res.authUrl;
+        return;
+      }
+    } catch {
+      // If OAuth credentials not yet configured, proceed to profile selection
+    }
     setTimeout(() => {
       setOauthStep("select");
-    }, 900);
+    }, 600);
   };
 
   const userEmail = session?.user?.email || "smartwareinnovation@gmail.com";
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-150">
+    <div className="w-full min-w-0 max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6 animate-in fade-in duration-150">
       {/* Header with Connect Action */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-base-300">
         <div>
@@ -463,7 +478,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
             <button
               type="button"
               onClick={() => setIsPreviewMode(false)}
-              className="btn btn-sm btn-outline rounded-xl font-bold text-xs gap-1.5"
+              className="btn btn-sm btn-outline rounded-xl font-bold text-xs gap-1.5 whitespace-nowrap shrink-0"
             >
               <Icon icon="solar:pen-bold" className="h-4 w-4" />
               <span>Edit Business Location</span>
@@ -477,7 +492,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
               setOauthStep("login");
               setIsOAuthModalOpen(true);
             }}
-            className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+            className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 whitespace-nowrap shrink-0"
           >
             <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
             <span>Connect Google Business</span>
@@ -487,7 +502,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
             type="button"
             onClick={() => void localQuery.refetch()}
             disabled={localQuery.isFetching}
-            className="btn btn-sm btn-ghost btn-circle"
+            className="btn btn-sm btn-ghost btn-circle shrink-0"
             title="Refresh Local Audit"
           >
             <Icon
@@ -517,11 +532,11 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsPreviewMode(true)}
-                  className="btn btn-outline rounded-2xl font-bold text-xs gap-2"
+                  className="btn btn-outline rounded-2xl font-bold text-xs gap-2 w-full sm:w-auto shrink-0"
                 >
                   <Icon icon="solar:eye-bold" className="h-4 w-4 text-primary" />
                   <span>Preview Interactive Demo</span>
@@ -532,7 +547,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     setOauthStep("login");
                     setIsOAuthModalOpen(true);
                   }}
-                  className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/20 text-xs gap-2"
+                  className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/20 text-xs gap-2 w-full sm:w-auto shrink-0 whitespace-nowrap"
                 >
                   <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
                   <span>Connect Google Account</span>
@@ -1165,12 +1180,12 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                   value={gridKeyword}
                   onChange={(e) => setGridKeyword(e.target.value)}
                   placeholder="e.g. corporate office near me"
-                  className="input input-bordered input-sm rounded-xl text-xs w-56 font-medium"
+                  className="input input-bordered input-sm rounded-xl text-xs w-full sm:w-56 font-medium"
                 />
                 <select
                   value={gridSize}
                   onChange={(e) => setGridSize(e.target.value as "3x3" | "5x5")}
-                  className="select select-bordered select-sm rounded-xl text-xs font-medium"
+                  className="select select-bordered select-sm rounded-xl text-xs font-medium w-full sm:w-auto"
                 >
                   <option value="3x3">3x3 Grid (9 Pins)</option>
                   <option value="5x5">5x5 Grid (25 Pins)</option>
@@ -1186,7 +1201,7 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                       lng: activeLocation?.lng || grid?.centerLng || 3.4735,
                     })
                   }
-                  className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5"
+                  className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 w-full sm:w-auto"
                 >
                   <Icon
                     icon="solar:radar-2-bold"
@@ -1672,71 +1687,101 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     Select a Google Business Profile to Connect:
                   </h4>
                   <p className="text-xs text-base-content/60">
-                    We found{" "}
-                    <strong>
-                      {detectedProfilesQuery.data?.length || 3} locations
-                    </strong>{" "}
-                    managed by your account. Select which one to link:
+                    {detectedProfilesQuery.data && detectedProfilesQuery.data.length > 0 ? (
+                      <>
+                        We found <strong>{detectedProfilesQuery.data.length} verified location{detectedProfilesQuery.data.length === 1 ? "" : "s"}</strong> associated with your account.
+                      </>
+                    ) : (
+                      <>No pre-existing Google Business Profiles found on this account.</>
+                    )}
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-1">
-                  {detectedProfilesQuery.data?.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-2xl bg-base-200/40 border border-base-300 hover:border-primary transition-all space-y-3 shadow-xs"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-0.5">
-                          <div className="font-black text-sm text-base-content flex items-center gap-1.5">
-                            <Icon
-                              icon="solar:shop-2-bold"
-                              className="h-4 w-4 text-primary"
-                            />
-                            <span>{item.businessName}</span>
+                  {detectedProfilesQuery.data && detectedProfilesQuery.data.length > 0 ? (
+                    detectedProfilesQuery.data.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-4 rounded-2xl bg-base-200/40 border border-base-300 hover:border-primary transition-all space-y-3 shadow-xs"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-0.5">
+                            <div className="font-black text-sm text-base-content flex items-center gap-1.5">
+                              <Icon
+                                icon="solar:shop-2-bold"
+                                className="h-4 w-4 text-primary"
+                              />
+                              <span>{item.businessName}</span>
+                            </div>
+                            <p className="text-xs text-base-content/70">
+                              {item.streetAddress}, {item.city},{" "}
+                              {item.countryCode}
+                            </p>
+                            <p className="text-[11px] text-base-content/50 font-mono">
+                              {item.phoneNumber}
+                            </p>
                           </div>
-                          <p className="text-xs text-base-content/70">
-                            {item.streetAddress}, {item.city},{" "}
-                            {item.countryCode}
-                          </p>
-                          <p className="text-[11px] text-base-content/50 font-mono">
-                            {item.phoneNumber}
-                          </p>
+
+                          <span
+                            className={`badge badge-sm font-bold ${item.onlineAssessment === "Poor" ? "badge-warning" : "badge-success text-white"}`}
+                          >
+                            {item.onlineAssessment} Presence
+                          </span>
                         </div>
 
-                        <span
-                          className={`badge badge-sm font-bold ${item.onlineAssessment === "Poor" ? "badge-warning" : "badge-success text-white"}`}
-                        >
-                          {item.onlineAssessment} Presence
-                        </span>
+                        <div className="flex items-center justify-between pt-2 border-t border-base-300/60">
+                          <span className="text-[11px] text-base-content/60 font-medium">
+                            {item.listingsToFixCount} listings to fix
+                          </span>
+
+                          <button
+                            type="button"
+                            disabled={connectDetectedMutation.isPending}
+                            onClick={() =>
+                              connectDetectedMutation.mutate(item.id)
+                            }
+                            className="btn btn-xs btn-primary rounded-xl font-bold text-white shadow-xs gap-1 px-4"
+                          >
+                            <Icon
+                              icon="solar:link-circle-bold"
+                              className="h-3.5 w-3.5"
+                            />
+                            <span>
+                              {connectDetectedMutation.isPending
+                                ? "Connecting..."
+                                : "Connect This Profile"}
+                            </span>
+                          </button>
+                        </div>
                       </div>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-base-300/60">
-                        <span className="text-[11px] text-base-content/60 font-medium">
-                          {item.listingsToFixCount} listings to fix
-                        </span>
-
+                    ))
+                  ) : (
+                    <div className="p-5 rounded-2xl bg-base-200/50 border border-base-300 text-center space-y-3">
+                      <Icon
+                        icon="solar:info-circle-bold"
+                        className="h-8 w-8 text-base-content/40 mx-auto"
+                      />
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold text-base-content">
+                          No Google Business Profile listings found
+                        </p>
+                        <p className="text-[11px] text-base-content/60 max-w-xs mx-auto">
+                          Create a listing on Google Business Profile, or add your business location manually below.
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-center gap-2 pt-2">
                         <button
                           type="button"
-                          disabled={connectDetectedMutation.isPending}
-                          onClick={() =>
-                            connectDetectedMutation.mutate(item.id)
-                          }
-                          className="btn btn-xs btn-primary rounded-xl font-bold text-white shadow-xs gap-1 px-4"
+                          onClick={() => {
+                            setIsOAuthModalOpen(false);
+                          }}
+                          className="btn btn-xs btn-primary font-bold rounded-xl"
                         >
-                          <Icon
-                            icon="solar:link-circle-bold"
-                            className="h-3.5 w-3.5"
-                          />
-                          <span>
-                            {connectDetectedMutation.isPending
-                              ? "Connecting..."
-                              : "Connect This Profile"}
-                          </span>
+                          Add Location Manually
                         </button>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             )}

@@ -215,8 +215,6 @@ export function RankTrackingDomainDetail({
         </div>
       )}
 
-      <FreePlanAlert visible={isFreePlan} />
-
       {/* Results card */}
       <div className="flex-1 flex flex-col min-w-0 border border-base-300 rounded-xl bg-base-100 overflow-hidden">
         {/* Domain header */}
@@ -250,6 +248,12 @@ export function RankTrackingDomainDetail({
             device={activeDevice}
             projectId={projectId}
             configId={config.id}
+            onCheckNow={() => {
+              const count = costEstimate?.keywordCount ?? rows?.length ?? 0;
+              if (count > 0) requestCheck(count);
+            }}
+            isBusy={isBusy}
+            isFreePlan={isFreePlan}
           />
         )}
 

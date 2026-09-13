@@ -13,6 +13,7 @@ import { BillingUsageChart } from "@/client/features/billing/BillingUsageChart";
 import { BillingFeatureBreakdown } from "@/client/features/billing/BillingFeatureBreakdown";
 import { parseTopUpAmount } from "@/client/features/billing/HostedBillingContentUtils";
 import { getCustomerPlanStatus } from "@/client/features/billing/plan-detection";
+import { useCurrency, CurrencySelector } from "@/client/lib/currency";
 import {
   submitCancellationSurveyServerFn,
   getUserCreditUsageServerFn,
@@ -39,13 +40,13 @@ export const Route = createFileRoute("/_app/billing")({
 
 function BillingPage() {
   const { data: session } = useSession();
+  const { currency, formatPrice } = useCurrency();
   const [topUpAmount, setTopUpAmount] = useState("10");
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [billingInterval, setBillingInterval] = useState<"month" | "year">(
     "month",
   );
-  const [currency, setCurrency] = useState<"USD" | "NGN">("USD");
 
   // Cancellation Retention State
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -467,39 +468,16 @@ function BillingPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Currency Switcher */}
-            <div className="join border border-base-300 rounded-xl p-0.5 bg-base-200/40">
-              <button
-                type="button"
-                onClick={() => setCurrency("USD")}
-                className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  currency === "USD"
-                    ? "bg-primary text-white"
-                    : "text-base-content/70 hover:text-base-content"
-                }`}
-              >
-                USD ($)
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrency("NGN")}
-                className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
-                  currency === "NGN"
-                    ? "bg-primary text-white"
-                    : "text-base-content/70 hover:text-base-content"
-                }`}
-              >
-                NGN (₦)
-              </button>
-            </div>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Multi-Currency Switcher */}
+            <CurrencySelector />
 
             {/* Monthly / Yearly Switch */}
             <div className="join border border-base-300 rounded-xl p-0.5 bg-base-200/40">
               <button
                 type="button"
                 onClick={() => setBillingInterval("month")}
-                className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
+                className={`join-item px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   billingInterval === "month"
                     ? "bg-primary text-white"
                     : "text-base-content/70 hover:text-base-content"
@@ -510,7 +488,7 @@ function BillingPage() {
               <button
                 type="button"
                 onClick={() => setBillingInterval("year")}
-                className={`join-item px-3 py-1 text-xs font-bold rounded-lg transition-all ${
+                className={`join-item px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   billingInterval === "year"
                     ? "bg-primary text-white"
                     : "text-base-content/70 hover:text-base-content"
@@ -529,15 +507,14 @@ function BillingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan: any) => {
             const isCurrent = planStatus === plan.id;
-            const price =
-              currency === "USD"
-                ? billingInterval === "year"
-                  ? Math.round(plan.priceUsd * 0.8)
-                  : plan.priceUsd
-                : billingInterval === "year"
-                  ? Math.round(plan.priceNgn * 0.8)
-                  : plan.priceNgn;
-            const symbol = currency === "USD" ? "$" : "₦";
+            const formattedPrice = formatPrice(
+              billingInterval === "year"
+                ? Math.round(plan.priceUsd * 0.8)
+                : plan.priceUsd,
+              billingInterval === "year"
+                ? Math.round(plan.priceNgn * 0.8)
+                : plan.priceNgn,
+            );
 
             return (
               <div
@@ -571,8 +548,7 @@ function BillingPage() {
 
                   <div className="flex items-baseline gap-1">
                     <span className="text-3xl font-black text-base-content font-mono">
-                      {symbol}
-                      {price.toLocaleString()}
+                      {formattedPrice}
                     </span>
                     <span className="text-xs text-base-content/50 font-medium">
                       / month

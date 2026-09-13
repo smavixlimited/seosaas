@@ -47,15 +47,8 @@ export const NotificationsService = {
         }));
       }
 
-      // Seed smart notifications for new user
-      return await this.seedDefaultNotifications(userId);
+      return [];
     } catch {
-      if (
-        !MEMORY_NOTIFICATIONS.has(userId) ||
-        (MEMORY_NOTIFICATIONS.get(userId)?.length ?? 0) === 0
-      ) {
-        MEMORY_NOTIFICATIONS.set(userId, this.getMockNotifications(userId));
-      }
       return MEMORY_NOTIFICATIONS.get(userId) || [];
     }
   },

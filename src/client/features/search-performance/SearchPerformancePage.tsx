@@ -189,26 +189,27 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
   };
 
   return (
-    <div className="px-4 py-4 pb-24 overflow-auto md:px-6 md:py-6 md:pb-8">
-      <div className="mx-auto max-w-7xl space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Search Performance</h1>
-            <p className="text-sm text-base-content/70">
-              See your site&apos;s clicks, impressions, CTR, and position from
-              Google Search Console.
-            </p>
-          </div>
-          {report?.connected ? (
-            <Link
-              to="/p/$projectId/settings/integrations"
-              params={{ projectId }}
-              className="link link-hover shrink-0 self-start text-sm font-medium text-base-content/60 transition-colors hover:text-base-content sm:mt-1"
-            >
-              Change property
-            </Link>
-          ) : null}
+    <div className="w-full min-w-0 max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6 pb-24 md:pb-8 animate-in fade-in duration-150">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-base-content">
+            Search Performance
+          </h1>
+          <p className="text-xs text-base-content/60">
+            See your site&apos;s clicks, impressions, CTR, and position from
+            Google Search Console.
+          </p>
         </div>
+        {report?.connected ? (
+          <Link
+            to="/p/$projectId/settings/integrations"
+            params={{ projectId }}
+            className="link link-hover shrink-0 self-start text-xs font-semibold text-base-content/60 transition-colors hover:text-base-content sm:mt-1"
+          >
+            Change property
+          </Link>
+        ) : null}
+      </div>
 
         {reportQuery.isPending ? (
           <SearchPerformanceLoadingState />
@@ -219,15 +220,15 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
             </span>
           </div>
         ) : !report?.connected ? (
-          <div className="max-w-2xl">
+          <div className="w-full min-w-0 max-w-full">
             <SearchConsoleConnectionCard projectId={projectId} />
           </div>
         ) : (
           <>
             <TotalsCards report={report} />
-            <div className="overflow-hidden rounded-xl border border-base-300 bg-base-100">
+            <div className="w-full min-w-0 overflow-hidden rounded-xl border border-base-300 bg-base-100">
               <div className="flex flex-col gap-3 border-b border-base-300 px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
-                <div role="tablist" className="tabs tabs-border w-fit">
+                <div role="tablist" className="tabs tabs-border w-full sm:w-fit overflow-x-auto">
                   <TabButton
                     active={tab === "striking"}
                     onClick={() => setTab("striking")}
@@ -249,7 +250,7 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
                     <Loader2 className="size-4 animate-spin text-base-content/40" />
                   ) : null}
                   <select
-                    className="select select-bordered select-sm w-36"
+                    className="select select-bordered select-sm w-full sm:w-36 min-w-[120px]"
                     value={device}
                     onChange={(event) => {
                       setDevice(
@@ -266,7 +267,7 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
                     ))}
                   </select>
                   <select
-                    className="select select-bordered select-sm w-36"
+                    className="select select-bordered select-sm w-full sm:w-36 min-w-[120px]"
                     value={country}
                     onChange={(event) => setCountry(event.target.value)}
                     aria-label="Country filter"
@@ -279,7 +280,7 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
                     ))}
                   </select>
                   <select
-                    className="select select-bordered select-sm w-36"
+                    className="select select-bordered select-sm w-full sm:w-36 min-w-[120px]"
                     value={range}
                     onChange={(event) => {
                       if (isDateRange(event.target.value)) {
@@ -331,7 +332,7 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
                 </div>
               ) : (
                 <>
-                  <div className="p-4">
+                  <div className="p-2 sm:p-4 overflow-x-auto w-full min-w-0">
                     <DimensionTable
                       rows={tableRows}
                       keyLabel={tab === "queries" ? "Query" : "Page"}
@@ -353,6 +354,5 @@ export function SearchPerformancePage({ projectId }: { projectId: string }) {
           </>
         )}
       </div>
-    </div>
   );
 }

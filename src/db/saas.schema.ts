@@ -114,7 +114,10 @@ export const uptimeMonitors = sqliteTable(
     lastCheckedAt: text("last_checked_at"),
     lastStatusCode: integer("last_status_code"),
     sslExpiresAt: text("ssl_expires_at"),
-    reminderFrequency: text("reminder_frequency").notNull().default("both"), // 'weekly' | 'ssl_expiry' | 'both' | 'none'
+    domainExpiresAt: text("domain_expires_at"),
+    domainRegistrar: text("domain_registrar"),
+    hostingProvider: text("hosting_provider"),
+    reminderFrequency: text("reminder_frequency").notNull().default("all"), // 'all' | 'weekly' | 'ssl_expiry' | 'domain_expiry' | 'none'
     reminderEmail: text("reminder_email"),
     lastReminderSentAt: text("last_reminder_sent_at"),
     isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),

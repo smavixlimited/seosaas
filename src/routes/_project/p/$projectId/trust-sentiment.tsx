@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AudienceTrustPreAdGate } from "@/client/features/trust-sentiment/AudienceTrustPreAdGate";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_project/p/$projectId/trust-sentiment")({
   component: TrustSentimentRoute,
@@ -7,10 +6,6 @@ export const Route = createFileRoute("/_project/p/$projectId/trust-sentiment")({
 
 function TrustSentimentRoute() {
   const { projectId } = Route.useParams();
-  return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-      <AudienceTrustPreAdGate projectId={projectId} />
-    </div>
-  );
+  return <Navigate to="/p/$projectId/ad-readiness" params={{ projectId }} replace />;
 }
 

@@ -255,16 +255,81 @@ export const CompetitorAdsService = {
     brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
+    const name = competitorName || domain.split(".")[0].toUpperCase();
+
+    try {
+      const { getChatAgentModel } = await import("@/server/lib/openrouter");
+      const { generateText } = await import("ai");
+      const model = await getChatAgentModel();
+
+      const response = await generateText({
+        model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an expert Ad Intelligence and PPC Reverse-Engineering Analyst. Return only valid JSON array.",
+          },
+          {
+            role: "user",
+            content: `Generate 2 realistic, highly targeted Google Search Ads currently run by competitor "${name}" (${domain}).
+Include headline (under 60 chars), bodyCopy (under 180 chars), landingPageUrl (e.g. https://${domain}/...), ctaType (e.g. "Start Free Trial", "Get Demo"), angleCategory ("discount_offer" | "social_proof" | "problem_solution"), estimatedActiveDays (number 15-90), isWinningAd (boolean), and metadata with sitelinks and targetKeywords.
+
+Format as JSON array of objects:
+[
+  {
+    "headline": "...",
+    "bodyCopy": "...",
+    "landingPageUrl": "https://${domain}/...",
+    "ctaType": "...",
+    "angleCategory": "problem_solution",
+    "estimatedActiveDays": 45,
+    "isWinningAd": true,
+    "metadata": { "sitelinks": ["..."], "targetKeywords": ["..."] }
+  }
+]`,
+          },
+        ],
+        temperature: 0.3,
+      });
+
+      const jsonText = response.text.replace(/```json\n?|\n?```/g, "").trim();
+      const parsed = JSON.parse(jsonText);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map((ad, idx) => ({
+          id: `ad_goog_${Date.now()}_${idx}_${Math.random().toString(36).slice(2, 6)}`,
+          projectId,
+          brandCompetitorId,
+          competitorDomain: domain,
+          competitorName: name,
+          platform: "google" as AdPlatform,
+          headline: String(ad.headline || `#1 Solution | Try ${name} Free`),
+          bodyCopy: String(ad.bodyCopy || `Accelerate your workflow with ${name}. Join industry leaders today.`),
+          mediaType: "text_only",
+          landingPageUrl: String(ad.landingPageUrl || `https://${domain}`),
+          ctaType: String(ad.ctaType || "Get Started"),
+          angleCategory: ad.angleCategory || "problem_solution",
+          estimatedActiveDays: Number(ad.estimatedActiveDays) || 30,
+          isWinningAd: Boolean(ad.isWinningAd),
+          isAiOpportunity: false,
+          metadata: ad.metadata || { sitelinks: ["Overview", "Pricing"], targetKeywords: [`${name.toLowerCase()} software`] },
+          createdAt: now,
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+
     return [
       {
         id: `ad_goog_1_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "google",
-        headline: `#1 Alternative to Traditional Solutions | Try ${competitorName} Free`,
-        bodyCopy: `Boost efficiency by 40% with automated workflows. Seamless setup, 24/7 dedicated support, and enterprise security. Start your 14-day free trial today.`,
+        headline: `#1 Alternative to Traditional Tools | ${name}`,
+        bodyCopy: `Boost efficiency with automated workflows. Seamless setup, 24/7 dedicated support, and enterprise security. Try ${name} today.`,
         mediaType: "text_only",
         landingPageUrl: `https://${domain}/get-started`,
         ctaType: "Start Free Trial",
@@ -280,7 +345,7 @@ export const CompetitorAdsService = {
             "API Documentation",
           ],
           targetKeywords: [
-            `${competitorName.toLowerCase()} vs alternatives`,
+            `${name.toLowerCase()} vs alternatives`,
             "best workflow automation tool",
             "enterprise marketing platform",
           ],
@@ -292,9 +357,9 @@ export const CompetitorAdsService = {
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "google",
-        headline: `Rated 4.9/5 by 10,000+ Brands | Switch to ${competitorName}`,
+        headline: `Rated 4.9/5 by Industry Leaders | Switch to ${name}`,
         bodyCopy: `Voted #1 Leader on G2. Migrate from legacy software in under 15 minutes with zero downtime. Speak with a specialist now.`,
         mediaType: "text_only",
         landingPageUrl: `https://${domain}/switch`,
@@ -322,16 +387,80 @@ export const CompetitorAdsService = {
     brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
+    const name = competitorName || domain.split(".")[0].toUpperCase();
+
+    try {
+      const { getChatAgentModel } = await import("@/server/lib/openrouter");
+      const { generateText } = await import("ai");
+      const model = await getChatAgentModel();
+
+      const response = await generateText({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert Social Ads Analyst. Return only valid JSON array.",
+          },
+          {
+            role: "user",
+            content: `Generate 2 realistic Meta (Facebook/Instagram) ads run by competitor "${name}" (${domain}).
+Include headline, bodyCopy, landingPageUrl, ctaType ("Learn More" | "Get Offer" | "Sign Up"), angleCategory ("problem_solution" | "social_proof" | "fomo"), estimatedActiveDays (number 10-60), isWinningAd (boolean).
+
+Format as JSON array:
+[
+  {
+    "headline": "...",
+    "bodyCopy": "...",
+    "landingPageUrl": "https://${domain}/...",
+    "ctaType": "...",
+    "angleCategory": "problem_solution",
+    "estimatedActiveDays": 42,
+    "isWinningAd": true
+  }
+]`,
+          },
+        ],
+        temperature: 0.3,
+      });
+
+      const jsonText = response.text.replace(/```json\n?|\n?```/g, "").trim();
+      const parsed = JSON.parse(jsonText);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map((ad, idx) => ({
+          id: `ad_meta_${Date.now()}_${idx}_${Math.random().toString(36).slice(2, 6)}`,
+          projectId,
+          brandCompetitorId,
+          competitorDomain: domain,
+          competitorName: name,
+          platform: "meta" as AdPlatform,
+          headline: String(ad.headline || `Scale Faster with ${name}`),
+          bodyCopy: String(ad.bodyCopy || `See how fast-growing teams get ahead with ${name}.`),
+          mediaUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+          mediaType: "image",
+          landingPageUrl: String(ad.landingPageUrl || `https://${domain}`),
+          ctaType: String(ad.ctaType || "Learn More"),
+          angleCategory: ad.angleCategory || "problem_solution",
+          estimatedActiveDays: Number(ad.estimatedActiveDays) || 35,
+          isWinningAd: Boolean(ad.isWinningAd),
+          isAiOpportunity: false,
+          metadata: { ctrBracket: "Top 10% Industry CTR" },
+          createdAt: now,
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+
     return [
       {
         id: `ad_meta_1_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "meta",
         headline: `Stop Wasting Budget on Manual Processes`,
-        bodyCopy: `Most teams spend 15+ hours weekly on tasks that could run automatically. See how fast-growing companies scale faster with ${competitorName}. Claim your complimentary strategy audit.`,
+        bodyCopy: `Most teams spend 15+ hours weekly on tasks that could run automatically. See how fast-growing companies scale faster with ${name}. Claim your strategy audit.`,
         mediaUrl:
           "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
         mediaType: "image",
@@ -351,10 +480,10 @@ export const CompetitorAdsService = {
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "meta",
-        headline: `Trusted by 500+ High-Growth Tech Companies`,
-        bodyCopy: `"Switching to ${competitorName} doubled our operational throughput within 30 days." — Alex V., VP Operations. See customer results.`,
+        headline: `Trusted by 500+ High-Growth Companies`,
+        bodyCopy: `"Switching to ${name} doubled our operational throughput within 30 days." See verified customer case studies.`,
         mediaUrl:
           "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
         mediaType: "image",
@@ -382,20 +511,21 @@ export const CompetitorAdsService = {
     brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
+    const name = competitorName || domain.split(".")[0].toUpperCase();
     return [
       {
         id: `ad_li_1_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "linkedin",
-        headline: `2026 Executive Playbook: Scaling Digital Operations`,
-        bodyCopy: `Download the definitive benchmark report based on data from 1,200+ enterprise leaders. Discover actionable cost reduction frameworks.`,
+        headline: `2026 Executive Benchmark Report for ${name} Ecosystem`,
+        bodyCopy: `Download the definitive industry report based on data from 1,200+ technology leaders. Discover actionable efficiency frameworks.`,
         mediaUrl:
           "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
         mediaType: "image",
-        landingPageUrl: `https://${domain}/whitepaper-2026`,
+        landingPageUrl: `https://${domain}/whitepaper`,
         ctaType: "Download",
         angleCategory: "educational",
         estimatedActiveDays: 41,
@@ -405,7 +535,7 @@ export const CompetitorAdsService = {
           targetKeywords: [
             "VP Engineering",
             "Chief Technology Officer",
-            "Director of Operations",
+            "Director of Growth",
           ],
         },
         createdAt: now,
@@ -423,20 +553,21 @@ export const CompetitorAdsService = {
     brandCompetitorId?: string,
   ): Promise<CompetitorAdItem[]> {
     const now = new Date().toISOString();
+    const name = competitorName || domain.split(".")[0].toUpperCase();
     return [
       {
         id: `ad_tt_1_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         projectId,
         brandCompetitorId,
         competitorDomain: domain,
-        competitorName,
+        competitorName: name,
         platform: "tiktok",
-        headline: `POV: You stopped doing everything manually in 2026 🤯`,
-        bodyCopy: `Secret hack that fast-growing founders use to reclaim 3 hours every single day. Link in bio to test it yourself! #productivity #tech #saas`,
+        headline: `POV: You discovered ${name} in 2026 🤯`,
+        bodyCopy: `The tool that fast-growing founders use to reclaim 3 hours every single day. Link in bio to test it yourself! #growth #tech #productivity`,
         mediaUrl:
           "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
         mediaType: "video",
-        landingPageUrl: `https://${domain}/tiktok-exclusive`,
+        landingPageUrl: `https://${domain}`,
         ctaType: "Try Now",
         angleCategory: "fomo",
         estimatedActiveDays: 19,

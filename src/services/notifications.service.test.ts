@@ -5,7 +5,11 @@ describe("NotificationsService", () => {
   it("lists, seeds, marks as read, and clears notifications", async () => {
     const userId = "test_user_notif_123";
 
-    // 1. Initial list seeds default notifications
+    // 1. Seed notifications for user
+    const seeded = await NotificationsService.seedDefaultNotifications(userId);
+    expect(seeded).toBeDefined();
+    expect(seeded.length).toBeGreaterThan(0);
+
     const items = await NotificationsService.listNotifications(userId);
     expect(items).toBeDefined();
     expect(items.length).toBeGreaterThan(0);
@@ -27,5 +31,10 @@ describe("NotificationsService", () => {
     // 4. Clear all notifications
     const cleared = await NotificationsService.clearNotifications(userId);
     expect(typeof cleared).toBe("boolean");
+
+    // 5. Verify list is now empty and not auto-reseeded
+    const emptyItems = await NotificationsService.listNotifications(userId);
+    expect(emptyItems.length).toBe(0);
   });
 });
+

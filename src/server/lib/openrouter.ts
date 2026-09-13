@@ -129,15 +129,7 @@ export async function getChatAgentModel(): Promise<LanguageModelV3> {
     );
   }
 
-  if (resolved.provider === "openrouter") {
-    return buildChatAgentModel(resolved.apiKey, resolved.modelId);
-  }
-
-  // OpenAI / Gemini OpenAI-compatible endpoints
-  return createOpenRouter({
-    apiKey: resolved.apiKey,
-    baseURL: resolved.baseURL,
-  })(resolved.modelId);
+  return buildChatAgentModel(resolved.apiKey, resolved.modelId, resolved.baseURL);
 }
 
 /**
@@ -148,8 +140,20 @@ export async function getChatAgentModel(): Promise<LanguageModelV3> {
 export function buildChatAgentModel(
   apiKey: string,
   modelId?: string,
+  baseURL?: string,
 ): LanguageModelV3 {
-  return createOpenRouter({ apiKey })(modelId ?? DEFAULT_CHAT_AGENT_MODEL, {
+  const isDirectOpenAi = Boolean(baseURL && baseURL.includes("api.openai.com"));
+  const isDirectGemini = Boolean(baseURL && baseURL.includes("googleapis.com"));
+
+  if (isDirectOpenAi || isDirectGemini) {
+    return createOpenRouter({
+      apiKey,
+      baseURL,
+      headers: {},
+    })(modelId ?? (isDirectGemini ? "gemini-2.0-flash" : "gpt-4o-mini"));
+  }
+
+  return createOpenRouter({ apiKey, baseURL })(modelId ?? DEFAULT_CHAT_AGENT_MODEL, {
     usage: { include: true },
     reasoning: { effort: "medium" },
     provider: {
@@ -159,4 +163,5 @@ export function buildChatAgentModel(
     },
   });
 }
+
 

@@ -232,6 +232,7 @@ export const ViralContentService = {
   async generateOpportunities(
     projectId: string,
     targetPlatform?: ViralPlatform,
+    customTopic?: string,
   ): Promise<ViralOpportunityItem[]> {
     const brand = await BrandCompetitorService.getBrandProfile(projectId);
     const competitors = await BrandCompetitorService.listCompetitors(projectId);
@@ -288,8 +289,9 @@ Return ONLY a valid JSON array of objects.`;
 - Brand Bio / Description: ${bio || "Not specified"}
 ${competitorNames ? `- Key Competitors Tracked: ${competitorNames}` : ""}
 ${targetPlatform ? `- Target Platform Requested: ${targetPlatform}` : ""}
+${customTopic ? `- Specific Topic / Product Feature / Angle to Focus On: "${customTopic}"` : ""}
 
-Generate 5 high-converting, viral content hooks tailored specifically to ${brandName}'s value proposition ("${usp}") and current market trends in ${countryName}.`;
+Generate 5 high-converting, viral content hooks tailored specifically to ${brandName}'s value proposition ("${usp}"), ${customTopic ? `focusing heavily on the custom angle "${customTopic}",` : ""} and current market trends in ${countryName}.`;
 
       const aiResponse = await generateText({
         model,

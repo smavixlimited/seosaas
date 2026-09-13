@@ -9,7 +9,7 @@ import {
   SerpApi,
 } from "dataforseo-client";
 import { AppError } from "@/server/lib/errors";
-import { getRequiredEnvValue } from "@/server/lib/runtime-env";
+import { getOptionalEnvValue } from "@/server/lib/runtime-env";
 import type { ErrorCode } from "@/shared/error-codes";
 
 const API_BASE = "https://api.dataforseo.com";
@@ -90,7 +90,14 @@ function createAuthenticatedFetch(
     } catch {}
 
     if (!apiKey) {
-      apiKey = await getRequiredEnvValue("DATAFORSEO_API_KEY");
+      apiKey = (await getOptionalEnvValue("DATAFORSEO_API_KEY")) ?? "";
+    }
+    if (!apiKey) {
+      throw new AppError(
+        "DATAFORSEO_AUTH_FAILED",
+        "DataForSEO API credentials are not configured. Please configure your API key in Admin Settings > API Settings or set DATAFORSEO_API_KEY in your environment.",
+        { provider: "dataforseo" },
+      );
     }
     const headers = new Headers(init?.headers);
     headers.set("Authorization", `Basic ${apiKey}`);

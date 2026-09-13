@@ -14,8 +14,8 @@ import {
   ShieldAlert,
   Trash2,
   XCircle,
-  Mail,
-  Clock,
+  Server,
+  Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -24,7 +24,7 @@ import {
   updateMonitorReminderServerFn,
   deleteUptimeMonitorServerFn,
   probeUptimeMonitorServerFn,
-  triggerSslExpiryCheckServerFn,
+  triggerMonitoringCheckServerFn,
 } from "@/serverFunctions/uptime";
 
 export const Route = createFileRoute("/_app/uptime")({
@@ -40,7 +40,10 @@ interface MonitorItem {
   lastCheckedAt?: string | null;
   lastStatusCode?: number | null;
   sslExpiresAt?: string | null;
-  reminderFrequency?: "weekly" | "ssl_expiry" | "both" | "none";
+  domainExpiresAt?: string | null;
+  domainRegistrar?: string | null;
+  hostingProvider?: string | null;
+  reminderFrequency?: "all" | "weekly" | "ssl_expiry" | "domain_expiry" | "both" | "none";
   reminderEmail?: string | null;
   lastReminderSentAt?: string | null;
   isActive: boolean;
@@ -56,14 +59,14 @@ function UptimePage() {
   // Add Monitor Form
   const [newUrl, setNewUrl] = React.useState("");
   const [newReminderFrequency, setNewReminderFrequency] = React.useState<
-    "weekly" | "ssl_expiry" | "both" | "none"
-  >("both");
+    "all" | "weekly" | "ssl_expiry" | "domain_expiry" | "both" | "none"
+  >("all");
   const [newReminderEmail, setNewReminderEmail] = React.useState("");
 
   // Edit Reminder Form
   const [editFrequency, setEditFrequency] = React.useState<
-    "weekly" | "ssl_expiry" | "both" | "none"
-  >("both");
+    "all" | "weekly" | "ssl_expiry" | "domain_expiry" | "both" | "none"
+  >("all");
   const [editEmail, setEditEmail] = React.useState("");
 
   const monitorsQuery = useQuery({
@@ -87,7 +90,7 @@ function UptimePage() {
       setModalOpen(false);
       setNewUrl("");
       setNewReminderEmail("");
-      toast.success("Domain added with automated 24/7 uptime & SSL monitoring.");
+      toast.success("Domain added with automated 24/7 uptime, domain & SSL monitoring.");
     },
     onError: (err) => {
       toast.error("Failed to add monitor: " + (err as Error).message);
@@ -109,7 +112,7 @@ function UptimePage() {
       queryClient.invalidateQueries({ queryKey: ["uptime-monitors"] });
       setReminderModalOpen(false);
       setSelectedMonitor(null);
-      toast.success("Reminder preferences updated successfully.");
+      toast.success("Monitoring reminder preferences updated successfully.");
     },
     onError: (err) => {
       toast.error("Failed to update reminders: " + (err as Error).message);
@@ -130,21 +133,21 @@ function UptimePage() {
       probeUptimeMonitorServerFn({ data: { monitorId } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["uptime-monitors"] });
-      toast.success("Live HTTP & SSL probe complete.");
+      toast.success("Live HTTP, hosting & SSL probe complete.");
     },
   });
 
-  const testSslAlertsMutation = useMutation({
-    mutationFn: () => triggerSslExpiryCheckServerFn(),
+  const testAlertsMutation = useMutation({
+    mutationFn: () => triggerMonitoringCheckServerFn(),
     onSuccess: (res: any) => {
       toast.success(
         res && res.length > 0
-          ? `Triggered ${res.length} SSL expiration notification(s)!`
-          : "All monitored SSL certificates are healthy and valid.",
+          ? `Dispatched ${res.length} monitoring expiration notification(s)!`
+          : "All monitored domains, hosting, and SSL certificates are healthy.",
       );
     },
     onError: (err) => {
-      toast.error("Failed to check SSL alerts: " + (err as Error).message);
+      toast.error("Failed to check alerts: " + (err as Error).message);
     },
   });
 
@@ -160,9 +163,19 @@ function UptimePage() {
     return days <= 14;
   });
 
+  const expiringDomainMonitors = monitors.filter((m) => {
+    if (!m.domainExpiresAt) return false;
+    const days = Math.ceil(
+      (new Date(m.domainExpiresAt).getTime() - nowMs) / (1000 * 60 * 60 * 24),
+    );
+    return days <= 30;
+  });
+
+  const downMonitors = monitors.filter((m) => m.status === "down");
+
   const handleOpenReminderModal = (mon: MonitorItem) => {
     setSelectedMonitor(mon);
-    setEditFrequency(mon.reminderFrequency || "both");
+    setEditFrequency(mon.reminderFrequency || "all");
     setEditEmail(mon.reminderEmail || "");
     setReminderModalOpen(true);
   };
@@ -176,22 +189,22 @@ function UptimePage() {
             <div className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-primary" />
               <h1 className="text-2xl font-black tracking-tight text-base-content">
-                Website Uptime & SSL Monitor
+                Website Uptime, Hosting & Domain Expiry Monitor
               </h1>
             </div>
             <p className="mt-1 text-xs text-base-content/60">
               Automated 24/7 health probes for HTTP availability, response times,
-              and SSL expiration alerts.
+              hosting infrastructure, domain renewals (1-month & 2-week reminders), and SSL expiration alerts.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               type="button"
-              disabled={testSslAlertsMutation.isPending}
-              onClick={() => testSslAlertsMutation.mutate()}
+              disabled={testAlertsMutation.isPending}
+              onClick={() => testAlertsMutation.mutate()}
               className="btn btn-outline btn-sm rounded-xl font-bold text-xs gap-1.5"
-              title="Run automated check for expiring certificates and trigger reminders"
+              title="Run automated check for domain & SSL expirations to dispatch alerts"
             >
               <Bell className="h-3.5 w-3.5 text-primary" /> Check Reminders
             </button>
@@ -205,6 +218,50 @@ function UptimePage() {
           </div>
         </div>
 
+        {/* Server Down Warning Banner */}
+        {downMonitors.length > 0 && (
+          <div className="rounded-2xl border-2 border-error bg-error/10 p-4 sm:p-5 text-error flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
+            <div className="flex items-center gap-3.5">
+              <div className="h-10 w-10 rounded-xl bg-error text-white flex items-center justify-center shrink-0 shadow-md shadow-error/30 animate-pulse">
+                <XCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black tracking-tight text-error">
+                  🚨 Urgent: {downMonitors.length} Monitored Website(s) Currently Offline!
+                </h3>
+                <p className="text-xs text-base-content/80 mt-0.5">
+                  Affected sites: <strong>{downMonitors.map((d) => d.url).join(", ")}</strong>. Automated critical alerts have been dispatched. Check hosting server health immediately.
+                </p>
+              </div>
+            </div>
+            <span className="badge badge-error text-white font-black text-[11px] uppercase tracking-wider shrink-0 px-3 py-2">
+              Server Down
+            </span>
+          </div>
+        )}
+
+        {/* Domain Expiration Warning Banner (< 30 days) */}
+        {expiringDomainMonitors.length > 0 && (
+          <div className="rounded-2xl border-2 border-warning/60 bg-warning/10 p-4 sm:p-5 text-warning-content flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
+            <div className="flex items-center gap-3.5">
+              <div className="h-10 w-10 rounded-xl bg-warning text-warning-content flex items-center justify-center shrink-0 shadow-md">
+                <Calendar className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black tracking-tight text-warning-content">
+                  🌐 Domain Expiration Notice: {expiringDomainMonitors.length} Domain(s) Expire Within 30 Days!
+                </h3>
+                <p className="text-xs text-base-content/80 mt-0.5">
+                  Renew expiring domains with your registrar (e.g. Namecheap, GoDaddy, Cloudflare) before they enter redemption or go offline.
+                </p>
+              </div>
+            </div>
+            <span className="badge badge-warning text-neutral font-black text-[11px] uppercase tracking-wider shrink-0 px-3 py-2">
+              Domain Renewal Required
+            </span>
+          </div>
+        )}
+
         {/* Critical SSL Expiry Warning Banner (< 14 days) */}
         {expiringSslMonitors.length > 0 && (
           <div className="rounded-2xl border-2 border-error/50 bg-error/10 p-4 sm:p-5 text-error flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in">
@@ -214,24 +271,21 @@ function UptimePage() {
               </div>
               <div>
                 <h3 className="text-sm font-black tracking-tight text-error">
-                  ⚠️ Critical Alert: {expiringSslMonitors.length} Domain SSL
-                  Certificate(s) Expiring in Less Than 2 Weeks!
+                  ⚠️ SSL Certificate Expiration: {expiringSslMonitors.length} Certificate(s) Expire In &lt; 14 Days!
                 </h3>
                 <p className="text-xs text-base-content/80 mt-0.5">
-                  Web browsers will block visitor traffic with a security warning if
-                  not renewed immediately. In-app and email reminders have been
-                  dispatched.
+                  Web browsers will block visitor traffic with a security warning if not renewed immediately.
                 </p>
               </div>
             </div>
             <span className="badge badge-error text-white font-black text-[11px] uppercase tracking-wider shrink-0 px-3 py-2">
-              Immediate Action Required
+              SSL Renewal Required
             </span>
           </div>
         )}
 
         {/* Overview Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-1">
             <div className="text-xs font-semibold text-base-content/60">
               Total Monitored
@@ -248,30 +302,28 @@ function UptimePage() {
               {upCount} URLs
             </div>
           </div>
-          <div className="rounded-2xl border border-error/30 bg-error/5 p-4 space-y-1">
-            <div className="text-xs font-semibold text-error">
+          <div className={`rounded-2xl border p-4 space-y-1 ${
+            downCount > 0 ? "border-error/50 bg-error/10 text-error" : "border-base-300 bg-base-200/40"
+          }`}>
+            <div className="text-xs font-semibold">
               Down / Degraded
             </div>
-            <div className="text-2xl font-black text-error">
+            <div className={`text-2xl font-black ${downCount > 0 ? "text-error" : "text-base-content"}`}>
               {downCount} URLs
             </div>
           </div>
           <div
             className={`rounded-2xl border p-4 space-y-1 ${
-              expiringSslMonitors.length > 0
-                ? "border-error/50 bg-error/10 text-error"
+              expiringDomainMonitors.length > 0 || expiringSslMonitors.length > 0
+                ? "border-warning/50 bg-warning/10 text-warning-content"
                 : "border-base-300 bg-base-200/40"
             }`}
           >
             <div className="text-xs font-semibold">
-              SSL Expiring Soon (&lt;14d)
+              Expirations Pending (&lt;30d)
             </div>
-            <div
-              className={`text-2xl font-black ${
-                expiringSslMonitors.length > 0 ? "text-error" : "text-base-content"
-              }`}
-            >
-              {expiringSslMonitors.length} Domains
+            <div className="text-2xl font-black">
+              {expiringDomainMonitors.length + expiringSslMonitors.length} Items
             </div>
           </div>
         </div>
@@ -285,7 +337,7 @@ function UptimePage() {
             </h3>
             <p className="text-xs text-base-content/60 max-w-sm mx-auto">
               Add your website or client domains to receive automated downtime
-              alerts, weekly summaries, and SSL certificate expiration reminders.
+              alerts, domain renewal countdowns (1 month & 2 weeks), hosting detection, and SSL certificate expiration reminders.
             </p>
             <button
               type="button"
@@ -298,32 +350,45 @@ function UptimePage() {
         ) : (
           <div className="space-y-3">
             {monitors.map((mon) => {
-              const expiryMs = mon.sslExpiresAt
+              const sslExpiryMs = mon.sslExpiresAt
                 ? new Date(mon.sslExpiresAt).getTime()
                 : null;
-              const daysRemaining = expiryMs
-                ? Math.ceil((expiryMs - nowMs) / (1000 * 60 * 60 * 24))
+              const sslDaysRemaining = sslExpiryMs
+                ? Math.ceil((sslExpiryMs - nowMs) / (1000 * 60 * 60 * 24))
                 : null;
-              const isExpiringSoon =
-                daysRemaining !== null && daysRemaining <= 14;
+              const isSslExpiringSoon =
+                sslDaysRemaining !== null && sslDaysRemaining <= 14;
+
+              const domExpiryMs = mon.domainExpiresAt
+                ? new Date(mon.domainExpiresAt).getTime()
+                : null;
+              const domDaysRemaining = domExpiryMs
+                ? Math.ceil((domExpiryMs - nowMs) / (1000 * 60 * 60 * 24))
+                : null;
+              const isDomainExpiringSoon =
+                domDaysRemaining !== null && domDaysRemaining <= 30;
 
               return (
                 <div
                   key={mon.id}
                   className={`rounded-2xl border p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
-                    isExpiringSoon
-                      ? "border-error/60 bg-error/5 dark:bg-error/10 hover:border-error"
-                      : "border-base-300 bg-base-100 hover:border-base-content/20"
+                    mon.status === "down"
+                      ? "border-error/80 bg-error/10 hover:border-error"
+                      : isSslExpiringSoon || (isDomainExpiringSoon && domDaysRemaining !== null && domDaysRemaining <= 14)
+                        ? "border-error/60 bg-error/5 hover:border-error"
+                        : isDomainExpiringSoon
+                          ? "border-warning/60 bg-warning/5 hover:border-warning"
+                          : "border-base-300 bg-base-100 hover:border-base-content/20"
                   }`}
                 >
-                  <div className="flex items-center gap-3.5">
-                    <div className="relative">
+                  <div className="flex items-start gap-3.5">
+                    <div className="relative mt-1">
                       {mon.status === "up" ? (
                         <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                       ) : mon.status === "degraded" ? (
                         <AlertTriangle className="h-6 w-6 text-amber-500" />
                       ) : (
-                        <XCircle className="h-6 w-6 text-error" />
+                        <XCircle className="h-6 w-6 text-error animate-pulse" />
                       )}
                       {mon.status === "up" && (
                         <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
@@ -333,7 +398,7 @@ function UptimePage() {
                       )}
                     </div>
 
-                    <div>
+                    <div className="space-y-1.5">
                       <div className="text-sm font-bold text-base-content flex flex-wrap items-center gap-2">
                         <span>{mon.url}</span>
                         <span
@@ -348,15 +413,39 @@ function UptimePage() {
                           {mon.status}
                         </span>
 
-                        {/* SSL Expiry Status Badge (Red under 2 weeks) */}
-                        {isExpiringSoon ? (
+                        {/* Hosting Provider Badge */}
+                        <span className="badge badge-ghost text-[10px] font-semibold gap-1 border-base-300 text-base-content/80">
+                          <Server className="h-3 w-3 text-primary" />
+                          {mon.hostingProvider || "Cloud Hosting"}
+                        </span>
+
+                        {/* Domain Expiry Badge */}
+                        {isDomainExpiringSoon ? (
+                          <span
+                            className={`badge font-bold text-[10px] gap-1 ${
+                              domDaysRemaining !== null && domDaysRemaining <= 14
+                                ? "badge-error text-white animate-pulse"
+                                : "badge-warning text-neutral"
+                            }`}
+                          >
+                            <Calendar className="h-3 w-3" />
+                            Domain Expires in {domDaysRemaining}d ({mon.domainRegistrar || "Registrar"})
+                          </span>
+                        ) : domDaysRemaining !== null ? (
+                          <span className="badge badge-ghost text-[10px] font-semibold text-base-content/70 gap-1 border-base-300">
+                            <Calendar className="h-3 w-3 text-base-content/50" /> Domain ({domDaysRemaining}d left)
+                          </span>
+                        ) : null}
+
+                        {/* SSL Expiry Status Badge */}
+                        {isSslExpiringSoon ? (
                           <span className="badge badge-error text-white font-bold text-[10px] gap-1 animate-pulse">
                             <AlertTriangle className="h-3 w-3" />
-                            SSL EXPIRES IN {daysRemaining} DAYS
+                            SSL EXPIRES IN {sslDaysRemaining}d
                           </span>
-                        ) : daysRemaining !== null ? (
+                        ) : sslDaysRemaining !== null ? (
                           <span className="badge badge-ghost text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 gap-1 border-emerald-500/30">
-                            <Lock className="h-3 w-3" /> SSL Valid ({daysRemaining}d left)
+                            <Lock className="h-3 w-3" /> SSL Valid ({sslDaysRemaining}d left)
                           </span>
                         ) : (
                           <span className="badge badge-ghost text-[10px] text-base-content/60">
@@ -365,8 +454,8 @@ function UptimePage() {
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-3 text-[11px] text-base-content/60 mt-1">
-                        <span>Status: HTTP {mon.lastStatusCode || 200}</span>
+                      <div className="flex flex-wrap items-center gap-3 text-[11px] text-base-content/60">
+                        <span>HTTP {mon.lastStatusCode || 200}</span>
                         <span>•</span>
                         <span>
                           Checked:{" "}
@@ -377,27 +466,29 @@ function UptimePage() {
                         <span>•</span>
                         <span className="flex items-center gap-1">
                           <Bell className="h-3 w-3 text-primary" />
-                          Reminders:{" "}
+                          Alerts:{" "}
                           <strong className="text-base-content/80 capitalize">
-                            {mon.reminderFrequency === "both"
-                              ? "Weekly + SSL Alerts"
-                              : mon.reminderFrequency === "ssl_expiry"
-                                ? "SSL Alerts Only"
-                                : mon.reminderFrequency === "weekly"
-                                  ? "Weekly Only"
-                                  : "Off"}
+                            {mon.reminderFrequency === "all" || mon.reminderFrequency === "both"
+                              ? "All (Downtime, Domain & SSL)"
+                              : mon.reminderFrequency === "domain_expiry"
+                                ? "Domain Expiry (<30d)"
+                                : mon.reminderFrequency === "ssl_expiry"
+                                  ? "SSL Expiry (<14d)"
+                                  : mon.reminderFrequency === "weekly"
+                                    ? "Weekly Only"
+                                    : "Off"}
                           </strong>
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 self-end sm:self-center">
+                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                     <button
                       type="button"
                       onClick={() => handleOpenReminderModal(mon)}
                       className="btn btn-ghost btn-sm rounded-xl text-xs gap-1.5"
-                      title="Configure weekly or SSL expiry reminder settings"
+                      title="Configure downtime, domain and SSL expiration reminder settings"
                     >
                       <Settings className="h-3.5 w-3.5" /> Reminders
                     </button>
@@ -439,11 +530,10 @@ function UptimePage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-3xl border border-base-300 bg-base-100 p-6 shadow-2xl space-y-4">
               <h3 className="text-lg font-bold text-base-content">
-                Add Website to Monitor
+                Add Website to 24/7 Monitor
               </h3>
               <p className="text-xs text-base-content/70">
-                Skorvia will monitor HTTP availability 24/7, track SSL certificate
-                expiration, and send automated in-app and email reminders.
+                Skorvia will monitor HTTP server uptime 24/7, detect hosting infrastructure, track domain expiration (reminders at 1 month &amp; 2 weeks), and alert on expiring SSL certificates.
               </p>
 
               <form
@@ -455,7 +545,7 @@ function UptimePage() {
               >
                 <div>
                   <label className="text-xs font-bold text-base-content/70">
-                    Domain / URL *
+                    Domain / Website URL *
                   </label>
                   <input
                     type="text"
@@ -469,24 +559,27 @@ function UptimePage() {
 
                 <div>
                   <label className="text-xs font-bold text-base-content/70">
-                    Notification & Reminder Schedule
+                    Notification &amp; Reminder Schedule
                   </label>
                   <select
                     className="select select-bordered select-sm w-full rounded-xl text-xs mt-1"
                     value={newReminderFrequency}
                     onChange={(e) =>
                       setNewReminderFrequency(
-                        e.target.value as "weekly" | "ssl_expiry" | "both" | "none",
+                        e.target.value as any,
                       )
                     }
                   >
-                    <option value="both">
-                      🔔 Both Weekly Digest & SSL Expiry Alerts (&lt;14d)
+                    <option value="all">
+                      🚨 All Alerts (Downtime, Domain Expiry &lt;30d &amp; SSL &lt;14d)
+                    </option>
+                    <option value="domain_expiry">
+                      🌐 Domain Expiry Alerts (&lt;30d and &lt;14d)
                     </option>
                     <option value="ssl_expiry">
-                      🔒 SSL Expiry Warnings Only (&lt;14d and &lt;7d)
+                      🔒 SSL Expiry Warnings (&lt;14d and &lt;7d)
                     </option>
-                    <option value="weekly">📊 Weekly Uptime Digest Only</option>
+                    <option value="weekly">📊 Weekly Health Digest Only</option>
                     <option value="none">🔕 Disabled (No Reminders)</option>
                   </select>
                 </div>
@@ -532,13 +625,12 @@ function UptimePage() {
               <div className="flex items-center gap-2">
                 <Bell className="h-5 w-5 text-primary" />
                 <h3 className="text-lg font-bold text-base-content">
-                  Reminder Settings
+                  Monitoring &amp; Reminder Settings
                 </h3>
               </div>
               <p className="text-xs text-base-content/70">
                 Configure automated alerts for <strong>{selectedMonitor.url}</strong>.
-                When the SSL certificate has less than 2 weeks remaining, critical
-                alerts will trigger automatically.
+                Receive instant notices on server downtime, domain expiration (&lt;30 days and &lt;14 days), and SSL certificate expiration.
               </p>
 
               <form
@@ -550,24 +642,27 @@ function UptimePage() {
               >
                 <div>
                   <label className="text-xs font-bold text-base-content/70">
-                    Reminder Frequency
+                    Reminder Schedule
                   </label>
                   <select
                     className="select select-bordered select-sm w-full rounded-xl text-xs mt-1"
                     value={editFrequency}
                     onChange={(e) =>
                       setEditFrequency(
-                        e.target.value as "weekly" | "ssl_expiry" | "both" | "none",
+                        e.target.value as any,
                       )
                     }
                   >
-                    <option value="both">
-                      🔔 Both Weekly Digest & SSL Expiry Alerts (&lt;14d)
+                    <option value="all">
+                      🚨 All Alerts (Downtime, Domain Expiry &lt;30d &amp; SSL &lt;14d)
+                    </option>
+                    <option value="domain_expiry">
+                      🌐 Domain Expiry Alerts (&lt;30d and &lt;14d)
                     </option>
                     <option value="ssl_expiry">
-                      🔒 SSL Expiry Warnings Only (&lt;14d and &lt;7d)
+                      🔒 SSL Expiry Warnings (&lt;14d and &lt;7d)
                     </option>
-                    <option value="weekly">📊 Weekly Uptime Digest Only</option>
+                    <option value="weekly">📊 Weekly Health Digest Only</option>
                     <option value="none">🔕 Disabled (No Reminders)</option>
                   </select>
                 </div>
@@ -614,4 +709,5 @@ function UptimePage() {
     </div>
   );
 }
+
 

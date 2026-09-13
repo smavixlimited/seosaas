@@ -103,13 +103,26 @@ export function VenixTopBar({
   const markOneReadMutation = useMutation({
     mutationFn: (id: string) =>
       markNotificationReadServerFn({ data: { notificationId: id } }),
-    onSuccess: () => {
+    onMutate: (id: string) => {
+      queryClient.setQueryData<UserNotificationItem[]>(
+        ["userNotifications"],
+        (old) =>
+          old ? old.map((n) => (n.id === id ? { ...n, isRead: true } : n)) : [],
+      );
+    },
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ["userNotifications"] });
     },
   });
 
   const markAllReadMutation = useMutation({
     mutationFn: () => markAllNotificationsReadServerFn({ data: {} }),
+    onMutate: () => {
+      queryClient.setQueryData<UserNotificationItem[]>(
+        ["userNotifications"],
+        (old) => (old ? old.map((n) => ({ ...n, isRead: true })) : []),
+      );
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["userNotifications"] });
       toast.success("All notifications marked as read");
@@ -118,6 +131,12 @@ export function VenixTopBar({
 
   const clearAllMutation = useMutation({
     mutationFn: () => clearNotificationsServerFn({ data: {} }),
+    onMutate: () => {
+      queryClient.setQueryData<UserNotificationItem[]>(
+        ["userNotifications"],
+        [],
+      );
+    },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["userNotifications"] });
       setSelectedNotification(null);

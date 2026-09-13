@@ -44,27 +44,43 @@ async function handleWebhook(
       }
 
       const eventType = event.event as string | undefined;
-      if (eventType === "charge.success") {
-        const data = event.data as Record<string, unknown> | undefined;
-        const reference = (data?.reference as string | undefined) || `paystack_${Date.now()}`;
-        const metadata = data?.metadata as Record<string, unknown> | undefined;
-        const userId = metadata?.userId as string | undefined;
-        const organizationId = metadata?.organizationId as string | undefined;
-        const planId = (metadata?.planId as string | undefined) || "pro";
+      const data = event.data as Record<string, unknown> | undefined;
+      const reference = (data?.reference as string | undefined) || `paystack_${Date.now()}`;
+      const metadata = data?.metadata as Record<string, unknown> | undefined;
+      const userId = metadata?.userId as string | undefined;
+      const organizationId = metadata?.organizationId as string | undefined;
+      const planId = (metadata?.planId as string | undefined) || "pro";
 
+      if (eventType === "charge.success" || eventType === "subscription.create") {
         const claimed = await WebhookIdempotencyService.claimWebhookEvent({
           gateway: "paystack",
           eventId: reference,
-          eventType: "charge.success",
+          eventType: eventType,
           payload: event,
         });
 
         if (claimed && userId) {
-          await activateUserSubscription({
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          await SubscriptionLifecycleService.renewSubscription({
             userId,
             planId,
             organizationId: organizationId || undefined,
           });
+        }
+      } else if (
+        eventType === "subscription.disable" ||
+        eventType === "invoice.payment_failed"
+      ) {
+        if (userId) {
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          await SubscriptionLifecycleService.downgradeUserToStarter(
+            userId,
+            `PAYSTACK_${eventType.toUpperCase().replace(/\./g, "_")}`,
+          );
         }
       }
     }
@@ -115,7 +131,10 @@ async function handleWebhook(
         });
 
         if (claimed && userId) {
-          await activateUserSubscription({
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          await SubscriptionLifecycleService.renewSubscription({
             userId,
             planId,
             organizationId: organizationId || undefined,
@@ -149,34 +168,53 @@ async function handleWebhook(
       const eventName = event.meta
         ? (event.meta as Record<string, unknown>).event_name
         : event.event;
+      const eventNameStr = String(eventName || "");
+
+      const data = event.data as Record<string, unknown> | undefined;
+      const orderId = (data?.id as string | undefined) || `ls_${Date.now()}`;
+      const attributes = data?.attributes as Record<string, unknown> | undefined;
+      const customData = (attributes?.custom_data || (event.meta as Record<string, unknown>)?.custom_data) as
+        | Record<string, unknown>
+        | undefined;
+      const userId = (customData?.user_id || customData?.userId) as string | undefined;
+      const organizationId = (customData?.organization_id || customData?.organizationId) as string | undefined;
+      const planId = ((customData?.plan_id || customData?.planId) as string | undefined) || "pro";
 
       if (
-        eventName === "subscription_created" ||
-        eventName === "order_created"
+        eventNameStr === "subscription_created" ||
+        eventNameStr === "order_created" ||
+        eventNameStr === "subscription_payment_success" ||
+        eventNameStr === "subscription_updated"
       ) {
-        const data = event.data as Record<string, unknown> | undefined;
-        const orderId = (data?.id as string | undefined) || `ls_${Date.now()}`;
-        const attributes = data?.attributes as Record<string, unknown> | undefined;
-        const customData = (attributes?.custom_data || (event.meta as Record<string, unknown>)?.custom_data) as
-          | Record<string, unknown>
-          | undefined;
-        const userId = (customData?.user_id || customData?.userId) as string | undefined;
-        const organizationId = (customData?.organization_id || customData?.organizationId) as string | undefined;
-        const planId = ((customData?.plan_id || customData?.planId) as string | undefined) || "pro";
-
         const claimed = await WebhookIdempotencyService.claimWebhookEvent({
           gateway: "lemonsqueezy",
           eventId: String(orderId),
-          eventType: String(eventName),
+          eventType: eventNameStr,
           payload: event,
         });
 
         if (claimed && userId) {
-          await activateUserSubscription({
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          await SubscriptionLifecycleService.renewSubscription({
             userId,
             planId,
             organizationId: organizationId || undefined,
           });
+        }
+      } else if (
+        eventNameStr === "subscription_cancelled" ||
+        eventNameStr === "subscription_expired"
+      ) {
+        if (userId) {
+          const { SubscriptionLifecycleService } = await import(
+            "@/services/subscription-lifecycle.service"
+          );
+          await SubscriptionLifecycleService.downgradeUserToStarter(
+            userId,
+            `LEMONSQUEEZY_${eventNameStr.toUpperCase()}`,
+          );
         }
       }
     }
