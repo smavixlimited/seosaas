@@ -305,6 +305,17 @@ export const SystemSettingsService = {
     return this.getSetting<AiApiSettings>("api_ai", DEFAULT_AI_APIS);
   },
 
+  /**
+   * Synchronously retrieves memory-cached AI APIs.
+   */
+  getAiApisSync(): AiApiSettings {
+    const cached = memoryCache.get("api_ai");
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.value as AiApiSettings;
+    }
+    return DEFAULT_AI_APIS;
+  },
+
   async setAiApis(
     settings: Partial<AiApiSettings>,
     updatedBy?: string,

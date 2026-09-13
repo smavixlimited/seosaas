@@ -35,80 +35,99 @@ export async function resolveActiveLlmConfig(): Promise<ResolvedLlmConfig | null
     // fallback to env
   }
 
-  // 1. OpenRouter (Default)
-  const openrouterKey =
-    aiSettings?.openrouterApiKey ||
-    (await getOptionalEnvValue("OPENROUTER_API_KEY"));
-  if (openrouterKey && openrouterKey.trim().length > 0) {
+  // 1. Explicitly configured keys from Admin / SystemSettings (Highest Priority)
+  if (aiSettings?.openaiApiKey && aiSettings.openaiApiKey.trim().length > 0) {
     const modelId =
-      aiSettings?.defaultModel ||
-      (await getOptionalEnvValue("OPENROUTER_MODEL")) ||
-      DEFAULT_CHAT_AGENT_MODEL;
-    return {
-      provider: "openrouter",
-      apiKey: openrouterKey.trim(),
-      modelId,
-    };
-  }
-
-  // 2. OpenAI
-  const openaiKey =
-    aiSettings?.openaiApiKey ||
-    (await getOptionalEnvValue("OPENAI_API_KEY"));
-  if (openaiKey && openaiKey.trim().length > 0) {
-    const modelId =
-      (aiSettings?.defaultModel &&
+      (aiSettings.defaultModel &&
       (aiSettings.defaultModel.startsWith("gpt-") ||
         aiSettings.defaultModel.startsWith("o1") ||
-        aiSettings.defaultModel.startsWith("o3"))
+        aiSettings.defaultModel.startsWith("o3")))
         ? aiSettings.defaultModel
-        : null) ||
-      (await getOptionalEnvValue("OPENAI_MODEL")) ||
-      "gpt-4o-mini";
+        : "gpt-4o-mini";
     return {
       provider: "openai",
-      apiKey: openaiKey.trim(),
+      apiKey: aiSettings.openaiApiKey.trim(),
       modelId,
       baseURL: "https://api.openai.com/v1",
     };
   }
 
-  // 3. Google Gemini
-  const geminiKey =
-    aiSettings?.geminiApiKey ||
-    (await getOptionalEnvValue("GEMINI_API_KEY")) ||
-    (await getOptionalEnvValue("GOOGLE_GENERATIVE_AI_API_KEY"));
-  if (geminiKey && geminiKey.trim().length > 0) {
+  if (aiSettings?.openrouterApiKey && aiSettings.openrouterApiKey.trim().length > 0) {
+    const modelId = aiSettings.defaultModel || DEFAULT_CHAT_AGENT_MODEL;
+    return {
+      provider: "openrouter",
+      apiKey: aiSettings.openrouterApiKey.trim(),
+      modelId,
+    };
+  }
+
+  if (aiSettings?.geminiApiKey && aiSettings.geminiApiKey.trim().length > 0) {
     const modelId =
-      (aiSettings?.defaultModel &&
-      aiSettings.defaultModel.startsWith("gemini-")
+      (aiSettings.defaultModel && aiSettings.defaultModel.startsWith("gemini-"))
         ? aiSettings.defaultModel
-        : null) ||
-      (await getOptionalEnvValue("GEMINI_MODEL")) ||
-      "gemini-2.0-flash";
+        : "gemini-2.0-flash";
     return {
       provider: "gemini",
-      apiKey: geminiKey.trim(),
+      apiKey: aiSettings.geminiApiKey.trim(),
       modelId,
       baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
     };
   }
 
-  // 4. Anthropic
-  const anthropicKey =
-    aiSettings?.anthropicApiKey ||
-    (await getOptionalEnvValue("ANTHROPIC_API_KEY"));
-  if (anthropicKey && anthropicKey.trim().length > 0) {
+  if (aiSettings?.anthropicApiKey && aiSettings.anthropicApiKey.trim().length > 0) {
     const modelId =
-      (aiSettings?.defaultModel &&
-      aiSettings.defaultModel.startsWith("claude-")
+      (aiSettings.defaultModel && aiSettings.defaultModel.startsWith("claude-"))
         ? aiSettings.defaultModel
-        : null) ||
-      (await getOptionalEnvValue("ANTHROPIC_MODEL")) ||
-      "claude-3-5-sonnet";
+        : "claude-3-5-sonnet";
     return {
       provider: "anthropic",
-      apiKey: anthropicKey.trim(),
+      apiKey: aiSettings.anthropicApiKey.trim(),
+      modelId,
+    };
+  }
+
+  // 2. Fallbacks from Environment Variables
+  const openaiEnv = await getOptionalEnvValue("OPENAI_API_KEY");
+  if (openaiEnv && openaiEnv.trim().length > 0) {
+    const modelId = (await getOptionalEnvValue("OPENAI_MODEL")) || "gpt-4o-mini";
+    return {
+      provider: "openai",
+      apiKey: openaiEnv.trim(),
+      modelId,
+      baseURL: "https://api.openai.com/v1",
+    };
+  }
+
+  const openrouterEnv = await getOptionalEnvValue("OPENROUTER_API_KEY");
+  if (openrouterEnv && openrouterEnv.trim().length > 0 && !openrouterEnv.includes("placeholder")) {
+    const modelId =
+      (await getOptionalEnvValue("OPENROUTER_MODEL")) || DEFAULT_CHAT_AGENT_MODEL;
+    return {
+      provider: "openrouter",
+      apiKey: openrouterEnv.trim(),
+      modelId,
+    };
+  }
+
+  const geminiEnv =
+    (await getOptionalEnvValue("GEMINI_API_KEY")) ||
+    (await getOptionalEnvValue("GOOGLE_GENERATIVE_AI_API_KEY"));
+  if (geminiEnv && geminiEnv.trim().length > 0) {
+    const modelId = (await getOptionalEnvValue("GEMINI_MODEL")) || "gemini-2.0-flash";
+    return {
+      provider: "gemini",
+      apiKey: geminiEnv.trim(),
+      modelId,
+      baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
+    };
+  }
+
+  const anthropicEnv = await getOptionalEnvValue("ANTHROPIC_API_KEY");
+  if (anthropicEnv && anthropicEnv.trim().length > 0) {
+    const modelId = (await getOptionalEnvValue("ANTHROPIC_MODEL")) || "claude-3-5-sonnet";
+    return {
+      provider: "anthropic",
+      apiKey: anthropicEnv.trim(),
       modelId,
     };
   }

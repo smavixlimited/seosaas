@@ -21,6 +21,7 @@ import {
 import { SamSessionRepository } from "@/server/features/sam/SamSessionRepository";
 import { ProjectContextService } from "@/server/features/project-context/services/ProjectContextService";
 import { ProjectRepository } from "@/server/features/projects/repositories/ProjectRepository";
+import { SystemSettingsService } from "@/services/system-settings.service";
 import { buildSamMcpTools } from "@/server/features/sam/samChatTools";
 import { buildSamSkillSource } from "@/server/features/sam/samSkills";
 import { buildSamSystemPrompt } from "@/server/features/sam/samSystemPrompt";
@@ -126,14 +127,41 @@ export class SamChatAgent extends Think {
   }
 
   getModel() {
-    const openrouterKey = getEnvValueSync(this.env, "OPENROUTER_API_KEY");
-    if (openrouterKey && openrouterKey.trim().length > 0) {
-      return buildChatAgentModel(
-        openrouterKey.trim(),
-        getEnvValueSync(this.env, "OPENROUTER_MODEL"),
-      );
-    }
+    // 1. Check SystemSettings dynamic configuration (configured in Admin Dashboard)
+    try {
+      const aiSettings = SystemSettingsService.getAiApisSync();
+      if (aiSettings?.openaiApiKey && aiSettings.openaiApiKey.trim().length > 0) {
+        const modelId =
+          (aiSettings.defaultModel &&
+          (aiSettings.defaultModel.startsWith("gpt-") ||
+            aiSettings.defaultModel.startsWith("o1") ||
+            aiSettings.defaultModel.startsWith("o3")))
+            ? aiSettings.defaultModel
+            : "gpt-4o-mini";
+        return buildChatAgentModel(
+          aiSettings.openaiApiKey.trim(),
+          modelId,
+          "https://api.openai.com/v1",
+        );
+      }
 
+      if (aiSettings?.openrouterApiKey && aiSettings.openrouterApiKey.trim().length > 0) {
+        return buildChatAgentModel(
+          aiSettings.openrouterApiKey.trim(),
+          aiSettings.defaultModel || "anthropic/claude-3.5-sonnet",
+        );
+      }
+
+      if (aiSettings?.geminiApiKey && aiSettings.geminiApiKey.trim().length > 0) {
+        return buildChatAgentModel(
+          aiSettings.geminiApiKey.trim(),
+          aiSettings.defaultModel || "gemini-2.0-flash",
+          "https://generativelanguage.googleapis.com/v1beta/openai",
+        );
+      }
+    } catch {}
+
+    // 2. Check OpenAI from env
     const openaiKey = getEnvValueSync(this.env, "OPENAI_API_KEY");
     if (openaiKey && openaiKey.trim().length > 0) {
       return buildChatAgentModel(
@@ -143,6 +171,20 @@ export class SamChatAgent extends Think {
       );
     }
 
+    // 3. Check OpenRouter from env (ignore dummy/placeholder strings)
+    const openrouterKey = getEnvValueSync(this.env, "OPENROUTER_API_KEY");
+    if (
+      openrouterKey &&
+      openrouterKey.trim().length > 0 &&
+      !openrouterKey.includes("placeholder")
+    ) {
+      return buildChatAgentModel(
+        openrouterKey.trim(),
+        getEnvValueSync(this.env, "OPENROUTER_MODEL"),
+      );
+    }
+
+    // 4. Check Gemini from env
     const geminiKey =
       getEnvValueSync(this.env, "GEMINI_API_KEY") ??
       getEnvValueSync(this.env, "GOOGLE_GENERATIVE_AI_API_KEY");
@@ -154,9 +196,9 @@ export class SamChatAgent extends Think {
       );
     }
 
-    // Graceful fallback when no key is configured yet in environment
+    // Graceful fallback when no key is configured yet
     return staticAssistantModel(
-      "👋 Hello! I am Skorvia AI, your Brand Growth Coach, CMO & Search Strategist.\n\nTo enable full live AI responses and real-time execution of MCP tools, please configure your `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, or `GEMINI_API_KEY` in your `.env` configuration or System Settings.",
+      "👋 Hello! I am Skorvia AI, your Brand Growth Coach, CMO & Search Strategist.\n\nTo enable full live AI responses and real-time execution of MCP tools, please configure your `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, or `GEMINI_API_KEY` in System Settings or environment variables.",
     );
   }
 
@@ -209,6 +251,9 @@ export class SamChatAgent extends Think {
   }
 
   private async loadSamContext(): Promise<SamContext | null> {
+    try {
+      await SystemSettingsService.getAiApis();
+    } catch {}
     if (this.samContext) return this.samContext;
     const row = await SamSessionRepository.getSessionById(this.name);
     if (!row) return null;

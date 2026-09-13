@@ -110,6 +110,23 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
     }
   }, [localQuery.data]);
 
+  // Auto-open profile selector if returning from Google Business Profile OAuth
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("gbp_connected") === "1") {
+        setIsOAuthModalOpen(true);
+        setOauthStep("select");
+        toast.success(
+          "Google account authorized! Select your Business Profile below to finish connecting.",
+        );
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete("gbp_connected");
+        window.history.replaceState({}, document.title, newUrl.toString());
+      }
+    }
+  }, []);
+
   // Handle Google Places Search Debounce
   React.useEffect(() => {
     if (!searchQuery.trim() || searchQuery.trim().length < 2) {
@@ -430,9 +447,11 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
   const handleStartGoogleOAuth = async () => {
     setOauthStep("detecting");
     try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("gbp_connected", "1");
       const res = await startGbpOAuthServerFn({
         data: {
-          callbackURL: window.location.href,
+          callbackURL: url.toString(),
         },
       });
       if (res?.authUrl) {
