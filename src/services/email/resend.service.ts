@@ -12,30 +12,43 @@ export interface SendEmailOptions {
 }
 
 export async function resolveResendApiKey(): Promise<string | null> {
-  if (typeof process !== "undefined" && process.env?.RESEND_API_KEY) {
-    return process.env.RESEND_API_KEY.trim();
-  }
   try {
     const { SystemSettingsService } = await import(
       "@/services/system-settings.service"
     );
-    const emailSettings = await SystemSettingsService.getSetting<{
-      resendApiKey?: string;
-    }>("email_apis", {});
-    if (emailSettings.resendApiKey?.trim()) {
-      return emailSettings.resendApiKey.trim();
+    const commsSettings = await SystemSettingsService.getCommunicationsApis();
+    if (commsSettings?.resendApiKey?.trim()) {
+      return commsSettings.resendApiKey.trim();
     }
   } catch {}
+
+  if (typeof process !== "undefined" && process.env?.RESEND_API_KEY) {
+    return process.env.RESEND_API_KEY.trim();
+  }
+
   return null;
+}
+
+export async function resolveSenderAddress(fallback?: string): Promise<string> {
+  try {
+    const { SystemSettingsService } = await import(
+      "@/services/system-settings.service"
+    );
+    const comms = await SystemSettingsService.getCommunicationsApis();
+    if (comms?.senderEmail?.trim()) {
+      const name = comms.senderName?.trim() || BRAND_CONFIG.name;
+      return `${name} <${comms.senderEmail.trim()}>`;
+    }
+  } catch {}
+
+  return fallback || `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
 }
 
 export async function sendResendEmail(
   options: SendEmailOptions,
 ): Promise<{ success: boolean; id?: string; error?: string }> {
   const apiKey = await resolveResendApiKey();
-  const fromAddress =
-    options.from ||
-    `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
+  const fromAddress = options.from || (await resolveSenderAddress());
 
   if (!apiKey) {
     console.info("[Resend Email Mock/Dev]", {
