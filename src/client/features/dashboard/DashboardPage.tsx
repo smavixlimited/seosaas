@@ -18,7 +18,6 @@ import { McpConnectCard } from "@/client/features/dashboard/McpConnectCard";
 import { WorkspaceMergeBanner } from "@/client/features/dashboard/WorkspaceMergeBanner";
 import { VenixKpiCards } from "@/client/features/dashboard/VenixKpiCards";
 import { getStandardErrorMessage } from "@/client/lib/error-messages";
-import { AdReadinessScoreWidget } from "@/client/features/overview/AdReadinessScoreWidget";
 import type { DashboardActivation } from "@/server/features/dashboard/services/DashboardService";
 import {
   getDashboardActivation,

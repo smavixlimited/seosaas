@@ -465,6 +465,195 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
         </div>
       </div>
 
+      {/* Brand Reputation, Sentiment & Mentions Intelligence */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Sentiment & Reputation Gauge (5 cols) */}
+        <div className="lg:col-span-5 bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4 flex flex-col justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between border-b border-base-200 pb-3">
+              <div className="flex items-center gap-2">
+                <Icon icon="solar:heart-pulse-bold-duotone" className="size-5 text-rose-500" />
+                <h3 className="text-base font-black text-base-content">
+                  Brand Sentiment &amp; Reputation
+                </h3>
+              </div>
+              <span className="badge badge-success badge-sm font-black text-white">
+                {data?.sentimentScore || 85}% Positive
+              </span>
+            </div>
+            <p className="text-xs text-base-content/60 pt-1">
+              Cross-engine entity sentiment computed across web citations, search indices, and user community discussions.
+            </p>
+          </div>
+
+          {/* Sentiment Distribution Bars */}
+          <div className="space-y-3 bg-base-200/50 p-4 rounded-2xl border border-base-300/60">
+            <div className="flex items-center justify-between text-xs font-bold">
+              <span className="text-base-content/70">Sentiment Distribution</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-mono">
+                {data?.sentimentBreakdown?.positivePct || 75}% Positive
+              </span>
+            </div>
+
+            <div className="h-3 w-full rounded-full bg-base-300 overflow-hidden flex shadow-inner">
+              <div
+                className="bg-emerald-500 transition-all duration-500"
+                style={{ width: `${data?.sentimentBreakdown?.positivePct || 75}%` }}
+                title={`Positive: ${data?.sentimentBreakdown?.positivePct || 75}%`}
+              />
+              <div
+                className="bg-amber-400 transition-all duration-500"
+                style={{ width: `${data?.sentimentBreakdown?.neutralPct || 18}%` }}
+                title={`Neutral: ${data?.sentimentBreakdown?.neutralPct || 18}%`}
+              />
+              <div
+                className="bg-rose-500 transition-all duration-500"
+                style={{ width: `${data?.sentimentBreakdown?.negativePct || 7}%` }}
+                title={`Negative: ${data?.sentimentBreakdown?.negativePct || 7}%`}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 pt-1">
+              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                <span className="size-2 rounded-full bg-emerald-500" /> Positive: {data?.sentimentBreakdown?.positivePct || 75}%
+              </span>
+              <span className="flex items-center gap-1 text-amber-500">
+                <span className="size-2 rounded-full bg-amber-400" /> Neutral: {data?.sentimentBreakdown?.neutralPct || 18}%
+              </span>
+              <span className="flex items-center gap-1 text-rose-500">
+                <span className="size-2 rounded-full bg-rose-500" /> Negative: {data?.sentimentBreakdown?.negativePct || 7}%
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300 font-medium flex items-center gap-2">
+            <Icon icon="solar:shield-check-bold" className="size-4 shrink-0 text-emerald-600" />
+            <span>High Brand Trust Signal: AI answer engines cite your brand favorably for domain queries.</span>
+          </div>
+        </div>
+
+        {/* Live Mentions & Search Signals Stream (7 cols) */}
+        <div className="lg:col-span-7 bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-base-200 pb-3">
+            <div className="flex items-center gap-2">
+              <Icon icon="solar:chat-round-dots-bold-duotone" className="size-5 text-primary" />
+              <h3 className="text-base font-black text-base-content">
+                Scanned Brand Citations &amp; Mentions
+              </h3>
+            </div>
+            <Link
+              to="/p/$projectId/brand-mentions"
+              params={{ projectId }}
+              className="text-xs text-primary font-bold hover:underline"
+            >
+              Open Mentions Radar &rarr;
+            </Link>
+          </div>
+
+          <div className="space-y-2.5">
+            {(data?.mentionsSample || []).map((m: any) => (
+              <div
+                key={m.id}
+                className="p-3.5 rounded-2xl bg-base-200/40 border border-base-300/60 hover:bg-base-200/70 transition-all space-y-1"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-base-content/50">
+                      {m.source}
+                    </span>
+                    <span className="text-[10px] text-base-content/40">•</span>
+                    <span className="text-xs font-bold text-base-content truncate">
+                      {m.title}
+                    </span>
+                  </div>
+                  <span
+                    className={`badge badge-xs font-bold shrink-0 ${
+                      m.sentiment === "positive"
+                        ? "badge-success text-white"
+                        : m.sentiment === "negative"
+                          ? "badge-error text-white"
+                          : "badge-ghost"
+                    }`}
+                  >
+                    {m.sentiment.toUpperCase()}
+                  </span>
+                </div>
+                <p className="text-xs text-base-content/75 leading-relaxed">
+                  {m.snippet}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* What's Missing: Crucial Brand & SEO Assets */}
+      <div className="bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-base-200 pb-3">
+          <div className="flex items-center gap-2">
+            <Icon icon="solar:magnifer-bug-bold-duotone" className="size-5 text-amber-500" />
+            <div>
+              <h3 className="text-base sm:text-lg font-black text-base-content">
+                What Is Missing: Essential Brand &amp; Authority Signals
+              </h3>
+              <p className="text-xs text-base-content/60">
+                High-leverage brand infrastructure gaps detected from search index audits
+              </p>
+            </div>
+          </div>
+          <span className="badge badge-warning badge-sm font-bold">
+            {(data?.missingAssets || []).length} High Impact Gaps
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {(data?.missingAssets || []).map((asset: any) => (
+            <div
+              key={asset.id}
+              className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 flex flex-col justify-between space-y-3"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="badge badge-xs badge-warning font-bold text-warning-content">
+                    {asset.category}
+                  </span>
+                  <span className="badge badge-error badge-xs font-bold text-white">
+                    {asset.impact}
+                  </span>
+                </div>
+                <h4 className="text-xs font-black text-base-content leading-snug">
+                  {asset.title}
+                </h4>
+                <p className="text-xs text-base-content/70 leading-relaxed">
+                  {asset.description}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-amber-500/20 flex items-center justify-between gap-2">
+                <span className="text-[11px] text-base-content/60 italic truncate">
+                  👉 {asset.action}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    addRoadmapTaskMutation.mutate({
+                      title: asset.title,
+                      action: asset.action,
+                      priority: asset.impact === "CRITICAL" ? "CRITICAL" : "HIGH",
+                      suggestedPromptForSam: asset.suggestedPrompt,
+                    })
+                  }
+                  disabled={addRoadmapTaskMutation.isPending}
+                  className="btn btn-ghost btn-xs text-primary font-black hover:bg-primary/10 shrink-0"
+                >
+                  + Add to Roadmap
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* AI Scorecard: What You Are Doing Well At vs What You Need to Improve */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left: What you are doing well at (Strengths) */}

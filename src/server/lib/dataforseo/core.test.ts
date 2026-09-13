@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/server/lib/runtime-env", () => ({
-  getRequiredEnvValue: vi.fn().mockResolvedValue("encoded-credentials"),
+  getRequiredEnvValue: vi.fn(async () => "encoded-credentials"),
+  getOptionalEnvValue: vi.fn(async () => "encoded-credentials"),
 }));
 
 import { onPageApi } from "@/server/lib/dataforseo/core";

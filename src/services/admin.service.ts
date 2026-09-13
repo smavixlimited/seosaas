@@ -22,7 +22,15 @@ const SUPERADMIN_EMAILS = [
 
 export function isSuperAdminEmail(email?: string | null): boolean {
   if (!email) return false;
-  return SUPERADMIN_EMAILS.includes(email.toLowerCase());
+  const cleanEmail = email.toLowerCase().trim();
+  if (SUPERADMIN_EMAILS.includes(cleanEmail)) return true;
+
+  const envAdmins = (process.env.ADMIN_EMAILS || process.env.SUPERADMIN_EMAIL || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  return envAdmins.includes(cleanEmail);
 }
 
 export async function isUserSuperAdmin(userId: string): Promise<boolean> {

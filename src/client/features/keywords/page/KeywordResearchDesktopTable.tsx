@@ -21,6 +21,8 @@ import { formatNumber } from "@/client/features/keywords/utils";
 import type { KeywordResearchRow } from "@/types/keywords";
 import { EmptyFilterResults } from "./keywordResearchFilters";
 
+import { Bookmark, Star } from "lucide-react";
+
 type Props = {
   activeFilterCount: number;
   filteredRows: KeywordResearchRow[];
@@ -32,6 +34,7 @@ type Props = {
   toggleSort: (field: SortField) => void;
   resetFilters: () => void;
   handleRowClick: (row: KeywordResearchRow) => void;
+  onSaveSingleKeyword?: (row: KeywordResearchRow) => void;
 };
 
 const keywordColumnHelper = createColumnHelper<KeywordResearchRow>();
@@ -47,6 +50,7 @@ export function KeywordResearchDesktopTable({
   toggleSort,
   resetFilters,
   handleRowClick,
+  onSaveSingleKeyword,
 }: Props) {
   const selectAnchorRef = useSelectionAnchor();
   const rowSelection = useMemo<RowSelectionState>(
@@ -71,12 +75,27 @@ export function KeywordResearchDesktopTable({
           />
         ),
         cell: ({ row }) => (
-          <span
-            className="block min-w-48 whitespace-normal break-words font-medium capitalize md:min-w-0 md:truncate"
-            title={row.original.keyword}
-          >
-            {row.original.keyword}
-          </span>
+          <div className="flex items-center gap-2 min-w-48 md:min-w-0">
+            {onSaveSingleKeyword ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSaveSingleKeyword(row.original);
+                }}
+                className="btn btn-ghost btn-xs btn-circle text-base-content/40 hover:text-primary hover:bg-primary/10 transition-colors shrink-0"
+                title="Save keyword to project"
+              >
+                <Bookmark className="size-3.5" />
+              </button>
+            ) : null}
+            <span
+              className="block whitespace-normal break-words font-medium capitalize md:min-w-0 md:truncate"
+              title={row.original.keyword}
+            >
+              {row.original.keyword}
+            </span>
+          </div>
         ),
         meta: {
           headerClassName: "min-w-48 md:min-w-0",

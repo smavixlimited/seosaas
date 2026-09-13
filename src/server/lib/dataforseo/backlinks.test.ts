@@ -3,6 +3,7 @@ import { AppError } from "@/server/lib/errors";
 
 vi.mock("@/server/lib/runtime-env", () => ({
   getRequiredEnvValue: vi.fn(async () => "test-api-key"),
+  getOptionalEnvValue: vi.fn(async () => "test-api-key"),
 }));
 
 const { classifyBacklinksError } = vi.hoisted(() => ({

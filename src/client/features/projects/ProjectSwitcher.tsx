@@ -98,7 +98,8 @@ export function ProjectSwitcher({
         match.fullPath
           .split("/")
           .every(
-            (segment) => !segment.startsWith("$") || segment === "$projectId",
+            (segment: string) =>
+              !segment.startsWith("$") || segment === "$projectId",
           ),
     );
     // Navigating by href keeps typed-route generics out of a dynamic target

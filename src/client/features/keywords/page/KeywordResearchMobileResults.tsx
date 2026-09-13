@@ -228,6 +228,7 @@ function MobileKeywordResults({ controller }: Props) {
         toggleSort={controller.toggleSort}
         resetFilters={controller.resetFilters}
         handleRowClick={controller.handleRowClick}
+        onSaveSingleKeyword={controller.saveSingleKeyword}
       />
       {filteredRows.length > 0 ? (
         <KeywordResearchPagination

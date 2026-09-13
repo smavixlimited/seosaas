@@ -229,32 +229,32 @@ export function SkorviaOnboardingWizard({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto rounded-3xl border border-base-300 bg-base-100 p-6 sm:p-10 shadow-2xl space-y-6">
+    <div className="w-full max-w-2xl mx-auto rounded-3xl border border-base-300 bg-base-100 p-4 sm:p-6 md:p-10 shadow-2xl space-y-6 overflow-hidden">
       {/* Top Header */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             <img
               src={BRAND_CONFIG.logoUrl}
               alt={BRAND_CONFIG.name}
-              className="h-8 w-8 rounded-xl object-contain ring-1 ring-primary/20 shadow-xs"
+              className="h-8 w-8 rounded-xl object-contain ring-1 ring-primary/20 shadow-xs shrink-0"
             />
-            <div>
-              <span className="text-base font-black tracking-tight text-base-content block">
+            <div className="min-w-0">
+              <span className="text-sm sm:text-base font-black tracking-tight text-base-content block truncate">
                 {BRAND_CONFIG.name} Brand Onboarding
               </span>
-              <span className="text-[11px] text-base-content/60 font-medium">
-                Tailored AI Visibility & Competitor Intelligence Setup
+              <span className="text-[10px] sm:text-[11px] text-base-content/60 font-medium block truncate">
+                Tailored AI Visibility & Competitor Setup
               </span>
             </div>
           </div>
-          <span className="badge badge-primary badge-sm font-black rounded-lg text-xs">
+          <span className="badge badge-primary badge-sm font-black rounded-lg text-xs shrink-0">
             Step {step} of 4
           </span>
         </div>
 
         {/* Step Indicator Grid */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
           {[
             { num: 1, label: "Business", icon: "solar:shop-2-bold-duotone" },
             {
@@ -271,7 +271,7 @@ export function SkorviaOnboardingWizard({
           ].map((s) => (
             <div
               key={s.num}
-              className={`flex items-center gap-2 rounded-2xl p-2.5 text-xs font-bold transition-all ${
+              className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 text-xs font-bold transition-all ${
                 step === s.num
                   ? "bg-primary text-white shadow-md shadow-primary/20"
                   : step > s.num

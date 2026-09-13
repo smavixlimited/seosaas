@@ -161,7 +161,40 @@ export function useSaveAndExportActions(params: SaveExportActionParams) {
     });
   };
 
-  return { handleSaveKeywords, confirmSave, exportCsv, sheetsExportRows };
+  const saveSingleKeyword = (row: KeywordResearchRow) => {
+    saveKeywordsMutate(
+      {
+        projectId: input.projectId,
+        keywords: [row.keyword],
+        locationCode: input.locationCode,
+        metrics: [
+          {
+            keyword: row.keyword,
+            searchVolume: row.searchVolume,
+            cpc: row.cpc,
+            competition: row.competition,
+            keywordDifficulty: row.keywordDifficulty,
+            intent: row.intent,
+            monthlySearches: row.trend,
+          },
+        ],
+      },
+      {
+        onSuccess: () => {
+          captureClientEvent("keyword:save", {
+            source_feature: "keyword_research",
+            keyword_count: 1,
+          });
+          toast.success(`Saved "${row.keyword}" to project!`);
+        },
+        onError: (error: unknown) => {
+          toast.error(getStandardErrorMessage(error, "Save failed."));
+        },
+      },
+    );
+  };
+
+  return { handleSaveKeywords, confirmSave, saveSingleKeyword, exportCsv, sheetsExportRows };
 }
 
 export function downloadKeywordResearchCsv(rows: CsvValue[][]) {

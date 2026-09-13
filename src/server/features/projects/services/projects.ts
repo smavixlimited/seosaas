@@ -110,7 +110,7 @@ export async function createProject(
 ) {
   try {
     // 1. Enforce maxDomains limit based on active plan tier
-    const existing = await ProjectRepository.listProjects(organizationId);
+    const existing = (await ProjectRepository.listProjects(organizationId)) ?? [];
     let maxDomains = 5;
     let planName = "Starter Plan";
 

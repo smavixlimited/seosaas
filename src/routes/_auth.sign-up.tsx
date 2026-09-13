@@ -48,6 +48,13 @@ const signUpSchema = z
 
 export const Route = createFileRoute("/_auth/sign-up")({
   validateSearch: authRedirectSearchSchema,
+  loader: async () => {
+    try {
+      return await getRegistrationStatus();
+    } catch {
+      return { enabled: true };
+    }
+  },
   component: SignUpPage,
 });
 
@@ -70,6 +77,7 @@ function calculatePasswordStrength(pass: string): {
 }
 
 function SignUpPage() {
+  const loaderData = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = useNavigate();
   const { redirectTo, isHostedMode } = useAuthPageState(search.redirect);
@@ -80,6 +88,7 @@ function SignUpPage() {
   const registrationQuery = useQuery({
     queryKey: ["publicRegistrationStatus"],
     queryFn: () => getRegistrationStatus(),
+    initialData: loaderData,
   });
 
   const isTurnstileEnabled = isHostedMode && Boolean(TURNSTILE_SITE_KEY);

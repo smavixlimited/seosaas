@@ -123,14 +123,14 @@ export function AuthenticatedAppLayout({
   }, [shouldShowMissingSeoApiKeyModal]);
 
   return (
-    <div className="flex h-[100dvh] bg-base-200/60 overflow-hidden">
+    <div className="flex h-[100dvh] w-full max-w-full bg-base-200/60 overflow-hidden">
       {/* Desktop Venix Sidebar */}
       <div className="hidden shrink-0 md:block">
         <Sidebar projectId={sidebarProjectId} />
       </div>
 
       {/* Main Content Area with Venix TopBar */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-w-0 max-w-full flex-1 flex-col overflow-hidden">
         <VenixTopBar
           projectId={sidebarProjectId}
           onToggleSidebar={() => setDrawerOpen((prev) => !prev)}
@@ -145,7 +145,9 @@ export function AuthenticatedAppLayout({
 
           {banner}
 
-          <div className="min-h-0 flex-1 overflow-auto">{children}</div>
+          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden w-full max-w-full">
+            {children}
+          </div>
         </div>
       </div>
 

@@ -71,7 +71,7 @@ const projectNavItems = [
     solarIcon: "icon-park-outline:chart-line",
   },
 
-  // 2. BRAND & AD READINESS
+  // 2. BRAND INTELLIGENCE
   {
     to: "/p/$projectId/brand-analysis" as const,
     label: "Brand Analysis",
@@ -80,32 +80,6 @@ const projectNavItems = [
     icon: Gauge,
     solarIcon: "icon-park-outline:badge-two",
   },
-  {
-    to: "/p/$projectId/ad-readiness" as const,
-    label: "Ad & Conversion Gate",
-    benefit:
-      "Pre-Ad Verification: Audit landing page speed, conversion pixels, CTA clarity, trust signals & ad spend waste risk before launching campaigns.",
-    icon: Target,
-    solarIcon: "icon-park-outline:target",
-  },
-  {
-    to: "/p/$projectId/viral-detector" as const,
-    label: "Viral Hooks & Scripts",
-    benefit:
-      "Generate high-converting organic video hooks (TikTok, Reels, Shorts), contrarian Twitter/X threads, and viral frameworks tailored to your brand.",
-    icon: Flame,
-    solarIcon: "icon-park-outline:fire",
-  },
-  {
-    to: "/p/$projectId/trends-radar" as const,
-    label: "Trending Topics & Questions",
-    benefit:
-      "Explore real-time search trends, question clusters (Who, What, Where, When, Why, How, Comparisons, Prepositions), and Google Trends breakout velocity.",
-    icon: Sparkles,
-    solarIcon: "icon-park-outline:chart-line",
-  },
-
-
 
   // 3. COMPETITOR INTELLIGENCE
   {
@@ -301,13 +275,10 @@ export function getProjectNavGroups(projectId: string) {
       ],
     },
     {
-      label: "Brand & Ad Readiness",
+      label: "Brand Intelligence",
       solarIcon: "icon-park-outline:badge-two",
       items: [
         byPath("/p/$projectId/brand-analysis"),
-        byPath("/p/$projectId/ad-readiness"),
-        byPath("/p/$projectId/viral-detector"),
-        byPath("/p/$projectId/trends-radar"),
       ],
     },
 

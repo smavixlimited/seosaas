@@ -225,7 +225,7 @@ export function CompetitorAnalysisDecoder({
           </div>
           <div>
             <h3 className="text-base font-bold text-base-content">
-              Analyzing & Decoding Competitor Strategy...
+              Analyzing &amp; Decoding Competitor Strategy...
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
               Scraping landing pages, pulling search ranking footprints, and
@@ -233,7 +233,31 @@ export function CompetitorAnalysisDecoder({
             </p>
           </div>
         </div>
-      ) : !teardown ? (
+      ) : teardownQuery.isError ? (
+        <div className="rounded-3xl border border-error/30 bg-error/5 p-10 text-center space-y-4 shadow-xs">
+          <div className="mx-auto w-14 h-14 rounded-2xl bg-error/10 text-error flex items-center justify-center">
+            <Icon icon="solar:danger-triangle-bold-duotone" className="h-7 w-7" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-base-content">
+              Unable to Complete Teardown for {cleanDomain}
+            </h3>
+            <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
+              {teardownQuery.error instanceof Error
+                ? teardownQuery.error.message
+                : "An unexpected error occurred while analyzing the competitor domain. Please try again."}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => teardownQuery.refetch()}
+            className="btn btn-primary btn-sm rounded-xl font-bold text-xs"
+          >
+            <Icon icon="solar:refresh-bold" className="h-4 w-4" />
+            <span>Retry Analysis</span>
+          </button>
+        </div>
+      ) : !cleanDomain ? (
         <div className="rounded-3xl border border-base-300 bg-base-100 p-12 text-center space-y-4 shadow-xs">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-base-200 text-base-content/40 flex items-center justify-center">
             <Icon icon="solar:swords-bold-duotone" className="h-7 w-7" />
@@ -248,6 +272,28 @@ export function CompetitorAnalysisDecoder({
               playbook.
             </p>
           </div>
+        </div>
+      ) : !teardown ? (
+        <div className="rounded-3xl border border-base-300 bg-base-100 p-10 text-center space-y-4 shadow-xs">
+          <div className="mx-auto w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+            <Icon icon="solar:swords-bold-duotone" className="h-7 w-7" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-base-content">
+              Ready to Decode {cleanDomain}
+            </h3>
+            <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
+              Run a complete 5-pillar strategic teardown to analyze their positioning hooks, funnel angles, content moat, striking-distance keywords, and attack playbook.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => regenerateMutation.mutate()}
+            className="btn btn-primary btn-sm rounded-xl font-bold text-xs"
+          >
+            <Icon icon="solar:play-bold" className="h-4 w-4" />
+            <span>Run Strategy Teardown</span>
+          </button>
         </div>
       ) : (
         /* Teardown Content */

@@ -318,7 +318,16 @@ export class SamChatAgent extends Think {
         scopes: [MCP_SCOPE],
       };
 
+      let activeModel: any = undefined;
+      try {
+        const { getChatAgentModel } = await import("@/server/lib/openrouter");
+        activeModel = await getChatAgentModel();
+      } catch {
+        // Handled by Think's fallback to getModel()
+      }
+
       return {
+        model: activeModel,
         tools: buildSamMcpTools(authContext, {
           id: ctx.project.id,
           domain: ctx.project.domain,
