@@ -87,7 +87,7 @@ export function VenixKpiCards({
             params={{ projectId }}
             className="font-bold text-primary hover:underline"
           >
-            {hasAudit ? "Audit details &rarr;" : "Run audit &rarr;"}
+            {hasAudit ? "Audit Details" : "Run Audit"}
           </Link>
         </div>
       </div>

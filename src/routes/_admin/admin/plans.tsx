@@ -585,66 +585,6 @@ function AdminPlansPage() {
                       360° Brand Perception Analysis
                     </span>
                   </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="checkbox checkbox-primary checkbox-xs"
-                      checked={editingPlan.features.ad_readiness ?? true}
-                      onChange={(e) =>
-                        setEditingPlan({
-                          ...editingPlan,
-                          features: {
-                            ...editingPlan.features,
-                            ad_readiness: e.target.checked,
-                          },
-                        })
-                      }
-                    />
-                    <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Pre-Launch Ad &amp; Conversion Gate
-                    </span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="checkbox checkbox-primary checkbox-xs"
-                      checked={editingPlan.features.viral_detector ?? true}
-                      onChange={(e) =>
-                        setEditingPlan({
-                          ...editingPlan,
-                          features: {
-                            ...editingPlan.features,
-                            viral_detector: e.target.checked,
-                          },
-                        })
-                      }
-                    />
-                    <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Viral Video Hooks &amp; Scripts
-                    </span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="checkbox checkbox-primary checkbox-xs"
-                      checked={editingPlan.features.trends_radar ?? true}
-                      onChange={(e) =>
-                        setEditingPlan({
-                          ...editingPlan,
-                          features: {
-                            ...editingPlan.features,
-                            trends_radar: e.target.checked,
-                          },
-                        })
-                      }
-                    />
-                    <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Trending Topics &amp; Question Radar
-                    </span>
-                  </label>
                 </div>
               </div>
 

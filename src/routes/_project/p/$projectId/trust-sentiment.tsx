@@ -6,6 +6,6 @@ export const Route = createFileRoute("/_project/p/$projectId/trust-sentiment")({
 
 function TrustSentimentRoute() {
   const { projectId } = Route.useParams();
-  return <Navigate to="/p/$projectId/ad-readiness" params={{ projectId }} replace />;
+  return <Navigate to="/p/$projectId/brand-analysis" params={{ projectId }} replace />;
 }
 

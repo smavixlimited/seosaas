@@ -101,9 +101,7 @@ import { Route as ApiGscOauthCallbackRouteImport } from './routes/api/gsc/oauth/
 import { Route as ApiGbpOauthCallbackRouteImport } from './routes/api/gbp/oauth/callback'
 import { Route as ApiGa4OauthCallbackRouteImport } from './routes/api/ga4/oauth/callback'
 import { Route as ApiBillingWebhookGatewayRouteImport } from './routes/api/billing.webhook.$gateway'
-import { Route as ProjectPProjectIdViralDetectorRouteImport } from './routes/_project/p/$projectId/viral-detector'
 import { Route as ProjectPProjectIdTrustSentimentRouteImport } from './routes/_project/p/$projectId/trust-sentiment'
-import { Route as ProjectPProjectIdTrendsRadarRouteImport } from './routes/_project/p/$projectId/trends-radar'
 import { Route as ProjectPProjectIdSettingsRouteImport } from './routes/_project/p/$projectId/settings'
 import { Route as ProjectPProjectIdSearchPerformanceRouteImport } from './routes/_project/p/$projectId/search-performance'
 import { Route as ProjectPProjectIdScraperRouteImport } from './routes/_project/p/$projectId/scraper'
@@ -125,7 +123,6 @@ import { Route as ProjectPProjectIdBrandAnalysisRouteImport } from './routes/_pr
 import { Route as ProjectPProjectIdBacklinksRouteImport } from './routes/_project/p/$projectId/backlinks'
 import { Route as ProjectPProjectIdAuditRouteImport } from './routes/_project/p/$projectId/audit'
 import { Route as ProjectPProjectIdAdvancedAnalyticsRouteImport } from './routes/_project/p/$projectId/advanced-analytics'
-import { Route as ProjectPProjectIdAdReadinessRouteImport } from './routes/_project/p/$projectId/ad-readiness'
 import { Route as AppDashboardSettingsSecurityRouteImport } from './routes/_app/dashboard/settings/security'
 import { Route as AdminAdminSettingsSecurityRouteImport } from './routes/_admin/admin/settings/security'
 import { Route as AdminAdminSettingsBrandingRouteImport } from './routes/_admin/admin/settings/branding'
@@ -604,22 +601,10 @@ const ApiBillingWebhookGatewayRoute =
     path: '/api/billing/webhook/$gateway',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ProjectPProjectIdViralDetectorRoute =
-  ProjectPProjectIdViralDetectorRouteImport.update({
-    id: '/viral-detector',
-    path: '/viral-detector',
-    getParentRoute: () => ProjectPProjectIdRouteRoute,
-  } as any)
 const ProjectPProjectIdTrustSentimentRoute =
   ProjectPProjectIdTrustSentimentRouteImport.update({
     id: '/trust-sentiment',
     path: '/trust-sentiment',
-    getParentRoute: () => ProjectPProjectIdRouteRoute,
-  } as any)
-const ProjectPProjectIdTrendsRadarRoute =
-  ProjectPProjectIdTrendsRadarRouteImport.update({
-    id: '/trends-radar',
-    path: '/trends-radar',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
 const ProjectPProjectIdSettingsRoute =
@@ -742,12 +727,6 @@ const ProjectPProjectIdAdvancedAnalyticsRoute =
   ProjectPProjectIdAdvancedAnalyticsRouteImport.update({
     id: '/advanced-analytics',
     path: '/advanced-analytics',
-    getParentRoute: () => ProjectPProjectIdRouteRoute,
-  } as any)
-const ProjectPProjectIdAdReadinessRoute =
-  ProjectPProjectIdAdReadinessRouteImport.update({
-    id: '/ad-readiness',
-    path: '/ad-readiness',
     getParentRoute: () => ProjectPProjectIdRouteRoute,
   } as any)
 const AppDashboardSettingsSecurityRoute =
@@ -909,7 +888,6 @@ export interface FileRoutesByFullPath {
   '/admin/settings/branding': typeof AdminAdminSettingsBrandingRoute
   '/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
-  '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
@@ -931,9 +909,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
-  '/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
-  '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
@@ -1034,7 +1010,6 @@ export interface FileRoutesByTo {
   '/admin/settings/branding': typeof AdminAdminSettingsBrandingRoute
   '/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
-  '/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
   '/p/$projectId/brand-analysis': typeof ProjectPProjectIdBrandAnalysisRoute
@@ -1053,9 +1028,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/saved': typeof ProjectPProjectIdSavedRoute
   '/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
-  '/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
-  '/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
@@ -1163,7 +1136,6 @@ export interface FileRoutesById {
   '/_admin/admin/settings/branding': typeof AdminAdminSettingsBrandingRoute
   '/_admin/admin/settings/security': typeof AdminAdminSettingsSecurityRoute
   '/_app/dashboard/settings/security': typeof AppDashboardSettingsSecurityRoute
-  '/_project/p/$projectId/ad-readiness': typeof ProjectPProjectIdAdReadinessRoute
   '/_project/p/$projectId/advanced-analytics': typeof ProjectPProjectIdAdvancedAnalyticsRoute
   '/_project/p/$projectId/audit': typeof ProjectPProjectIdAuditRouteWithChildren
   '/_project/p/$projectId/backlinks': typeof ProjectPProjectIdBacklinksRoute
@@ -1185,9 +1157,7 @@ export interface FileRoutesById {
   '/_project/p/$projectId/scraper': typeof ProjectPProjectIdScraperRoute
   '/_project/p/$projectId/search-performance': typeof ProjectPProjectIdSearchPerformanceRoute
   '/_project/p/$projectId/settings': typeof ProjectPProjectIdSettingsRouteWithChildren
-  '/_project/p/$projectId/trends-radar': typeof ProjectPProjectIdTrendsRadarRoute
   '/_project/p/$projectId/trust-sentiment': typeof ProjectPProjectIdTrustSentimentRoute
-  '/_project/p/$projectId/viral-detector': typeof ProjectPProjectIdViralDetectorRoute
   '/api/billing/webhook/$gateway': typeof ApiBillingWebhookGatewayRoute
   '/api/ga4/oauth/callback': typeof ApiGa4OauthCallbackRoute
   '/api/gbp/oauth/callback': typeof ApiGbpOauthCallbackRoute
@@ -1291,7 +1261,6 @@ export interface FileRouteTypes {
     | '/admin/settings/branding'
     | '/admin/settings/security'
     | '/dashboard/settings/security'
-    | '/p/$projectId/ad-readiness'
     | '/p/$projectId/advanced-analytics'
     | '/p/$projectId/audit'
     | '/p/$projectId/backlinks'
@@ -1313,9 +1282,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
     | '/p/$projectId/settings'
-    | '/p/$projectId/trends-radar'
     | '/p/$projectId/trust-sentiment'
-    | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gbp/oauth/callback'
@@ -1416,7 +1383,6 @@ export interface FileRouteTypes {
     | '/admin/settings/branding'
     | '/admin/settings/security'
     | '/dashboard/settings/security'
-    | '/p/$projectId/ad-readiness'
     | '/p/$projectId/advanced-analytics'
     | '/p/$projectId/backlinks'
     | '/p/$projectId/brand-analysis'
@@ -1435,9 +1401,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/saved'
     | '/p/$projectId/scraper'
     | '/p/$projectId/search-performance'
-    | '/p/$projectId/trends-radar'
     | '/p/$projectId/trust-sentiment'
-    | '/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gbp/oauth/callback'
@@ -1544,7 +1508,6 @@ export interface FileRouteTypes {
     | '/_admin/admin/settings/branding'
     | '/_admin/admin/settings/security'
     | '/_app/dashboard/settings/security'
-    | '/_project/p/$projectId/ad-readiness'
     | '/_project/p/$projectId/advanced-analytics'
     | '/_project/p/$projectId/audit'
     | '/_project/p/$projectId/backlinks'
@@ -1566,9 +1529,7 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/scraper'
     | '/_project/p/$projectId/search-performance'
     | '/_project/p/$projectId/settings'
-    | '/_project/p/$projectId/trends-radar'
     | '/_project/p/$projectId/trust-sentiment'
-    | '/_project/p/$projectId/viral-detector'
     | '/api/billing/webhook/$gateway'
     | '/api/ga4/oauth/callback'
     | '/api/gbp/oauth/callback'
@@ -2296,25 +2257,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBillingWebhookGatewayRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_project/p/$projectId/viral-detector': {
-      id: '/_project/p/$projectId/viral-detector'
-      path: '/viral-detector'
-      fullPath: '/p/$projectId/viral-detector'
-      preLoaderRoute: typeof ProjectPProjectIdViralDetectorRouteImport
-      parentRoute: typeof ProjectPProjectIdRouteRoute
-    }
     '/_project/p/$projectId/trust-sentiment': {
       id: '/_project/p/$projectId/trust-sentiment'
       path: '/trust-sentiment'
       fullPath: '/p/$projectId/trust-sentiment'
       preLoaderRoute: typeof ProjectPProjectIdTrustSentimentRouteImport
-      parentRoute: typeof ProjectPProjectIdRouteRoute
-    }
-    '/_project/p/$projectId/trends-radar': {
-      id: '/_project/p/$projectId/trends-radar'
-      path: '/trends-radar'
-      fullPath: '/p/$projectId/trends-radar'
-      preLoaderRoute: typeof ProjectPProjectIdTrendsRadarRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
     '/_project/p/$projectId/settings': {
@@ -2462,13 +2409,6 @@ declare module '@tanstack/react-router' {
       path: '/advanced-analytics'
       fullPath: '/p/$projectId/advanced-analytics'
       preLoaderRoute: typeof ProjectPProjectIdAdvancedAnalyticsRouteImport
-      parentRoute: typeof ProjectPProjectIdRouteRoute
-    }
-    '/_project/p/$projectId/ad-readiness': {
-      id: '/_project/p/$projectId/ad-readiness'
-      path: '/ad-readiness'
-      fullPath: '/p/$projectId/ad-readiness'
-      preLoaderRoute: typeof ProjectPProjectIdAdReadinessRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
     '/_app/dashboard/settings/security': {
@@ -2652,7 +2592,6 @@ const ProjectPProjectIdSettingsRouteWithChildren =
   )
 
 interface ProjectPProjectIdRouteRouteChildren {
-  ProjectPProjectIdAdReadinessRoute: typeof ProjectPProjectIdAdReadinessRoute
   ProjectPProjectIdAdvancedAnalyticsRoute: typeof ProjectPProjectIdAdvancedAnalyticsRoute
   ProjectPProjectIdAuditRoute: typeof ProjectPProjectIdAuditRouteWithChildren
   ProjectPProjectIdBacklinksRoute: typeof ProjectPProjectIdBacklinksRoute
@@ -2674,15 +2613,12 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdScraperRoute: typeof ProjectPProjectIdScraperRoute
   ProjectPProjectIdSearchPerformanceRoute: typeof ProjectPProjectIdSearchPerformanceRoute
   ProjectPProjectIdSettingsRoute: typeof ProjectPProjectIdSettingsRouteWithChildren
-  ProjectPProjectIdTrendsRadarRoute: typeof ProjectPProjectIdTrendsRadarRoute
   ProjectPProjectIdTrustSentimentRoute: typeof ProjectPProjectIdTrustSentimentRoute
-  ProjectPProjectIdViralDetectorRoute: typeof ProjectPProjectIdViralDetectorRoute
   ProjectPProjectIdIndexRoute: typeof ProjectPProjectIdIndexRoute
 }
 
 const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
   {
-    ProjectPProjectIdAdReadinessRoute: ProjectPProjectIdAdReadinessRoute,
     ProjectPProjectIdAdvancedAnalyticsRoute:
       ProjectPProjectIdAdvancedAnalyticsRoute,
     ProjectPProjectIdAuditRoute: ProjectPProjectIdAuditRouteWithChildren,
@@ -2708,9 +2644,7 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdSearchPerformanceRoute:
       ProjectPProjectIdSearchPerformanceRoute,
     ProjectPProjectIdSettingsRoute: ProjectPProjectIdSettingsRouteWithChildren,
-    ProjectPProjectIdTrendsRadarRoute: ProjectPProjectIdTrendsRadarRoute,
     ProjectPProjectIdTrustSentimentRoute: ProjectPProjectIdTrustSentimentRoute,
-    ProjectPProjectIdViralDetectorRoute: ProjectPProjectIdViralDetectorRoute,
     ProjectPProjectIdIndexRoute: ProjectPProjectIdIndexRoute,
   }
 

@@ -182,12 +182,18 @@ export function TemplateHero() {
                 </div>
               </div>
 
-              {/* Dashboard Preview Image */}
+              {/* Dashboard Preview Image (Dark & Light responsive) */}
               <div className="relative overflow-hidden bg-background-5">
                 <img
-                  src="/images/dashboard-preview.jpg"
+                  src="/images/dashboard-preview-light.png"
                   alt="Skorvia AI Search, SEO and Competitor Intelligence Dashboard"
-                  className="w-full h-auto object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+                  className="w-full h-auto object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.01] dark:hidden block"
+                  loading="eager"
+                />
+                <img
+                  src="/images/dashboard-preview-dark.png"
+                  alt="Skorvia AI Search, SEO and Competitor Intelligence Dashboard"
+                  className="w-full h-auto object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.01] hidden dark:block"
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background-1/30 via-transparent to-transparent pointer-events-none" />

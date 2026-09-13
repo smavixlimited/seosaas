@@ -456,31 +456,6 @@ export function DashboardPage({ projectId }: { projectId: string }) {
             </Link>
 
             <Link
-              to="/p/$projectId/ad-readiness"
-              params={{ projectId }}
-              className="group rounded-2xl border border-base-300/80 bg-base-200/40 p-4.5 hover:border-blue-500 hover:bg-base-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                    <Icon icon="icon-park-outline:ranking" className="h-5 w-5" />
-                  </div>
-                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">0–100 Index</span>
-                </div>
-                <h4 className="text-sm font-bold text-base-content group-hover:text-blue-500 transition-colors">
-                  Conversion &amp; Ad Readiness
-                </h4>
-                <p className="text-xs text-base-content/60 line-clamp-2">
-                  Diagnose conversion leaks, audit trust badges, and protect paid ad spend ROI.
-                </p>
-              </div>
-              <div className="mt-4 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 gap-1">
-                <span>View Scorecard</span>
-                <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            <Link
               to="/p/$projectId/brand-mentions"
               params={{ projectId }}
               className="group rounded-2xl border border-base-300/80 bg-base-200/40 p-4.5 hover:border-violet-500 hover:bg-base-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
@@ -515,7 +490,6 @@ export function DashboardPage({ projectId }: { projectId: string }) {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                     <Icon icon="icon-park-outline:fire" className="h-5 w-5" />
                   </div>
-                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">AI Scraper</span>
                 </div>
                 <h4 className="text-sm font-bold text-base-content group-hover:text-orange-500 transition-colors">
                   Competitor Page Decoder

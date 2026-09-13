@@ -136,11 +136,66 @@ function fetch(
   return withPgClient(() => Promise.resolve(handleFetch(request, env, ctx)));
 }
 
+let uptimeIntervalStarted = false;
+let hourlyIntervalStarted = false;
+
+function ensureBackgroundCronRunner(env?: Env) {
+  if (uptimeIntervalStarted || typeof process === "undefined" || !process.env) return;
+  uptimeIntervalStarted = true;
+
+  // 1. 24/7 Uptime & SSL Monitor: Run initial probe 10s after start, then every 5 minutes
+  setTimeout(() => {
+    void runBackgroundMonitoringCycle();
+  }, 10_000);
+
+  setInterval(() => {
+    void runBackgroundMonitoringCycle();
+  }, 5 * 60_000);
+
+  // 2. 24/7 System Maintenance: Reconcile audits & system health every 1 hour
+  if (!hourlyIntervalStarted) {
+    hourlyIntervalStarted = true;
+    setTimeout(() => {
+      void runBackgroundMaintenanceCycle();
+    }, 60_000);
+
+    setInterval(() => {
+      void runBackgroundMaintenanceCycle();
+    }, 60 * 60_000);
+  }
+}
+
+async function runBackgroundMonitoringCycle() {
+  try {
+    await withPgClient(async () => {
+      const { runAllActiveMonitors } = await import("@/services/uptime.service");
+      const results = await runAllActiveMonitors();
+      if (results && results.length > 0) {
+        console.log(`[24/7 Monitor] Checked ${results.length} active monitors & SSL certificates at ${new Date().toISOString()}`);
+      }
+    });
+  } catch (err) {
+    console.error("[24/7 Monitor Error]:", err);
+  }
+}
+
+async function runBackgroundMaintenanceCycle() {
+  try {
+    await withPgClient(async () => {
+      await reconcileStaleAudits();
+      console.log(`[24/7 Maintenance] Reconciled stale audits at ${new Date().toISOString()}`);
+    });
+  } catch (err) {
+    console.error("[24/7 Maintenance Error]:", err);
+  }
+}
+
 function handleFetch(
   request: Request,
   env: Env,
   ctx: ExecutionContext,
 ): Response | Promise<Response> {
+  ensureBackgroundCronRunner(env);
   ctx.waitUntil(maybeSendSelfHostHeartbeat());
 
   const authMode = getAuthMode(env.AUTH_MODE);

@@ -209,14 +209,6 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
             <Icon icon="solar:pen-2-bold" className="size-4" />
             <span>Edit Brand Profile</span>
           </Link>
-          <Link
-            to="/p/$projectId/ad-readiness"
-            params={{ projectId }}
-            className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5 shadow-xs"
-          >
-            <Icon icon="solar:target-bold-duotone" className="size-4" />
-            <span>Landing Page Ad Audit</span>
-          </Link>
         </div>
       </div>
 

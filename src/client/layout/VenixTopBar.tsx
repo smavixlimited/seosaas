@@ -143,9 +143,16 @@ export function VenixTopBar({
       toast.success("All notifications cleared");
     },
   });
-  const currentPlan = creditData?.planId
-    ? creditData.planId.toUpperCase()
-    : "STARTER";
+  const formatPlanDisplay = (planId?: string) => {
+    if (!planId || planId.toLowerCase() === "starter") return "Starter Plan";
+    if (planId.toLowerCase() === "growth") return "Growth Plan";
+    if (planId.toLowerCase() === "pro") return "Pro Plan";
+    if (planId.toLowerCase() === "scale") return "Scale Plan";
+    if (planId.toLowerCase() === "agency") return "Agency Plan";
+    if (planId.toLowerCase() === "enterprise") return "Enterprise Plan";
+    return `${planId.toUpperCase()} Plan`;
+  };
+  const currentPlan = formatPlanDisplay(creditData?.planId);
 
   const isDark =
     themePreference === "dark" ||
@@ -764,11 +771,11 @@ export function VenixTopBar({
                   {userEmail}
                 </span>
                 <div className="mt-1.5 flex items-center gap-1.5">
-                  <span className="badge badge-primary badge-xs py-1 px-2 rounded-md font-bold text-[9px]">
-                    {currentPlan} PLAN
+                  <span className="badge badge-primary badge-xs py-1 px-2 rounded-md font-bold text-[10px]">
+                    {currentPlan}
                   </span>
-                  <span className="text-[10px] text-base-content/50">
-                    {BRAND_CONFIG.name}
+                  <span className="badge badge-ghost badge-xs py-0.5 px-1.5 rounded-md font-semibold text-[9px] text-base-content/60">
+                    Active
                   </span>
                 </div>
               </div>

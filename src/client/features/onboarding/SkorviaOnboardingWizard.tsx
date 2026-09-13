@@ -458,7 +458,7 @@ export function SkorviaOnboardingWizard({
               </h2>
               <p className="text-xs text-base-content/60">
                 We monitor cross-channel brand mentions, sentiment trust scores,
-                and viral hook opportunities.
+                and market reputation.
               </p>
             </div>
             <button

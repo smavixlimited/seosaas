@@ -11,17 +11,28 @@ export interface SendEmailOptions {
   replyTo?: string;
 }
 
-export function getResendApiKey(): string | null {
+export async function resolveResendApiKey(): Promise<string | null> {
   if (typeof process !== "undefined" && process.env?.RESEND_API_KEY) {
     return process.env.RESEND_API_KEY.trim();
   }
+  try {
+    const { SystemSettingsService } = await import(
+      "@/services/system-settings.service"
+    );
+    const emailSettings = await SystemSettingsService.getSetting<{
+      resendApiKey?: string;
+    }>("email_apis", {});
+    if (emailSettings.resendApiKey?.trim()) {
+      return emailSettings.resendApiKey.trim();
+    }
+  } catch {}
   return null;
 }
 
 export async function sendResendEmail(
   options: SendEmailOptions,
 ): Promise<{ success: boolean; id?: string; error?: string }> {
-  const apiKey = getResendApiKey();
+  const apiKey = await resolveResendApiKey();
   const fromAddress =
     options.from ||
     `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
