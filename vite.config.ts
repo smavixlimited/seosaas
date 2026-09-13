@@ -14,7 +14,10 @@ export default defineConfig(({ mode }) => {
     : env.PORT
       ? Number(env.PORT)
       : 3001;
-  const showDevtools = env.VITE_SHOW_DEVTOOLS !== "false";
+  const showDevtools =
+    mode !== "production" &&
+    process.env.NODE_ENV !== "production" &&
+    env.VITE_SHOW_DEVTOOLS !== "false";
   const allowedHosts = [
     env.ALLOWED_HOST,
     env.BETTER_AUTH_URL ? new URL(env.BETTER_AUTH_URL).hostname : undefined,
