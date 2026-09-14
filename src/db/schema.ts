@@ -135,4 +135,5 @@ export const {
   viralContentItems,
   competitorTrackedAds,
   waitlistUsers,
+  backlinkProspects,
 } = schema;

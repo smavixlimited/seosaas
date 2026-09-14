@@ -1,7 +1,9 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { SortingState, Updater } from "@tanstack/react-table";
+import { Sparkles, Search } from "lucide-react";
 import { BacklinksSearchCard } from "./BacklinksSearchCard";
 import { BacklinksBody } from "./BacklinksPageContent";
+import { BacklinkProspectorStudio } from "./BacklinkProspectorStudio";
 import type { BacklinksPageProps } from "./backlinksPageTypes";
 import type { BacklinksSearchState } from "./backlinksPageTypes";
 import {
@@ -179,63 +181,104 @@ export function BacklinksPage({
     }),
     [],
   );
+  const [activeModule, setActiveModule] = useState<"prospector" | "explorer">(
+    searchState.target ? "explorer" : "prospector",
+  );
+
   return (
     <div className="px-4 py-4 pb-24 overflow-auto md:px-6 md:py-6 md:pb-8">
-      <div className="mx-auto max-w-7xl space-y-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Backlinks</h1>
-          <p className="text-sm text-base-content/70">
-            Understand who links to a site, what changed recently, and which
-            pages attract links.
-          </p>
+      <div className="mx-auto max-w-7xl space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-base-200 pb-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Backlinks & Authority Studio
+            </h1>
+            <p className="text-sm text-base-content/70">
+              Discover high-converting backlink opportunities, draft outreach
+              pitches, and analyze referring domains.
+            </p>
+          </div>
+
+          {/* Module Switcher Tabs */}
+          <div className="flex items-center gap-1.5 p-1 bg-base-200/80 rounded-xl border border-base-300 w-fit">
+            <button
+              onClick={() => setActiveModule("prospector")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all ${
+                activeModule === "prospector"
+                  ? "bg-primary text-primary-content shadow-sm"
+                  : "text-base-content/70 hover:text-base-content"
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI Link Prospector & Pitch Studio</span>
+            </button>
+
+            <button
+              onClick={() => setActiveModule("explorer")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all ${
+                activeModule === "explorer"
+                  ? "bg-primary text-primary-content shadow-sm"
+                  : "text-base-content/70 hover:text-base-content"
+              }`}
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>Domain Profile & Explorer</span>
+            </button>
+          </div>
         </div>
 
-        <BacklinksSearchCard
-          errorMessage={overviewErrorMessage}
-          initialValues={searchCardInitialValues}
-          onSubmit={(values) => {
-            searchTabs.openTab(toBacklinksTabInput(values));
-            navigateToBacklinksSearch(navigate, values);
-            addSearch({ target: values.target, scope: values.scope });
-          }}
-        />
+        {activeModule === "prospector" ? (
+          <BacklinkProspectorStudio projectId={projectId} />
+        ) : (
+          <div className="space-y-4">
+            <BacklinksSearchCard
+              errorMessage={overviewErrorMessage}
+              initialValues={searchCardInitialValues}
+              onSubmit={(values) => {
+                searchTabs.openTab(toBacklinksTabInput(values));
+                navigateToBacklinksSearch(navigate, values);
+                addSearch({ target: values.target, scope: values.scope });
+              }}
+            />
 
-        <BacklinksBody
-          projectId={projectId}
-          history={history}
-          historyLoaded={historyLoaded}
-          overviewData={overviewQuery.data}
-          overviewError={overviewErrorMessage}
-          overviewLoading={overviewQuery.isLoading}
-          backlinksRowsPage={rowsQuery.data}
-          referringDomainsPage={referringDomainsQuery.data}
-          topPagesPage={topPagesQuery.data}
-          searchState={searchState}
-          filters={filters}
-          sorting={sorting}
-          domainExpansion={domainExpansion}
-          tabErrorMessage={activeTabErrorMessage}
-          tabLoading={activeTabQuery.isLoading}
-          tabFetching={activeTabQuery.isFetching}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          onRemoveHistoryItem={removeHistoryItem}
-          onRetryOverview={() => void overviewQuery.refetch()}
-          onSortingChange={handleSortingChange}
-          onTabChange={handleResultTabChange}
-          onViewChange={handleViewChange}
-          searchTabs={
-            searchState.target
-              ? {
-                  activeTabId: searchTabs.activeTabId,
-                  tabs: searchTabs.tabs,
-                  onSelect: searchTabs.selectTab,
-                  onClose: searchTabs.closeTab,
-                  onViewed: searchTabs.markTabViewed,
-                }
-              : null
-          }
-        />
+            <BacklinksBody
+              projectId={projectId}
+              history={history}
+              historyLoaded={historyLoaded}
+              overviewData={overviewQuery.data}
+              overviewError={overviewErrorMessage}
+              overviewLoading={overviewQuery.isLoading}
+              backlinksRowsPage={rowsQuery.data}
+              referringDomainsPage={referringDomainsQuery.data}
+              topPagesPage={topPagesQuery.data}
+              searchState={searchState}
+              filters={filters}
+              sorting={sorting}
+              domainExpansion={domainExpansion}
+              tabErrorMessage={activeTabErrorMessage}
+              tabLoading={activeTabQuery.isLoading}
+              tabFetching={activeTabQuery.isFetching}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+              onRemoveHistoryItem={removeHistoryItem}
+              onRetryOverview={() => void overviewQuery.refetch()}
+              onSortingChange={handleSortingChange}
+              onTabChange={handleResultTabChange}
+              onViewChange={handleViewChange}
+              searchTabs={
+                searchState.target
+                  ? {
+                      activeTabId: searchTabs.activeTabId,
+                      tabs: searchTabs.tabs,
+                      onSelect: searchTabs.selectTab,
+                      onClose: searchTabs.closeTab,
+                      onViewed: searchTabs.markTabViewed,
+                    }
+                  : null
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

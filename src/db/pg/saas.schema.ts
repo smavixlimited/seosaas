@@ -839,3 +839,37 @@ export const waitlistUsers = pgTable(
     index("pg_waitlist_created_at_idx").on(table.createdAt),
   ],
 );
+
+export const backlinkProspects = pgTable(
+  "backlink_prospects",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    prospectDomain: text("prospect_domain").notNull(),
+    prospectName: text("prospect_name"),
+    prospectUrl: text("prospect_url"),
+    domainRating: integer("domain_rating").notNull().default(40),
+    referringDomains: integer("referring_domains").notNull().default(0),
+    organicTraffic: integer("organic_traffic").notNull().default(0),
+    spamScore: integer("spam_score").notNull().default(1),
+    recommendedAngle: text("recommended_angle")
+      .notNull()
+      .default("resource_inclusion"), // 'resource_inclusion' | 'competitor_alternative' | 'expert_quote' | 'broken_link' | 'guest_post'
+    matchReason: text("match_reason").notNull(),
+    status: text("status").notNull().default("suggested"), // 'suggested' | 'contacted' | 'responded' | 'won' | 'dismissed'
+    subjectLinesJson: text("subject_lines_json").notNull().default("[]"),
+    pitchBody: text("pitch_body"),
+    followUpBody: text("follow_up_body"),
+    socialDmBody: text("social_dm_body"),
+    contactEmail: text("contact_email"),
+    lastContactedAt: text("last_contacted_at"),
+    notes: text("notes"),
+    createdAt: text("created_at").notNull().default(isoNow),
+    updatedAt: text("updated_at").notNull().default(isoNow),
+  },
+  (table) => [
+    index("pg_backlink_prospects_project_idx").on(table.projectId),
+    index("pg_backlink_prospects_domain_idx").on(table.prospectDomain),
+    index("pg_backlink_prospects_status_idx").on(table.status),
+  ],
+);
