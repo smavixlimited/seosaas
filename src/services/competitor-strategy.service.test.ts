@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { CompetitorStrategyService } from "@/services/competitor-strategy.service";
 
 describe("CompetitorStrategyService", () => {
-  it("generates a structured 5-Pillar Competitor Strategy Teardown with 3 attack plays", async () => {
+  it("generates a structured 5-Pillar Competitor Strategy Teardown with Head-to-Head and 3 attack plays", async () => {
     const report = await CompetitorStrategyService.generateTeardown(
       "test-proj-123",
       "competitor.com",
@@ -12,6 +12,19 @@ describe("CompetitorStrategyService", () => {
     expect(report).toBeDefined();
     expect(report.targetDomain).toBe("competitor.com");
     expect(report.locationCode).toBe(2840);
+
+    // Head-to-Head Scorecard & Battlecard
+    expect(report.headToHead).toBeDefined();
+    expect(report.headToHead?.brand).toBeDefined();
+    expect(report.headToHead?.competitor).toBeDefined();
+    expect(report.headToHead?.deltas).toBeDefined();
+    expect(report.headToHead?.battlecard.length).toBeGreaterThan(0);
+    report.headToHead?.battlecard.forEach((angle) => {
+      expect(angle.category).toBeDefined();
+      expect(angle.ourAdvantage).toBeDefined();
+      expect(angle.competitorWeakness).toBeDefined();
+      expect(angle.winningPitch).toBeDefined();
+    });
 
     // Pillar 1: Positioning
     expect(report.positioning).toBeDefined();

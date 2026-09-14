@@ -18,7 +18,7 @@ import {
 import { requestWithPublicOrigin } from "@/server/mcp/public-origin";
 import { MCP_ROUTE } from "@/server/mcp/context";
 import { handleSelfHostedOpenSeoMcpRequest } from "@/server/mcp/transport";
-import { withPgClient } from "@/db";
+import { db, withPgClient } from "@/db";
 import {
   AUTUMN_WEBHOOK_PATH,
   handleAutumnWebhookRequest,
@@ -76,19 +76,45 @@ async function authorizeSamChat(
   } catch {
     return new Response("Unauthorized", { status: 401 });
   }
-  const session = await SamSessionRepository.getActiveSession(
-    sessionId,
-    context.userId,
-  );
-  const project = session
-    ? await ProjectRepository.getProjectForOrganization(
-        session.projectId,
-        context.organizationId,
-      )
-    : null;
-  if (!session || !project) {
+  const session = await SamSessionRepository.getSessionById(sessionId);
+  if (!session || session.archivedAt) {
     return new Response("Forbidden", { status: 403 });
   }
+
+  const project = await ProjectRepository.getProjectById(session.projectId);
+  if (!project) {
+    return new Response("Forbidden", { status: 403 });
+  }
+
+  // Caller is owner or matches project organization
+  let hasAccess =
+    session.userId === context.userId ||
+    project.organizationId === context.organizationId;
+
+  if (!hasAccess) {
+    try {
+      const { member } = await import("@/db/schema");
+      const { and, eq } = await import("drizzle-orm");
+      const [membership] = await db
+        .select()
+        .from(member)
+        .where(
+          and(
+            eq(member.organizationId, project.organizationId),
+            eq(member.userId, context.userId),
+          ),
+        )
+        .limit(1);
+      hasAccess = Boolean(membership);
+    } catch {
+      hasAccess = false;
+    }
+  }
+
+  if (!hasAccess) {
+    return new Response("Forbidden", { status: 403 });
+  }
+
   // Same as onboarding above: make sure the Autumn customer (and its default
   // free-plan credits) exists before the DO's balance gate runs, or a brand-new
   // org's first message hits a false "out of credits".

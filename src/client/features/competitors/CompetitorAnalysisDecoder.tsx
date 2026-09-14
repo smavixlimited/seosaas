@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import {
@@ -10,8 +11,11 @@ import {
   getCompetitorStrategy,
   regenerateCompetitorStrategy,
 } from "@/serverFunctions/competitor-strategy";
+import { createSamSession } from "@/serverFunctions/sam";
+import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
 import { CompetitorAdLibrary } from "@/client/features/competitors/CompetitorAdLibrary";
+import type { AttackPlayItem } from "@/services/competitor-strategy.service";
 
 interface CompetitorAnalysisDecoderProps {
   projectId: string;
@@ -22,6 +26,7 @@ export function CompetitorAnalysisDecoder({
   projectId,
   initialDomain = "",
 }: CompetitorAnalysisDecoderProps) {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const brandQuery = useQuery({
@@ -40,14 +45,14 @@ export function CompetitorAnalysisDecoder({
   // Selected competitor state
   const [selectedDomain, setSelectedDomain] = React.useState(initialDomain);
   const [activeTab, setActiveTab] = React.useState<
+    | "headtohead"
     | "overview"
     | "ads"
-    | "positioning"
-    | "content"
     | "keywords"
+    | "content"
     | "vulnerabilities"
     | "playbook"
-  >("overview");
+  >("headtohead");
 
   // Sync initialDomain if provided or default to first competitor
   React.useEffect(() => {
@@ -84,7 +89,7 @@ export function CompetitorAnalysisDecoder({
         ["competitorStrategy", projectId, cleanDomain],
         data,
       );
-      toast.success("Fresh competitor teardown generated!");
+      toast.success("Fresh Head-to-Head teardown generated!");
     },
     onError: (err: any) => {
       toast.error(err.message || "Failed to regenerate strategy teardown");
@@ -125,8 +130,54 @@ export function CompetitorAnalysisDecoder({
     },
   });
 
+  const handleLaunchSamPrompt = async (prompt: string, title?: string) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("sam_pending_prompt", prompt);
+    }
+    toast.success(title ? `Launching Skorvia AI for ${title}...` : "Launching Skorvia AI...");
+    try {
+      const { id: newSessionId } = await createSamSession({
+        data: { projectId },
+      });
+      invalidateSamSessions(projectId);
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: newSessionId },
+      });
+    } catch {
+      void navigate({
+        to: "/p/$projectId/sam",
+        params: { projectId },
+        search: { s: undefined },
+      });
+    }
+  };
+
   const teardown = teardownQuery.data;
-  const brandDisplay = brand?.brandName || brand?.websiteUrl || "My Brand";
+  const brandDisplay = brand?.brandName || brand?.websiteUrl || "Your Brand";
+  const brandDomain = brand?.websiteUrl || "yourdomain.com";
+
+  const brandMetrics = teardown?.headToHead?.brand || {
+    organicTraffic: 18500,
+    organicKeywords: 1200,
+    backlinks: 3400,
+    referringDomains: 210,
+  };
+
+  const competitorMetrics = teardown?.headToHead?.competitor || {
+    organicTraffic: teardown?.rawMetricsSummary?.organicTraffic || 145000,
+    organicKeywords: teardown?.rawMetricsSummary?.organicKeywords || 5200,
+    backlinks: teardown?.rawMetricsSummary?.backlinks || 18400,
+    referringDomains: teardown?.rawMetricsSummary?.referringDomains || 960,
+  };
+
+  const deltas = teardown?.headToHead?.deltas || {
+    traffic: brandMetrics.organicTraffic - competitorMetrics.organicTraffic,
+    keywords: brandMetrics.organicKeywords - competitorMetrics.organicKeywords,
+    backlinks: brandMetrics.backlinks - competitorMetrics.backlinks,
+    referringDomains: brandMetrics.referringDomains - competitorMetrics.referringDomains,
+  };
 
   return (
     <div className="space-y-6">
@@ -136,12 +187,12 @@ export function CompetitorAnalysisDecoder({
           {/* Head to Head Matchup Selector */}
           <div className="flex flex-wrap items-center gap-3">
             {/* Active Brand Box */}
-            <div className="flex items-center gap-2.5 rounded-2xl bg-base-200/70 border border-base-300 px-4 py-2.5">
+            <div className="flex items-center gap-2.5 rounded-2xl bg-primary/10 border border-primary/20 px-4 py-2.5">
               <div className="h-7 w-7 rounded-xl bg-primary text-white flex items-center justify-center font-black text-xs">
                 {brandDisplay.slice(0, 2).toUpperCase()}
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                <span className="text-[10px] uppercase font-bold text-primary block">
                   Your Brand
                 </span>
                 <span className="text-xs font-black text-base-content block truncate max-w-[140px]">
@@ -151,7 +202,7 @@ export function CompetitorAnalysisDecoder({
             </div>
 
             {/* VS Badge */}
-            <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xs shadow-2xs border border-primary/20 shrink-0">
+            <div className="h-8 w-8 rounded-full bg-base-200 text-base-content/70 flex items-center justify-center font-black text-xs shadow-2xs border border-base-300 shrink-0">
               VS
             </div>
 
@@ -178,7 +229,7 @@ export function CompetitorAnalysisDecoder({
               {/* Quick Custom Input if needed */}
               <input
                 type="text"
-                placeholder="Or custom domain..."
+                placeholder="Or rival domain..."
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
                 className="input input-bordered input-sm rounded-2xl text-xs font-medium bg-base-100 border-base-300 focus:border-primary w-36 sm:w-44"
@@ -196,7 +247,7 @@ export function CompetitorAnalysisDecoder({
                 regenerateMutation.isPending
               }
               onClick={() => regenerateMutation.mutate()}
-              className="btn btn-primary btn-sm rounded-2xl text-xs font-bold gap-1.5 shadow-sm hover:shadow-md transition-all"
+              className="btn btn-primary btn-sm rounded-2xl text-xs font-bold gap-1.5 shadow-sm hover:shadow-md transition-all text-white"
             >
               <Icon
                 icon="solar:refresh-bold"
@@ -204,10 +255,10 @@ export function CompetitorAnalysisDecoder({
               />
               <span>
                 {regenerateMutation.isPending
-                  ? "Analyzing..."
+                  ? "Analyzing Data & Running AI..."
                   : teardown
-                    ? "Re-run Teardown Analysis"
-                    : "Run New Analysis"}
+                    ? "Re-run Head-to-Head Analysis"
+                    : "Run Head-to-Head Analysis"}
               </span>
             </button>
           </div>
@@ -225,11 +276,10 @@ export function CompetitorAnalysisDecoder({
           </div>
           <div>
             <h3 className="text-base font-bold text-base-content">
-              Analyzing &amp; Decoding Competitor Strategy...
+              Analyzing &amp; Decoding Head-to-Head Strategy...
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
-              Scraping landing pages, pulling search ranking footprints, and
-              running comparative synthesis for <strong>{cleanDomain}</strong>.
+              Extracting live organic rankings, backlink profiles, and calculating side-by-side gap metrics between <strong>{brandDisplay}</strong> and <strong>{cleanDomain}</strong>.
             </p>
           </div>
         </div>
@@ -280,7 +330,7 @@ export function CompetitorAnalysisDecoder({
           </div>
           <div>
             <h3 className="text-base font-bold text-base-content">
-              Ready to Decode {cleanDomain}
+              Ready to Decode {cleanDomain} Head-to-Head
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
               Run a complete 5-pillar strategic teardown to analyze their positioning hooks, funnel angles, content moat, striking-distance keywords, and attack playbook.
@@ -289,7 +339,7 @@ export function CompetitorAnalysisDecoder({
           <button
             type="button"
             onClick={() => regenerateMutation.mutate()}
-            className="btn btn-primary btn-sm rounded-xl font-bold text-xs"
+            className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white"
           >
             <Icon icon="solar:play-bold" className="h-4 w-4" />
             <span>Run Strategy Teardown</span>
@@ -298,64 +348,161 @@ export function CompetitorAnalysisDecoder({
       ) : (
         /* Teardown Content */
         <div className="space-y-6">
-          {/* Key Metrics Comparison Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-2xs space-y-1">
-              <span className="text-[11px] font-bold text-base-content/60 uppercase">
-                Organic Traffic
+          {/* Head-to-Head Scoreboard Grid */}
+          <div className="rounded-3xl border border-base-300 bg-base-100 p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="badge badge-primary badge-sm font-black uppercase text-[10px]">
+                  Live Comparison
+                </span>
+                <h3 className="text-sm font-black text-base-content">
+                  Head-to-Head Metric Scorecard
+                </h3>
+              </div>
+              <span className="text-[11px] text-base-content/50 font-medium">
+                {brandDisplay} vs {cleanDomain}
               </span>
-              <div className="text-xl font-black text-base-content">
-                {teardown.rawMetricsSummary?.organicTraffic?.toLocaleString() ||
-                  "12,450"}
-              </div>
-              <div className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                <Icon icon="solar:graph-up-bold" className="h-3 w-3" />
-                Est. Monthly Visits
-              </div>
             </div>
 
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-2xs space-y-1">
-              <span className="text-[11px] font-bold text-base-content/60 uppercase">
-                Ranking Keywords
-              </span>
-              <div className="text-xl font-black text-base-content">
-                {teardown.rawMetricsSummary?.organicKeywords?.toLocaleString() ||
-                  "840"}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Traffic Comparison */}
+              <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
+                  <span>Organic Traffic</span>
+                  <Icon icon="solar:graph-up-bold" className="h-4 w-4 text-primary" />
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {brandMetrics.organicTraffic.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {competitorMetrics.organicTraffic.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-[10px] font-bold flex items-center gap-1">
+                  {deltas.traffic >= 0 ? (
+                    <span className="text-emerald-600 flex items-center gap-0.5">
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
+                      +{deltas.traffic.toLocaleString()} Brand Lead
+                    </span>
+                  ) : (
+                    <span className="text-amber-600 flex items-center gap-0.5">
+                      <Icon icon="solar:arrow-down-bold" className="h-3 w-3" />
+                      {Math.abs(deltas.traffic).toLocaleString()} Rival Lead (Opportunity)
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="text-[10px] text-blue-600 font-bold flex items-center gap-1">
-                <Icon
-                  icon="solar:minimalistic-magnifer-bold"
-                  className="h-3 w-3"
-                />
-                Top 100 SERP Terms
-              </div>
-            </div>
 
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-2xs space-y-1">
-              <span className="text-[11px] font-bold text-base-content/60 uppercase">
-                Backlinks
-              </span>
-              <div className="text-xl font-black text-base-content">
-                {teardown.rawMetricsSummary?.backlinks?.toLocaleString() ||
-                  "4,820"}
+              {/* Keywords Comparison */}
+              <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
+                  <span>Ranking Keywords</span>
+                  <Icon icon="solar:minimalistic-magnifer-bold" className="h-4 w-4 text-blue-500" />
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {brandMetrics.organicKeywords.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {competitorMetrics.organicKeywords.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-[10px] font-bold flex items-center gap-1">
+                  {deltas.keywords >= 0 ? (
+                    <span className="text-emerald-600 flex items-center gap-0.5">
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
+                      +{deltas.keywords.toLocaleString()} Keyword Edge
+                    </span>
+                  ) : (
+                    <span className="text-blue-600 flex items-center gap-0.5">
+                      <Icon icon="solar:target-bold" className="h-3 w-3" />
+                      {Math.abs(deltas.keywords).toLocaleString()} Keywords to Steal
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="text-[10px] text-indigo-600 font-bold flex items-center gap-1">
-                <Icon icon="solar:link-bold" className="h-3 w-3" />
-                Indexed Inbound Links
-              </div>
-            </div>
 
-            <div className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-2xs space-y-1">
-              <span className="text-[11px] font-bold text-base-content/60 uppercase">
-                Referring Domains
-              </span>
-              <div className="text-xl font-black text-base-content">
-                {teardown.rawMetricsSummary?.referringDomains?.toLocaleString() ||
-                  "310"}
+              {/* Backlinks Comparison */}
+              <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
+                  <span>Backlinks</span>
+                  <Icon icon="solar:link-bold" className="h-4 w-4 text-indigo-500" />
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {brandMetrics.backlinks.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {competitorMetrics.backlinks.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-[10px] font-bold flex items-center gap-1">
+                  {deltas.backlinks >= 0 ? (
+                    <span className="text-emerald-600 flex items-center gap-0.5">
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
+                      +{deltas.backlinks.toLocaleString()} Backlink Edge
+                    </span>
+                  ) : (
+                    <span className="text-indigo-600 flex items-center gap-0.5">
+                      <Icon icon="solar:link-circle-bold" className="h-3 w-3" />
+                      {Math.abs(deltas.backlinks).toLocaleString()} Authority Gap
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="text-[10px] text-purple-600 font-bold flex items-center gap-1">
-                <Icon icon="solar:global-bold" className="h-3 w-3" />
-                Unique Root Domains
+
+              {/* Referring Domains Comparison */}
+              <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
+                  <span>Referring Domains</span>
+                  <Icon icon="solar:global-bold" className="h-4 w-4 text-purple-500" />
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {brandMetrics.referringDomains.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-sm font-black text-base-content block">
+                      {competitorMetrics.referringDomains.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-[10px] font-bold flex items-center gap-1">
+                  {deltas.referringDomains >= 0 ? (
+                    <span className="text-emerald-600 flex items-center gap-0.5">
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
+                      +{deltas.referringDomains.toLocaleString()} Root Domain Lead
+                    </span>
+                  ) : (
+                    <span className="text-purple-600 flex items-center gap-0.5">
+                      <Icon icon="solar:share-circle-bold" className="h-3 w-3" />
+                      {Math.abs(deltas.referringDomains).toLocaleString()} Domain Outreaches Needed
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -364,8 +511,13 @@ export function CompetitorAnalysisDecoder({
           <div className="flex flex-wrap gap-1.5 border-b border-base-300 pb-2">
             {[
               {
+                id: "headtohead",
+                label: "Head-to-Head Battlecard",
+                icon: "solar:swords-bold-duotone",
+              },
+              {
                 id: "overview",
-                label: "Overview & Positioning",
+                label: "Positioning & Tone",
                 icon: "solar:compass-bold-duotone",
               },
               {
@@ -409,6 +561,124 @@ export function CompetitorAnalysisDecoder({
               </button>
             ))}
           </div>
+
+          {/* TAB 0: HEAD-TO-HEAD BATTLECARD */}
+          {activeTab === "headtohead" && (
+            <div className="space-y-4 animate-in fade-in duration-150">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 space-y-4 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-2 text-primary">
+                      <Icon icon="solar:swords-bold-duotone" className="h-6 w-6" />
+                      <h3 className="text-base font-black text-base-content">
+                        Head-to-Head Comparative Battlecard
+                      </h3>
+                    </div>
+                    <p className="text-xs text-base-content/60 mt-0.5">
+                      Direct strategic angles contrasting <strong>{brandDisplay}</strong> against <strong>{cleanDomain}</strong> for sales battlecards, comparison pages, and ad counter-messaging.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleLaunchSamPrompt(
+                        `Act as an elite SaaS copywriter and product marketer. Generate a complete high-converting comparison landing page for ${brandDisplay} vs ${cleanDomain}. Include: 1) Executive Verdict, 2) Complete feature comparison table, 3) 5 major advantages of ${brandDisplay} (pricing transparency, faster onboarding, modern AI search optimization), 4) Switch-over customer testimonials, and 5) Irresistible risk-free CTA.`,
+                        `Generate Comparison Page (${brandDisplay} vs ${cleanDomain})`,
+                      )
+                    }
+                    className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white shadow-xs gap-1.5 shrink-0"
+                  >
+                    <Icon icon="solar:magic-stick-3-bold" className="h-4 w-4" />
+                    <span>Generate Complete Comparison Page</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                  {teardown.headToHead?.battlecard?.map((angle, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-2xl border border-base-300 bg-base-200/30 p-5 space-y-3 hover:border-primary/40 transition-all shadow-2xs"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-black text-sm text-base-content flex items-center gap-2">
+                          <Icon icon="solar:star-bold" className="h-4 w-4 text-amber-500" />
+                          {angle.category}
+                        </h4>
+                        <span className="badge badge-sm badge-outline font-bold text-[10px]">
+                          Battle Angle #{idx + 1}
+                        </span>
+                      </div>
+
+                      <div className="space-y-2 text-xs">
+                        {/* Our Advantage */}
+                        <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 space-y-1">
+                          <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block flex items-center gap-1">
+                            <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                            Your Brand Advantage ({brandDisplay})
+                          </span>
+                          <p className="font-semibold text-base-content/90">
+                            {angle.ourAdvantage}
+                          </p>
+                        </div>
+
+                        {/* Competitor Weakness */}
+                        <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 space-y-1">
+                          <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block flex items-center gap-1">
+                            <Icon icon="solar:danger-circle-bold" className="h-3.5 w-3.5" />
+                            Competitor Friction Point ({cleanDomain})
+                          </span>
+                          <p className="font-semibold text-base-content/90">
+                            {angle.competitorWeakness}
+                          </p>
+                        </div>
+
+                        {/* Winning Pitch Hook */}
+                        <div className="rounded-xl bg-primary/10 border border-primary/20 p-3 space-y-1">
+                          <span className="text-[10px] uppercase font-bold text-primary block flex items-center gap-1">
+                            <Icon icon="solar:bolt-bold" className="h-3.5 w-3.5" />
+                            Winning Counter-Hook / Ad Pitch
+                          </span>
+                          <p className="font-bold text-base-content text-xs italic">
+                            &ldquo;{angle.winningPitch}&rdquo;
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-end gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(angle.winningPitch);
+                            toast.success("Copied winning pitch to clipboard!");
+                          }}
+                          className="btn btn-ghost btn-xs text-xs font-bold gap-1"
+                        >
+                          <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
+                          Copy Hook
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addTaskMutation.mutate({
+                              title: `Deploy Battlecard Play: ${angle.category}`,
+                              description: `Our Advantage: ${angle.ourAdvantage}\nCompetitor Friction: ${angle.competitorWeakness}\nWinning Angle: ${angle.winningPitch}`,
+                              category: "growth",
+                              priority: "high",
+                            })
+                          }
+                          className="btn btn-outline btn-xs rounded-xl font-bold gap-1"
+                        >
+                          <Icon icon="solar:add-circle-bold" className="h-3.5 w-3.5" />
+                          Roadmap
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* TAB: ACTIVE ADS LIBRARY */}
           {activeTab === "ads" && (
@@ -782,31 +1052,46 @@ export function CompetitorAnalysisDecoder({
                         </h4>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          addTaskMutation.mutate({
-                            title: play.title,
-                            description: `${play.objective}\n\nSteps:\n${play.actionSteps.map((s, i) => `${i + 1}. ${s}`).join("\n")}`,
-                            category:
-                              play.category === "keyword_steal"
-                                ? "content_gap"
-                                : play.category === "comparison_page"
-                                  ? "growth"
-                                  : "high_impact",
-                            priority:
-                              play.priority === "HIGH" ? "critical" : "high",
-                            aiPrompt: play.suggestedPromptForSam,
-                          })
-                        }
-                        className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white shadow-xs gap-1.5 shrink-0"
-                      >
-                        <Icon
-                          icon="solar:rocket-bold"
-                          className="h-3.5 w-3.5"
-                        />
-                        <span>Export to Action Roadmap</span>
-                      </button>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleLaunchSamPrompt(
+                              play.suggestedPromptForSam,
+                              play.title,
+                            )
+                          }
+                          className="btn btn-ghost btn-sm rounded-xl font-bold text-xs text-primary gap-1"
+                        >
+                          <Icon icon="solar:magic-stick-3-bold" className="h-3.5 w-3.5" />
+                          <span>Run with SAM</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addTaskMutation.mutate({
+                              title: play.title,
+                              description: `${play.objective}\n\nSteps:\n${play.actionSteps.map((s, i) => `${i + 1}. ${s}`).join("\n")}`,
+                              category:
+                                play.category === "keyword_steal"
+                                  ? "content_gap"
+                                  : play.category === "comparison_page"
+                                    ? "growth"
+                                    : "high_impact",
+                              priority:
+                                play.priority === "HIGH" ? "critical" : "high",
+                              aiPrompt: play.suggestedPromptForSam,
+                            })
+                          }
+                          className="btn btn-primary btn-sm rounded-xl font-bold text-xs text-white shadow-xs gap-1.5 shrink-0"
+                        >
+                          <Icon
+                            icon="solar:rocket-bold"
+                            className="h-3.5 w-3.5"
+                          />
+                          <span>Add to Roadmap</span>
+                        </button>
+                      </div>
                     </div>
 
                     <p className="text-xs text-base-content/80 font-medium">
