@@ -50,14 +50,19 @@ export const PlanEntitlementService = {
     const allPlans = await BillingPlansService.getAllPlans();
     const activePlan =
       allPlans.find((p) => p.id.toLowerCase() === planId.toLowerCase()) ||
+      allPlans.find((p) => p.id.toLowerCase() === "free") ||
       allPlans.find((p) => p.id.toLowerCase() === "starter") ||
       allPlans[0];
 
     const limits: SaasPlanLimits = activePlan?.limits ?? {
-      maxDomains: 5,
-      monthlyCredits: 500,
-      auditPages: 5000,
+      maxDomains: 1,
+      maxCompetitors: 2,
+      competitorScans: 5,
+      keywordSearches: 15,
+      monthlyCredits: 50,
+      auditPages: 100,
       uptimeMonitors: 0,
+      teamMembers: 1,
     };
 
     const features: SaasPlanFeatures = activePlan?.features ?? {
@@ -95,7 +100,7 @@ export const PlanEntitlementService = {
     return {
       userId,
       planId: activePlan?.id ?? planId,
-      planName: activePlan?.name ?? "Starter Plan",
+      planName: activePlan?.name ?? "Free Plan",
       limits,
       features,
       creditsUsed,

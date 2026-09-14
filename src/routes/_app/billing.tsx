@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useCustomer } from "autumn-js/react";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
@@ -14,6 +14,10 @@ import { BillingFeatureBreakdown } from "@/client/features/billing/BillingFeatur
 import { parseTopUpAmount } from "@/client/features/billing/HostedBillingContentUtils";
 import { getCustomerPlanStatus } from "@/client/features/billing/plan-detection";
 import { useCurrency, CurrencySelector } from "@/client/lib/currency";
+import {
+  CheckoutModal,
+  type PlanItem,
+} from "@/client/components/billing/CheckoutModal";
 import {
   submitCancellationSurveyServerFn,
   getUserCreditUsageServerFn,
@@ -40,6 +44,7 @@ export const Route = createFileRoute("/_app/billing")({
 
 function BillingPage() {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
   const { currency, formatPrice } = useCurrency();
   const [topUpAmount, setTopUpAmount] = useState("10");
   const [isPending, setIsPending] = useState(false);
@@ -47,6 +52,10 @@ function BillingPage() {
   const [billingInterval, setBillingInterval] = useState<"month" | "year">(
     "month",
   );
+
+  // Gateway Checkout Modal State
+  const [checkoutPlan, setCheckoutPlan] = useState<PlanItem | null>(null);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Cancellation Retention State
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -86,6 +95,10 @@ function BillingPage() {
   });
 
   const dbCredits = creditUsageQuery.data;
+  const userCurrentPlanName =
+    dbCredits?.planName ||
+    (isFreePlan ? "Free Plan" : `${planStatus.toUpperCase()} Plan`);
+
   const liveCreditsRemaining = dbCredits
     ? dbCredits.creditsRemaining
     : totalRemaining > 0
@@ -99,30 +112,20 @@ function BillingPage() {
   const { isValid: isValidTopUp, parsed: parsedTopUpAmount } =
     parseTopUpAmount(topUpAmount);
 
-  async function handlePlanCheckout(planId: string) {
-    captureClientEvent("billing:checkout_start", { planId });
-    setError(null);
-    setIsPending(true);
-    try {
-      if (customerQuery.attach) {
-        await customerQuery.attach({
-          planId,
-          redirectMode: "always",
-          successUrl: buildCheckoutSuccessUrl(BILLING_ROUTE),
-        });
-      } else {
-        toast.success(`Redirecting to ${planId.toUpperCase()} checkout...`);
-      }
-    } catch (err) {
-      const msg = getStandardErrorMessage(
-        err,
-        "Failed to start plan checkout. Please try again.",
-      );
-      setError(msg);
-      toast.error(msg);
-    } finally {
-      setIsPending(false);
-    }
+  function handlePlanCheckout(planOrId: string | PlanItem) {
+    const planObj: PlanItem =
+      typeof planOrId === "string"
+        ? plans.find((p) => p.id === planOrId) || {
+            id: planOrId,
+            name: `${planOrId.toUpperCase()} Plan`,
+            priceUsd: 29,
+            priceNgn: 35000,
+          }
+        : planOrId;
+
+    captureClientEvent("billing:checkout_start", { planId: planObj.id });
+    setCheckoutPlan(planObj);
+    setIsCheckoutOpen(true);
   }
 
   async function handleTopUpCheckout() {
@@ -319,7 +322,7 @@ function BillingPage() {
 
           <div className="space-y-1">
             <h3 className="text-2xl font-black text-base-content capitalize font-mono">
-              {isFreePlan ? "Free Starter" : `${planStatus} Plan`}
+              {userCurrentPlanName}
             </h3>
             <p className="text-xs text-base-content/60">
               {isFreePlan
@@ -646,7 +649,7 @@ function BillingPage() {
                 <button
                   type="button"
                   disabled={isPending || isCurrent}
-                  onClick={() => handlePlanCheckout(plan.id)}
+                  onClick={() => handlePlanCheckout(plan)}
                   className={`btn btn-sm rounded-xl w-full font-bold transition-all ${
                     isCurrent
                       ? "btn-outline btn-disabled"
@@ -672,6 +675,21 @@ function BillingPage() {
           <BillingUsageChart />
         </div>
       </div>
+
+      {/* Payment Gateway Checkout Modal */}
+      <CheckoutModal
+        plan={checkoutPlan}
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        onSuccess={() => {
+          setIsCheckoutOpen(false);
+          void queryClient.invalidateQueries({
+            queryKey: ["userCreditUsageTopBar"],
+          });
+          void queryClient.invalidateQueries({ queryKey: ["publicSaaSPlans"] });
+          toast.success("Subscription updated successfully!");
+        }}
+      />
     </div>
   );
 }

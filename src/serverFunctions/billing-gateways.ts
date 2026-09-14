@@ -17,19 +17,70 @@ export const getPublicPlansServerFn = createServerFn({ method: "GET" }).handler(
 export const getPublicGatewaysServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
+  const { SystemSettingsService } = await import(
+    "@/services/system-settings.service"
+  );
+  let sysPayments: any = null;
+  try {
+    sysPayments = await SystemSettingsService.getPaymentGatewaysApis();
+  } catch {}
+
   const paystack = await getGatewayConfig("paystack");
   const flutterwave = await getGatewayConfig("flutterwave");
   const lemonsqueezy = await getGatewayConfig("lemonsqueezy");
   const manual = await getGatewayConfig("manual");
 
+  const paystackSecret =
+    sysPayments?.paystackSecretKey ||
+    paystack?.secretKey ||
+    process.env.PAYSTACK_SECRET_KEY;
+  const paystackEnabled = Boolean(
+    (sysPayments?.paystackEnabled ?? paystack?.isEnabled ?? true) &&
+      paystackSecret &&
+      paystackSecret.trim().length > 0,
+  );
+
+  const flutterwaveSecret =
+    sysPayments?.flutterwaveSecretKey ||
+    flutterwave?.secretKey ||
+    process.env.FLUTTERWAVE_SECRET_KEY;
+  const flutterwaveEnabled = Boolean(
+    (sysPayments?.flutterwaveEnabled ?? flutterwave?.isEnabled ?? false) &&
+      flutterwaveSecret &&
+      flutterwaveSecret.trim().length > 0,
+  );
+
+  const lemonsqueezyKey =
+    sysPayments?.lemonsqueezyApiKey ||
+    lemonsqueezy?.secretKey ||
+    process.env.LEMONSQUEEZY_API_KEY;
+  const lemonsqueezyEnabled = Boolean(
+    (sysPayments?.lemonsqueezyEnabled ?? lemonsqueezy?.isEnabled ?? false) &&
+      lemonsqueezyKey &&
+      lemonsqueezyKey.trim().length > 0,
+  );
+
+  const manualEnabled = Boolean(
+    sysPayments?.manualPaymentEnabled ?? manual?.isEnabled ?? true,
+  );
+
+  let manualInstructions = manual?.manualInstructions;
+  if (
+    sysPayments?.manualPaymentBankName ||
+    sysPayments?.manualPaymentAccountNumber
+  ) {
+    manualInstructions = `Bank: ${sysPayments.manualPaymentBankName || "Bank"}\nAccount Name: ${sysPayments.manualPaymentAccountName || "Skorvia Ltd"}\nAccount Number: ${sysPayments.manualPaymentAccountNumber || ""}\n${sysPayments.manualPaymentInstructions || ""}`;
+  }
+
   return {
-    paystackEnabled: paystack?.isEnabled ?? true,
-    paystackPublicKey: paystack?.publicKey ?? null,
-    flutterwaveEnabled: flutterwave?.isEnabled ?? false,
-    lemonsqueezyEnabled: lemonsqueezy?.isEnabled ?? false,
-    manualEnabled: manual?.isEnabled ?? true,
+    paystackEnabled,
+    paystackPublicKey:
+      sysPayments?.paystackPublicKey || paystack?.publicKey || null,
+    flutterwaveEnabled,
+    lemonsqueezyEnabled,
+    manualEnabled,
     manualInstructions:
-      manual?.manualInstructions ??
+      manualInstructions ||
       "Bank: Access Bank PLC\nAccount Name: Skorvia Ltd\nAccount Number: 0123456789",
   };
 });

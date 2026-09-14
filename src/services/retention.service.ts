@@ -21,6 +21,7 @@ export interface UserCreditUsageSummary {
   isNearLimit: boolean; // >= 80%
   isDepleted: boolean; // >= 100%
   planId: string;
+  planName?: string;
 }
 
 // In-Memory store for surveys and retention discounts
@@ -98,6 +99,26 @@ export const RetentionService = {
     );
     const isNearLimit = percentageUsed >= 80;
     const isDepleted = creditsRemaining <= 0;
+    let planName = "Free Plan";
+    if (planId === "starter") planName = "Starter Plan";
+    else if (planId === "growth") planName = "Growth Plan";
+    else if (planId === "pro") planName = "Pro Plan";
+    else if (planId === "agency") planName = "Agency Plan";
+    else if (planId === "enterprise") planName = "Enterprise Plan";
+    else if (planId === "free") planName = "Free Plan";
+
+    try {
+      const { BillingPlansService } = await import(
+        "@/services/billing-plans.service"
+      );
+      const allPlans = await BillingPlansService.getAllPlans();
+      const dbPlan = allPlans.find(
+        (p) => p.id.toLowerCase() === planId.toLowerCase(),
+      );
+      if (dbPlan?.name) {
+        planName = dbPlan.name;
+      }
+    } catch {}
 
     return {
       userId,
@@ -108,6 +129,7 @@ export const RetentionService = {
       isNearLimit,
       isDepleted,
       planId,
+      planName,
     };
   },
 

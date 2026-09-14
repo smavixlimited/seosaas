@@ -111,8 +111,8 @@ export async function createProject(
   try {
     // 1. Enforce maxDomains limit based on active plan tier
     const existing = (await ProjectRepository.listProjects(organizationId)) ?? [];
-    let maxDomains = 5;
-    let planName = "Starter Plan";
+    let maxDomains = 1;
+    let planName = "Free Plan";
 
     try {
       const { BillingPlansService } = await import(
@@ -142,11 +142,12 @@ export async function createProject(
         const allPlans = await BillingPlansService.getAllPlans();
         const activePlan =
           allPlans.find((p) => p.id === quota?.planId) ||
+          allPlans.find((p) => p.id === "free") ||
           allPlans.find((p) => p.id === "starter") ||
           allPlans[0];
 
         if (activePlan) {
-          maxDomains = activePlan.limits.maxDomains ?? 5;
+          maxDomains = activePlan.limits.maxDomains ?? 1;
           planName = activePlan.name;
         }
       }

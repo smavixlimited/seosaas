@@ -143,8 +143,12 @@ export function VenixTopBar({
       toast.success("All notifications cleared");
     },
   });
-  const formatPlanDisplay = (planId?: string) => {
-    if (!planId || planId.toLowerCase() === "starter") return "Starter Plan";
+  const formatPlanDisplay = (planId?: string, explicitPlanName?: string) => {
+    if (explicitPlanName && explicitPlanName.trim().length > 0) {
+      return explicitPlanName;
+    }
+    if (!planId || planId.toLowerCase() === "free") return "Free Plan";
+    if (planId.toLowerCase() === "starter") return "Starter Plan";
     if (planId.toLowerCase() === "growth") return "Growth Plan";
     if (planId.toLowerCase() === "pro") return "Pro Plan";
     if (planId.toLowerCase() === "scale") return "Scale Plan";
@@ -152,7 +156,10 @@ export function VenixTopBar({
     if (planId.toLowerCase() === "enterprise") return "Enterprise Plan";
     return `${planId.toUpperCase()} Plan`;
   };
-  const currentPlan = formatPlanDisplay(creditData?.planId);
+  const currentPlan = formatPlanDisplay(
+    creditData?.planId,
+    creditData?.planName,
+  );
 
   const isDark =
     themePreference === "dark" ||

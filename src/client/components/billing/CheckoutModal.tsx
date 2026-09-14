@@ -14,9 +14,11 @@ import {
   Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import { useCurrency } from "@/client/lib/currency";
 import { BRAND_CONFIG } from "@/config/brand";
 import {
+  getPublicGatewaysServerFn,
   initializePaystackCheckoutServerFn,
   initializeFlutterwaveCheckoutServerFn,
   initializeLemonSqueezyCheckoutServerFn,
@@ -49,9 +51,31 @@ export function CheckoutModal({
   onSuccess,
 }: CheckoutModalProps) {
   const { currency, formatPrice } = useCurrency();
+  const gatewaysQuery = useQuery({
+    queryKey: ["publicGateways"],
+    queryFn: () => getPublicGatewaysServerFn(),
+    staleTime: 60 * 1000,
+  });
+
+  const gateways = gatewaysQuery.data;
   const [selectedGateway, setSelectedGateway] = React.useState<
     "paystack" | "flutterwave" | "lemonsqueezy" | "manual"
   >("paystack");
+
+  React.useEffect(() => {
+    if (gateways) {
+      if (gateways.paystackEnabled) {
+        setSelectedGateway("paystack");
+      } else if (gateways.flutterwaveEnabled) {
+        setSelectedGateway("flutterwave");
+      } else if (gateways.lemonsqueezyEnabled) {
+        setSelectedGateway("lemonsqueezy");
+      } else if (gateways.manualEnabled) {
+        setSelectedGateway("manual");
+      }
+    }
+  }, [gateways]);
+
   const [loading, setLoading] = React.useState(false);
   const [reference, setReference] = React.useState("");
   const [receiptUrl, setReceiptUrl] = React.useState("");
@@ -376,88 +400,96 @@ export function CheckoutModal({
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {/* Paystack */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedGateway("paystack")}
-                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
-                    selectedGateway === "paystack"
-                      ? "border-primary bg-primary/5 ring-2 ring-primary/20"
-                      : "border-base-300 bg-base-100 hover:border-base-content/30"
-                  }`}
-                >
-                  <CreditCard className="h-4 w-4 text-primary" />
-                  <div>
-                    <div className="text-xs font-bold text-base-content">
-                      Paystack
+                {(!gateways || gateways.paystackEnabled) && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway("paystack")}
+                    className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
+                      selectedGateway === "paystack"
+                        ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                        : "border-base-300 bg-base-100 hover:border-base-content/30"
+                    }`}
+                  >
+                    <CreditCard className="h-4 w-4 text-primary" />
+                    <div>
+                      <div className="text-xs font-bold text-base-content">
+                        Paystack
+                      </div>
+                      <div className="text-[10px] text-base-content/60">
+                        Cards, NGN
+                      </div>
                     </div>
-                    <div className="text-[10px] text-base-content/60">
-                      Cards, NGN
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                )}
 
                 {/* Flutterwave */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedGateway("flutterwave")}
-                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
-                    selectedGateway === "flutterwave"
-                      ? "border-orange-500 bg-orange-500/5 ring-2 ring-orange-500/20"
-                      : "border-base-300 bg-base-100 hover:border-base-content/30"
-                  }`}
-                >
-                  <Zap className="h-4 w-4 text-orange-500" />
-                  <div>
-                    <div className="text-xs font-bold text-base-content">
-                      Flutterwave
+                {(!gateways || gateways.flutterwaveEnabled) && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway("flutterwave")}
+                    className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
+                      selectedGateway === "flutterwave"
+                        ? "border-orange-500 bg-orange-500/5 ring-2 ring-orange-500/20"
+                        : "border-base-300 bg-base-100 hover:border-base-content/30"
+                    }`}
+                  >
+                    <Zap className="h-4 w-4 text-orange-500" />
+                    <div>
+                      <div className="text-xs font-bold text-base-content">
+                        Flutterwave
+                      </div>
+                      <div className="text-[10px] text-base-content/60">
+                        Pan-Africa & USD
+                      </div>
                     </div>
-                    <div className="text-[10px] text-base-content/60">
-                      Pan-Africa & USD
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                )}
 
                 {/* LemonSqueezy */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedGateway("lemonsqueezy")}
-                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
-                    selectedGateway === "lemonsqueezy"
-                      ? "border-blue-500 bg-blue-500/5 ring-2 ring-blue-500/20"
-                      : "border-base-300 bg-base-100 hover:border-base-content/30"
-                  }`}
-                >
-                  <Globe className="h-4 w-4 text-blue-500" />
-                  <div>
-                    <div className="text-xs font-bold text-base-content">
-                      Global Cards
+                {(!gateways || gateways.lemonsqueezyEnabled) && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway("lemonsqueezy")}
+                    className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
+                      selectedGateway === "lemonsqueezy"
+                        ? "border-blue-500 bg-blue-500/5 ring-2 ring-blue-500/20"
+                        : "border-base-300 bg-base-100 hover:border-base-content/30"
+                    }`}
+                  >
+                    <Globe className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <div className="text-xs font-bold text-base-content">
+                        Global Cards
+                      </div>
+                      <div className="text-[10px] text-base-content/60">
+                        Stripe / USD
+                      </div>
                     </div>
-                    <div className="text-[10px] text-base-content/60">
-                      Stripe / USD
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                )}
 
                 {/* Manual Bank Wire */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedGateway("manual")}
-                  className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
-                    selectedGateway === "manual"
-                      ? "border-emerald-500 bg-emerald-500/5 ring-2 ring-emerald-500/20"
-                      : "border-base-300 bg-base-100 hover:border-base-content/30"
-                  }`}
-                >
-                  <Receipt className="h-4 w-4 text-emerald-500" />
-                  <div>
-                    <div className="text-xs font-bold text-base-content">
-                      Bank Wire
+                {(!gateways || gateways.manualEnabled) && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway("manual")}
+                    className={`rounded-2xl border p-3 text-left transition-all flex flex-col justify-between space-y-2 ${
+                      selectedGateway === "manual"
+                        ? "border-emerald-500 bg-emerald-500/5 ring-2 ring-emerald-500/20"
+                        : "border-base-300 bg-base-100 hover:border-base-content/30"
+                    }`}
+                  >
+                    <Receipt className="h-4 w-4 text-emerald-500" />
+                    <div>
+                      <div className="text-xs font-bold text-base-content">
+                        Bank Wire
+                      </div>
+                      <div className="text-[10px] text-base-content/60">
+                        Direct Transfer
+                      </div>
                     </div>
-                    <div className="text-[10px] text-base-content/60">
-                      Direct Transfer
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -469,9 +501,7 @@ export function CheckoutModal({
                     <ShieldCheck className="h-4 w-4" /> Instant Activation with Paystack
                   </div>
                   <p>
-                    Pay securely using your Nigerian Naira debit card, USSD
-                    code, or instant bank transfer. Your {plan.name} features
-                    and monthly credits activate immediately upon payment.
+                    Pay securely using your debit card, USSD code, or instant bank transfer. Your {plan.name} features and monthly credits activate immediately upon payment.
                   </p>
                 </div>
 
@@ -544,11 +574,10 @@ export function CheckoutModal({
                   <div className="font-bold text-base-content">
                     Official Bank Account Details:
                   </div>
-                  <pre className="font-mono text-[11px] text-base-content/80 leading-relaxed bg-base-100 p-2.5 rounded-xl border border-base-300">
-                    Bank: Access Bank PLC{"\n"}
-                    Account Name: Skorvia Intelligence Ltd{"\n"}
-                    Account Number: 0123456789{"\n"}
-                    Amount to Pay: {formattedFinalAmount}
+                  <pre className="font-mono text-[11px] text-base-content/80 leading-relaxed bg-base-100 p-2.5 rounded-xl border border-base-300 whitespace-pre-wrap">
+                    {gateways?.manualInstructions ||
+                      `Bank: Access Bank PLC\nAccount Name: Skorvia Ltd\nAccount Number: 0123456789`}
+                    {"\n"}Amount to Pay: {formattedFinalAmount}
                   </pre>
                 </div>
 
