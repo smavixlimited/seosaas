@@ -62,6 +62,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Application
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: pnpm vite build
+
       - name: Deploy to Cloudflare Workers
         if: env.CLOUDFLARE_API_TOKEN != ''
         uses: cloudflare/wrangler-action@v3
