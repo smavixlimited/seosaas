@@ -278,7 +278,8 @@ export function KeywordSuggestionStep({
         <div className="flex flex-col items-center justify-center gap-3 py-16">
           <AlertCircle className="size-8 text-error" />
           <p className="text-xs text-base-content/50 text-center max-w-sm">
-            Could not fetch ranked keyword suggestions for {domain}. You can continue and add keywords manually.
+            Could not fetch ranked keyword suggestions for {domain}. You can
+            continue and add keywords manually.
           </p>
           <div className="flex gap-2 mt-2">
             <button className="btn btn-primary btn-sm" onClick={onClose}>
@@ -297,7 +298,9 @@ export function KeywordSuggestionStep({
         {sectionHeader("No rankings found")}
         <div className="flex flex-col items-center justify-center gap-3 py-16">
           <p className="text-xs text-base-content/50 text-center max-w-sm">
-            We couldn't find any existing keyword rankings for {domain} in this location. You can continue and add the keywords you want to track manually.
+            We couldn't find any existing keyword rankings for {domain} in this
+            location. You can continue and add the keywords you want to track
+            manually.
           </p>
           <button className="btn btn-primary btn-sm mt-2" onClick={onClose}>
             Continue to Tracker

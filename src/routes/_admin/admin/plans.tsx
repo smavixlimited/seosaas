@@ -254,7 +254,11 @@ function AdminPlansPage() {
             </button>
             <div>
               <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <span>{isCreating ? "Create New Plan" : `Editing: ${editingPlan.name}`}</span>
+                <span>
+                  {isCreating
+                    ? "Create New Plan"
+                    : `Editing: ${editingPlan.name}`}
+                </span>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">
                   {editingPlan.id}
                 </span>
@@ -273,7 +277,10 @@ function AdminPlansPage() {
               className="btn btn-primary btn-sm text-xs font-bold flex items-center gap-1.5"
             >
               {upsertMutation.isPending ? (
-                <Icon icon="solar:spinner-line-duotone" className="h-4 w-4 animate-spin" />
+                <Icon
+                  icon="solar:spinner-line-duotone"
+                  className="h-4 w-4 animate-spin"
+                />
               ) : (
                 <Icon icon="solar:diskette-bold" className="h-4 w-4" />
               )}
@@ -287,7 +294,10 @@ function AdminPlansPage() {
           {/* General & Pricing */}
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-6 shadow-2xs space-y-4">
             <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
-              <Icon icon="solar:tag-price-bold-duotone" className="h-4 w-4 text-primary" />
+              <Icon
+                icon="solar:tag-price-bold-duotone"
+                className="h-4 w-4 text-primary"
+              />
               <span>Plan Details &amp; Dual Currency Pricing</span>
             </h5>
 
@@ -675,7 +685,9 @@ function AdminPlansPage() {
                     <input
                       type="checkbox"
                       className="checkbox checkbox-primary checkbox-xs"
-                      checked={editingPlan.features.competitors_directory ?? true}
+                      checked={
+                        editingPlan.features.competitors_directory ?? true
+                      }
                       onChange={(e) =>
                         setEditingPlan({
                           ...editingPlan,

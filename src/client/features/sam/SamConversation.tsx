@@ -96,7 +96,8 @@ export function SamConversation({
   // Auto-execute pending strategy prompt passed from Roadmap, Strategy Decoder, or Ad Readiness
   const executedPendingPromptRef = useRef(false);
   useEffect(() => {
-    if (typeof window === "undefined" || executedPendingPromptRef.current) return;
+    if (typeof window === "undefined" || executedPendingPromptRef.current)
+      return;
     const pendingPrompt = sessionStorage.getItem("sam_pending_prompt");
     if (pendingPrompt && !isBusy) {
       executedPendingPromptRef.current = true;
@@ -189,7 +190,10 @@ export function SamConversation({
 
           {status === "error" ? (
             <div className="rounded-xl border border-error/30 bg-error/10 p-3 text-xs text-error flex items-center justify-between gap-3">
-              <span>Could not complete AI response. Please check your API key or reset the chat.</span>
+              <span>
+                Could not complete AI response. Please check your API key or
+                reset the chat.
+              </span>
               <button
                 type="button"
                 onClick={() => clearHistory()}

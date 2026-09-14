@@ -5,7 +5,13 @@ import { AppError } from "@/server/lib/errors";
 import { assertSafeUrlOrThrow } from "@/shared/security/ssrf";
 
 export interface MonitorReminderSettings {
-  reminderFrequency: "all" | "weekly" | "ssl_expiry" | "domain_expiry" | "both" | "none";
+  reminderFrequency:
+    | "all"
+    | "weekly"
+    | "ssl_expiry"
+    | "domain_expiry"
+    | "both"
+    | "none";
   reminderEmail?: string | null;
 }
 
@@ -26,7 +32,12 @@ export function detectHostingProvider(headers: Headers): string {
 
   if (cfRay || server.includes("cloudflare")) return "Cloudflare";
   if (vercel) return "Vercel";
-  if (cloudfront || server.includes("cloudfront") || server.includes("amazons3")) return "AWS CloudFront";
+  if (
+    cloudfront ||
+    server.includes("cloudfront") ||
+    server.includes("amazons3")
+  )
+    return "AWS CloudFront";
   if (netlify) return "Netlify";
   if (fastly) return "Fastly";
   if (render) return "Render";
@@ -39,7 +50,9 @@ export function detectHostingProvider(headers: Headers): string {
   if (server.includes("github")) return "GitHub Pages";
   if (poweredBy.includes("next.js")) return "Next.js Server";
 
-  return server ? server.charAt(0).toUpperCase() + server.slice(1) : "Cloud Infrastructure";
+  return server
+    ? server.charAt(0).toUpperCase() + server.slice(1)
+    : "Cloud Infrastructure";
 }
 
 /**
@@ -92,8 +105,13 @@ export async function probeDomainInfo(targetUrl: string): Promise<{
             (e: any) => Array.isArray(e.roles) && e.roles.includes("registrar"),
           );
           if (regEntity) {
-            if (regEntity.vcardArray && Array.isArray(regEntity.vcardArray[1])) {
-              const fn = regEntity.vcardArray[1].find((item: any) => item[0] === "fn");
+            if (
+              regEntity.vcardArray &&
+              Array.isArray(regEntity.vcardArray[1])
+            ) {
+              const fn = regEntity.vcardArray[1].find(
+                (item: any) => item[0] === "fn",
+              );
               if (fn && fn[3]) registrar = String(fn[3]);
             }
             if (!registrar && regEntity.handle) {
@@ -104,7 +122,9 @@ export async function probeDomainInfo(targetUrl: string): Promise<{
 
         if (expiryDate) {
           const expMs = new Date(expiryDate).getTime();
-          const diffDays = Math.ceil((expMs - Date.now()) / (1000 * 60 * 60 * 24));
+          const diffDays = Math.ceil(
+            (expMs - Date.now()) / (1000 * 60 * 60 * 24),
+          );
           return {
             domainExpiresAt: expiryDate,
             domainRegistrar: registrar || "Standard ICANN Registrar",
@@ -121,7 +141,9 @@ export async function probeDomainInfo(targetUrl: string): Promise<{
   }
 
   // Fallback estimation (320 days standard registration window)
-  const defaultExpiry = new Date(Date.now() + 320 * 24 * 60 * 60 * 1000).toISOString();
+  const defaultExpiry = new Date(
+    Date.now() + 320 * 24 * 60 * 60 * 1000,
+  ).toISOString();
   return {
     domainExpiresAt: defaultExpiry,
     domainRegistrar: "Verified Domain Registrar",
@@ -178,24 +200,32 @@ export async function probeSslCertificate(targetUrl: string): Promise<{
                 );
 
                 socket.on("error", () => {
-                  try { socket.destroy(); } catch {}
+                  try {
+                    socket.destroy();
+                  } catch {}
                   resolve(null);
                 });
 
                 socket.on("timeout", () => {
-                  try { socket.destroy(); } catch {}
+                  try {
+                    socket.destroy();
+                  } catch {}
                   resolve(null);
                 });
               } catch {
                 resolve(null);
               }
             }),
-            new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000)),
+            new Promise<null>((resolve) =>
+              setTimeout(() => resolve(null), 3000),
+            ),
           ]);
 
           if (certDate && !isNaN(certDate.getTime())) {
             const iso = certDate.toISOString();
-            const diffDays = Math.ceil((certDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+            const diffDays = Math.ceil(
+              (certDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+            );
             return {
               sslExpiresAt: iso,
               daysRemaining: diffDays,
@@ -213,7 +243,9 @@ export async function probeSslCertificate(targetUrl: string): Promise<{
   }
 
   // Fallback if TLS socket inspection was blocked, non-HTTPS, or in edge worker
-  const defaultExpiry = new Date(Date.now() + 85 * 24 * 60 * 60 * 1000).toISOString();
+  const defaultExpiry = new Date(
+    Date.now() + 85 * 24 * 60 * 60 * 1000,
+  ).toISOString();
   return {
     sslExpiresAt: defaultExpiry,
     daysRemaining: 85,
@@ -240,7 +272,13 @@ export async function addUptimeMonitor(
   params: {
     url: string;
     projectId?: string | null;
-    reminderFrequency?: "all" | "weekly" | "ssl_expiry" | "domain_expiry" | "both" | "none";
+    reminderFrequency?:
+      | "all"
+      | "weekly"
+      | "ssl_expiry"
+      | "domain_expiry"
+      | "both"
+      | "none";
     reminderEmail?: string | null;
   },
 ) {
@@ -290,7 +328,10 @@ export async function addUptimeMonitor(
     domainRegistrar: domainInfo.domainRegistrar,
     hostingProvider: detectedHosting,
     reminderFrequency: (params.reminderFrequency || "all") as any,
-    reminderEmail: params.reminderEmail && params.reminderEmail.trim().length > 0 ? params.reminderEmail.trim() : null,
+    reminderEmail:
+      params.reminderEmail && params.reminderEmail.trim().length > 0
+        ? params.reminderEmail.trim()
+        : null,
     isActive: true,
     createdAt: now,
   };
@@ -303,7 +344,10 @@ export async function addUptimeMonitor(
 
     return created || monitorRecord;
   } catch (dbErr) {
-    console.warn("Direct insert into uptimeMonitors error, trying fallback:", dbErr);
+    console.warn(
+      "Direct insert into uptimeMonitors error, trying fallback:",
+      dbErr,
+    );
     try {
       const [created] = await db
         .insert(uptimeMonitors)
@@ -409,7 +453,8 @@ export async function probeUptimeMonitor(monitorId: string) {
     // Server just went down: Dispatch instant in-app notification & email alert
     try {
       const { userNotifications } = await import("@/db/schema");
-      const { sendResendEmail } = await import("@/services/email/resend.service");
+      const { sendResendEmail } =
+        await import("@/services/email/resend.service");
       const { BRAND_CONFIG } = await import("@/config/brand");
 
       await db.insert(userNotifications).values({
@@ -428,7 +473,11 @@ export async function probeUptimeMonitor(monitorId: string) {
 
       let recipientEmail = mon.reminderEmail;
       if (!recipientEmail) {
-        const [u] = await db.select().from(user).where(eq(user.id, mon.userId)).limit(1);
+        const [u] = await db
+          .select()
+          .from(user)
+          .where(eq(user.id, mon.userId))
+          .limit(1);
         recipientEmail = u?.email;
       }
 
@@ -465,7 +514,8 @@ export async function probeUptimeMonitor(monitorId: string) {
     // Server just recovered: Dispatch recovery notification & email alert
     try {
       const { userNotifications } = await import("@/db/schema");
-      const { sendResendEmail } = await import("@/services/email/resend.service");
+      const { sendResendEmail } =
+        await import("@/services/email/resend.service");
       const { BRAND_CONFIG } = await import("@/config/brand");
 
       await db.insert(userNotifications).values({
@@ -484,7 +534,11 @@ export async function probeUptimeMonitor(monitorId: string) {
 
       let recipientEmail = mon.reminderEmail;
       if (!recipientEmail) {
-        const [u] = await db.select().from(user).where(eq(user.id, mon.userId)).limit(1);
+        const [u] = await db
+          .select()
+          .from(user)
+          .where(eq(user.id, mon.userId))
+          .limit(1);
         recipientEmail = u?.email;
       }
 
@@ -559,7 +613,11 @@ export async function checkAndSendMonitoringReminders() {
 
     let recipientEmail = mon.reminderEmail;
     if (!recipientEmail) {
-      const [u] = await db.select().from(user).where(eq(user.id, mon.userId)).limit(1);
+      const [u] = await db
+        .select()
+        .from(user)
+        .where(eq(user.id, mon.userId))
+        .limit(1);
       recipientEmail = u?.email;
     }
 
@@ -572,7 +630,9 @@ export async function checkAndSendMonitoringReminders() {
       mon.sslExpiresAt
     ) {
       const sslExpiryMs = new Date(mon.sslExpiresAt).getTime();
-      const sslDaysRemaining = Math.ceil((sslExpiryMs - nowMs) / (1000 * 60 * 60 * 24));
+      const sslDaysRemaining = Math.ceil(
+        (sslExpiryMs - nowMs) / (1000 * 60 * 60 * 24),
+      );
 
       if (sslDaysRemaining <= 14) {
         try {
@@ -611,7 +671,12 @@ export async function checkAndSendMonitoringReminders() {
           }
 
           shouldUpdateLastSent = true;
-          alertsTriggered.push({ monitorId: mon.id, url: mon.url, type: "ssl", daysRemaining: sslDaysRemaining });
+          alertsTriggered.push({
+            monitorId: mon.id,
+            url: mon.url,
+            type: "ssl",
+            daysRemaining: sslDaysRemaining,
+          });
         } catch (sslErr) {
           console.warn("Failed to dispatch SSL expiry reminder:", sslErr);
         }
@@ -625,7 +690,9 @@ export async function checkAndSendMonitoringReminders() {
       mon.domainExpiresAt
     ) {
       const domExpiryMs = new Date(mon.domainExpiresAt).getTime();
-      const domDaysRemaining = Math.ceil((domExpiryMs - nowMs) / (1000 * 60 * 60 * 24));
+      const domDaysRemaining = Math.ceil(
+        (domExpiryMs - nowMs) / (1000 * 60 * 60 * 24),
+      );
 
       if (domDaysRemaining <= 30) {
         try {
@@ -664,7 +731,12 @@ export async function checkAndSendMonitoringReminders() {
           }
 
           shouldUpdateLastSent = true;
-          alertsTriggered.push({ monitorId: mon.id, url: mon.url, type: "domain", daysRemaining: domDaysRemaining });
+          alertsTriggered.push({
+            monitorId: mon.id,
+            url: mon.url,
+            type: "domain",
+            daysRemaining: domDaysRemaining,
+          });
         } catch (domErr) {
           console.warn("Failed to dispatch Domain expiry reminder:", domErr);
         }
@@ -681,9 +753,6 @@ export async function checkAndSendMonitoringReminders() {
 
   return alertsTriggered;
 }
-
-// Alias for backward compatibility
-export const checkAndSendSslExpiryReminders = checkAndSendMonitoringReminders;
 
 export async function runAllActiveMonitors() {
   const activeMonitors = await db
@@ -703,7 +772,10 @@ export async function runAllActiveMonitors() {
 
   // Also check reminders for SSL and Domain expiry
   await checkAndSendMonitoringReminders().catch((err) => {
-    console.warn("Monitoring reminder check failed during runAllActiveMonitors:", err);
+    console.warn(
+      "Monitoring reminder check failed during runAllActiveMonitors:",
+      err,
+    );
   });
 
   return results;
@@ -719,8 +791,5 @@ export const UptimeService = {
   probeDomainInfo,
   detectHostingProvider,
   checkAndSendMonitoringReminders,
-  checkAndSendSslExpiryReminders,
   runAllActiveMonitors,
 };
-
-

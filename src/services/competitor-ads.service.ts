@@ -304,7 +304,10 @@ Format as JSON array of objects:
           competitorName: name,
           platform: "google" as AdPlatform,
           headline: String(ad.headline || `#1 Solution | Try ${name} Free`),
-          bodyCopy: String(ad.bodyCopy || `Accelerate your workflow with ${name}. Join industry leaders today.`),
+          bodyCopy: String(
+            ad.bodyCopy ||
+              `Accelerate your workflow with ${name}. Join industry leaders today.`,
+          ),
           mediaType: "text_only",
           landingPageUrl: String(ad.landingPageUrl || `https://${domain}`),
           ctaType: String(ad.ctaType || "Get Started"),
@@ -312,7 +315,10 @@ Format as JSON array of objects:
           estimatedActiveDays: Number(ad.estimatedActiveDays) || 30,
           isWinningAd: Boolean(ad.isWinningAd),
           isAiOpportunity: false,
-          metadata: ad.metadata || { sitelinks: ["Overview", "Pricing"], targetKeywords: [`${name.toLowerCase()} software`] },
+          metadata: ad.metadata || {
+            sitelinks: ["Overview", "Pricing"],
+            targetKeywords: [`${name.toLowerCase()} software`],
+          },
           createdAt: now,
         }));
       }
@@ -399,7 +405,8 @@ Format as JSON array of objects:
         messages: [
           {
             role: "system",
-            content: "You are an expert Social Ads Analyst. Return only valid JSON array.",
+            content:
+              "You are an expert Social Ads Analyst. Return only valid JSON array.",
           },
           {
             role: "user",
@@ -434,8 +441,11 @@ Format as JSON array:
           competitorName: name,
           platform: "meta" as AdPlatform,
           headline: String(ad.headline || `Scale Faster with ${name}`),
-          bodyCopy: String(ad.bodyCopy || `See how fast-growing teams get ahead with ${name}.`),
-          mediaUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
+          bodyCopy: String(
+            ad.bodyCopy || `See how fast-growing teams get ahead with ${name}.`,
+          ),
+          mediaUrl:
+            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&q=80",
           mediaType: "image",
           landingPageUrl: String(ad.landingPageUrl || `https://${domain}`),
           ctaType: String(ad.ctaType || "Learn More"),

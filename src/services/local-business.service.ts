@@ -295,8 +295,7 @@ export class LocalBusinessService {
               locationName: `${existingProfile.businessName} (Main)`,
               placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
               businessName: existingProfile.businessName,
-              streetAddress:
-                existingProfile.streetAddress || "",
+              streetAddress: existingProfile.streetAddress || "",
               city: existingProfile.city || "",
               state: existingProfile.state || "",
               postalCode: existingProfile.postalCode || "",
@@ -342,7 +341,8 @@ export class LocalBusinessService {
             countryCode: existingProfile.countryCode || "US",
             phoneNumber: existingProfile.phoneNumber || "",
             websiteUrl: existingProfile.websiteUrl || "",
-            primaryCategory: existingProfile.primaryCategory || "Local Business",
+            primaryCategory:
+              existingProfile.primaryCategory || "Local Business",
             gbpClaimed: existingProfile.gbpClaimed,
             gbpHealthScore: existingProfile.gbpHealthScore,
             averageRating: existingProfile.averageRating,
@@ -388,9 +388,8 @@ export class LocalBusinessService {
       }
 
       // No configured local business location found in DB: return clean unconfigured state
-      const { BrandCompetitorService } = await import(
-        "@/services/brand-competitor.service"
-      );
+      const { BrandCompetitorService } =
+        await import("@/services/brand-competitor.service");
       const brand = await BrandCompetitorService.getBrandProfile(projectId);
       const brandName = brand.brandName || "My Business";
       const websiteUrl = brand.websiteUrl || "";
@@ -518,19 +517,22 @@ export class LocalBusinessService {
           {
             id: `gbp_project_${projectId}`,
             businessName: bName,
-            streetAddress: existingLb?.streetAddress || "KM 17 Lekki - Epe Expressway",
+            streetAddress:
+              existingLb?.streetAddress || "KM 17 Lekki - Epe Expressway",
             city: existingLb?.city || "Lagos",
             state: existingLb?.state || "Lagos State",
             postalCode: existingLb?.postalCode || "106104",
             countryCode: existingLb?.countryCode || "NG",
             phoneNumber: existingLb?.phoneNumber || "+234 805 716 2832",
             websiteUrl: existingLb?.websiteUrl || `https://${domain}`,
-            primaryCategory: existingLb?.primaryCategory || "Corporate Office & Services",
+            primaryCategory:
+              existingLb?.primaryCategory || "Corporate Office & Services",
             lat: existingLb?.countryCode === "NG" ? 6.4474 : 37.7749,
             lng: existingLb?.countryCode === "NG" ? 3.4735 : -122.4194,
             averageRating: existingLb?.averageRating || 0,
             totalReviews: existingLb?.totalReviews || 0,
-            onlineAssessment: (existingLb?.napConsistencyScore || 70) > 80 ? "Good" : "Fair",
+            onlineAssessment:
+              (existingLb?.napConsistencyScore || 70) > 80 ? "Good" : "Fair",
             listingsToFixCount: 12,
             totalListingsCount: 33,
             coverage: DEFAULT_SEMRUSH_COVERAGE,
@@ -551,7 +553,10 @@ export class LocalBusinessService {
     projectId: string;
     profileId: string;
   }): Promise<LocalBusinessData> {
-    const all = await this.detectGoogleBusinessProfiles(undefined, params.projectId);
+    const all = await this.detectGoogleBusinessProfiles(
+      undefined,
+      params.projectId,
+    );
     const detected = all.find((p) => p.id === params.profileId) || all[0];
     if (!detected) {
       throw new Error("Location profile not found to connect");
@@ -593,7 +598,11 @@ export class LocalBusinessService {
     connectGoogle?: boolean;
   }): Promise<LocalBusinessData> {
     const { db } = await import("@/db");
-    const { localBusinessProfiles, localBusinessLocations, localRankGridSnapshots } = await import("@/db/schema");
+    const {
+      localBusinessProfiles,
+      localBusinessLocations,
+      localRankGridSnapshots,
+    } = await import("@/db/schema");
     const { eq } = await import("drizzle-orm");
 
     const now = new Date().toISOString();
@@ -613,7 +622,9 @@ export class LocalBusinessService {
 
     const initialAudit = [
       `Primary business location for ${params.businessName} successfully configured`,
-      params.connectGoogle ? "Google Business Profile connection established" : "Ready for Google Business Profile connection",
+      params.connectGoogle
+        ? "Google Business Profile connection established"
+        : "Ready for Google Business Profile connection",
       `Active directory sync monitoring initiated for ${countryCode} directories`,
       "Local Geo-Grid 3x3 rank scanner initialized",
     ];
@@ -695,7 +706,8 @@ export class LocalBusinessService {
         id: locationId,
         projectId: params.projectId,
         locationName: `${params.businessName} (Main)`,
-        placeId: params.placeId || `ChIJ_${Math.random().toString(36).slice(2, 10)}`,
+        placeId:
+          params.placeId || `ChIJ_${Math.random().toString(36).slice(2, 10)}`,
         businessName: params.businessName,
         streetAddress: params.streetAddress,
         city: params.city,
@@ -728,15 +740,96 @@ export class LocalBusinessService {
     if (!existingGrid) {
       const gridId = `lgrid_${params.projectId}`;
       const points = [
-        { row: 0, col: 0, lat: lat + 0.02, lng: lng - 0.02, rank: 2, distanceKm: 2.8, previousRank: 3, rankDelta: 1 },
-        { row: 0, col: 1, lat: lat + 0.02, lng, rank: 1, distanceKm: 2.2, previousRank: 2, rankDelta: 1 },
-        { row: 0, col: 2, lat: lat + 0.02, lng: lng + 0.02, rank: 3, distanceKm: 2.8, previousRank: 4, rankDelta: 1 },
-        { row: 1, col: 0, lat, lng: lng - 0.02, rank: 1, distanceKm: 2.2, previousRank: 1, rankDelta: 0 },
-        { row: 1, col: 1, lat, lng, rank: 1, distanceKm: 0.0, previousRank: 1, rankDelta: 0 },
-        { row: 1, col: 2, lat, lng: lng + 0.02, rank: 2, distanceKm: 2.2, previousRank: 3, rankDelta: 1 },
-        { row: 2, col: 0, lat: lat - 0.02, lng: lng - 0.02, rank: 4, distanceKm: 2.8, previousRank: 6, rankDelta: 2 },
-        { row: 2, col: 1, lat: lat - 0.02, lng, rank: 2, distanceKm: 2.2, previousRank: 3, rankDelta: 1 },
-        { row: 2, col: 2, lat: lat - 0.02, lng: lng + 0.02, rank: 3, distanceKm: 2.8, previousRank: 5, rankDelta: 2 },
+        {
+          row: 0,
+          col: 0,
+          lat: lat + 0.02,
+          lng: lng - 0.02,
+          rank: 2,
+          distanceKm: 2.8,
+          previousRank: 3,
+          rankDelta: 1,
+        },
+        {
+          row: 0,
+          col: 1,
+          lat: lat + 0.02,
+          lng,
+          rank: 1,
+          distanceKm: 2.2,
+          previousRank: 2,
+          rankDelta: 1,
+        },
+        {
+          row: 0,
+          col: 2,
+          lat: lat + 0.02,
+          lng: lng + 0.02,
+          rank: 3,
+          distanceKm: 2.8,
+          previousRank: 4,
+          rankDelta: 1,
+        },
+        {
+          row: 1,
+          col: 0,
+          lat,
+          lng: lng - 0.02,
+          rank: 1,
+          distanceKm: 2.2,
+          previousRank: 1,
+          rankDelta: 0,
+        },
+        {
+          row: 1,
+          col: 1,
+          lat,
+          lng,
+          rank: 1,
+          distanceKm: 0.0,
+          previousRank: 1,
+          rankDelta: 0,
+        },
+        {
+          row: 1,
+          col: 2,
+          lat,
+          lng: lng + 0.02,
+          rank: 2,
+          distanceKm: 2.2,
+          previousRank: 3,
+          rankDelta: 1,
+        },
+        {
+          row: 2,
+          col: 0,
+          lat: lat - 0.02,
+          lng: lng - 0.02,
+          rank: 4,
+          distanceKm: 2.8,
+          previousRank: 6,
+          rankDelta: 2,
+        },
+        {
+          row: 2,
+          col: 1,
+          lat: lat - 0.02,
+          lng,
+          rank: 2,
+          distanceKm: 2.2,
+          previousRank: 3,
+          rankDelta: 1,
+        },
+        {
+          row: 2,
+          col: 2,
+          lat: lat - 0.02,
+          lng: lng + 0.02,
+          rank: 3,
+          distanceKm: 2.8,
+          previousRank: 5,
+          rankDelta: 2,
+        },
       ];
 
       await db.insert(localRankGridSnapshots).values({
@@ -1092,7 +1185,8 @@ export class LocalBusinessService {
       if (proj?.domain) {
         resolvedWebsiteUrl = `https://${proj.domain}`;
         const domainBase = proj.domain.replace(/^www\./i, "").split(".")[0];
-        resolvedBusinessName = domainBase.charAt(0).toUpperCase() + domainBase.slice(1);
+        resolvedBusinessName =
+          domainBase.charAt(0).toUpperCase() + domainBase.slice(1);
       }
     } catch {
       // Ignore db query error

@@ -59,9 +59,7 @@ export function ResultsView({
     return calculateAuditGrade({
       issues,
       pagesCrawled: audit.pagesCrawled,
-      lighthouseScores: lighthouse.map(
-        (l) => l.seoScore ?? l.performanceScore,
-      ),
+      lighthouseScores: lighthouse.map((l) => l.seoScore ?? l.performanceScore),
     });
   }, [issues, audit.pagesCrawled, lighthouse]);
 
@@ -71,7 +69,9 @@ export function ResultsView({
   );
 
   const passedTests = useMemo(() => {
-    return (Object.entries(AUDIT_ISSUE_TYPES) as [string, AuditIssueDescriptor][])
+    return (
+      Object.entries(AUDIT_ISSUE_TYPES) as [string, AuditIssueDescriptor][]
+    )
       .filter(([typeKey]) => !failedIssueTypes.has(typeKey))
       .map(([typeKey, desc]) => ({
         typeKey,
@@ -159,7 +159,10 @@ export function ResultsView({
       </div>
 
       {/* 2. Executive Print / PDF Export View (Clean White-Label Report) */}
-      <div id="audit-printable-report" className="hidden print:block p-8 bg-white text-slate-900 space-y-8 font-sans">
+      <div
+        id="audit-printable-report"
+        className="hidden print:block p-8 bg-white text-slate-900 space-y-8 font-sans"
+      >
         {/* Executive Header */}
         <div className="border-b-2 border-slate-900 pb-6 flex items-start justify-between">
           <div className="flex items-center gap-4">
@@ -202,7 +205,8 @@ export function ResultsView({
                           : "#fecdd3",
                   }}
                 >
-                  {auditGrade.score}% • Grade {auditGrade.letterGrade} ({auditGrade.label})
+                  {auditGrade.score}% • Grade {auditGrade.letterGrade} (
+                  {auditGrade.label})
                 </span>
               </div>
             </div>
@@ -212,9 +216,16 @@ export function ResultsView({
               Status: Completed
             </div>
             <p className="font-semibold text-slate-700 pt-1">
-              Date: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+              Date:{" "}
+              {new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
-            <p className="text-[10px] text-slate-400">Audit ID: {audit.id.slice(0, 12)}</p>
+            <p className="text-[10px] text-slate-400">
+              Audit ID: {audit.id.slice(0, 12)}
+            </p>
           </div>
         </div>
 
@@ -250,20 +261,36 @@ export function ResultsView({
 
           <div className="col-span-4 grid grid-cols-4 gap-3 text-center pl-2">
             <div className="p-2 rounded-xl bg-white border border-slate-200">
-              <p className="text-[10px] uppercase font-bold text-slate-400">Pages Crawled</p>
-              <p className="text-xl font-bold text-slate-800 mt-1">{audit.pagesCrawled}</p>
+              <p className="text-[10px] uppercase font-bold text-slate-400">
+                Pages Crawled
+              </p>
+              <p className="text-xl font-bold text-slate-800 mt-1">
+                {audit.pagesCrawled}
+              </p>
             </div>
             <div className="p-2 rounded-xl bg-white border border-slate-200">
-              <p className="text-[10px] uppercase font-bold text-rose-500">Critical Issues</p>
-              <p className="text-xl font-bold text-rose-600 mt-1">{severityCounts.critical}</p>
+              <p className="text-[10px] uppercase font-bold text-rose-500">
+                Critical Issues
+              </p>
+              <p className="text-xl font-bold text-rose-600 mt-1">
+                {severityCounts.critical}
+              </p>
             </div>
             <div className="p-2 rounded-xl bg-white border border-slate-200">
-              <p className="text-[10px] uppercase font-bold text-amber-500">Warnings</p>
-              <p className="text-xl font-bold text-amber-600 mt-1">{severityCounts.warning}</p>
+              <p className="text-[10px] uppercase font-bold text-amber-500">
+                Warnings
+              </p>
+              <p className="text-xl font-bold text-amber-600 mt-1">
+                {severityCounts.warning}
+              </p>
             </div>
             <div className="p-2 rounded-xl bg-white border border-slate-200">
-              <p className="text-[10px] uppercase font-bold text-slate-400">Avg Latency</p>
-              <p className="text-xl font-bold text-slate-800 mt-1">{stats.averageResponseMs}ms</p>
+              <p className="text-[10px] uppercase font-bold text-slate-400">
+                Avg Latency
+              </p>
+              <p className="text-xl font-bold text-slate-800 mt-1">
+                {stats.averageResponseMs}ms
+              </p>
             </div>
           </div>
         </div>
@@ -275,7 +302,9 @@ export function ResultsView({
               <span className="h-3 w-3 rounded-full bg-rose-500" />
               <span>Issues Requiring Action ({issues.length} total)</span>
             </h2>
-            <span className="text-xs text-slate-500 font-semibold">Prioritized by Severity</span>
+            <span className="text-xs text-slate-500 font-semibold">
+              Prioritized by Severity
+            </span>
           </div>
 
           {issues.length === 0 ? (
@@ -287,19 +316,33 @@ export function ResultsView({
               {issues.map((issue, idx) => {
                 const desc = getIssueDescriptor(issue.issueType);
                 return (
-                  <div key={issue.id || idx} className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 print-break-inside-avoid shadow-2xs">
+                  <div
+                    key={issue.id || idx}
+                    className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 print-break-inside-avoid shadow-2xs"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                          issue.severity === "critical" ? "bg-rose-100 text-rose-800" : issue.severity === "warning" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"
-                        }`}>
+                        <span
+                          className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
+                            issue.severity === "critical"
+                              ? "bg-rose-100 text-rose-800"
+                              : issue.severity === "warning"
+                                ? "bg-amber-100 text-amber-800"
+                                : "bg-slate-100 text-slate-700"
+                          }`}
+                        >
                           {issue.severity}
                         </span>
                         <h3 className="text-sm font-bold text-slate-900">
-                          {desc?.title || issue.issueType.replace(/[-_]+/g, " ").toUpperCase()}
+                          {desc?.title ||
+                            issue.issueType
+                              .replace(/[-_]+/g, " ")
+                              .toUpperCase()}
                         </h3>
                       </div>
-                      <span className="text-xs font-mono text-slate-500 truncate max-w-sm">{issue.pageUrl}</span>
+                      <span className="text-xs font-mono text-slate-500 truncate max-w-sm">
+                        {issue.pageUrl}
+                      </span>
                     </div>
                     {desc?.explanation && (
                       <p className="text-xs text-slate-600 leading-relaxed">
@@ -308,7 +351,9 @@ export function ResultsView({
                     )}
                     {desc?.howToFix && (
                       <div className="p-2.5 rounded-lg bg-indigo-50/60 border border-indigo-100 text-xs text-indigo-900">
-                        <strong className="font-bold text-indigo-950">Recommended Fix: </strong>
+                        <strong className="font-bold text-indigo-950">
+                          Recommended Fix:{" "}
+                        </strong>
                         {desc.howToFix}
                       </div>
                     )}
@@ -332,7 +377,9 @@ export function ResultsView({
                 <span className="h-3 w-3 rounded-full bg-blue-500" />
                 <span>Crawled Pages Inventory ({pages.length} pages)</span>
               </h2>
-              <span className="text-xs text-slate-500 font-semibold">Live HTTP Status &amp; On-Page Health</span>
+              <span className="text-xs text-slate-500 font-semibold">
+                Live HTTP Status &amp; On-Page Health
+              </span>
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -355,25 +402,39 @@ export function ResultsView({
                         {p.url}
                       </td>
                       <td className="p-2.5 text-center">
-                        <span className={`px-2 py-0.5 rounded font-mono font-bold text-[10px] ${
-                          (p.statusCode ?? 200) < 300 ? "bg-emerald-100 text-emerald-800" : (p.statusCode ?? 200) < 400 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
-                        }`}>
+                        <span
+                          className={`px-2 py-0.5 rounded font-mono font-bold text-[10px] ${
+                            (p.statusCode ?? 200) < 300
+                              ? "bg-emerald-100 text-emerald-800"
+                              : (p.statusCode ?? 200) < 400
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-rose-100 text-rose-800"
+                          }`}
+                        >
                           {p.statusCode ?? "200"}
                         </span>
                       </td>
                       <td className="p-2.5 max-w-xs truncate text-[11px]">
                         {p.title || "<Missing Title>"}
                       </td>
-                      <td className="p-2.5 text-center font-mono">{p.h1Count}</td>
-                      <td className="p-2.5 text-center font-mono">{p.wordCount ?? 0}</td>
+                      <td className="p-2.5 text-center font-mono">
+                        {p.h1Count}
+                      </td>
+                      <td className="p-2.5 text-center font-mono">
+                        {p.wordCount ?? 0}
+                      </td>
                       <td className="p-2.5 text-center font-mono">
                         {(p.imagesMissingAlt ?? 0) > 0 ? (
-                          <span className="text-rose-600 font-bold">{p.imagesMissingAlt}</span>
+                          <span className="text-rose-600 font-bold">
+                            {p.imagesMissingAlt}
+                          </span>
                         ) : (
                           "0"
                         )}
                       </td>
-                      <td className="p-2.5 text-right font-mono text-slate-500">{p.responseTimeMs ?? 0}ms</td>
+                      <td className="p-2.5 text-right font-mono text-slate-500">
+                        {p.responseTimeMs ?? 0}ms
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -388,9 +449,13 @@ export function ResultsView({
             <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
               <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-amber-500" />
-                <span>Performance &amp; Core Web Vitals ({lighthouse.length} tested)</span>
+                <span>
+                  Performance &amp; Core Web Vitals ({lighthouse.length} tested)
+                </span>
               </h2>
-              <span className="text-xs text-slate-500 font-semibold">Lighthouse Audit Scores</span>
+              <span className="text-xs text-slate-500 font-semibold">
+                Lighthouse Audit Scores
+              </span>
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -411,19 +476,40 @@ export function ResultsView({
                   {lighthouse.map((lh, idx) => (
                     <tr key={lh.id || idx} className="print-break-inside-avoid">
                       <td className="p-2.5 max-w-xs truncate text-slate-900 font-sans font-semibold">
-                        {pages.find(p => p.id === lh.pageId)?.url || lh.pageId}
+                        {pages.find((p) => p.id === lh.pageId)?.url ||
+                          lh.pageId}
                       </td>
-                      <td className="p-2.5 text-center uppercase text-[10px] font-bold text-slate-500">{lh.strategy}</td>
+                      <td className="p-2.5 text-center uppercase text-[10px] font-bold text-slate-500">
+                        {lh.strategy}
+                      </td>
                       <td className="p-2.5 text-center font-bold">
-                        <span className={lh.performanceScore && lh.performanceScore >= 80 ? "text-emerald-600" : lh.performanceScore && lh.performanceScore >= 50 ? "text-amber-600" : "text-rose-600"}>
+                        <span
+                          className={
+                            lh.performanceScore && lh.performanceScore >= 80
+                              ? "text-emerald-600"
+                              : lh.performanceScore && lh.performanceScore >= 50
+                                ? "text-amber-600"
+                                : "text-rose-600"
+                          }
+                        >
                           {lh.performanceScore ?? "-"}
                         </span>
                       </td>
-                      <td className="p-2.5 text-center font-bold text-emerald-600">{lh.seoScore ?? "-"}</td>
-                      <td className="p-2.5 text-center font-bold text-emerald-600">{lh.accessibilityScore ?? "-"}</td>
-                      <td className="p-2.5 text-center">{lh.lcpMs ? `${lh.lcpMs}ms` : "-"}</td>
-                      <td className="p-2.5 text-center">{lh.cls != null ? lh.cls.toFixed(2) : "-"}</td>
-                      <td className="p-2.5 text-right text-slate-500">{lh.ttfbMs ? `${lh.ttfbMs}ms` : "-"}</td>
+                      <td className="p-2.5 text-center font-bold text-emerald-600">
+                        {lh.seoScore ?? "-"}
+                      </td>
+                      <td className="p-2.5 text-center font-bold text-emerald-600">
+                        {lh.accessibilityScore ?? "-"}
+                      </td>
+                      <td className="p-2.5 text-center">
+                        {lh.lcpMs ? `${lh.lcpMs}ms` : "-"}
+                      </td>
+                      <td className="p-2.5 text-center">
+                        {lh.cls != null ? lh.cls.toFixed(2) : "-"}
+                      </td>
+                      <td className="p-2.5 text-right text-slate-500">
+                        {lh.ttfbMs ? `${lh.ttfbMs}ms` : "-"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -438,9 +524,13 @@ export function ResultsView({
             <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
               <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-emerald-500" />
-                <span>Passed Technical SEO Benchmarks ({passedTests.length} tests)</span>
+                <span>
+                  Passed Technical SEO Benchmarks ({passedTests.length} tests)
+                </span>
               </h2>
-              <span className="text-xs text-emerald-700 font-semibold">Verified Compliant</span>
+              <span className="text-xs text-emerald-700 font-semibold">
+                Verified Compliant
+              </span>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -453,8 +543,12 @@ export function ResultsView({
                     ✓
                   </span>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">{test.title}</h4>
-                    <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{test.explanation}</p>
+                    <h4 className="text-xs font-bold text-slate-900">
+                      {test.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                      {test.explanation}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -464,8 +558,14 @@ export function ResultsView({
 
         {/* Executive Footer */}
         <div className="border-t border-slate-200 pt-4 flex items-center justify-between text-xs text-slate-400 print-break-inside-avoid">
-          <p>© {new Date().getFullYear()} {BRAND_CONFIG.legalName || BRAND_CONFIG.name} • Confidential Client Deliverable</p>
-          <p>Generated by {BRAND_CONFIG.name} Intelligence • {BRAND_CONFIG.url}</p>
+          <p>
+            © {new Date().getFullYear()}{" "}
+            {BRAND_CONFIG.legalName || BRAND_CONFIG.name} • Confidential Client
+            Deliverable
+          </p>
+          <p>
+            Generated by {BRAND_CONFIG.name} Intelligence • {BRAND_CONFIG.url}
+          </p>
         </div>
       </div>
     </>
@@ -576,8 +676,18 @@ function ResultsHeader({
           className="btn btn-sm btn-outline rounded-xl font-bold gap-1.5 text-xs text-base-content/80 hover:text-base-content"
           title="Print or Save as PDF"
         >
-          <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          <svg
+            className="size-3.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+            />
           </svg>
           <span>Export / Print PDF</span>
         </button>

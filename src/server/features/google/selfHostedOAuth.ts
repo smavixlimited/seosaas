@@ -52,7 +52,7 @@ export const GA4_INTEGRATION: SelfHostedGoogleOAuthIntegration = {
 };
 
 export const GBP_OAUTH_PROVIDER_ID = "google-business-profile";
-export const GBP_OAUTH_SCOPES = [
+const GBP_OAUTH_SCOPES = [
   "https://www.googleapis.com/auth/business.manage",
   "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/userinfo.profile",

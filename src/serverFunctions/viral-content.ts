@@ -62,4 +62,3 @@ export const updateViralOpportunityStatus = createServerFn({ method: "POST" })
       data.status,
     );
   });
-

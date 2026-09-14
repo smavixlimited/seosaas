@@ -162,7 +162,9 @@ export const startGbpOAuthServerFn = createServerFn({ method: "POST" })
     const { getRequest } = await import("@tanstack/react-start/server");
 
     const req = getRequest();
-    const origin = req ? getPublicOrigin(req) : (process.env.VITE_APP_URL || "http://localhost:3000");
+    const origin = req
+      ? getPublicOrigin(req)
+      : process.env.VITE_APP_URL || "http://localhost:3000";
 
     const authUrl = await createSelfHostedGoogleAuthorizationUrl({
       integration: GBP_INTEGRATION,
@@ -187,10 +189,11 @@ export const detectGoogleProfilesServerFn = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     try {
-      const { fetchLiveGoogleBusinessProfiles } = await import(
-        "@/server/features/google/gbpClient"
+      const { fetchLiveGoogleBusinessProfiles } =
+        await import("@/server/features/google/gbpClient");
+      const liveProfiles = await fetchLiveGoogleBusinessProfiles(
+        context.userId,
       );
-      const liveProfiles = await fetchLiveGoogleBusinessProfiles(context.userId);
       if (liveProfiles && liveProfiles.length > 0) {
         return liveProfiles;
       }
@@ -247,4 +250,3 @@ export const connectDetectedProfileServerFn = createServerFn({ method: "POST" })
       profileId: data.profileId,
     });
   });
-

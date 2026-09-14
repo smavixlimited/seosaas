@@ -324,7 +324,10 @@ export const TeamManagementService = {
       });
 
       // Synchronize with Better-Auth organization and invitation tables
-      const orgId = await syncBetterAuthOrganization(params.ownerId, params.inviterName);
+      const orgId = await syncBetterAuthOrganization(
+        params.ownerId,
+        params.inviterName,
+      );
       if (orgId) {
         const { invitation } = await import("@/db/better-auth-schema");
         await db.insert(invitation).values({

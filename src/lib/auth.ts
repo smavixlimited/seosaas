@@ -127,7 +127,8 @@ function createAuth() {
 
             if (!isRegEnabled && !isAdminEmail) {
               throw new APIError("FORBIDDEN", {
-                message: "Public registration is currently disabled by administrator.",
+                message:
+                  "Public registration is currently disabled by administrator.",
               });
             }
             if (
@@ -146,20 +147,28 @@ function createAuth() {
             try {
               const { db } = await import("@/db");
               const { userQuotas } = await import("@/db/schema");
-              const { BillingPlansService } = await import("@/services/billing-plans.service");
+              const { BillingPlansService } =
+                await import("@/services/billing-plans.service");
               const allPlans = await BillingPlansService.getAllPlans();
-              const freePlan = allPlans.find((p) => p.id === "free") || allPlans[0];
-              const monthlyCreditsLimit = freePlan?.limits?.monthlyCredits ?? 50;
+              const freePlan =
+                allPlans.find((p) => p.id === "free") || allPlans[0];
+              const monthlyCreditsLimit =
+                freePlan?.limits?.monthlyCredits ?? 50;
 
               await db.insert(userQuotas).values({
                 userId: user.id,
                 planId: "free",
                 monthlyCreditsLimit,
                 creditsUsed: 0,
-                resetAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                resetAt: new Date(
+                  Date.now() + 30 * 24 * 60 * 60 * 1000,
+                ).toISOString(),
               });
             } catch (err) {
-              console.warn("Could not create initial free quota for user:", err);
+              console.warn(
+                "Could not create initial free quota for user:",
+                err,
+              );
             }
           },
         },

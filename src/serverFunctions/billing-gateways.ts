@@ -17,9 +17,8 @@ export const getPublicPlansServerFn = createServerFn({ method: "GET" }).handler(
 export const getPublicGatewaysServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const { SystemSettingsService } = await import(
-    "@/services/system-settings.service"
-  );
+  const { SystemSettingsService } =
+    await import("@/services/system-settings.service");
   let sysPayments: any = null;
   try {
     sysPayments = await SystemSettingsService.getPaymentGatewaysApis();
@@ -36,8 +35,8 @@ export const getPublicGatewaysServerFn = createServerFn({
     process.env.PAYSTACK_SECRET_KEY;
   const paystackEnabled = Boolean(
     (sysPayments?.paystackEnabled ?? paystack?.isEnabled ?? true) &&
-      paystackSecret &&
-      paystackSecret.trim().length > 0,
+    paystackSecret &&
+    paystackSecret.trim().length > 0,
   );
 
   const flutterwaveSecret =
@@ -46,8 +45,8 @@ export const getPublicGatewaysServerFn = createServerFn({
     process.env.FLUTTERWAVE_SECRET_KEY;
   const flutterwaveEnabled = Boolean(
     (sysPayments?.flutterwaveEnabled ?? flutterwave?.isEnabled ?? false) &&
-      flutterwaveSecret &&
-      flutterwaveSecret.trim().length > 0,
+    flutterwaveSecret &&
+    flutterwaveSecret.trim().length > 0,
   );
 
   const lemonsqueezyKey =
@@ -56,8 +55,8 @@ export const getPublicGatewaysServerFn = createServerFn({
     process.env.LEMONSQUEEZY_API_KEY;
   const lemonsqueezyEnabled = Boolean(
     (sysPayments?.lemonsqueezyEnabled ?? lemonsqueezy?.isEnabled ?? false) &&
-      lemonsqueezyKey &&
-      lemonsqueezyKey.trim().length > 0,
+    lemonsqueezyKey &&
+    lemonsqueezyKey.trim().length > 0,
   );
 
   const manualEnabled = Boolean(
@@ -125,7 +124,8 @@ export const initializeFlutterwaveCheckoutServerFn = createServerFn({
   .middleware(requireAuthenticatedContext)
   .validator((d: unknown) => flutterwaveCheckoutSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { initializeFlutterwaveCheckout } = await import("@/services/billing.service");
+    const { initializeFlutterwaveCheckout } =
+      await import("@/services/billing.service");
     return initializeFlutterwaveCheckout({
       email: context.userEmail,
       userId: context.userId,
@@ -151,7 +151,8 @@ export const initializeLemonSqueezyCheckoutServerFn = createServerFn({
   .middleware(requireAuthenticatedContext)
   .validator((d: unknown) => lemonsqueezyCheckoutSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { initializeLemonSqueezyCheckout } = await import("@/services/billing.service");
+    const { initializeLemonSqueezyCheckout } =
+      await import("@/services/billing.service");
     return initializeLemonSqueezyCheckout({
       email: context.userEmail,
       userId: context.userId,

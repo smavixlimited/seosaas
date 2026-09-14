@@ -5,10 +5,14 @@ import { getAuth } from "@/lib/auth";
 import { GBP_OAUTH_PROVIDER_ID } from "./selfHostedOAuth";
 import type { DetectedGoogleBusinessProfile } from "@/services/local-business.service";
 
-const GBP_ACCOUNTS_URL = "https://mybusinessaccountmanagement.googleapis.com/v1/accounts";
-const GBP_LOCATIONS_BASE = "https://mybusinessbusinessinformation.googleapis.com/v1";
+const GBP_ACCOUNTS_URL =
+  "https://mybusinessaccountmanagement.googleapis.com/v1/accounts";
+const GBP_LOCATIONS_BASE =
+  "https://mybusinessbusinessinformation.googleapis.com/v1";
 
-export async function getGbpAccessTokenForUser(userId: string): Promise<string | null> {
+async function getGbpAccessTokenForUser(
+  userId: string,
+): Promise<string | null> {
   try {
     const rows = await db
       .select({
@@ -63,7 +67,10 @@ export async function fetchLiveGoogleBusinessProfiles(
     });
 
     if (!accountsRes.ok) {
-      console.warn("GBP Accounts API responded with status:", accountsRes.status);
+      console.warn(
+        "GBP Accounts API responded with status:",
+        accountsRes.status,
+      );
       return [];
     }
 

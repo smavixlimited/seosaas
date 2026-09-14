@@ -62,13 +62,22 @@ export function BacklinksErrorState({
           </p>
           {isDataForSeoError && (
             <p className="text-xs text-base-content/60 pt-1">
-              To query live backlinks, please provide your DataForSEO API credentials in Admin Dashboard &rarr; Settings &rarr; API Settings, or configure <code className="font-mono text-xs bg-base-300/60 px-1 py-0.5 rounded">DATAFORSEO_API_KEY</code>.
+              To query live backlinks, please provide your DataForSEO API
+              credentials in Admin Dashboard &rarr; Settings &rarr; API
+              Settings, or configure{" "}
+              <code className="font-mono text-xs bg-base-300/60 px-1 py-0.5 rounded">
+                DATAFORSEO_API_KEY
+              </code>
+              .
             </p>
           )}
         </div>
       </div>
       <div className="flex items-center gap-2 pt-1 pl-11">
-        <button className="btn btn-sm btn-primary rounded-xl px-4" onClick={onRetry}>
+        <button
+          className="btn btn-sm btn-primary rounded-xl px-4"
+          onClick={onRetry}
+        >
           Retry Query
         </button>
       </div>

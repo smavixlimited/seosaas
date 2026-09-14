@@ -27,7 +27,7 @@ const PRIVATE_IP_PATTERNS = [
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 const ALLOWED_PORTS = new Set(["", "80", "443", "8080", "8443"]);
 
-export interface SafeUrlResult {
+interface SafeUrlResult {
   isValid: boolean;
   cleanUrl: string;
   hostname: string;
@@ -41,7 +41,13 @@ export interface SafeUrlResult {
  */
 export function validateSafeUrl(rawUrl: string): SafeUrlResult {
   if (!rawUrl || typeof rawUrl !== "string") {
-    return { isValid: false, cleanUrl: "", hostname: "", protocol: "", error: "URL is empty" };
+    return {
+      isValid: false,
+      cleanUrl: "",
+      hostname: "",
+      protocol: "",
+      error: "URL is empty",
+    };
   }
 
   const trimmed = rawUrl.trim();
@@ -53,7 +59,13 @@ export function validateSafeUrl(rawUrl: string): SafeUrlResult {
   try {
     parsed = new URL(withProtocol);
   } catch {
-    return { isValid: false, cleanUrl: "", hostname: "", protocol: "", error: "Invalid URL syntax" };
+    return {
+      isValid: false,
+      cleanUrl: "",
+      hostname: "",
+      protocol: "",
+      error: "Invalid URL syntax",
+    };
   }
 
   if (!ALLOWED_PROTOCOLS.has(parsed.protocol)) {
@@ -69,7 +81,10 @@ export function validateSafeUrl(rawUrl: string): SafeUrlResult {
   const hostname = parsed.hostname.toLowerCase();
   const unbracketedHost = hostname.replace(/^\[|\]$/g, "");
 
-  if (BLOCKED_HOSTNAMES.has(hostname) || BLOCKED_HOSTNAMES.has(unbracketedHost)) {
+  if (
+    BLOCKED_HOSTNAMES.has(hostname) ||
+    BLOCKED_HOSTNAMES.has(unbracketedHost)
+  ) {
     return {
       isValid: false,
       cleanUrl: "",
@@ -119,7 +134,10 @@ export function validateSafeUrl(rawUrl: string): SafeUrlResult {
 export function assertSafeUrlOrThrow(rawUrl: string): string {
   const result = validateSafeUrl(rawUrl);
   if (!result.isValid) {
-    throw new AppError("VALIDATION_ERROR", result.error || "Invalid or restricted URL");
+    throw new AppError(
+      "VALIDATION_ERROR",
+      result.error || "Invalid or restricted URL",
+    );
   }
   return result.cleanUrl;
 }

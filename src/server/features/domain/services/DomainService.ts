@@ -216,7 +216,11 @@ async function getSuggestedKeywords(
 
     return keywords;
   } catch (error) {
-    console.warn("DomainService.getSuggestedKeywords fallback to empty for:", target.hostname, error);
+    console.warn(
+      "DomainService.getSuggestedKeywords fallback to empty for:",
+      target.hostname,
+      error,
+    );
     return [];
   }
 }

@@ -272,10 +272,7 @@ export const BillingPlansService = {
       const dbPlanMap = new Map(rows.map((r) => [r.id, r]));
 
       const allPlanIds = Array.from(
-        new Set([
-          ...DEFAULT_PLANS.map((p) => p.id),
-          ...rows.map((r) => r.id),
-        ]),
+        new Set([...DEFAULT_PLANS.map((p) => p.id), ...rows.map((r) => r.id)]),
       );
 
       return allPlanIds.map((planId) => {

@@ -25,7 +25,8 @@ function extractProjectId(data: unknown) {
     (data as any).data !== null &&
     "projectId" in (data as any).data
   ) {
-    const projectId = (data as { data: { projectId?: unknown } }).data.projectId;
+    const projectId = (data as { data: { projectId?: unknown } }).data
+      .projectId;
     if (typeof projectId === "string" && projectId.length > 0) {
       return projectId;
     }
@@ -33,7 +34,6 @@ function extractProjectId(data: unknown) {
 
   return null;
 }
-
 
 export const ensureUserMiddleware = createMiddleware({
   type: "function",

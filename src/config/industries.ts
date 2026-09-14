@@ -52,7 +52,7 @@ export const INDUSTRY_CATEGORIES: Record<string, readonly string[]> = {
     "Beauty & Personal Care",
     "Pharmaceuticals",
   ],
-  "Education": [
+  Education: [
     "EdTech / Online Learning",
     "Tutoring & Coaching",
     "Corporate Training",

@@ -11,7 +11,7 @@ describe("AdvancedAnalyticsService (Executive Growth & SEO Command Center)", () 
     expect(report).toBeDefined();
     expect(report.projectId).toBe("test-proj-123");
     expect(report.dateRange).toBe("30d");
-    
+
     // Executive KPIs
     expect(report.kpis.totalImpressions).toBeGreaterThanOrEqual(0);
     expect(report.kpis.totalClicks).toBeGreaterThanOrEqual(0);

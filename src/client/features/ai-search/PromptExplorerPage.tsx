@@ -213,9 +213,7 @@ export function PromptExplorerPageInner({
           }
           onModelsChange={(value) => updateForm("models", value)}
           onWebSearchChange={(value) => updateForm("webSearch", value)}
-          onCountryChange={(value) =>
-            updateForm("webSearchCountryCode", value)
-          }
+          onCountryChange={(value) => updateForm("webSearchCountryCode", value)}
           onSubmit={handleSubmit}
           isLoading={isLoading}
           validationError={validationError}

@@ -77,7 +77,9 @@ function BrandSettingsForm({
   const [domain, setDomain] = React.useState(
     project.domain ||
       (brandProfile?.websiteUrl
-        ? brandProfile.websiteUrl.replace(/^https?:\/\//i, "").replace(/\/.*$/, "")
+        ? brandProfile.websiteUrl
+            .replace(/^https?:\/\//i, "")
+            .replace(/\/.*$/, "")
         : ""),
   );
   const [market, setMarket] = React.useState({
@@ -152,7 +154,9 @@ function BrandSettingsForm({
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["projects"] }),
-        queryClient.invalidateQueries({ queryKey: ["brandProfile", project.id] }),
+        queryClient.invalidateQueries({
+          queryKey: ["brandProfile", project.id],
+        }),
       ]);
       toast.success("Brand settings saved successfully");
     },
@@ -172,10 +176,13 @@ function BrandSettingsForm({
     companySize !== ((brandProfile?.companySize as CompanySize) || "1-5") ||
     brandDescription.trim() !== (brandProfile?.brandDescription || "") ||
     valueProposition.trim() !== (brandProfile?.valueProposition || "") ||
-    socialLinks.instagram.trim() !== (brandProfile?.socialLinks?.instagram || "") ||
-    socialLinks.linkedin.trim() !== (brandProfile?.socialLinks?.linkedin || "") ||
+    socialLinks.instagram.trim() !==
+      (brandProfile?.socialLinks?.instagram || "") ||
+    socialLinks.linkedin.trim() !==
+      (brandProfile?.socialLinks?.linkedin || "") ||
     socialLinks.twitter.trim() !== (brandProfile?.socialLinks?.twitter || "") ||
-    socialLinks.facebook.trim() !== (brandProfile?.socialLinks?.facebook || "") ||
+    socialLinks.facebook.trim() !==
+      (brandProfile?.socialLinks?.facebook || "") ||
     socialLinks.youtube.trim() !== (brandProfile?.socialLinks?.youtube || "") ||
     socialLinks.tiktok.trim() !== (brandProfile?.socialLinks?.tiktok || "");
 
@@ -217,7 +224,10 @@ function BrandSettingsForm({
 
           <label className="flex flex-col gap-1.5 text-xs font-bold text-base-content/80">
             <span>
-              Domain <span className="text-base-content/50 font-normal">(e.g. example.com)</span>
+              Domain{" "}
+              <span className="text-base-content/50 font-normal">
+                (e.g. example.com)
+              </span>
             </span>
             <input
               type="text"
@@ -233,7 +243,8 @@ function BrandSettingsForm({
         <div className="flex flex-col gap-1.5">
           <ProjectMarketFields value={market} onChange={setMarket} />
           <span className="text-xs text-base-content/50">
-            Keyword, SERP, and domain data uses this country and language unless a call asks for a different one.
+            Keyword, SERP, and domain data uses this country and language unless
+            a call asks for a different one.
           </span>
         </div>
       </section>
@@ -245,7 +256,8 @@ function BrandSettingsForm({
             Business Profile &amp; Positioning
           </h2>
           <p className="text-xs text-base-content/50">
-            Used by Skorvia AI agents, audit models, and prompt generators to contextualize analysis.
+            Used by Skorvia AI agents, audit models, and prompt generators to
+            contextualize analysis.
           </p>
         </div>
 
@@ -258,9 +270,17 @@ function BrandSettingsForm({
               className="select select-bordered w-full rounded-2xl h-10 text-xs bg-base-100 text-base-content"
             >
               {Object.entries(INDUSTRY_CATEGORIES).map(([category, items]) => (
-                <optgroup key={category} label={category} className="bg-base-100 text-base-content font-bold">
+                <optgroup
+                  key={category}
+                  label={category}
+                  className="bg-base-100 text-base-content font-bold"
+                >
                   {items.map((ind) => (
-                    <option key={ind} value={ind} className="bg-base-100 text-base-content font-normal">
+                    <option
+                      key={ind}
+                      value={ind}
+                      className="bg-base-100 text-base-content font-normal"
+                    >
                       {ind}
                     </option>
                   ))}
@@ -277,7 +297,11 @@ function BrandSettingsForm({
               className="select select-bordered w-full rounded-2xl h-10 text-xs bg-base-100 text-base-content"
             >
               {COMPANY_SIZES.map((size) => (
-                <option key={size} value={size} className="bg-base-100 text-base-content">
+                <option
+                  key={size}
+                  value={size}
+                  className="bg-base-100 text-base-content"
+                >
                   {size} employees
                 </option>
               ))}
@@ -315,7 +339,8 @@ function BrandSettingsForm({
             Official Social Channels
           </h2>
           <p className="text-xs text-base-content/50">
-            Enables multi-platform brand mention monitoring and social proof tracking.
+            Enables multi-platform brand mention monitoring and social proof
+            tracking.
           </p>
         </div>
 
@@ -323,14 +348,19 @@ function BrandSettingsForm({
           {/* Instagram */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:camera-bold-duotone" className="h-4 w-4 text-pink-500" />
+              <Icon
+                icon="solar:camera-bold-duotone"
+                className="h-4 w-4 text-pink-500"
+              />
               Instagram
             </label>
             <input
               type="text"
               placeholder="instagram.com/yourbrand or @handle"
               value={socialLinks.instagram}
-              onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, instagram: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>
@@ -338,14 +368,19 @@ function BrandSettingsForm({
           {/* LinkedIn */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:buildings-2-bold-duotone" className="h-4 w-4 text-blue-600" />
+              <Icon
+                icon="solar:buildings-2-bold-duotone"
+                className="h-4 w-4 text-blue-600"
+              />
               LinkedIn
             </label>
             <input
               type="text"
               placeholder="linkedin.com/company/yourbrand"
               value={socialLinks.linkedin}
-              onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, linkedin: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>
@@ -353,14 +388,19 @@ function BrandSettingsForm({
           {/* X / Twitter */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:hashtag-bold-duotone" className="h-4 w-4 text-slate-800 dark:text-slate-200" />
+              <Icon
+                icon="solar:hashtag-bold-duotone"
+                className="h-4 w-4 text-slate-800 dark:text-slate-200"
+              />
               X (Twitter)
             </label>
             <input
               type="text"
               placeholder="x.com/yourbrand or @handle"
               value={socialLinks.twitter}
-              onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, twitter: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>
@@ -368,14 +408,19 @@ function BrandSettingsForm({
           {/* Facebook */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:users-group-rounded-bold-duotone" className="h-4 w-4 text-blue-500" />
+              <Icon
+                icon="solar:users-group-rounded-bold-duotone"
+                className="h-4 w-4 text-blue-500"
+              />
               Facebook
             </label>
             <input
               type="text"
               placeholder="facebook.com/yourbrand"
               value={socialLinks.facebook}
-              onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, facebook: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>
@@ -383,14 +428,19 @@ function BrandSettingsForm({
           {/* YouTube */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:videocamera-bold-duotone" className="h-4 w-4 text-red-500" />
+              <Icon
+                icon="solar:videocamera-bold-duotone"
+                className="h-4 w-4 text-red-500"
+              />
               YouTube
             </label>
             <input
               type="text"
               placeholder="youtube.com/@yourbrand"
               value={socialLinks.youtube}
-              onChange={(e) => setSocialLinks({ ...socialLinks, youtube: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, youtube: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>
@@ -398,14 +448,19 @@ function BrandSettingsForm({
           {/* TikTok */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-base-content/80 flex items-center gap-1.5">
-              <Icon icon="solar:music-notes-bold-duotone" className="h-4 w-4 text-purple-500" />
+              <Icon
+                icon="solar:music-notes-bold-duotone"
+                className="h-4 w-4 text-purple-500"
+              />
               TikTok
             </label>
             <input
               type="text"
               placeholder="tiktok.com/@yourbrand"
               value={socialLinks.tiktok}
-              onChange={(e) => setSocialLinks({ ...socialLinks, tiktok: e.target.value })}
+              onChange={(e) =>
+                setSocialLinks({ ...socialLinks, tiktok: e.target.value })
+              }
               className="input input-bordered w-full rounded-2xl h-10 text-xs bg-base-200/40"
             />
           </div>

@@ -23,8 +23,12 @@ describe("SSRF Protection (validateSafeUrl & assertSafeUrlOrThrow)", () => {
   });
 
   it("blocks cloud instance metadata endpoints (169.254.169.254)", () => {
-    expect(validateSafeUrl("http://169.254.169.254/latest/meta-data").isValid).toBe(false);
-    expect(validateSafeUrl("http://metadata.google.internal").isValid).toBe(false);
+    expect(
+      validateSafeUrl("http://169.254.169.254/latest/meta-data").isValid,
+    ).toBe(false);
+    expect(validateSafeUrl("http://metadata.google.internal").isValid).toBe(
+      false,
+    );
   });
 
   it("blocks private RFC 1918 IPv4 ranges", () => {

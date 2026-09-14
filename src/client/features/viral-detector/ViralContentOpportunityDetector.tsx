@@ -66,7 +66,6 @@ export function ViralContentOpportunityDetector({
     generateMutation.mutate(topic);
   };
 
-
   const addRoadmapMutation = useMutation({
     mutationFn: (item: ViralOpportunityItem) =>
       createRoadmapTask({
@@ -407,7 +406,10 @@ export function ViralContentOpportunityDetector({
                       onClick={() => setTeleprompterItem(item)}
                       className="btn btn-outline btn-sm rounded-xl text-xs font-bold gap-1 border-primary/30 text-primary hover:bg-primary/10"
                     >
-                      <Icon icon="solar:videocamera-record-bold" className="h-3.5 w-3.5" />
+                      <Icon
+                        icon="solar:videocamera-record-bold"
+                        className="h-3.5 w-3.5"
+                      />
                       <span>Teleprompter</span>
                     </button>
                     <button
@@ -448,14 +450,18 @@ export function ViralContentOpportunityDetector({
             <div className="flex items-center justify-between border-b border-base-200 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                  <Icon icon="solar:videocamera-record-bold" className="h-5 w-5" />
+                  <Icon
+                    icon="solar:videocamera-record-bold"
+                    className="h-5 w-5"
+                  />
                 </div>
                 <div>
                   <h3 className="font-black text-base text-base-content">
                     Teleprompter &amp; Spoken Script Mode
                   </h3>
                   <p className="text-xs text-base-content/60">
-                    Optimized for {teleprompterItem.platform.toUpperCase()} short-form recording (~35-45s)
+                    Optimized for {teleprompterItem.platform.toUpperCase()}{" "}
+                    short-form recording (~35-45s)
                   </p>
                 </div>
               </div>
@@ -471,16 +477,28 @@ export function ViralContentOpportunityDetector({
             {/* Speaking Stats */}
             <div className="grid grid-cols-3 gap-3">
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Speaking Time</span>
-                <span className="text-sm font-black text-primary">~35 - 45 sec</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Speaking Time
+                </span>
+                <span className="text-sm font-black text-primary">
+                  ~35 - 45 sec
+                </span>
               </div>
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Viral Score</span>
-                <span className="text-sm font-black text-amber-500">{teleprompterItem.viralPotentialScore}/100</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Viral Score
+                </span>
+                <span className="text-sm font-black text-amber-500">
+                  {teleprompterItem.viralPotentialScore}/100
+                </span>
               </div>
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Target Audience</span>
-                <span className="text-xs font-black text-base-content truncate block">{teleprompterItem.targetAudience}</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Target Audience
+                </span>
+                <span className="text-xs font-black text-base-content truncate block">
+                  {teleprompterItem.targetAudience}
+                </span>
               </div>
             </div>
 
@@ -497,7 +515,9 @@ export function ViralContentOpportunityDetector({
 
             {/* Full Script Text */}
             <div className="space-y-2">
-              <span className="text-xs font-bold uppercase text-base-content/60 block">Full Teleprompter Breakdown:</span>
+              <span className="text-xs font-bold uppercase text-base-content/60 block">
+                Full Teleprompter Breakdown:
+              </span>
               <div className="p-4 rounded-2xl bg-base-200/40 border border-base-300 whitespace-pre-wrap font-sans text-sm leading-relaxed text-base-content/90 font-medium">
                 {teleprompterItem.scriptOutline}
               </div>
@@ -505,9 +525,14 @@ export function ViralContentOpportunityDetector({
 
             {/* Hashtags */}
             <div className="flex flex-wrap gap-1.5 items-center">
-              <span className="text-xs font-bold text-base-content/60 mr-1">Recommended Tags:</span>
+              <span className="text-xs font-bold text-base-content/60 mr-1">
+                Recommended Tags:
+              </span>
               {teleprompterItem.tags.map((tag, tIdx) => (
-                <span key={tIdx} className="badge badge-neutral text-xs font-mono py-1 px-2">
+                <span
+                  key={tIdx}
+                  className="badge badge-neutral text-xs font-mono py-1 px-2"
+                >
                   {tag}
                 </span>
               ))}

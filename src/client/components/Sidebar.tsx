@@ -72,10 +72,7 @@ function SidebarNavLink({
             <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-md bg-primary" />
           ) : null}
           {solarIcon ? (
-            <Icon
-              icon={solarIcon}
-              className="h-4 w-4 shrink-0 text-inherit"
-            />
+            <Icon icon={solarIcon} className="h-4 w-4 shrink-0 text-inherit" />
           ) : FallbackIcon ? (
             <FallbackIcon className="h-4 w-4 shrink-0" />
           ) : null}

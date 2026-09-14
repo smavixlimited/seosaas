@@ -14,10 +14,7 @@ describe("calculateAuditGrade", () => {
 
   it("grades clean sites with minor issues in 70-100 range as Green", () => {
     const grade = calculateAuditGrade({
-      issues: [
-        { severity: "warning" },
-        { severity: "info" },
-      ],
+      issues: [{ severity: "warning" }, { severity: "info" }],
       pagesCrawled: 20,
     });
     expect(grade.score).toBeGreaterThanOrEqual(70);

@@ -244,8 +244,6 @@ export function CurrencySwitcher({ className = "" }: { className?: string }) {
   return <CurrencyDropdown className={className} />;
 }
 
-export const CurrencySelector = CurrencySwitcher;
-
 export function CurrencyDropdown({ className = "" }: { className?: string }) {
   const { currency, setCurrency, currentCurrencyInfo } = useCurrency();
   const [isOpen, setIsOpen] = React.useState(false);

@@ -166,7 +166,8 @@ let uptimeIntervalStarted = false;
 let hourlyIntervalStarted = false;
 
 function ensureBackgroundCronRunner(env?: Env) {
-  if (uptimeIntervalStarted || typeof process === "undefined" || !process.env) return;
+  if (uptimeIntervalStarted || typeof process === "undefined" || !process.env)
+    return;
   uptimeIntervalStarted = true;
 
   // 1. 24/7 Uptime & SSL Monitor: Run initial probe 10s after start, then every 5 minutes
@@ -194,10 +195,13 @@ function ensureBackgroundCronRunner(env?: Env) {
 async function runBackgroundMonitoringCycle() {
   try {
     await withPgClient(async () => {
-      const { runAllActiveMonitors } = await import("@/services/uptime.service");
+      const { runAllActiveMonitors } =
+        await import("@/services/uptime.service");
       const results = await runAllActiveMonitors();
       if (results && results.length > 0) {
-        console.log(`[24/7 Monitor] Checked ${results.length} active monitors & SSL certificates at ${new Date().toISOString()}`);
+        console.log(
+          `[24/7 Monitor] Checked ${results.length} active monitors & SSL certificates at ${new Date().toISOString()}`,
+        );
       }
     });
   } catch (err) {
@@ -209,7 +213,9 @@ async function runBackgroundMaintenanceCycle() {
   try {
     await withPgClient(async () => {
       await reconcileStaleAudits();
-      console.log(`[24/7 Maintenance] Reconciled stale audits at ${new Date().toISOString()}`);
+      console.log(
+        `[24/7 Maintenance] Reconciled stale audits at ${new Date().toISOString()}`,
+      );
     });
   } catch (err) {
     console.error("[24/7 Maintenance Error]:", err);
@@ -310,7 +316,8 @@ export default {
     await withPgClient(async () => {
       await runScheduledRankChecks(env);
       try {
-        const { runAllActiveMonitors } = await import("@/services/uptime.service");
+        const { runAllActiveMonitors } =
+          await import("@/services/uptime.service");
         await runAllActiveMonitors();
       } catch (uptimeErr) {
         console.error("[cron] Scheduled uptime checks failed:", uptimeErr);

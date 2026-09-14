@@ -53,14 +53,9 @@ export const RetentionService = {
 
       if (row) {
         // Check for expired subscription past 24-hour grace period
-        if (
-          row.planId &&
-          row.planId !== "starter" &&
-          row.resetAt
-        ) {
-          const { SubscriptionLifecycleService } = await import(
-            "@/services/subscription-lifecycle.service"
-          );
+        if (row.planId && row.planId !== "starter" && row.resetAt) {
+          const { SubscriptionLifecycleService } =
+            await import("@/services/subscription-lifecycle.service");
           if (SubscriptionLifecycleService.isPastGracePeriod(row.resetAt)) {
             await SubscriptionLifecycleService.downgradeUserToStarter(userId);
             row.planId = "starter";
@@ -108,9 +103,8 @@ export const RetentionService = {
     else if (planId === "free") planName = "Free Plan";
 
     try {
-      const { BillingPlansService } = await import(
-        "@/services/billing-plans.service"
-      );
+      const { BillingPlansService } =
+        await import("@/services/billing-plans.service");
       const allPlans = await BillingPlansService.getAllPlans();
       const dbPlan = allPlans.find(
         (p) => p.id.toLowerCase() === planId.toLowerCase(),

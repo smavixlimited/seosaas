@@ -105,7 +105,10 @@ export const BrandCompetitorService = {
       await db
         .update(brandProfiles)
         .set({
-          brandName: input.brandName !== undefined ? input.brandName : existing.brandName,
+          brandName:
+            input.brandName !== undefined
+              ? input.brandName
+              : existing.brandName,
           websiteUrl:
             input.websiteUrl !== undefined
               ? input.websiteUrl
@@ -169,7 +172,10 @@ export const BrandCompetitorService = {
           .where(eq(projects.id, input.projectId));
       }
     } catch (err) {
-      console.warn("Failed to sync project name/domain in saveBrandProfile:", err);
+      console.warn(
+        "Failed to sync project name/domain in saveBrandProfile:",
+        err,
+      );
     }
 
     return this.getBrandProfile(input.projectId);
@@ -269,7 +275,8 @@ export const BrandCompetitorService = {
             .update(projectCompetitors)
             .set({
               name: comp.name || existingProjComp.name || cleanDomain,
-              notes: comp.notes !== undefined ? comp.notes : existingProjComp.notes,
+              notes:
+                comp.notes !== undefined ? comp.notes : existingProjComp.notes,
               updatedAt: now,
               updatedBy: "user",
             })
@@ -513,8 +520,10 @@ export const BrandCompetitorService = {
       const overviewParts: string[] = [];
       if (brand.brandName) overviewParts.push(`Brand: ${brand.brandName}`);
       if (brand.industry) overviewParts.push(`Industry: ${brand.industry}`);
-      if (brand.companySize) overviewParts.push(`Company Size: ${brand.companySize}`);
-      if (brand.targetCountry) overviewParts.push(`Target Market: ${brand.targetCountry}`);
+      if (brand.companySize)
+        overviewParts.push(`Company Size: ${brand.companySize}`);
+      if (brand.targetCountry)
+        overviewParts.push(`Target Market: ${brand.targetCountry}`);
       if (brand.brandDescription) overviewParts.push(brand.brandDescription);
 
       const overviewText = overviewParts.join(" · ");
@@ -640,8 +649,10 @@ export const BrandCompetitorService = {
     let score = 55;
     if (profile.brandName && profile.brandName !== "My Brand") score += 10;
     if (profile.websiteUrl) score += 10;
-    if (profile.brandDescription && profile.brandDescription.length > 20) score += 10;
-    if (profile.valueProposition && profile.valueProposition.length > 10) score += 10;
+    if (profile.brandDescription && profile.brandDescription.length > 20)
+      score += 10;
+    if (profile.valueProposition && profile.valueProposition.length > 10)
+      score += 10;
     score += Math.min(10, activeSocials.length * 2);
     if (competitors.length > 0) score += 5;
 
@@ -678,7 +689,10 @@ export const BrandCompetitorService = {
             {
               id: "s4",
               title: `Active Competitor Radar (${competitors.length} Tracked)`,
-              description: `Benchmarking traffic and ad strategies against key rivals: ${competitors.slice(0, 3).map((c) => c.domain).join(", ")}.`,
+              description: `Benchmarking traffic and ad strategies against key rivals: ${competitors
+                .slice(0, 3)
+                .map((c) => c.domain)
+                .join(", ")}.`,
               impact: "MEDIUM" as const,
               tag: "Intelligence",
             },
@@ -695,7 +709,8 @@ export const BrandCompetitorService = {
               description:
                 "Only limited social channels are connected. Connecting YouTube, LinkedIn, Twitter/X, and TikTok establishes high entity authority for Google & AI search engines.",
               priority: "CRITICAL" as const,
-              action: "Connect your official LinkedIn, Twitter/X, and YouTube channel URLs in Brand Settings.",
+              action:
+                "Connect your official LinkedIn, Twitter/X, and YouTube channel URLs in Brand Settings.",
               suggestedPromptForSam:
                 "Generate an omnichannel social media setup and distribution plan for my brand.",
             },
@@ -709,7 +724,8 @@ export const BrandCompetitorService = {
               description:
                 "Your Unique Selling Proposition lacks specific quantifiable outcomes. Searchers and ad clicks convert 2.4x higher with distinct differentiators.",
               priority: "HIGH" as const,
-              action: "Refine your USP with quantifiable benefits (e.g., 'Save 10 hrs/wk', 'Increase rank by 40%').",
+              action:
+                "Refine your USP with quantifiable benefits (e.g., 'Save 10 hrs/wk', 'Increase rank by 40%').",
               suggestedPromptForSam:
                 "Help me write 3 high-converting, crisp Unique Selling Propositions (USPs) for my brand.",
             },
@@ -723,7 +739,8 @@ export const BrandCompetitorService = {
               description:
                 "No competitors are currently monitored. Adding 3-5 rivals unlocks automated keyword gap alerts and ad spy teardowns.",
               priority: "HIGH" as const,
-              action: "Add 3 top competitors in the Competitors Directory to enable automated ad spying & keyword radar.",
+              action:
+                "Add 3 top competitors in the Competitors Directory to enable automated ad spying & keyword radar.",
               suggestedPromptForSam:
                 "Identify top 5 direct organic and paid search competitors for my brand.",
             },
@@ -735,7 +752,8 @@ export const BrandCompetitorService = {
         description:
           "AI search engines (Perplexity, ChatGPT, Claude) need structured schema and third-party entity co-citations to confidently recommend your brand in answers.",
         priority: "MEDIUM" as const,
-        action: "Deploy Organization schema markup and claim your brand profiles across reputable tech directories.",
+        action:
+          "Deploy Organization schema markup and claim your brand profiles across reputable tech directories.",
         suggestedPromptForSam:
           "Generate JSON-LD Organization schema markup for my brand with sameAs social links.",
       },
@@ -769,13 +787,16 @@ export const BrandCompetitorService = {
     let sentimentScore = Math.min(95, Math.max(45, score + 5));
     let sentimentBreakdown = {
       positivePct: Math.min(85, Math.max(50, Math.round(score * 0.8))),
-      neutralPct: Math.max(10, Math.round(100 - (score * 0.8) - 8)),
+      neutralPct: Math.max(10, Math.round(100 - score * 0.8 - 8)),
       negativePct: Math.max(4, Math.round(8)),
     };
-    sentimentBreakdown.neutralPct = 100 - sentimentBreakdown.positivePct - sentimentBreakdown.negativePct;
+    sentimentBreakdown.neutralPct =
+      100 - sentimentBreakdown.positivePct - sentimentBreakdown.negativePct;
 
     const brandDisplay = profile.brandName || "My Brand";
-    const brandHost = profile.websiteUrl ? profile.websiteUrl.replace(/^https?:\/\//i, "").replace(/\/.*$/, "") : "brand.com";
+    const brandHost = profile.websiteUrl
+      ? profile.websiteUrl.replace(/^https?:\/\//i, "").replace(/\/.*$/, "")
+      : "brand.com";
 
     let mentionsSample = [
       {
@@ -826,8 +847,10 @@ export const BrandCompetitorService = {
         title: "Missing Structured FAQ & Software Schema Markup",
         category: "Schema & Technical",
         impact: "HIGH" as const,
-        description: "Your landing pages lack JSON-LD FAQPage, Organization, and SoftwareApplication schema markup, limiting rich snippet carousels in Google SERPs.",
-        action: "Deploy structured JSON-LD schema with complete sameAs entity references to your social profiles.",
+        description:
+          "Your landing pages lack JSON-LD FAQPage, Organization, and SoftwareApplication schema markup, limiting rich snippet carousels in Google SERPs.",
+        action:
+          "Deploy structured JSON-LD schema with complete sameAs entity references to your social profiles.",
         suggestedPrompt: `Generate valid JSON-LD schema markup including Organization, FAQPage, and SoftwareApplication for ${brandDisplay} (${brandHost}).`,
       },
       {
@@ -836,7 +859,12 @@ export const BrandCompetitorService = {
         category: "Content Moat",
         impact: "CRITICAL" as const,
         description: `Potential buyers actively search '${brandDisplay} vs ${competitors[0]?.domain || "competitors"}'. Without comparison landing pages, competitors capture these high-intent buyers.`,
-        action: `Publish dedicated head-to-head comparison pages against top rivals (${competitors.slice(0, 3).map((c) => c.domain).join(", ") || "top competitors"}).`,
+        action: `Publish dedicated head-to-head comparison pages against top rivals (${
+          competitors
+            .slice(0, 3)
+            .map((c) => c.domain)
+            .join(", ") || "top competitors"
+        }).`,
         suggestedPrompt: `Draft a high-converting comparison landing page outline for ${brandDisplay} vs ${competitors[0]?.domain || "industry competitors"}.`,
       },
       {
@@ -844,8 +872,10 @@ export const BrandCompetitorService = {
         title: "Missing Authoritative Customer Proof & Trust Badges",
         category: "Conversion & Trust",
         impact: "HIGH" as const,
-        description: "Above-the-fold hero sections need clear quantifiable trust signals (metrics, client logos, review aggregate rating schema) to maximize visit-to-lead conversion.",
-        action: "Incorporate live review aggregates, verified trust badges, and quantifiable outcome metrics on top landing pages.",
+        description:
+          "Above-the-fold hero sections need clear quantifiable trust signals (metrics, client logos, review aggregate rating schema) to maximize visit-to-lead conversion.",
+        action:
+          "Incorporate live review aggregates, verified trust badges, and quantifiable outcome metrics on top landing pages.",
         suggestedPrompt: `Write 5 compelling social proof and trust badge copy blocks for ${brandDisplay}.`,
       },
     ];
@@ -935,7 +965,10 @@ Return ONLY raw JSON, no markdown backticks, no other text.`;
       if (typeof parsed.sentimentScore === "number") {
         sentimentScore = Math.min(100, Math.max(20, parsed.sentimentScore));
       }
-      if (parsed.sentimentBreakdown && typeof parsed.sentimentBreakdown.positivePct === "number") {
+      if (
+        parsed.sentimentBreakdown &&
+        typeof parsed.sentimentBreakdown.positivePct === "number"
+      ) {
         sentimentBreakdown = parsed.sentimentBreakdown;
       }
       if (Array.isArray(parsed.strengths) && parsed.strengths.length > 0) {
@@ -944,10 +977,16 @@ Return ONLY raw JSON, no markdown backticks, no other text.`;
       if (Array.isArray(parsed.weaknesses) && parsed.weaknesses.length > 0) {
         weaknesses = parsed.weaknesses;
       }
-      if (Array.isArray(parsed.opportunities) && parsed.opportunities.length > 0) {
+      if (
+        Array.isArray(parsed.opportunities) &&
+        parsed.opportunities.length > 0
+      ) {
         opportunities = parsed.opportunities;
       }
-      if (Array.isArray(parsed.missingAssets) && parsed.missingAssets.length > 0) {
+      if (
+        Array.isArray(parsed.missingAssets) &&
+        parsed.missingAssets.length > 0
+      ) {
         missingAssets = parsed.missingAssets;
       }
     } catch (aiErr) {

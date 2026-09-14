@@ -65,11 +65,15 @@ export const AudienceTrustService = {
     projectId: string,
     options?: TrustAuditOptions,
   ): Promise<AudienceTrustResult> {
-    const brand = await BrandCompetitorService.getBrandProfile(projectId).catch(() => null);
+    const brand = await BrandCompetitorService.getBrandProfile(projectId).catch(
+      () => null,
+    );
     const brandName = brand?.brandName || "Your Brand";
     const websiteUrl = brand?.websiteUrl || "https://yourbrand.com";
-    const industry = options?.industry || brand?.industry || "E-Commerce / Direct-to-Consumer";
-    const campaignGoal = options?.campaignGoal || "E-Commerce Sales / Direct Checkout (ROAS)";
+    const industry =
+      options?.industry || brand?.industry || "E-Commerce / Direct-to-Consumer";
+    const campaignGoal =
+      options?.campaignGoal || "E-Commerce Sales / Direct Checkout (ROAS)";
     const adPlatform = options?.adPlatform || "Meta Ads (Facebook & Instagram)";
 
     // 1. Check existing snapshot in DB
@@ -107,14 +111,23 @@ export const AudienceTrustService = {
     projectId: string,
     options?: TrustAuditOptions,
   ): Promise<AudienceTrustResult> {
-    const brand = await BrandCompetitorService.getBrandProfile(projectId).catch(() => null);
+    const brand = await BrandCompetitorService.getBrandProfile(projectId).catch(
+      () => null,
+    );
     const brandName = brand?.brandName || "Your Brand";
     const websiteUrl = brand?.websiteUrl || "https://yourbrand.com";
-    const industry = options?.industry || brand?.industry || "E-Commerce / Direct-to-Consumer";
-    const targetAudience = (brand as any)?.targetAudience || "Target Readers, Buyers & Industry Audience";
-    const uniqueSellingProp = (brand as any)?.valueProposition || (brand as any)?.brandDescription || "";
+    const industry =
+      options?.industry || brand?.industry || "E-Commerce / Direct-to-Consumer";
+    const targetAudience =
+      (brand as any)?.targetAudience ||
+      "Target Readers, Buyers & Industry Audience";
+    const uniqueSellingProp =
+      (brand as any)?.valueProposition ||
+      (brand as any)?.brandDescription ||
+      "";
     const country = brand?.targetCountry || "US";
-    const campaignGoal = options?.campaignGoal || "E-Commerce Sales / Direct Checkout (ROAS)";
+    const campaignGoal =
+      options?.campaignGoal || "E-Commerce Sales / Direct Checkout (ROAS)";
     const adPlatform = options?.adPlatform || "Meta Ads (Facebook & Instagram)";
 
     // 1. Live Web Crawl via Firecrawl
@@ -137,19 +150,64 @@ export const AudienceTrustService = {
 
       if (scrapeResult && scrapeResult.success && scrapeResult.markdown) {
         scrapedContent = scrapeResult.markdown.slice(0, 4000);
-        const lowerMd = (scrapeResult.markdown + " " + (scrapeResult.metadata?.title || "")).toLowerCase();
-        
-        hasMetaPixel = lowerMd.includes("fbq(") || lowerMd.includes("fbevents") || lowerMd.includes("facebook-pixel") || lowerMd.includes("connect.facebook.net");
-        hasGtm = lowerMd.includes("gtm.js") || lowerMd.includes("google-analytics") || lowerMd.includes("gtag(") || lowerMd.includes("googletagmanager");
-        hasPrivacyPolicy = lowerMd.includes("privacy policy") || lowerMd.includes("terms of service") || lowerMd.includes("/privacy") || lowerMd.includes("/terms");
-        hasRefundPolicy = lowerMd.includes("refund") || lowerMd.includes("returns") || lowerMd.includes("guarantee") || lowerMd.includes("30-day") || lowerMd.includes("money back");
-        hasTestimonials = lowerMd.includes("testimonial") || lowerMd.includes("review") || lowerMd.includes("client") || lowerMd.includes("rated") || lowerMd.includes("trustpilot") || lowerMd.includes("customer");
-        hasVideoUgc = lowerMd.includes("<video") || lowerMd.includes("youtube.com") || lowerMd.includes("vimeo.com") || lowerMd.includes("loom.com") || lowerMd.includes("tiktok.com");
-        hasNewsletterBox = lowerMd.includes("newsletter") || lowerMd.includes("subscribe") || lowerMd.includes("email signup") || lowerMd.includes("daily digest") || lowerMd.includes("rss");
-        hasEditorialBylines = lowerMd.includes("by ") || lowerMd.includes("author") || lowerMd.includes("editor") || lowerMd.includes("published on") || lowerMd.includes("written by");
+        const lowerMd = (
+          scrapeResult.markdown +
+          " " +
+          (scrapeResult.metadata?.title || "")
+        ).toLowerCase();
+
+        hasMetaPixel =
+          lowerMd.includes("fbq(") ||
+          lowerMd.includes("fbevents") ||
+          lowerMd.includes("facebook-pixel") ||
+          lowerMd.includes("connect.facebook.net");
+        hasGtm =
+          lowerMd.includes("gtm.js") ||
+          lowerMd.includes("google-analytics") ||
+          lowerMd.includes("gtag(") ||
+          lowerMd.includes("googletagmanager");
+        hasPrivacyPolicy =
+          lowerMd.includes("privacy policy") ||
+          lowerMd.includes("terms of service") ||
+          lowerMd.includes("/privacy") ||
+          lowerMd.includes("/terms");
+        hasRefundPolicy =
+          lowerMd.includes("refund") ||
+          lowerMd.includes("returns") ||
+          lowerMd.includes("guarantee") ||
+          lowerMd.includes("30-day") ||
+          lowerMd.includes("money back");
+        hasTestimonials =
+          lowerMd.includes("testimonial") ||
+          lowerMd.includes("review") ||
+          lowerMd.includes("client") ||
+          lowerMd.includes("rated") ||
+          lowerMd.includes("trustpilot") ||
+          lowerMd.includes("customer");
+        hasVideoUgc =
+          lowerMd.includes("<video") ||
+          lowerMd.includes("youtube.com") ||
+          lowerMd.includes("vimeo.com") ||
+          lowerMd.includes("loom.com") ||
+          lowerMd.includes("tiktok.com");
+        hasNewsletterBox =
+          lowerMd.includes("newsletter") ||
+          lowerMd.includes("subscribe") ||
+          lowerMd.includes("email signup") ||
+          lowerMd.includes("daily digest") ||
+          lowerMd.includes("rss");
+        hasEditorialBylines =
+          lowerMd.includes("by ") ||
+          lowerMd.includes("author") ||
+          lowerMd.includes("editor") ||
+          lowerMd.includes("published on") ||
+          lowerMd.includes("written by");
       }
     } catch (scrapeErr) {
-      console.warn("Firecrawl live scrape failed or skipped, falling back to default heuristic:", scrapeErr);
+      console.warn(
+        "Firecrawl live scrape failed or skipped, falling back to default heuristic:",
+        scrapeErr,
+      );
     }
 
     // 2. Intelligent AI LLM Evaluation Tailored to Industry & Campaign Goal
@@ -158,7 +216,11 @@ export const AudienceTrustService = {
     let sentimentDistribution = { positive: 76, neutral: 18, negative: 6 };
     let trustSignals: TrustSignalItem[] = [];
     let riskAlerts: RiskAlertItem[] = [];
-    let preAdChecklist: Array<{ item: string; passed: boolean; importance: "critical" | "high" | "recommended" }> = [];
+    let preAdChecklist: Array<{
+      item: string;
+      passed: boolean;
+      importance: "critical" | "high" | "recommended";
+    }> = [];
     let recommendedAction = "";
 
     try {
@@ -259,8 +321,16 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
       }
 
       const parsed = JSON.parse(cleanJson);
-      trustScore = typeof parsed.trustScore === "number" ? Math.min(100, Math.max(0, parsed.trustScore)) : 82;
-      preAdGateStatus = trustScore >= 75 ? "approved" : trustScore >= 55 ? "caution" : "rejected";
+      trustScore =
+        typeof parsed.trustScore === "number"
+          ? Math.min(100, Math.max(0, parsed.trustScore))
+          : 82;
+      preAdGateStatus =
+        trustScore >= 75
+          ? "approved"
+          : trustScore >= 55
+            ? "caution"
+            : "rejected";
       if (parsed.sentimentDistribution) {
         sentimentDistribution = {
           positive: Number(parsed.sentimentDistribution.positive) || 75,
@@ -268,20 +338,29 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           negative: Number(parsed.sentimentDistribution.negative) || 7,
         };
       }
-      if (Array.isArray(parsed.trustSignals) && parsed.trustSignals.length > 0) {
+      if (
+        Array.isArray(parsed.trustSignals) &&
+        parsed.trustSignals.length > 0
+      ) {
         trustSignals = parsed.trustSignals;
       }
       if (Array.isArray(parsed.riskAlerts) && parsed.riskAlerts.length > 0) {
         riskAlerts = parsed.riskAlerts;
       }
-      if (Array.isArray(parsed.preAdChecklist) && parsed.preAdChecklist.length > 0) {
+      if (
+        Array.isArray(parsed.preAdChecklist) &&
+        parsed.preAdChecklist.length > 0
+      ) {
         preAdChecklist = parsed.preAdChecklist;
       }
       if (parsed.recommendedAction) {
         recommendedAction = parsed.recommendedAction;
       }
     } catch (aiErr) {
-      console.warn("AI generation for audience trust failed, using smart industry heuristic scan:", aiErr);
+      console.warn(
+        "AI generation for audience trust failed, using smart industry heuristic scan:",
+        aiErr,
+      );
     }
 
     const indLower = industry.toLowerCase();
@@ -352,7 +431,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
         trustSignals = [
           {
             type: "press",
-            title: hasEditorialBylines ? "Verified Editorial Bylines & Authors" : "Editorial Attribution Baseline",
+            title: hasEditorialBylines
+              ? "Verified Editorial Bylines & Authors"
+              : "Editorial Attribution Baseline",
             source: "Newsroom Standards",
             sentiment: "positive",
             snippet: hasEditorialBylines
@@ -362,7 +443,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           },
           {
             type: "community",
-            title: hasNewsletterBox ? "Active Reader Newsletter Opt-in" : "Reader Retention Engine",
+            title: hasNewsletterBox
+              ? "Active Reader Newsletter Opt-in"
+              : "Reader Retention Engine",
             source: "Audience Engagement",
             sentiment: hasNewsletterBox ? "positive" : "neutral",
             snippet: hasNewsletterBox
@@ -372,7 +455,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           },
           {
             type: "security",
-            title: hasHttps ? "Fast Secure Content Delivery (HTTPS)" : "Security Protocol Needed",
+            title: hasHttps
+              ? "Fast Secure Content Delivery (HTTPS)"
+              : "Security Protocol Needed",
             source: "Technical Infrastructure",
             sentiment: hasHttps ? "positive" : "critical",
             snippet: hasHttps
@@ -393,7 +478,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
         trustSignals = [
           {
             type: "security",
-            title: hasHttps ? "Encrypted Data Protocol & Regulatory Trust" : "Security Certificate Required",
+            title: hasHttps
+              ? "Encrypted Data Protocol & Regulatory Trust"
+              : "Security Certificate Required",
             source: "Compliance Standards",
             sentiment: hasHttps ? "positive" : "critical",
             snippet: hasHttps
@@ -424,7 +511,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
         trustSignals = [
           {
             type: "social_proof",
-            title: hasTestimonials ? "Verified Customer Social Proof" : "Social Proof Baseline",
+            title: hasTestimonials
+              ? "Verified Customer Social Proof"
+              : "Social Proof Baseline",
             source: `${industry} Landing Page`,
             sentiment: "positive",
             snippet: hasTestimonials
@@ -434,7 +523,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           },
           {
             type: "security",
-            title: hasHttps ? "Active SSL & Encryption Protocol" : "Security Certificate Needed",
+            title: hasHttps
+              ? "Active SSL & Encryption Protocol"
+              : "Security Certificate Needed",
             source: "Technical Infrastructure",
             sentiment: hasHttps ? "positive" : "critical",
             snippet: hasHttps
@@ -468,7 +559,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasNewsletterBox ? "low" : "high",
             category: "trust_gap",
-            title: hasNewsletterBox ? "Reader Retention Flow Active" : "One-and-Done Reader Bounce Risk",
+            title: hasNewsletterBox
+              ? "Reader Retention Flow Active"
+              : "One-and-Done Reader Bounce Risk",
             description: hasNewsletterBox
               ? "Newsletter opt-in detected, converting paid traffic into retained subscribers."
               : "Cold ad traffic to news articles without an inline newsletter signup or recirculation widget results in 85%+ immediate bounce.",
@@ -481,7 +574,8 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
             category: "ad_comment_risk",
             title: "Article Comment Moderation & Ad Policy Alignment",
             description: `News and blog headlines on ${adPlatform} require strict comment moderation to prevent flame wars or clickbait flags.`,
-            recommendedAction: "Ensure automated keyword moderation is enabled on ad comments and sensational headlines are fact-checked.",
+            recommendedAction:
+              "Ensure automated keyword moderation is enabled on ad comments and sensational headlines are fact-checked.",
           },
         ];
       } else if (isEcom) {
@@ -489,7 +583,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasMetaPixel ? "low" : "high",
             category: "ad_comment_risk",
-            title: hasMetaPixel ? "Purchase Pixel Attribution Active" : "Missing E-Commerce Purchase Tracking Pixel",
+            title: hasMetaPixel
+              ? "Purchase Pixel Attribution Active"
+              : "Missing E-Commerce Purchase Tracking Pixel",
             description: hasMetaPixel
               ? "Meta/Google purchase event tracking detected for precise ROAS optimization."
               : "Running e-commerce ads without pixel purchase event tracking leads to wasted ad spend and failed algorithmic optimization.",
@@ -500,7 +596,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasRefundPolicy ? "low" : "high",
             category: "refund_sentiment",
-            title: hasRefundPolicy ? "Clear Return & Refund Policy" : "Missing Clear Return / Refund Policy",
+            title: hasRefundPolicy
+              ? "Clear Return & Refund Policy"
+              : "Missing Clear Return / Refund Policy",
             description: hasRefundPolicy
               ? "Transparent refund guarantee builds high buyer confidence on cold paid traffic."
               : "Cold ad traffic without a clear 30-day money-back guarantee will trigger negative ad comments and high cart abandonment.",
@@ -514,7 +612,9 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasTestimonials ? "low" : "high",
             category: "social_proof_missing",
-            title: hasTestimonials ? "Quantified B2B Client Proof Active" : "Missing Enterprise Case Studies & Logo Proof",
+            title: hasTestimonials
+              ? "Quantified B2B Client Proof Active"
+              : "Missing Enterprise Case Studies & Logo Proof",
             description: hasTestimonials
               ? "Client testimonials and metrics reduce skepticism among B2B buyers."
               : "High-ticket B2B decision makers will leave without quantified ROI case studies or recognizable customer logos.",
@@ -525,11 +625,14 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasPrivacyPolicy ? "low" : "moderate",
             category: "trust_gap",
-            title: hasPrivacyPolicy ? "GDPR & Privacy Compliance Active" : "Enterprise Privacy & Terms Transparency",
+            title: hasPrivacyPolicy
+              ? "GDPR & Privacy Compliance Active"
+              : "Enterprise Privacy & Terms Transparency",
             description: hasPrivacyPolicy
               ? "Privacy policies compliant with enterprise procurement standards."
               : "Enterprise buyers require transparent data security and terms before submitting demo requests.",
-            recommendedAction: "Ensure enterprise privacy policy and security overview are linked in the footer.",
+            recommendedAction:
+              "Ensure enterprise privacy policy and security overview are linked in the footer.",
           },
         ];
       } else if (isLocal) {
@@ -538,15 +641,21 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
             severity: "moderate",
             category: "trust_gap",
             title: "Local Address & Direct Call Accessibility",
-            description: "Local ad clicks require instant tap-to-call phone buttons and clear service area details on mobile.",
-            recommendedAction: "Ensure primary phone number is clickable and physical service radius is stated above the fold.",
+            description:
+              "Local ad clicks require instant tap-to-call phone buttons and clear service area details on mobile.",
+            recommendedAction:
+              "Ensure primary phone number is clickable and physical service radius is stated above the fold.",
           },
           {
             severity: hasTestimonials ? "low" : "high",
             category: "social_proof_missing",
-            title: hasTestimonials ? "Local Reputation Signals Verified" : "Google Business Reviews Under-Represented",
-            description: "Local service ads convert 2.4x higher when Google review star ratings and local testimonials are displayed.",
-            recommendedAction: "Embed Google review badge with star rating above the fold on the landing page.",
+            title: hasTestimonials
+              ? "Local Reputation Signals Verified"
+              : "Google Business Reviews Under-Represented",
+            description:
+              "Local service ads convert 2.4x higher when Google review star ratings and local testimonials are displayed.",
+            recommendedAction:
+              "Embed Google review badge with star rating above the fold on the landing page.",
           },
         ];
       } else if (isHealthFin) {
@@ -556,14 +665,19 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
             category: "trust_gap",
             title: "Statutory Disclaimers & Regulatory Policy Compliance",
             description: `Paid campaigns on ${adPlatform} for ${industry} have strict policy restrictions regarding medical claims, financial guarantees, and personal health disclosures.`,
-            recommendedAction: "Include clear disclaimers (e.g. 'Not financial/medical advice', APR disclosures, licensing numbers) in the footer.",
+            recommendedAction:
+              "Include clear disclaimers (e.g. 'Not financial/medical advice', APR disclosures, licensing numbers) in the footer.",
           },
           {
             severity: hasTestimonials ? "low" : "moderate",
             category: "social_proof_missing",
-            title: hasTestimonials ? "Compliant Proof Active" : "Verified Outcome Proof Needed",
-            description: "In regulated industries, verified practitioner credentials and compliant client testimonials drive 2x higher trust.",
-            recommendedAction: "Showcase board certifications, verified licenses, or accredited institution trust badges.",
+            title: hasTestimonials
+              ? "Compliant Proof Active"
+              : "Verified Outcome Proof Needed",
+            description:
+              "In regulated industries, verified practitioner credentials and compliant client testimonials drive 2x higher trust.",
+            recommendedAction:
+              "Showcase board certifications, verified licenses, or accredited institution trust badges.",
           },
         ];
       } else if (isApp) {
@@ -571,16 +685,22 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasMetaPixel ? "low" : "high",
             category: "ad_comment_risk",
-            title: hasMetaPixel ? "App Event Attribution Active" : "Missing App Install / Registration Attribution",
-            description: "App campaigns require SKAdNetwork or deep linking event tracking to optimize cost-per-install (CPI).",
-            recommendedAction: "Configure deep linking and registration conversion events before running app ads.",
+            title: hasMetaPixel
+              ? "App Event Attribution Active"
+              : "Missing App Install / Registration Attribution",
+            description:
+              "App campaigns require SKAdNetwork or deep linking event tracking to optimize cost-per-install (CPI).",
+            recommendedAction:
+              "Configure deep linking and registration conversion events before running app ads.",
           },
           {
             severity: "moderate",
             category: "refund_sentiment",
             title: "Subscription Terms & Free Trial Transparency",
-            description: "Hidden auto-renewal subscription terms trigger severe app store reviews and negative ad comments.",
-            recommendedAction: "State trial duration, cancellation terms, and renewal price clearly on the landing page.",
+            description:
+              "Hidden auto-renewal subscription terms trigger severe app store reviews and negative ad comments.",
+            recommendedAction:
+              "State trial duration, cancellation terms, and renewal price clearly on the landing page.",
           },
         ];
       } else {
@@ -588,18 +708,25 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
           {
             severity: hasMetaPixel ? "low" : "high",
             category: "ad_comment_risk",
-            title: hasMetaPixel ? "Ad Tracking Pixel Active" : "Missing Ad Conversion Pixel",
+            title: hasMetaPixel
+              ? "Ad Tracking Pixel Active"
+              : "Missing Ad Conversion Pixel",
             description: hasMetaPixel
               ? "Tracking pixel active for campaign optimization."
               : "No conversion pixel detected. Paid ads will suffer from attribution blindness.",
-            recommendedAction: "Install Meta Pixel and Google Tag Manager before scaling paid ad campaigns.",
+            recommendedAction:
+              "Install Meta Pixel and Google Tag Manager before scaling paid ad campaigns.",
           },
           {
             severity: hasVideoUgc ? "low" : "moderate",
             category: "social_proof_missing",
-            title: hasVideoUgc ? "Video Proof Active" : "Video UGC Testimonials Under-Utilized",
-            description: "Authentic video testimonials significantly increase conversion rate on cold paid ad traffic.",
-            recommendedAction: "Add short 30-second client video proof snippets directly on the landing page.",
+            title: hasVideoUgc
+              ? "Video Proof Active"
+              : "Video UGC Testimonials Under-Utilized",
+            description:
+              "Authentic video testimonials significantly increase conversion rate on cold paid ad traffic.",
+            recommendedAction:
+              "Add short 30-second client video proof snippets directly on the landing page.",
           },
         ];
       }
@@ -608,66 +735,234 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
     if (preAdChecklist.length === 0) {
       if (isMediaNews) {
         preAdChecklist = [
-          { item: "Instant Mobile Article Load Speed Under 2.0s (Core Web Vitals)", passed: true, importance: "critical" },
-          { item: "Verified Author Bylines, Editorial Standards & Timestamps", passed: hasEditorialBylines, importance: "critical" },
-          { item: "Inline Newsletter & Reader Subscription Opt-In Box", passed: hasNewsletterBox, importance: "high" },
-          { item: "Non-Intrusive Layout (No aggressive interstitials or layout shifts)", passed: true, importance: "high" },
-          { item: "Open Graph Social Meta Tags & Clean Article Headline Formatting", passed: true, importance: "high" },
-          { item: "Active Comment Moderation & Editorial Disclaimer in Footer", passed: hasPrivacyPolicy, importance: "recommended" },
+          {
+            item: "Instant Mobile Article Load Speed Under 2.0s (Core Web Vitals)",
+            passed: true,
+            importance: "critical",
+          },
+          {
+            item: "Verified Author Bylines, Editorial Standards & Timestamps",
+            passed: hasEditorialBylines,
+            importance: "critical",
+          },
+          {
+            item: "Inline Newsletter & Reader Subscription Opt-In Box",
+            passed: hasNewsletterBox,
+            importance: "high",
+          },
+          {
+            item: "Non-Intrusive Layout (No aggressive interstitials or layout shifts)",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Open Graph Social Meta Tags & Clean Article Headline Formatting",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Active Comment Moderation & Editorial Disclaimer in Footer",
+            passed: hasPrivacyPolicy,
+            importance: "recommended",
+          },
         ];
       } else if (isEcom) {
         preAdChecklist = [
-          { item: "Meta Pixel & Google Ads Purchase / AddToCart Event Tracking Active", passed: hasMetaPixel || hasGtm, importance: "critical" },
-          { item: "Transparent 30-Day Refund & Money-Back Guarantee Policy", passed: hasRefundPolicy, importance: "critical" },
-          { item: "Product Reviews with Star Ratings & Customer Photos", passed: hasTestimonials, importance: "high" },
-          { item: "Clear Shipping Timeframes & Delivery Cost Stated", passed: true, importance: "high" },
-          { item: "Fast Mobile Checkout Load Speed (Under 2.5s)", passed: true, importance: "high" },
-          { item: "Video UGC / Product Demonstration Clips Available", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "Meta Pixel & Google Ads Purchase / AddToCart Event Tracking Active",
+            passed: hasMetaPixel || hasGtm,
+            importance: "critical",
+          },
+          {
+            item: "Transparent 30-Day Refund & Money-Back Guarantee Policy",
+            passed: hasRefundPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Product Reviews with Star Ratings & Customer Photos",
+            passed: hasTestimonials,
+            importance: "high",
+          },
+          {
+            item: "Clear Shipping Timeframes & Delivery Cost Stated",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Fast Mobile Checkout Load Speed (Under 2.5s)",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Video UGC / Product Demonstration Clips Available",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       } else if (isB2b) {
         preAdChecklist = [
-          { item: "Retargeting Pixels & B2B Form Conversion Tracking Active", passed: hasMetaPixel || hasGtm, importance: "critical" },
-          { item: "Clear Value Proposition & Single-Click Demo / Trial CTA Above the Fold", passed: true, importance: "critical" },
-          { item: "Quantified Customer Case Studies with Measurable ROI Metrics", passed: hasTestimonials, importance: "high" },
-          { item: "Enterprise Privacy Policy, Terms & Data Security in Footer", passed: hasPrivacyPolicy, importance: "critical" },
-          { item: "Frictionless Booking Calendar or Short 2-Step Form", passed: true, importance: "high" },
-          { item: "Interactive Product Walkthrough or Video Demo Clip", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "Retargeting Pixels & B2B Form Conversion Tracking Active",
+            passed: hasMetaPixel || hasGtm,
+            importance: "critical",
+          },
+          {
+            item: "Clear Value Proposition & Single-Click Demo / Trial CTA Above the Fold",
+            passed: true,
+            importance: "critical",
+          },
+          {
+            item: "Quantified Customer Case Studies with Measurable ROI Metrics",
+            passed: hasTestimonials,
+            importance: "high",
+          },
+          {
+            item: "Enterprise Privacy Policy, Terms & Data Security in Footer",
+            passed: hasPrivacyPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Frictionless Booking Calendar or Short 2-Step Form",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Interactive Product Walkthrough or Video Demo Clip",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       } else if (isLocal) {
         preAdChecklist = [
-          { item: "Click-to-Call Phone Tracking & Google Ads Call Conversion Active", passed: hasGtm || hasMetaPixel, importance: "critical" },
-          { item: "Verified Google Business Reviews & 5-Star Rating Badge Displayed", passed: hasTestimonials, importance: "high" },
-          { item: "Clear Local Service Area & Physical Address in Footer", passed: true, importance: "critical" },
-          { item: "Transparent Operating Hours & Fast Response Guarantee", passed: true, importance: "high" },
-          { item: "Mobile Fast-Loading Local Landing Page (Under 2s)", passed: true, importance: "high" },
-          { item: "Real Local Team Photos & Project Showcase Videos", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "Click-to-Call Phone Tracking & Google Ads Call Conversion Active",
+            passed: hasGtm || hasMetaPixel,
+            importance: "critical",
+          },
+          {
+            item: "Verified Google Business Reviews & 5-Star Rating Badge Displayed",
+            passed: hasTestimonials,
+            importance: "high",
+          },
+          {
+            item: "Clear Local Service Area & Physical Address in Footer",
+            passed: true,
+            importance: "critical",
+          },
+          {
+            item: "Transparent Operating Hours & Fast Response Guarantee",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Mobile Fast-Loading Local Landing Page (Under 2s)",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Real Local Team Photos & Project Showcase Videos",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       } else if (isHealthFin) {
         preAdChecklist = [
-          { item: "Full HTTPS Encryption & Compliant Lead Form Security", passed: hasHttps, importance: "critical" },
-          { item: "Statutory Disclaimers, Licensing & Industry Accreditation in Footer", passed: hasPrivacyPolicy, importance: "critical" },
-          { item: "Board-Certified Credentials, Provider Profiles & Transparent Authority", passed: true, importance: "high" },
-          { item: "Compliant Patient / Client Privacy Policy (HIPAA / GDPR / SEC)", passed: hasPrivacyPolicy, importance: "critical" },
-          { item: "Transparent Consultation Pricing or Clear Next-Steps Expectation", passed: true, importance: "high" },
-          { item: "Verified Video / Client Educational Walkthrough", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "Full HTTPS Encryption & Compliant Lead Form Security",
+            passed: hasHttps,
+            importance: "critical",
+          },
+          {
+            item: "Statutory Disclaimers, Licensing & Industry Accreditation in Footer",
+            passed: hasPrivacyPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Board-Certified Credentials, Provider Profiles & Transparent Authority",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Compliant Patient / Client Privacy Policy (HIPAA / GDPR / SEC)",
+            passed: hasPrivacyPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Transparent Consultation Pricing or Clear Next-Steps Expectation",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Verified Video / Client Educational Walkthrough",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       } else if (isApp) {
         preAdChecklist = [
-          { item: "App Store & Google Play Direct Download Badges Visible", passed: true, importance: "critical" },
-          { item: "SKAdNetwork / Meta App Install Conversion Pixel Configured", passed: hasMetaPixel || hasGtm, importance: "critical" },
-          { item: "Transparent Free Trial Duration & Auto-Renewal Terms", passed: hasPrivacyPolicy, importance: "critical" },
-          { item: "Interactive UI Screenshots & Feature Walkthrough", passed: true, importance: "high" },
-          { item: "High-Rating App Store Social Proof Badge (4.5+ Stars)", passed: hasTestimonials, importance: "high" },
-          { item: "Video App Demonstration & Feature Highlights", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "App Store & Google Play Direct Download Badges Visible",
+            passed: true,
+            importance: "critical",
+          },
+          {
+            item: "SKAdNetwork / Meta App Install Conversion Pixel Configured",
+            passed: hasMetaPixel || hasGtm,
+            importance: "critical",
+          },
+          {
+            item: "Transparent Free Trial Duration & Auto-Renewal Terms",
+            passed: hasPrivacyPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Interactive UI Screenshots & Feature Walkthrough",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "High-Rating App Store Social Proof Badge (4.5+ Stars)",
+            passed: hasTestimonials,
+            importance: "high",
+          },
+          {
+            item: "Video App Demonstration & Feature Highlights",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       } else {
         preAdChecklist = [
-          { item: "Valid Conversion Tracking Pixels Installed on Landing Page", passed: hasMetaPixel || hasGtm, importance: "critical" },
-          { item: "Clear Value Proposition & Direct CTA Above the Fold", passed: true, importance: "critical" },
-          { item: "Public Trust Signals (Reviews / Testimonials / Guarantee)", passed: hasTestimonials, importance: "high" },
-          { item: "Mobile Page Load Speed Under 2.5s", passed: true, importance: "high" },
-          { item: "Transparent Privacy Policy & Terms of Service in Footer", passed: hasPrivacyPolicy, importance: "critical" },
-          { item: "Video UGC Social Proof Clips Available", passed: hasVideoUgc, importance: "recommended" },
+          {
+            item: "Valid Conversion Tracking Pixels Installed on Landing Page",
+            passed: hasMetaPixel || hasGtm,
+            importance: "critical",
+          },
+          {
+            item: "Clear Value Proposition & Direct CTA Above the Fold",
+            passed: true,
+            importance: "critical",
+          },
+          {
+            item: "Public Trust Signals (Reviews / Testimonials / Guarantee)",
+            passed: hasTestimonials,
+            importance: "high",
+          },
+          {
+            item: "Mobile Page Load Speed Under 2.5s",
+            passed: true,
+            importance: "high",
+          },
+          {
+            item: "Transparent Privacy Policy & Terms of Service in Footer",
+            passed: hasPrivacyPolicy,
+            importance: "critical",
+          },
+          {
+            item: "Video UGC Social Proof Clips Available",
+            passed: hasVideoUgc,
+            importance: "recommended",
+          },
         ];
       }
     }
@@ -795,69 +1090,241 @@ Only output the raw JSON object, no Markdown backticks, no other text.`;
         goalLower.includes("install") ||
         goalLower.includes("signup"));
 
-    let preAdChecklist: Array<{ item: string; passed: boolean; importance: "critical" | "high" | "recommended" }> = [];
+    let preAdChecklist: Array<{
+      item: string;
+      passed: boolean;
+      importance: "critical" | "high" | "recommended";
+    }> = [];
     if (isMediaNews) {
       preAdChecklist = [
-        { item: "Instant Mobile Article Load Speed Under 2.0s (Core Web Vitals)", passed: true, importance: "critical" },
-        { item: "Verified Author Bylines, Editorial Standards & Timestamps", passed: true, importance: "critical" },
-        { item: "Inline Newsletter & Reader Subscription Opt-In Box", passed: true, importance: "high" },
-        { item: "Non-Intrusive Layout (No aggressive interstitials or layout shifts)", passed: true, importance: "high" },
-        { item: "Open Graph Social Meta Tags & Clean Article Headline Formatting", passed: true, importance: "high" },
-        { item: "Active Comment Moderation & Editorial Disclaimer in Footer", passed: true, importance: "recommended" },
+        {
+          item: "Instant Mobile Article Load Speed Under 2.0s (Core Web Vitals)",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Verified Author Bylines, Editorial Standards & Timestamps",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Inline Newsletter & Reader Subscription Opt-In Box",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Non-Intrusive Layout (No aggressive interstitials or layout shifts)",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Open Graph Social Meta Tags & Clean Article Headline Formatting",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Active Comment Moderation & Editorial Disclaimer in Footer",
+          passed: true,
+          importance: "recommended",
+        },
       ];
     } else if (isEcom) {
       preAdChecklist = [
-        { item: "Meta Pixel & Google Ads Purchase / AddToCart Event Tracking Active", passed: true, importance: "critical" },
-        { item: "Transparent 30-Day Refund & Money-Back Guarantee Policy", passed: true, importance: "critical" },
-        { item: "Product Reviews with Star Ratings & Customer Photos", passed: true, importance: "high" },
-        { item: "Clear Shipping Timeframes & Delivery Cost Stated", passed: true, importance: "high" },
-        { item: "Fast Mobile Checkout Load Speed (Under 2.5s)", passed: true, importance: "high" },
-        { item: "Video UGC / Product Demonstration Clips Available", passed: false, importance: "recommended" },
+        {
+          item: "Meta Pixel & Google Ads Purchase / AddToCart Event Tracking Active",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Transparent 30-Day Refund & Money-Back Guarantee Policy",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Product Reviews with Star Ratings & Customer Photos",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Clear Shipping Timeframes & Delivery Cost Stated",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Fast Mobile Checkout Load Speed (Under 2.5s)",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Video UGC / Product Demonstration Clips Available",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     } else if (isB2b) {
       preAdChecklist = [
-        { item: "Retargeting Pixels & B2B Form Conversion Tracking Active", passed: true, importance: "critical" },
-        { item: "Clear Value Proposition & Single-Click Demo / Trial CTA Above the Fold", passed: true, importance: "critical" },
-        { item: "Quantified Customer Case Studies with Measurable ROI Metrics", passed: true, importance: "high" },
-        { item: "Enterprise Privacy Policy, Terms & Data Security in Footer", passed: true, importance: "critical" },
-        { item: "Frictionless Booking Calendar or Short 2-Step Form", passed: true, importance: "high" },
-        { item: "Interactive Product Walkthrough or Video Demo Clip", passed: false, importance: "recommended" },
+        {
+          item: "Retargeting Pixels & B2B Form Conversion Tracking Active",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Clear Value Proposition & Single-Click Demo / Trial CTA Above the Fold",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Quantified Customer Case Studies with Measurable ROI Metrics",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Enterprise Privacy Policy, Terms & Data Security in Footer",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Frictionless Booking Calendar or Short 2-Step Form",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Interactive Product Walkthrough or Video Demo Clip",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     } else if (isLocal) {
       preAdChecklist = [
-        { item: "Click-to-Call Phone Tracking & Google Ads Call Conversion Active", passed: true, importance: "critical" },
-        { item: "Verified Google Business Reviews & 5-Star Rating Badge Displayed", passed: true, importance: "high" },
-        { item: "Clear Local Service Area & Physical Address in Footer", passed: true, importance: "critical" },
-        { item: "Transparent Operating Hours & Fast Response Guarantee", passed: true, importance: "high" },
-        { item: "Mobile Fast-Loading Local Landing Page (Under 2s)", passed: true, importance: "high" },
-        { item: "Real Local Team Photos & Project Showcase Videos", passed: false, importance: "recommended" },
+        {
+          item: "Click-to-Call Phone Tracking & Google Ads Call Conversion Active",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Verified Google Business Reviews & 5-Star Rating Badge Displayed",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Clear Local Service Area & Physical Address in Footer",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Transparent Operating Hours & Fast Response Guarantee",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Mobile Fast-Loading Local Landing Page (Under 2s)",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Real Local Team Photos & Project Showcase Videos",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     } else if (isHealthFin) {
       preAdChecklist = [
-        { item: "Full HTTPS Encryption & Compliant Lead Form Security", passed: true, importance: "critical" },
-        { item: "Statutory Disclaimers, Licensing & Industry Accreditation in Footer", passed: true, importance: "critical" },
-        { item: "Board-Certified Credentials, Provider Profiles & Transparent Authority", passed: true, importance: "high" },
-        { item: "Compliant Patient / Client Privacy Policy (HIPAA / GDPR / SEC)", passed: true, importance: "critical" },
-        { item: "Transparent Consultation Pricing or Clear Next-Steps Expectation", passed: true, importance: "high" },
-        { item: "Verified Video / Client Educational Walkthrough", passed: false, importance: "recommended" },
+        {
+          item: "Full HTTPS Encryption & Compliant Lead Form Security",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Statutory Disclaimers, Licensing & Industry Accreditation in Footer",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Board-Certified Credentials, Provider Profiles & Transparent Authority",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Compliant Patient / Client Privacy Policy (HIPAA / GDPR / SEC)",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Transparent Consultation Pricing or Clear Next-Steps Expectation",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Verified Video / Client Educational Walkthrough",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     } else if (isApp) {
       preAdChecklist = [
-        { item: "App Store & Google Play Direct Download Badges Visible", passed: true, importance: "critical" },
-        { item: "SKAdNetwork / Meta App Install Conversion Pixel Configured", passed: true, importance: "critical" },
-        { item: "Transparent Free Trial Duration & Auto-Renewal Terms", passed: true, importance: "critical" },
-        { item: "Interactive UI Screenshots & Feature Walkthrough", passed: true, importance: "high" },
-        { item: "High-Rating App Store Social Proof Badge (4.5+ Stars)", passed: true, importance: "high" },
-        { item: "Video App Demonstration & Feature Highlights", passed: false, importance: "recommended" },
+        {
+          item: "App Store & Google Play Direct Download Badges Visible",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "SKAdNetwork / Meta App Install Conversion Pixel Configured",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Transparent Free Trial Duration & Auto-Renewal Terms",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Interactive UI Screenshots & Feature Walkthrough",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "High-Rating App Store Social Proof Badge (4.5+ Stars)",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Video App Demonstration & Feature Highlights",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     } else {
       preAdChecklist = [
-        { item: "Valid Conversion Tracking Pixels Installed on Landing Page", passed: true, importance: "critical" },
-        { item: "Clear Value Proposition & Direct CTA Above the Fold", passed: true, importance: "critical" },
-        { item: "Public Trust Signals (Reviews / Testimonials / Guarantee)", passed: true, importance: "high" },
-        { item: "Mobile Page Load Speed Under 2.5s", passed: true, importance: "high" },
-        { item: "Transparent Privacy Policy & Terms of Service in Footer", passed: true, importance: "critical" },
-        { item: "Video UGC Social Proof Clips Available", passed: false, importance: "recommended" },
+        {
+          item: "Valid Conversion Tracking Pixels Installed on Landing Page",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Clear Value Proposition & Direct CTA Above the Fold",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Public Trust Signals (Reviews / Testimonials / Guarantee)",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Mobile Page Load Speed Under 2.5s",
+          passed: true,
+          importance: "high",
+        },
+        {
+          item: "Transparent Privacy Policy & Terms of Service in Footer",
+          passed: true,
+          importance: "critical",
+        },
+        {
+          item: "Video UGC Social Proof Clips Available",
+          passed: false,
+          importance: "recommended",
+        },
       ];
     }
 

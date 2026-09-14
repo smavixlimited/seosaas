@@ -55,8 +55,9 @@ function AiPage() {
         <div>
           <h1 className="text-2xl font-semibold">AI & MCP</h1>
           <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
-            Connect your AI agent to Skorvia. Run keyword research, SERP analysis,
-            domain lookups, and backlink reviews from your editor or chat.
+            Connect your AI agent to Skorvia. Run keyword research, SERP
+            analysis, domain lookups, and backlink reviews from your editor or
+            chat.
           </p>
         </div>
 
@@ -201,13 +202,28 @@ function AiPage() {
               id="cursor"
               title="Cursor IDE"
               subtitle="Settings → Tools & Integrations → MCP Tools"
-              icon={<Icon icon="solar:programming-bold-duotone" className="size-5 text-primary" />}
+              icon={
+                <Icon
+                  icon="solar:programming-bold-duotone"
+                  className="size-5 text-primary"
+                />
+              }
             >
               <ol className="ml-5 list-decimal space-y-1.5 text-sm text-base-content/70 leading-relaxed">
                 <li>
-                  Open <span className="text-base-content">Settings → Tools &amp; Integrations → MCP Tools</span>.
+                  Open{" "}
+                  <span className="text-base-content">
+                    Settings → Tools &amp; Integrations → MCP Tools
+                  </span>
+                  .
                 </li>
-                <li>Click <span className="font-medium text-base-content">New MCP Server</span> (opens <code className="text-xs font-mono">mcp.json</code>).</li>
+                <li>
+                  Click{" "}
+                  <span className="font-medium text-base-content">
+                    New MCP Server
+                  </span>{" "}
+                  (opens <code className="text-xs font-mono">mcp.json</code>).
+                </li>
                 <li>Add the following configuration:</li>
               </ol>
               <CodeBlock
@@ -228,10 +244,17 @@ function AiPage() {
               id="google-antigravity"
               title="Google Antigravity (AGY)"
               subtitle="agy.config.json or IDE Settings"
-              icon={<Icon icon="solar:planet-bold-duotone" className="size-5 text-blue-500" />}
+              icon={
+                <Icon
+                  icon="solar:planet-bold-duotone"
+                  className="size-5 text-blue-500"
+                />
+              }
             >
               <p className="text-sm text-base-content/70 leading-relaxed">
-                Add the Skorvia MCP server to your <code className="text-xs font-mono">agy.config.json</code> or pass it via the CLI:
+                Add the Skorvia MCP server to your{" "}
+                <code className="text-xs font-mono">agy.config.json</code> or
+                pass it via the CLI:
               </p>
               <CodeBlock
                 code={`{
@@ -246,7 +269,8 @@ function AiPage() {
 }`}
               />
               <p className="text-xs text-base-content/60">
-                All 9 Skorvia SEO Agent Skills and research tools are directly accessible in Antigravity.
+                All 9 Skorvia SEO Agent Skills and research tools are directly
+                accessible in Antigravity.
               </p>
             </Collapsible>
 
@@ -254,10 +278,19 @@ function AiPage() {
               id="windsurf-cascade"
               title="Windsurf / Cascade"
               subtitle="Cascade MCP Server Settings"
-              icon={<Icon icon="solar:waterdrops-bold-duotone" className="size-5 text-cyan-500" />}
+              icon={
+                <Icon
+                  icon="solar:waterdrops-bold-duotone"
+                  className="size-5 text-cyan-500"
+                />
+              }
             >
               <p className="text-sm text-base-content/70 leading-relaxed">
-                Open <span className="text-base-content">Windsurf Settings → Cascade → MCP Servers</span> and add:
+                Open{" "}
+                <span className="text-base-content">
+                  Windsurf Settings → Cascade → MCP Servers
+                </span>{" "}
+                and add:
               </p>
               <CodeBlock
                 code={`{
@@ -277,13 +310,21 @@ function AiPage() {
               id="custom-mcp-clients"
               title="Custom MCP Client / Python / TS"
               subtitle="LangChain, LlamaIndex, Python SDK, or cURL"
-              icon={<Icon icon="solar:code-circle-bold-duotone" className="size-5 text-emerald-500" />}
+              icon={
+                <Icon
+                  icon="solar:code-circle-bold-duotone"
+                  className="size-5 text-emerald-500"
+                />
+              }
             >
               <p className="text-sm text-base-content/70 leading-relaxed">
-                Connect any custom agent framework using the standard Model Context Protocol:
+                Connect any custom agent framework using the standard Model
+                Context Protocol:
               </p>
               <div className="space-y-2">
-                <p className="text-xs font-bold text-base-content/80">Python MCP Client:</p>
+                <p className="text-xs font-bold text-base-content/80">
+                  Python MCP Client:
+                </p>
                 <CodeBlock
                   code={`from mcp.client.session import ClientSession
 from mcp.client.sse import sse_client

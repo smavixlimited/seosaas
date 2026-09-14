@@ -65,9 +65,12 @@ function MyBrandsPage() {
               <Plus className="size-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-black text-base-content">No Brands configured yet</h3>
+              <h3 className="text-base font-black text-base-content">
+                No Brands configured yet
+              </h3>
               <p className="text-xs text-base-content/60 max-w-sm mx-auto">
-                Create your first Brand workspace to unlock competitor ad spying, keyword radar, and automated site audits.
+                Create your first Brand workspace to unlock competitor ad
+                spying, keyword radar, and automated site audits.
               </p>
             </div>
             <button

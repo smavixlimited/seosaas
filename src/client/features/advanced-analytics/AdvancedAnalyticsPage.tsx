@@ -30,7 +30,9 @@ interface AdvancedAnalyticsPageProps {
   projectId: string;
 }
 
-export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps) {
+export function AdvancedAnalyticsPage({
+  projectId,
+}: AdvancedAnalyticsPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [dateRange, setDateRange] = React.useState<AnalyticsDateRange>("30d");
@@ -52,7 +54,9 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
         data: { projectId, dateRange },
       }),
     onSuccess: (data) => {
-      const blob = new Blob([data.csvContent], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob([data.csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
@@ -116,12 +120,36 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
   const distributionChartData = React.useMemo(() => {
     if (!report) return [];
     return [
-      { tier: "Top 3", count: report.rankingDistribution.top3, fill: "#10b981" },
-      { tier: "4 - 10", count: report.rankingDistribution.top10, fill: "#3b82f6" },
-      { tier: "11 - 20", count: report.rankingDistribution.top20, fill: "#6366f1" },
-      { tier: "21 - 50", count: report.rankingDistribution.top50, fill: "#f59e0b" },
-      { tier: "51 - 100", count: report.rankingDistribution.top100, fill: "#8b5cf6" },
-      { tier: "Not Ranked", count: report.rankingDistribution.notRanking, fill: "#64748b" },
+      {
+        tier: "Top 3",
+        count: report.rankingDistribution.top3,
+        fill: "#10b981",
+      },
+      {
+        tier: "4 - 10",
+        count: report.rankingDistribution.top10,
+        fill: "#3b82f6",
+      },
+      {
+        tier: "11 - 20",
+        count: report.rankingDistribution.top20,
+        fill: "#6366f1",
+      },
+      {
+        tier: "21 - 50",
+        count: report.rankingDistribution.top50,
+        fill: "#f59e0b",
+      },
+      {
+        tier: "51 - 100",
+        count: report.rankingDistribution.top100,
+        fill: "#8b5cf6",
+      },
+      {
+        tier: "Not Ranked",
+        count: report.rankingDistribution.notRanking,
+        fill: "#64748b",
+      },
     ];
   }, [report]);
 
@@ -209,16 +237,19 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
             </span>
             {report?.isGscConnected ? (
               <span className="badge badge-success badge-outline badge-xs gap-1">
-                <Icon icon="icon-park-outline:check-one" className="w-3 h-3" /> GSC Live: {report.gscSiteUrl}
+                <Icon icon="icon-park-outline:check-one" className="w-3 h-3" />{" "}
+                GSC Live: {report.gscSiteUrl}
               </span>
             ) : (
               <span className="badge badge-warning badge-outline badge-xs gap-1">
-                <Icon icon="icon-park-outline:info" className="w-3 h-3" /> GSC Disconnected
+                <Icon icon="icon-park-outline:info" className="w-3 h-3" /> GSC
+                Disconnected
               </span>
             )}
             {report?.isGa4Connected && (
               <span className="badge badge-info badge-outline badge-xs gap-1">
-                <Icon icon="icon-park-outline:check-one" className="w-3 h-3" /> GA4 Live
+                <Icon icon="icon-park-outline:check-one" className="w-3 h-3" />{" "}
+                GA4 Live
               </span>
             )}
           </div>
@@ -226,7 +257,8 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
             Unified Growth &amp; SEO Command Center
           </h1>
           <p className="text-sm text-base-content/70 mt-0.5">
-            Cross-channel visibility correlating search impressions, rank movement, organic traffic value ($), and technical health.
+            Cross-channel visibility correlating search impressions, rank
+            movement, organic traffic value ($), and technical health.
           </p>
         </div>
 
@@ -280,7 +312,8 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
         <div className="flex flex-col items-center justify-center py-24 space-y-4">
           <span className="loading loading-spinner loading-lg text-primary" />
           <p className="text-sm text-base-content/60 animate-pulse">
-            Synthesizing cross-channel search metrics, ranking velocity, and revenue attribution...
+            Synthesizing cross-channel search metrics, ranking velocity, and
+            revenue attribution...
           </p>
         </div>
       ) : report ? (
@@ -299,7 +332,9 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                     </h3>
                   </div>
                   <p className="text-xs text-base-content/70 max-w-2xl">
-                    Connect your Google Search Console account and start tracking keywords to populate real search impressions, position trajectories, and organic revenue equivalent ($).
+                    Connect your Google Search Console account and start
+                    tracking keywords to populate real search impressions,
+                    position trajectories, and organic revenue equivalent ($).
                   </p>
                 </div>
               </div>
@@ -331,7 +366,10 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 font-bold text-xs text-emerald-600">
-                      <Icon icon="icon-park-outline:ranking" className="w-4 h-4" />
+                      <Icon
+                        icon="icon-park-outline:ranking"
+                        className="w-4 h-4"
+                      />
                       <span>2. Add Tracked Keywords</span>
                     </div>
                     <p className="text-[11px] text-base-content/60">
@@ -350,11 +388,15 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 font-bold text-xs text-blue-600">
-                      <Icon icon="icon-park-outline:protect" className="w-4 h-4" />
+                      <Icon
+                        icon="icon-park-outline:protect"
+                        className="w-4 h-4"
+                      />
                       <span>3. Run Technical Site Audit</span>
                     </div>
                     <p className="text-[11px] text-base-content/60">
-                      Crawl pages to calculate technical health and Core Web Vitals.
+                      Crawl pages to calculate technical health and Core Web
+                      Vitals.
                     </p>
                   </div>
                   <span className="text-xs font-bold text-blue-600 flex items-center gap-1">
@@ -374,7 +416,10 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                   Total Impressions
                 </span>
                 <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                  <Icon icon="icon-park-outline:preview-open" className="w-4 h-4" />
+                  <Icon
+                    icon="icon-park-outline:preview-open"
+                    className="w-4 h-4"
+                  />
                 </div>
               </div>
               <div className="mt-3">
@@ -384,7 +429,10 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 <div className="flex items-center gap-1 mt-1 text-xs text-base-content/60 font-medium">
                   {report.hasGscData ? (
                     <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                      <Icon icon="icon-park-outline:trending-up" className="w-3.5 h-3.5" />
+                      <Icon
+                        icon="icon-park-outline:trending-up"
+                        className="w-3.5 h-3.5"
+                      />
                       Live Search Console Data
                     </span>
                   ) : (
@@ -416,7 +464,10 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 <div className="flex items-center gap-1 mt-1 text-xs text-base-content/60 font-medium">
                   {report.hasGscData ? (
                     <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                      <Icon icon="icon-park-outline:check-one" className="w-3.5 h-3.5" />
+                      <Icon
+                        icon="icon-park-outline:check-one"
+                        className="w-3.5 h-3.5"
+                      />
                       Verified Organic Traffic
                     </span>
                   ) : (
@@ -442,7 +493,11 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 </div>
                 <div className="flex items-center gap-1 mt-1 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
                   {report.kpis.estimatedMonthlyTrafficValue > 0 ? (
-                    <span>Saves ~${report.kpis.adSpendSavingsEquivalent.toLocaleString()}/mo vs Google Ads</span>
+                    <span>
+                      Saves ~$
+                      {report.kpis.adSpendSavingsEquivalent.toLocaleString()}/mo
+                      vs Google Ads
+                    </span>
                   ) : (
                     <span>Calculated from real organic clicks</span>
                   )}
@@ -471,11 +526,15 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 <div className="flex items-center gap-1 mt-1 text-xs text-base-content/60">
                   <span>Health: </span>
                   <span className="font-bold text-emerald-600">
-                    {report.kpis.technicalHealthScore > 0 ? `${report.kpis.technicalHealthScore}/100` : "Not Scanned"}
+                    {report.kpis.technicalHealthScore > 0
+                      ? `${report.kpis.technicalHealthScore}/100`
+                      : "Not Scanned"}
                   </span>
                   <span className="mx-1">•</span>
                   <span>Tracked: </span>
-                  <span className="font-bold text-indigo-600">{report.kpis.totalTrackedKeywords} KWs</span>
+                  <span className="font-bold text-indigo-600">
+                    {report.kpis.totalTrackedKeywords} KWs
+                  </span>
                 </div>
               </div>
             </div>
@@ -488,11 +547,15 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-base flex items-center gap-2">
-                    <Icon icon="icon-park-outline:chart-line" className="w-4 h-4 text-primary" />
+                    <Icon
+                      icon="icon-park-outline:chart-line"
+                      className="w-4 h-4 text-primary"
+                    />
                     Organic Traffic &amp; Search Impression Trajectory
                   </h3>
                   <p className="text-xs text-base-content/60">
-                    Daily search impression volume and organic click velocity across selected time window.
+                    Daily search impression volume and organic click velocity
+                    across selected time window.
                   </p>
                 </div>
                 {report.timeSeriesTrends.length > 0 && (
@@ -517,16 +580,48 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                       margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                     >
                       <defs>
-                        <linearGradient id="colorImp" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                        <linearGradient
+                          id="colorImp"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#3b82f6"
+                            stopOpacity={0.4}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#3b82f6"
+                            stopOpacity={0}
+                          />
                         </linearGradient>
-                        <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                        <linearGradient
+                          id="colorClicks"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#10b981"
+                            stopOpacity={0.4}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#10b981"
+                            stopOpacity={0}
+                          />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.1} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="currentColor"
+                        opacity={0.1}
+                      />
                       <XAxis
                         dataKey="date"
                         tick={{ fontSize: 10, fill: "#888" }}
@@ -569,12 +664,16 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                   </ResponsiveContainer>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center border border-dashed border-base-300 rounded-xl p-6 text-center space-y-2">
-                    <Icon icon="icon-park-outline:chart-line" className="w-8 h-8 text-base-content/30" />
+                    <Icon
+                      icon="icon-park-outline:chart-line"
+                      className="w-8 h-8 text-base-content/30"
+                    />
                     <p className="text-xs font-semibold text-base-content/70">
                       No Search Console impression trajectory recorded yet
                     </p>
                     <p className="text-[11px] text-base-content/50 max-w-md">
-                      Connect your Google Search Console property to stream daily impressions, clicks, and rank movements.
+                      Connect your Google Search Console property to stream
+                      daily impressions, clicks, and rank movements.
                     </p>
                   </div>
                 )}
@@ -585,11 +684,15 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
             <div className="card bg-base-100 border border-base-300 shadow-sm p-5 space-y-4">
               <div>
                 <h3 className="font-bold text-base flex items-center gap-2">
-                  <Icon icon="icon-park-outline:ranking" className="w-4 h-4 text-emerald-500" />
+                  <Icon
+                    icon="icon-park-outline:ranking"
+                    className="w-4 h-4 text-emerald-500"
+                  />
                   Ranking Position Matrix
                 </h3>
                 <p className="text-xs text-base-content/60">
-                  Distribution of {report.kpis.totalTrackedKeywords} tracked keywords across Google SERP positions.
+                  Distribution of {report.kpis.totalTrackedKeywords} tracked
+                  keywords across Google SERP positions.
                 </p>
               </div>
 
@@ -601,8 +704,17 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                       layout="vertical"
                       margin={{ top: 5, right: 20, left: 15, bottom: 5 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.08} />
-                      <XAxis type="number" tick={{ fontSize: 10, fill: "#888" }} tickLine={false} axisLine={false} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="currentColor"
+                        opacity={0.08}
+                      />
+                      <XAxis
+                        type="number"
+                        tick={{ fontSize: 10, fill: "#888" }}
+                        tickLine={false}
+                        axisLine={false}
+                      />
                       <YAxis
                         dataKey="tier"
                         type="category"
@@ -619,17 +731,25 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                           color: "#fff",
                         }}
                       />
-                      <Bar dataKey="count" radius={[0, 4, 4, 0]} name="Keywords" />
+                      <Bar
+                        dataKey="count"
+                        radius={[0, 4, 4, 0]}
+                        name="Keywords"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center border border-dashed border-base-300 rounded-xl p-6 text-center space-y-2">
-                    <Icon icon="icon-park-outline:ranking" className="w-8 h-8 text-base-content/30" />
+                    <Icon
+                      icon="icon-park-outline:ranking"
+                      className="w-8 h-8 text-base-content/30"
+                    />
                     <p className="text-xs font-semibold text-base-content/70">
                       0 keywords tracked in Rank Tracker
                     </p>
                     <p className="text-[11px] text-base-content/50 max-w-xs">
-                      Add your target keywords in Rank Tracker to view SERP distribution across Top 3, Top 10, and Top 50.
+                      Add your target keywords in Rank Tracker to view SERP
+                      distribution across Top 3, Top 10, and Top 50.
                     </p>
                   </div>
                 )}
@@ -642,11 +762,15 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="font-bold text-base flex items-center gap-2">
-                  <Icon icon="icon-park-outline:funds" className="w-4 h-4 text-emerald-500" />
+                  <Icon
+                    icon="icon-park-outline:funds"
+                    className="w-4 h-4 text-emerald-500"
+                  />
                   Top Search Queries &amp; Tracked Keywords
                 </h3>
                 <p className="text-xs text-base-content/60">
-                  Real ranking positions and search clicks from Google Search Console and Rank Tracker.
+                  Real ranking positions and search clicks from Google Search
+                  Console and Rank Tracker.
                 </p>
               </div>
             </div>
@@ -667,16 +791,23 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                   </thead>
                   <tbody className="divide-y divide-base-300/40 text-xs">
                     {report.topPerformingKeywords.map((kw) => (
-                      <tr key={kw.id} className="hover:bg-base-200/50 transition-colors">
+                      <tr
+                        key={kw.id}
+                        className="hover:bg-base-200/50 transition-colors"
+                      >
                         <td className="font-semibold text-base-content">
-                          <span className="truncate max-w-xs">{kw.keyword}</span>
+                          <span className="truncate max-w-xs">
+                            {kw.keyword}
+                          </span>
                         </td>
                         <td>
                           <span className="badge badge-sm font-bold bg-base-200">
                             #{kw.position}
                           </span>
                         </td>
-                        <td className="font-mono">{kw.searchVolume.toLocaleString()}</td>
+                        <td className="font-mono">
+                          {kw.searchVolume.toLocaleString()}
+                        </td>
                         <td className="font-mono text-emerald-600 font-medium">
                           ${kw.estimatedCpc.toFixed(2)}
                         </td>
@@ -698,7 +829,10 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                             }
                             className="btn btn-ghost btn-xs text-primary gap-1"
                           >
-                            <Icon icon="icon-park-outline:magic" className="w-3.5 h-3.5" />
+                            <Icon
+                              icon="icon-park-outline:magic"
+                              className="w-3.5 h-3.5"
+                            />
                             Optimize
                           </button>
                         </td>
@@ -708,12 +842,16 @@ export function AdvancedAnalyticsPage({ projectId }: AdvancedAnalyticsPageProps)
                 </table>
               ) : (
                 <div className="py-12 border border-dashed border-base-300 rounded-xl text-center space-y-2">
-                  <Icon icon="icon-park-outline:search" className="w-8 h-8 text-base-content/30 mx-auto" />
+                  <Icon
+                    icon="icon-park-outline:search"
+                    className="w-8 h-8 text-base-content/30 mx-auto"
+                  />
                   <p className="text-xs font-semibold text-base-content/70">
                     No Search Console queries or tracked keywords recorded yet
                   </p>
                   <p className="text-[11px] text-base-content/50 max-w-sm mx-auto">
-                    Connect Search Console or add keywords in Rank Tracker to see live search positions and traffic value.
+                    Connect Search Console or add keywords in Rank Tracker to
+                    see live search positions and traffic value.
                   </p>
                 </div>
               )}

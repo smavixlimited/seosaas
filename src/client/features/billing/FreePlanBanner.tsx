@@ -72,7 +72,10 @@ export function FreePlanBanner() {
         {isFreePlan ? (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
             <span>
-              <strong>Free Plan Quota Exhausted:</strong> You have reached your Free plan quota limit for this month. Upgrade your plan for higher limits, or wait until next month when your quota automatically resets.
+              <strong>Free Plan Quota Exhausted:</strong> You have reached your
+              Free plan quota limit for this month. Upgrade your plan for higher
+              limits, or wait until next month when your quota automatically
+              resets.
             </span>
             <Link
               to={BILLING_ROUTE}
@@ -83,7 +86,8 @@ export function FreePlanBanner() {
           </div>
         ) : (
           <div>
-            You&rsquo;ve used all your credits. {creditsActionLink} to continue using Skorvia.
+            You&rsquo;ve used all your credits. {creditsActionLink} to continue
+            using Skorvia.
           </div>
         )}
       </BannerShell>
@@ -96,7 +100,8 @@ export function FreePlanBanner() {
         {isFreePlan ? (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
             <span>
-              <strong>Low Monthly Quota:</strong> You have {dbCreditsRemaining} credits remaining on your Free plan this month.
+              <strong>Low Monthly Quota:</strong> You have {dbCreditsRemaining}{" "}
+              credits remaining on your Free plan this month.
             </span>
             <Link
               to={BILLING_ROUTE}
@@ -107,7 +112,8 @@ export function FreePlanBanner() {
           </div>
         ) : (
           <div>
-            You&rsquo;re running low on credits. {creditsActionLink} to keep using Skorvia.
+            You&rsquo;re running low on credits. {creditsActionLink} to keep
+            using Skorvia.
           </div>
         )}
       </BannerShell>

@@ -32,7 +32,11 @@ export function BrandSettingsCompletenessReminder({
     staleTime: 5 * 60 * 1000,
   });
 
-  if (brandProfileQuery.isLoading || projectContextQuery.isLoading || isDismissed) {
+  if (
+    brandProfileQuery.isLoading ||
+    projectContextQuery.isLoading ||
+    isDismissed
+  ) {
     return null;
   }
 
@@ -43,13 +47,16 @@ export function BrandSettingsCompletenessReminder({
   const missingGeneral: string[] = [];
   if (!brandProfile?.brandName?.trim()) missingGeneral.push("Brand Name");
   if (!brandProfile?.websiteUrl?.trim()) missingGeneral.push("Website URL");
-  if (!brandProfile?.brandDescription?.trim()) missingGeneral.push("Brand Description");
-  if (!brandProfile?.valueProposition?.trim()) missingGeneral.push("Value Proposition");
+  if (!brandProfile?.brandDescription?.trim())
+    missingGeneral.push("Brand Description");
+  if (!brandProfile?.valueProposition?.trim())
+    missingGeneral.push("Value Proposition");
   if (!brandProfile?.industry?.trim()) missingGeneral.push("Industry");
 
   // 2. Check Context Settings
   const missingContext: string[] = (projectContext?.missingSections || []).map(
-    (key: ProjectContextSectionKey) => PROJECT_CONTEXT_SECTION_LABELS[key] || key,
+    (key: ProjectContextSectionKey) =>
+      PROJECT_CONTEXT_SECTION_LABELS[key] || key,
   );
 
   const totalMissing = missingGeneral.length + missingContext.length;
@@ -60,9 +67,10 @@ export function BrandSettingsCompletenessReminder({
   }
 
   // Determine target link (directs to context if general is complete, otherwise general settings)
-  const targetSettingsUrl = missingGeneral.length > 0
-    ? "/p/$projectId/settings"
-    : "/p/$projectId/settings/context";
+  const targetSettingsUrl =
+    missingGeneral.length > 0
+      ? "/p/$projectId/settings"
+      : "/p/$projectId/settings/context";
 
   return (
     <div
@@ -76,11 +84,13 @@ export function BrandSettingsCompletenessReminder({
           <div className="font-bold text-base-content flex items-center gap-2 flex-wrap">
             <span>Boost your AI analysis &amp; generation accuracy</span>
             <span className="badge badge-warning badge-xs font-bold font-mono">
-              {totalMissing} {totalMissing === 1 ? "field" : "fields"} incomplete
+              {totalMissing} {totalMissing === 1 ? "field" : "fields"}{" "}
+              incomplete
             </span>
           </div>
           <p className="text-base-content/70 leading-relaxed">
-            To get a better result, ensure you submit all the details about your Brand in Brand Settings.
+            To get a better result, ensure you submit all the details about your
+            Brand in Brand Settings.
           </p>
         </div>
       </div>

@@ -25,7 +25,11 @@ export function isSuperAdminEmail(email?: string | null): boolean {
   const cleanEmail = email.toLowerCase().trim();
   if (SUPERADMIN_EMAILS.includes(cleanEmail)) return true;
 
-  const envAdmins = (process.env.ADMIN_EMAILS || process.env.SUPERADMIN_EMAIL || "")
+  const envAdmins = (
+    process.env.ADMIN_EMAILS ||
+    process.env.SUPERADMIN_EMAIL ||
+    ""
+  )
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);

@@ -95,7 +95,6 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
     },
   });
 
-
   const socialLinks = (profile?.socialLinks || {}) as Record<
     string,
     string | undefined
@@ -179,7 +178,8 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
             </span>
           </div>
           <p className="text-xs sm:text-sm text-base-content/70">
-            Comprehensive audit of your brand identity, market positioning, social distribution, and authority signals.
+            Comprehensive audit of your brand identity, market positioning,
+            social distribution, and authority signals.
           </p>
         </div>
 
@@ -224,10 +224,16 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               <span className="text-3xl font-black text-primary font-mono">
                 {score}
               </span>
-              <span className="text-xs text-base-content/50 font-bold">/ 100</span>
+              <span className="text-xs text-base-content/50 font-bold">
+                / 100
+              </span>
             </div>
             <p className="text-[11px] text-base-content/70 mt-1 font-medium">
-              {score >= 80 ? "Strong Market Presence" : score >= 60 ? "Moderate Authority" : "Emerging Brand"}
+              {score >= 80
+                ? "Strong Market Presence"
+                : score >= 60
+                  ? "Moderate Authority"
+                  : "Emerging Brand"}
             </p>
           </div>
           <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -245,10 +251,14 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               <span className="text-3xl font-black text-base-content font-mono">
                 {data?.activeSocialCount || 0}
               </span>
-              <span className="text-xs text-base-content/50 font-bold">/ 6 Verified</span>
+              <span className="text-xs text-base-content/50 font-bold">
+                / 6 Verified
+              </span>
             </div>
             <p className="text-[11px] text-base-content/70 mt-1 font-medium">
-              {data?.activeSocialCount ? `${data.activeSocialCount} official profiles connected` : "Connect social channels"}
+              {data?.activeSocialCount
+                ? `${data.activeSocialCount} official profiles connected`
+                : "Connect social channels"}
             </p>
           </div>
           <div className="size-12 rounded-2xl bg-info/10 flex items-center justify-center text-info">
@@ -266,16 +276,25 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               <span className="text-3xl font-black text-base-content font-mono">
                 {data?.trackedCompetitorCount || 0}
               </span>
-              <span className="text-xs text-base-content/50 font-bold">Rivals</span>
+              <span className="text-xs text-base-content/50 font-bold">
+                Rivals
+              </span>
             </div>
             <p className="text-[11px] text-base-content/70 mt-1 font-medium">
-              <Link to="/p/$projectId/competitors" params={{ projectId }} className="text-primary hover:underline font-bold">
+              <Link
+                to="/p/$projectId/competitors"
+                params={{ projectId }}
+                className="text-primary hover:underline font-bold"
+              >
                 View Competitors Directory &rarr;
               </Link>
             </p>
           </div>
           <div className="size-12 rounded-2xl bg-warning/10 flex items-center justify-center text-warning">
-            <Icon icon="solar:users-group-two-rounded-bold-duotone" className="size-6" />
+            <Icon
+              icon="solar:users-group-two-rounded-bold-duotone"
+              className="size-6"
+            />
           </div>
         </div>
 
@@ -309,7 +328,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
         <div className="lg:col-span-7 bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-base-200 pb-3">
             <div className="flex items-center gap-2">
-              <Icon icon="solar:crown-bold-duotone" className="size-5 text-primary" />
+              <Icon
+                icon="solar:crown-bold-duotone"
+                className="size-5 text-primary"
+              />
               <h2 className="text-base sm:text-lg font-black text-base-content">
                 Brand Positioning &amp; Identity
               </h2>
@@ -361,7 +383,8 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
                 Target Country &amp; Language
               </span>
               <span className="text-sm font-black text-base-content mt-0.5 block">
-                {profile?.targetCountry || "US"} ({profile?.targetLanguage || "English"})
+                {profile?.targetCountry || "US"} (
+                {profile?.targetLanguage || "English"})
               </span>
             </div>
           </div>
@@ -395,7 +418,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
         <div className="lg:col-span-5 bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-base-200 pb-3">
             <div className="flex items-center gap-2">
-              <Icon icon="solar:share-circle-bold-duotone" className="size-5 text-primary" />
+              <Icon
+                icon="solar:share-circle-bold-duotone"
+                className="size-5 text-primary"
+              />
               <h2 className="text-base sm:text-lg font-black text-base-content">
                 Official Social Channels
               </h2>
@@ -406,7 +432,8 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
           </div>
 
           <p className="text-xs text-base-content/70">
-            Connected social handles allow search engines and AI agents to verify brand entity knowledge graph authority.
+            Connected social handles allow search engines and AI agents to
+            verify brand entity knowledge graph authority.
           </p>
 
           <div className="space-y-2">
@@ -423,7 +450,11 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
                     </span>
                     {channel.handle ? (
                       <a
-                        href={channel.handle.startsWith("http") ? channel.handle : `https://${channel.handle}`}
+                        href={
+                          channel.handle.startsWith("http")
+                            ? channel.handle
+                            : `https://${channel.handle}`
+                        }
                         target="_blank"
                         rel="noreferrer"
                         className="text-[11px] text-primary hover:underline truncate block"
@@ -464,7 +495,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
           <div className="space-y-1">
             <div className="flex items-center justify-between border-b border-base-200 pb-3">
               <div className="flex items-center gap-2">
-                <Icon icon="solar:heart-pulse-bold-duotone" className="size-5 text-rose-500" />
+                <Icon
+                  icon="solar:heart-pulse-bold-duotone"
+                  className="size-5 text-rose-500"
+                />
                 <h3 className="text-base font-black text-base-content">
                   Brand Sentiment &amp; Reputation
                 </h3>
@@ -474,14 +508,17 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               </span>
             </div>
             <p className="text-xs text-base-content/60 pt-1">
-              Cross-engine entity sentiment computed across web citations, search indices, and user community discussions.
+              Cross-engine entity sentiment computed across web citations,
+              search indices, and user community discussions.
             </p>
           </div>
 
           {/* Sentiment Distribution Bars */}
           <div className="space-y-3 bg-base-200/50 p-4 rounded-2xl border border-base-300/60">
             <div className="flex items-center justify-between text-xs font-bold">
-              <span className="text-base-content/70">Sentiment Distribution</span>
+              <span className="text-base-content/70">
+                Sentiment Distribution
+              </span>
               <span className="text-emerald-600 dark:text-emerald-400 font-mono">
                 {data?.sentimentBreakdown?.positivePct || 75}% Positive
               </span>
@@ -490,37 +527,52 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
             <div className="h-3 w-full rounded-full bg-base-300 overflow-hidden flex shadow-inner">
               <div
                 className="bg-emerald-500 transition-all duration-500"
-                style={{ width: `${data?.sentimentBreakdown?.positivePct || 75}%` }}
+                style={{
+                  width: `${data?.sentimentBreakdown?.positivePct || 75}%`,
+                }}
                 title={`Positive: ${data?.sentimentBreakdown?.positivePct || 75}%`}
               />
               <div
                 className="bg-amber-400 transition-all duration-500"
-                style={{ width: `${data?.sentimentBreakdown?.neutralPct || 18}%` }}
+                style={{
+                  width: `${data?.sentimentBreakdown?.neutralPct || 18}%`,
+                }}
                 title={`Neutral: ${data?.sentimentBreakdown?.neutralPct || 18}%`}
               />
               <div
                 className="bg-rose-500 transition-all duration-500"
-                style={{ width: `${data?.sentimentBreakdown?.negativePct || 7}%` }}
+                style={{
+                  width: `${data?.sentimentBreakdown?.negativePct || 7}%`,
+                }}
                 title={`Negative: ${data?.sentimentBreakdown?.negativePct || 7}%`}
               />
             </div>
 
             <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 pt-1">
               <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-                <span className="size-2 rounded-full bg-emerald-500" /> Positive: {data?.sentimentBreakdown?.positivePct || 75}%
+                <span className="size-2 rounded-full bg-emerald-500" />{" "}
+                Positive: {data?.sentimentBreakdown?.positivePct || 75}%
               </span>
               <span className="flex items-center gap-1 text-amber-500">
-                <span className="size-2 rounded-full bg-amber-400" /> Neutral: {data?.sentimentBreakdown?.neutralPct || 18}%
+                <span className="size-2 rounded-full bg-amber-400" /> Neutral:{" "}
+                {data?.sentimentBreakdown?.neutralPct || 18}%
               </span>
               <span className="flex items-center gap-1 text-rose-500">
-                <span className="size-2 rounded-full bg-rose-500" /> Negative: {data?.sentimentBreakdown?.negativePct || 7}%
+                <span className="size-2 rounded-full bg-rose-500" /> Negative:{" "}
+                {data?.sentimentBreakdown?.negativePct || 7}%
               </span>
             </div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300 font-medium flex items-center gap-2">
-            <Icon icon="solar:shield-check-bold" className="size-4 shrink-0 text-emerald-600" />
-            <span>High Brand Trust Signal: AI answer engines cite your brand favorably for domain queries.</span>
+            <Icon
+              icon="solar:shield-check-bold"
+              className="size-4 shrink-0 text-emerald-600"
+            />
+            <span>
+              High Brand Trust Signal: AI answer engines cite your brand
+              favorably for domain queries.
+            </span>
           </div>
         </div>
 
@@ -528,7 +580,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
         <div className="lg:col-span-7 bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-base-200 pb-3">
             <div className="flex items-center gap-2">
-              <Icon icon="solar:chat-round-dots-bold-duotone" className="size-5 text-primary" />
+              <Icon
+                icon="solar:chat-round-dots-bold-duotone"
+                className="size-5 text-primary"
+              />
               <h3 className="text-base font-black text-base-content">
                 Scanned Brand Citations &amp; Mentions
               </h3>
@@ -583,13 +638,17 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
       <div className="bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-base-200 pb-3">
           <div className="flex items-center gap-2">
-            <Icon icon="solar:magnifer-bug-bold-duotone" className="size-5 text-amber-500" />
+            <Icon
+              icon="solar:magnifer-bug-bold-duotone"
+              className="size-5 text-amber-500"
+            />
             <div>
               <h3 className="text-base sm:text-lg font-black text-base-content">
                 What Is Missing: Essential Brand &amp; Authority Signals
               </h3>
               <p className="text-xs text-base-content/60">
-                High-leverage brand infrastructure gaps detected from search index audits
+                High-leverage brand infrastructure gaps detected from search
+                index audits
               </p>
             </div>
           </div>
@@ -631,7 +690,8 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
                     addRoadmapTaskMutation.mutate({
                       title: asset.title,
                       action: asset.action,
-                      priority: asset.impact === "CRITICAL" ? "CRITICAL" : "HIGH",
+                      priority:
+                        asset.impact === "CRITICAL" ? "CRITICAL" : "HIGH",
                       suggestedPromptForSam: asset.suggestedPrompt,
                     })
                   }
@@ -677,7 +737,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <h4 className="text-xs font-black text-base-content flex items-center gap-1.5">
-                    <Icon icon="solar:verified-check-bold" className="size-3.5 text-success shrink-0" />
+                    <Icon
+                      icon="solar:verified-check-bold"
+                      className="size-3.5 text-success shrink-0"
+                    />
                     <span>{item.title}</span>
                   </h4>
                   <span className="badge badge-outline badge-xs font-bold text-success border-success/40 shrink-0">
@@ -729,7 +792,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <h4 className="text-xs font-black text-base-content flex items-center gap-1.5">
-                    <Icon icon="solar:info-circle-bold" className="size-3.5 text-error shrink-0" />
+                    <Icon
+                      icon="solar:info-circle-bold"
+                      className="size-3.5 text-error shrink-0"
+                    />
                     <span>{item.title}</span>
                   </h4>
                   <span
@@ -767,7 +833,10 @@ export function BrandAnalysisPage({ projectId }: BrandAnalysisPageProps) {
       {/* Strategic Growth Opportunities */}
       <div className="bg-base-100 border border-base-300 rounded-3xl p-6 shadow-xs space-y-4">
         <div className="flex items-center gap-2 border-b border-base-200 pb-3">
-          <Icon icon="solar:lightbulb-bolt-bold-duotone" className="size-5 text-amber-500" />
+          <Icon
+            icon="solar:lightbulb-bolt-bold-duotone"
+            className="size-5 text-amber-500"
+          />
           <h3 className="text-base sm:text-lg font-black text-base-content">
             Strategic Growth &amp; Expansion Opportunities
           </h3>

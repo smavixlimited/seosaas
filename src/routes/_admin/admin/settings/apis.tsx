@@ -1554,24 +1554,51 @@ function AdminApiManagerPage() {
             {/* Required Google Cloud Console Redirect URIs */}
             <div className="rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/80 p-3.5 space-y-2 text-xs">
               <div className="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
-                <Icon icon="solar:info-circle-bold-duotone" className="h-4 w-4 text-blue-500" />
-                <span>Required Google Cloud Console Authorized Redirect URIs</span>
+                <Icon
+                  icon="solar:info-circle-bold-duotone"
+                  className="h-4 w-4 text-blue-500"
+                />
+                <span>
+                  Required Google Cloud Console Authorized Redirect URIs
+                </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Add all three redirect URIs below to your OAuth 2.0 Client Credentials in Google Cloud Console to enable Google Sign-In, Search Console (GSC), and Google Analytics (GA4) without redirect mismatch errors:
+                Add all three redirect URIs below to your OAuth 2.0 Client
+                Credentials in Google Cloud Console to enable Google Sign-In,
+                Search Console (GSC), and Google Analytics (GA4) without
+                redirect mismatch errors:
               </p>
               <div className="space-y-1.5 pt-1 font-mono text-[11px]">
                 {[
-                  { label: "Google Analytics 4 (GA4)", path: "/api/ga4/oauth/callback" },
-                  { label: "Google Search Console (GSC)", path: "/api/gsc/oauth/callback" },
-                  { label: "Google Sign-In (Auth)", path: "/api/auth/callback/google" },
+                  {
+                    label: "Google Analytics 4 (GA4)",
+                    path: "/api/ga4/oauth/callback",
+                  },
+                  {
+                    label: "Google Search Console (GSC)",
+                    path: "/api/gsc/oauth/callback",
+                  },
+                  {
+                    label: "Google Sign-In (Auth)",
+                    path: "/api/auth/callback/google",
+                  },
                 ].map((item) => {
-                  const fullUrl = typeof window !== "undefined" ? `${window.location.origin}${item.path}` : `https://skorvia.live${item.path}`;
+                  const fullUrl =
+                    typeof window !== "undefined"
+                      ? `${window.location.origin}${item.path}`
+                      : `https://skorvia.live${item.path}`;
                   return (
-                    <div key={item.path} className="flex items-center justify-between gap-2 p-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <div
+                      key={item.path}
+                      className="flex items-center justify-between gap-2 p-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                    >
                       <div className="truncate">
-                        <span className="text-slate-400 mr-2">[{item.label}]</span>
-                        <span className="text-slate-800 dark:text-slate-200 font-semibold">{fullUrl}</span>
+                        <span className="text-slate-400 mr-2">
+                          [{item.label}]
+                        </span>
+                        <span className="text-slate-800 dark:text-slate-200 font-semibold">
+                          {fullUrl}
+                        </span>
                       </div>
                       <button
                         type="button"

@@ -169,7 +169,10 @@ export function SkorviaOnboardingWizard({
           params: { projectId: finalProjectId },
         });
       } else {
-        void navigate({ to: "/p/$projectId", params: { projectId: finalProjectId } });
+        void navigate({
+          to: "/p/$projectId",
+          params: { projectId: finalProjectId },
+        });
       }
     },
     onError: (err) => {
@@ -359,23 +362,25 @@ export function SkorviaOnboardingWizard({
                   onChange={(e) => setIndustry(e.target.value as Industry)}
                   className="select select-bordered w-full rounded-2xl h-12 text-xs font-semibold focus:border-primary bg-base-100 text-base-content dark:bg-slate-900 dark:text-white border-base-300 shadow-xs pl-3 pr-10"
                 >
-                  {Object.entries(INDUSTRY_CATEGORIES).map(([category, items]) => (
-                    <optgroup
-                      key={category}
-                      label={category}
-                      className="bg-base-200 text-base-content font-bold dark:bg-slate-800 dark:text-slate-200"
-                    >
-                      {items.map((ind) => (
-                        <option
-                          key={ind}
-                          value={ind}
-                          className="bg-base-100 text-base-content font-medium py-1.5 dark:bg-slate-900 dark:text-white"
-                        >
-                          {ind}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
+                  {Object.entries(INDUSTRY_CATEGORIES).map(
+                    ([category, items]) => (
+                      <optgroup
+                        key={category}
+                        label={category}
+                        className="bg-base-200 text-base-content font-bold dark:bg-slate-800 dark:text-slate-200"
+                      >
+                        {items.map((ind) => (
+                          <option
+                            key={ind}
+                            value={ind}
+                            className="bg-base-100 text-base-content font-medium py-1.5 dark:bg-slate-900 dark:text-white"
+                          >
+                            {ind}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ),
+                  )}
                 </select>
               </div>
             </div>

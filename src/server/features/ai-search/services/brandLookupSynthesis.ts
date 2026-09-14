@@ -1,5 +1,8 @@
 import { generateText } from "ai";
-import { getChatAgentModel, resolveActiveLlmConfig } from "@/server/lib/openrouter";
+import {
+  getChatAgentModel,
+  resolveActiveLlmConfig,
+} from "@/server/lib/openrouter";
 import type { BrandLookupResult } from "@/types/schemas/ai-search";
 import type { detectTarget } from "@/shared/targetDetection";
 import type { ResearchTarget } from "@/shared/researchScope";
@@ -129,7 +132,9 @@ Return a STRICT JSON object (no markdown, no backticks, just raw JSON) matching 
             capturedVolume: Number(p.capturedVolume) || 3200,
             keywords: Array.isArray(p.keywords)
               ? p.keywords.map((k: any) => ({
-                  question: String(k.question || `Overview of ${capitalizedBrand}`),
+                  question: String(
+                    k.question || `Overview of ${capitalizedBrand}`,
+                  ),
                   aiSearchVolume: Number(k.aiSearchVolume) || 800,
                 }))
               : [
@@ -144,12 +149,15 @@ Return a STRICT JSON object (no markdown, no backticks, just raw JSON) matching 
       // Generate 12 months historical volume
       const monthlyVolume = Array.from({ length: 12 }).map((_, idx) => {
         const m = ((currentMonth - (11 - idx) + 11) % 12) + 1;
-        const y = currentMonth - (11 - idx) <= 0 ? currentYear - 1 : currentYear;
-        const factor = 0.5 + (idx / 11) * 0.5 + (Math.sin(idx) * 0.1);
+        const y =
+          currentMonth - (11 - idx) <= 0 ? currentYear - 1 : currentYear;
+        const factor = 0.5 + (idx / 11) * 0.5 + Math.sin(idx) * 0.1;
         return {
           year: y,
           month: m,
-          volume: Math.round((Number(parsed.totalAiSearchVolume) || 15000) * factor),
+          volume: Math.round(
+            (Number(parsed.totalAiSearchVolume) || 15000) * factor,
+          ),
         };
       });
 
@@ -189,17 +197,32 @@ Return a STRICT JSON object (no markdown, no backticks, just raw JSON) matching 
                 })),
               }
             : null,
-        topPages: topPages.length > 0 ? topPages : fallbackTopPages(brandOrDomain, capitalizedBrand),
-        topQueries: topQueries.length > 0 ? topQueries : fallbackTopQueries(brandOrDomain, capitalizedBrand),
+        topPages:
+          topPages.length > 0
+            ? topPages
+            : fallbackTopPages(brandOrDomain, capitalizedBrand),
+        topQueries:
+          topQueries.length > 0
+            ? topQueries
+            : fallbackTopQueries(brandOrDomain, capitalizedBrand),
         monthlyVolume,
       };
     }
   } catch (err) {
-    console.warn("LLM brand lookup synthesis fell back to algorithmic model:", err);
+    console.warn(
+      "LLM brand lookup synthesis fell back to algorithmic model:",
+      err,
+    );
   }
 
   // High-fidelity Algorithmic Fallback when LLM API key is not yet provided or failed
-  return buildAlgorithmicBrandResult(args, brandOrDomain, capitalizedBrand, currentYear, currentMonth);
+  return buildAlgorithmicBrandResult(
+    args,
+    brandOrDomain,
+    capitalizedBrand,
+    currentYear,
+    currentMonth,
+  );
 }
 
 function fallbackTopPages(domain: string, brand: string) {
@@ -211,8 +234,14 @@ function fallbackTopPages(domain: string, brand: string) {
       mentions: 85,
       capturedVolume: 4200,
       keywords: [
-        { question: `What services does ${brand} provide?`, aiSearchVolume: 1400 },
-        { question: `Is ${brand} trustworthy and reliable?`, aiSearchVolume: 950 },
+        {
+          question: `What services does ${brand} provide?`,
+          aiSearchVolume: 1400,
+        },
+        {
+          question: `Is ${brand} trustworthy and reliable?`,
+          aiSearchVolume: 950,
+        },
       ],
     },
     {
@@ -223,7 +252,10 @@ function fallbackTopPages(domain: string, brand: string) {
       capturedVolume: 2800,
       keywords: [
         { question: `How much does ${brand} cost?`, aiSearchVolume: 1100 },
-        { question: `${brand} plans and pricing comparison`, aiSearchVolume: 850 },
+        {
+          question: `${brand} plans and pricing comparison`,
+          aiSearchVolume: 850,
+        },
       ],
     },
     {
@@ -260,7 +292,11 @@ function fallbackTopQueries(domain: string, brand: string) {
       firstSeenAt: new Date(Date.now() - 45 * 86400000).toISOString(),
       lastSeenAt: new Date().toISOString(),
       citedSources: [
-        { url: `https://${domain}/features`, domain, title: `${brand} Features` },
+        {
+          url: `https://${domain}/features`,
+          domain,
+          title: `${brand} Features`,
+        },
       ],
       brandsMentioned: [brand],
     },

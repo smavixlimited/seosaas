@@ -324,7 +324,9 @@ function PricingPage() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {tiers.map((tier) => {
               const formattedPrice =
-                tier.priceUsd === 0 ? "$0" : formatPrice(tier.priceUsd, tier.priceNgn);
+                tier.priceUsd === 0
+                  ? "$0"
+                  : formatPrice(tier.priceUsd, tier.priceNgn);
               const isFree = tier.id === "free" || tier.priceUsd === 0;
               const isHighlighted = tier.id === "pro";
               const staticMeta = BRAND_CONFIG.pricing.tiers.find(
@@ -495,7 +497,8 @@ function PricingPage() {
                   Forever Free Default Tier
                 </h4>
                 <p className="text-tagline-2 text-accent/70">
-                  Every account starts with our free tier. Upgrade only when your brand scales.
+                  Every account starts with our free tier. Upgrade only when
+                  your brand scales.
                 </p>
               </div>
 

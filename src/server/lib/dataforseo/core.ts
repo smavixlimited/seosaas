@@ -72,9 +72,8 @@ function createAuthenticatedFetch(
   return async (url: RequestInfo, init?: RequestInit): Promise<Response> => {
     let apiKey = "";
     try {
-      const { SystemSettingsService } = await import(
-        "@/services/system-settings.service"
-      );
+      const { SystemSettingsService } =
+        await import("@/services/system-settings.service");
       const seoSettings = await SystemSettingsService.getSetting<{
         dataforseoApiKey?: string;
         dataforseoLogin?: string;
@@ -82,7 +81,10 @@ function createAuthenticatedFetch(
       }>("seo_apis", {});
       if (seoSettings.dataforseoApiKey) {
         apiKey = seoSettings.dataforseoApiKey;
-      } else if (seoSettings.dataforseoLogin && seoSettings.dataforseoPassword) {
+      } else if (
+        seoSettings.dataforseoLogin &&
+        seoSettings.dataforseoPassword
+      ) {
         apiKey = btoa(
           `${seoSettings.dataforseoLogin}:${seoSettings.dataforseoPassword}`,
         );

@@ -194,7 +194,13 @@ export function useSaveAndExportActions(params: SaveExportActionParams) {
     );
   };
 
-  return { handleSaveKeywords, confirmSave, saveSingleKeyword, exportCsv, sheetsExportRows };
+  return {
+    handleSaveKeywords,
+    confirmSave,
+    saveSingleKeyword,
+    exportCsv,
+    sheetsExportRows,
+  };
 }
 
 export function downloadKeywordResearchCsv(rows: CsvValue[][]) {

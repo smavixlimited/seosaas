@@ -8,9 +8,8 @@ export const getSeoApiKeyStatus = createServerFn({ method: "GET" })
     let configured = Boolean(env.DATAFORSEO_API_KEY?.trim());
     if (!configured) {
       try {
-        const { SystemSettingsService } = await import(
-          "@/services/system-settings.service"
-        );
+        const { SystemSettingsService } =
+          await import("@/services/system-settings.service");
         const seoSettings = await SystemSettingsService.getSetting<{
           dataforseoApiKey?: string;
           dataforseoLogin?: string;

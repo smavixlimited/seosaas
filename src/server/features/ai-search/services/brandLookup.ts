@@ -20,6 +20,7 @@ import {
   type PlatformBundle,
   type PlatformOutcome,
 } from "@/server/features/ai-search/services/brandLookupShaping";
+import { synthesizeLlmBrandLookup } from "@/server/features/ai-search/services/brandLookupSynthesis";
 import {
   brandLookupResultSchema,
   type BrandLookupInput,
@@ -164,7 +165,22 @@ export async function getBrandLookup(
     userLanguageCode: input.languageCode,
   });
 
-  const finalResult = result;
+  let finalResult = result;
+  if (!finalResult.hasData) {
+    try {
+      const synthesized = await synthesizeLlmBrandLookup({
+        query: input.query,
+        detected,
+        competitors: competitorGroups.map((g) => g.label),
+        researchTarget,
+      });
+      if (synthesized) {
+        finalResult = synthesized;
+      }
+    } catch {
+      // Keep original result if synthesis fails
+    }
+  }
 
   // Only cache when every call succeeded
   const allSucceeded =
@@ -173,9 +189,11 @@ export async function getBrandLookup(
     ) && crossOutcomes.every((c) => c.status === "success");
   if (allSucceeded && finalResult.hasData) {
     waitUntil(
-      setCached(cacheKey, finalResult, BRAND_LOOKUP_TTL_SECONDS).catch((err) => {
-        console.error("ai-search.brand-lookup.cache-write failed:", err);
-      }),
+      setCached(cacheKey, finalResult, BRAND_LOOKUP_TTL_SECONDS).catch(
+        (err) => {
+          console.error("ai-search.brand-lookup.cache-write failed:", err);
+        },
+      ),
     );
   }
 

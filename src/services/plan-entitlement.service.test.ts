@@ -4,9 +4,8 @@ import { AppError } from "@/server/lib/errors";
 
 describe("PlanEntitlementService", () => {
   it("resolves default entitlements for a new or fallback user", async () => {
-    const entitlements = await PlanEntitlementService.getUserEntitlements(
-      "test-user-id-001",
-    );
+    const entitlements =
+      await PlanEntitlementService.getUserEntitlements("test-user-id-001");
     expect(entitlements.userId).toBe("test-user-id-001");
     expect(entitlements.planId).toBeDefined();
     expect(entitlements.limits.monthlyCredits).toBeGreaterThanOrEqual(500);

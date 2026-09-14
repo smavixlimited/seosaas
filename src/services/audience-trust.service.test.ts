@@ -15,7 +15,11 @@ describe("Audience Trust & Sentiment (Pre-Ad Gate) Service", () => {
       projectId: "proj_abc",
       trustScore: 88,
       preAdGateStatus: "approved",
-      sentimentDistributionJson: JSON.stringify({ positive: 80, neutral: 15, negative: 5 }),
+      sentimentDistributionJson: JSON.stringify({
+        positive: 80,
+        neutral: 15,
+        negative: 5,
+      }),
       trustSignalsJson: JSON.stringify([
         {
           type: "social_proof",
@@ -53,7 +57,9 @@ describe("Audience Trust & Sentiment (Pre-Ad Gate) Service", () => {
     expect(result.brandName).toBe("Acme Corp");
     expect(result.websiteUrl).toBe("https://acme.com");
     expect(result.industry).toBe("E-Commerce & Retail");
-    expect(result.campaignGoal).toBe("E-Commerce Sales / Direct Checkout (ROAS)");
+    expect(result.campaignGoal).toBe(
+      "E-Commerce Sales / Direct Checkout (ROAS)",
+    );
     expect(result.adPlatform).toBe("Meta Ads (Facebook & Instagram)");
     expect(result.trustScore).toBe(88);
     expect(result.preAdGateStatus).toBe("approved");
@@ -71,7 +77,9 @@ describe("Audience Trust & Sentiment (Pre-Ad Gate) Service", () => {
 
     expect(result).toBeDefined();
     expect(typeof result.trustScore).toBe("number");
-    expect(["approved", "caution", "rejected"]).toContain(result.preAdGateStatus);
+    expect(["approved", "caution", "rejected"]).toContain(
+      result.preAdGateStatus,
+    );
     expect(result.campaignGoal).toBe("High-Ticket B2B Demos / Sales Calls");
     expect(result.adPlatform).toBe("LinkedIn Ads");
     expect(result.sentimentDistribution.positive).toBeGreaterThan(0);
@@ -91,21 +99,46 @@ describe("Audience Trust & Sentiment (Pre-Ad Gate) Service", () => {
     expect(result).toBeDefined();
     expect(result.industry).toBe("Media / News & Publishing");
     expect(result.campaignGoal).toBe("Site Traffic & Reader Engagement");
-    expect(result.preAdChecklist.some((c) => c.item.toLowerCase().includes("article load speed") || c.item.toLowerCase().includes("core web vitals"))).toBe(true);
-    expect(result.preAdChecklist.some((c) => c.item.toLowerCase().includes("author bylines") || c.item.toLowerCase().includes("editorial"))).toBe(true);
-    expect(result.preAdChecklist.some((c) => c.item.toLowerCase().includes("newsletter"))).toBe(true);
+    expect(
+      result.preAdChecklist.some(
+        (c) =>
+          c.item.toLowerCase().includes("article load speed") ||
+          c.item.toLowerCase().includes("core web vitals"),
+      ),
+    ).toBe(true);
+    expect(
+      result.preAdChecklist.some(
+        (c) =>
+          c.item.toLowerCase().includes("author bylines") ||
+          c.item.toLowerCase().includes("editorial"),
+      ),
+    ).toBe(true);
+    expect(
+      result.preAdChecklist.some((c) =>
+        c.item.toLowerCase().includes("newsletter"),
+      ),
+    ).toBe(true);
   });
 
   it("evaluates Healthcare & FinTech with regulatory compliance checklists", async () => {
-    const result = await AudienceTrustService.runTrustAudit("health_project_id", {
-      industry: "Healthcare & Wellness",
-      campaignGoal: "Lead Generation & Inquiries",
-      adPlatform: "Google Search & Performance Max",
-    });
+    const result = await AudienceTrustService.runTrustAudit(
+      "health_project_id",
+      {
+        industry: "Healthcare & Wellness",
+        campaignGoal: "Lead Generation & Inquiries",
+        adPlatform: "Google Search & Performance Max",
+      },
+    );
 
     expect(result).toBeDefined();
     expect(result.industry).toBe("Healthcare & Wellness");
-    expect(result.preAdChecklist.some((c) => c.item.toLowerCase().includes("encryption") || c.item.toLowerCase().includes("disclaimers"))).toBe(true);
+    expect(
+      result.preAdChecklist.some(
+        (c) =>
+          c.item.toLowerCase().includes("encryption") ||
+          c.item.toLowerCase().includes("disclaimers"),
+      ),
+    ).toBe(true);
   });
 
   it("evaluates Mobile App Installs with App Store badges and attribution", async () => {
@@ -117,6 +150,12 @@ describe("Audience Trust & Sentiment (Pre-Ad Gate) Service", () => {
 
     expect(result).toBeDefined();
     expect(result.campaignGoal).toBe("App Installs & User Signups");
-    expect(result.preAdChecklist.some((c) => c.item.toLowerCase().includes("app store") || c.item.toLowerCase().includes("skadnetwork"))).toBe(true);
+    expect(
+      result.preAdChecklist.some(
+        (c) =>
+          c.item.toLowerCase().includes("app store") ||
+          c.item.toLowerCase().includes("skadnetwork"),
+      ),
+    ).toBe(true);
   });
 });

@@ -154,10 +154,17 @@ export const AdvancedAnalyticsService = {
       position: 0,
     };
     const gscDailyPoints: AnalyticsTimeSeriesPoint[] = [];
-    let gscTopQueries: Array<{ query: string; clicks: number; impressions: number; ctr: number; position: number }> = [];
+    let gscTopQueries: Array<{
+      query: string;
+      clicks: number;
+      impressions: number;
+      ctr: number;
+      position: number;
+    }> = [];
 
     try {
-      const { GscService } = await import("@/server/features/gsc/services/GscService");
+      const { GscService } =
+        await import("@/server/features/gsc/services/GscService");
       const gscConn = await GscService.getConnection(projectId);
       if (gscConn) {
         isGscConnected = true;
@@ -205,8 +212,12 @@ export const AdvancedAnalyticsService = {
 
             gscTotals.clicks = totalClicks;
             gscTotals.impressions = totalImp;
-            gscTotals.ctr = totalImp > 0 ? Number(((totalClicks / totalImp) * 100).toFixed(2)) : 0;
-            gscTotals.position = totalImp > 0 ? Math.round((posSum / totalImp) * 10) / 10 : 0;
+            gscTotals.ctr =
+              totalImp > 0
+                ? Number(((totalClicks / totalImp) * 100).toFixed(2))
+                : 0;
+            gscTotals.position =
+              totalImp > 0 ? Math.round((posSum / totalImp) * 10) / 10 : 0;
           }
 
           if (queryReport.rows && queryReport.rows.length > 0) {
@@ -233,8 +244,10 @@ export const AdvancedAnalyticsService = {
 
     // 3. Query Real GA4 Connection & Data if connected
     try {
-      const { Ga4Service } = await import("@/server/features/ga4/services/Ga4Service");
-      const { Ga4OrganicOverviewService } = await import("@/server/features/ga4/services/Ga4OrganicOverviewService");
+      const { Ga4Service } =
+        await import("@/server/features/ga4/services/Ga4Service");
+      const { Ga4OrganicOverviewService } =
+        await import("@/server/features/ga4/services/Ga4OrganicOverviewService");
 
       const ga4Conn = await Ga4Service.getConnection(projectId);
       if (ga4Conn) {
@@ -247,10 +260,17 @@ export const AdvancedAnalyticsService = {
             startDate,
             endDate,
           });
-          const summary = ga4Report?.current as Record<string, number | null> | null;
+          const summary = ga4Report?.current as Record<
+            string,
+            number | null
+          > | null;
           if (summary) {
-            ga4Sessions = typeof summary.sessions === "number" ? summary.sessions : 0;
-            ga4EngagementRate = typeof summary.engagementRate === "number" ? Math.round(summary.engagementRate * 100) : 0;
+            ga4Sessions =
+              typeof summary.sessions === "number" ? summary.sessions : 0;
+            ga4EngagementRate =
+              typeof summary.engagementRate === "number"
+                ? Math.round(summary.engagementRate * 100)
+                : 0;
           }
         } catch (ga4Err) {
           console.warn("Could not query live GA4 report:", ga4Err);
@@ -275,17 +295,18 @@ export const AdvancedAnalyticsService = {
     const realRankKeywords: HighValueKeywordItem[] = [];
 
     try {
-      const { RankTrackingRepository } = await import(
-        "@/server/features/rank-tracking/repositories/RankTrackingRepository"
-      );
-      const { getLatestResults } = await import(
-        "@/server/features/rank-tracking/services/rankTrackingResults"
-      );
+      const { RankTrackingRepository } =
+        await import("@/server/features/rank-tracking/repositories/RankTrackingRepository");
+      const { getLatestResults } =
+        await import("@/server/features/rank-tracking/services/rankTrackingResults");
 
-      const configs = await RankTrackingRepository.getConfigsForProject(projectId);
+      const configs =
+        await RankTrackingRepository.getConfigsForProject(projectId);
       if (configs.length > 0) {
         const activeConfig = configs[0];
-        const latestRun = await RankTrackingRepository.getLatestRunForConfig(activeConfig.id);
+        const latestRun = await RankTrackingRepository.getLatestRunForConfig(
+          activeConfig.id,
+        );
         if (latestRun) {
           const results = await getLatestResults(activeConfig.id, projectId);
           if (results.rows && results.rows.length > 0) {
@@ -296,11 +317,15 @@ export const AdvancedAnalyticsService = {
 
             for (const row of results.rows) {
               const pos = row.desktop.position ?? row.mobile.position;
-              const prevPos = row.desktop.previousPosition ?? row.mobile.previousPosition;
+              const prevPos =
+                row.desktop.previousPosition ?? row.mobile.previousPosition;
               const delta = prevPos && pos ? prevPos - pos : 0;
               const sv = row.searchVolume || 0;
               const cpc = row.cpc || 0;
-              const monthlyVal = pos && pos <= 10 ? Math.round((sv * 0.15) * (cpc || 2.50)) : Math.round((sv * 0.03) * (cpc || 2.50));
+              const monthlyVal =
+                pos && pos <= 10
+                  ? Math.round(sv * 0.15 * (cpc || 2.5))
+                  : Math.round(sv * 0.03 * (cpc || 2.5));
 
               if (pos !== null && pos !== undefined && pos > 0) {
                 posSum += pos;
@@ -367,8 +392,12 @@ export const AdvancedAnalyticsService = {
     const averagePosition = hasGscData ? gscTotals.position : avgRankPosition;
 
     const avgCpc = 2.85;
-    const estimatedMonthlyTrafficValue = totalClicks > 0 ? Math.round(((totalClicks / days) * 30) * avgCpc) : 0;
-    const adSpendSavingsEquivalent = estimatedMonthlyTrafficValue > 0 ? Math.round(estimatedMonthlyTrafficValue * 1.15) : 0;
+    const estimatedMonthlyTrafficValue =
+      totalClicks > 0 ? Math.round((totalClicks / days) * 30 * avgCpc) : 0;
+    const adSpendSavingsEquivalent =
+      estimatedMonthlyTrafficValue > 0
+        ? Math.round(estimatedMonthlyTrafficValue * 1.15)
+        : 0;
 
     const kpis: AnalyticsKpi = {
       totalImpressions,
@@ -398,8 +427,8 @@ export const AdvancedAnalyticsService = {
         previousPosition: q.position,
         positionDelta: 0,
         searchVolume: Math.round(q.impressions * 1.2),
-        estimatedCpc: 3.20,
-        monthlyTrafficValue: Math.round(q.clicks * 3.20 * (30 / days)),
+        estimatedCpc: 3.2,
+        monthlyTrafficValue: Math.round(q.clicks * 3.2 * (30 / days)),
         url: `https://${domain}`,
         intent: q.position <= 3 ? "transactional" : "commercial",
       }));
@@ -408,43 +437,47 @@ export const AdvancedAnalyticsService = {
     }
 
     // Channel Breakdown (only when traffic exists, else empty/zero shares)
-    const channelBreakdown: ChannelSharePoint[] = totalClicks > 0 ? [
-      {
-        channel: "Google Organic Search",
-        sharePercent: 65,
-        clicks: Math.round(totalClicks * 0.65),
-        valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.65),
-        color: "#10b981",
-      },
-      {
-        channel: "AI Search & LLMs (Perplexity, ChatGPT, SGE)",
-        sharePercent: 20,
-        clicks: Math.round(totalClicks * 0.20),
-        valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.20),
-        color: "#6366f1",
-      },
-      {
-        channel: "Local GBP & Google Maps",
-        sharePercent: 10,
-        clicks: Math.round(totalClicks * 0.10),
-        valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.10),
-        color: "#f59e0b",
-      },
-      {
-        channel: "Direct & Referral Discovery",
-        sharePercent: 5,
-        clicks: Math.round(totalClicks * 0.05),
-        valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.05),
-        color: "#ec4899",
-      },
-    ] : [];
+    const channelBreakdown: ChannelSharePoint[] =
+      totalClicks > 0
+        ? [
+            {
+              channel: "Google Organic Search",
+              sharePercent: 65,
+              clicks: Math.round(totalClicks * 0.65),
+              valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.65),
+              color: "#10b981",
+            },
+            {
+              channel: "AI Search & LLMs (Perplexity, ChatGPT, SGE)",
+              sharePercent: 20,
+              clicks: Math.round(totalClicks * 0.2),
+              valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.2),
+              color: "#6366f1",
+            },
+            {
+              channel: "Local GBP & Google Maps",
+              sharePercent: 10,
+              clicks: Math.round(totalClicks * 0.1),
+              valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.1),
+              color: "#f59e0b",
+            },
+            {
+              channel: "Direct & Referral Discovery",
+              sharePercent: 5,
+              clicks: Math.round(totalClicks * 0.05),
+              valueUsd: Math.round(estimatedMonthlyTrafficValue * 0.05),
+              color: "#ec4899",
+            },
+          ]
+        : [];
 
     // Strategic Recommendations
     const strategicRecommendations: StrategicRecommendationItem[] = [];
     if (!isGscConnected) {
       strategicRecommendations.push({
         id: "rec-gsc",
-        title: "Connect Google Search Console to unlock 100% live search performance queries",
+        title:
+          "Connect Google Search Console to unlock 100% live search performance queries",
         category: "high_impact",
         impactValue: "Real Search Data",
         effort: "Low",
@@ -454,7 +487,8 @@ export const AdvancedAnalyticsService = {
     if (trackedKeywordsCount === 0) {
       strategicRecommendations.push({
         id: "rec-rank",
-        title: "Add target keywords in Rank Tracker to monitor daily position changes",
+        title:
+          "Add target keywords in Rank Tracker to monitor daily position changes",
         category: "quick_win",
         impactValue: "SERP Tracking",
         effort: "Low",
@@ -464,7 +498,8 @@ export const AdvancedAnalyticsService = {
     if (technicalHealthScore === 0) {
       strategicRecommendations.push({
         id: "rec-audit",
-        title: "Run a Technical Site Audit to detect broken links and crawl latency",
+        title:
+          "Run a Technical Site Audit to detect broken links and crawl latency",
         category: "technical",
         impactValue: "Site Health Check",
         effort: "Low",
@@ -506,10 +541,16 @@ export const AdvancedAnalyticsService = {
     const lines: string[] = [];
     lines.push(`"Skorvia Executive Growth & SEO Analytics Report"`);
     lines.push(`"Domain","${report.domain}"`);
-    lines.push(`"Generated","${new Date(report.generatedAt).toLocaleString()}"`);
+    lines.push(
+      `"Generated","${new Date(report.generatedAt).toLocaleString()}"`,
+    );
     lines.push(`"Date Range","${report.dateRange}"`);
-    lines.push(`"GSC Connected","${report.isGscConnected ? "Yes (" + (report.gscSiteUrl || "") + ")" : "No"}"`);
-    lines.push(`"GA4 Connected","${report.isGa4Connected ? "Yes (" + (report.ga4PropertyName || "") + ")" : "No"}"`);
+    lines.push(
+      `"GSC Connected","${report.isGscConnected ? "Yes (" + (report.gscSiteUrl || "") + ")" : "No"}"`,
+    );
+    lines.push(
+      `"GA4 Connected","${report.isGa4Connected ? "Yes (" + (report.ga4PropertyName || "") + ")" : "No"}"`,
+    );
     lines.push("");
 
     // KPIs
@@ -519,10 +560,18 @@ export const AdvancedAnalyticsService = {
     lines.push(`"Total Organic Clicks","${report.kpis.totalClicks}"`);
     lines.push(`"Average CTR","${report.kpis.averageCtr}%"`);
     lines.push(`"Average Position","${report.kpis.averagePosition}"`);
-    lines.push(`"Est. Monthly Organic Traffic Value ($)","$${report.kpis.estimatedMonthlyTrafficValue.toLocaleString()}"`);
-    lines.push(`"Google Ads Spend Savings Equivalent","$${report.kpis.adSpendSavingsEquivalent.toLocaleString()}"`);
-    lines.push(`"Technical Health Score","${report.kpis.technicalHealthScore}/100"`);
-    lines.push(`"AI Search Visibility Score","${report.kpis.aiSearchVisibilityScore}/100"`);
+    lines.push(
+      `"Est. Monthly Organic Traffic Value ($)","$${report.kpis.estimatedMonthlyTrafficValue.toLocaleString()}"`,
+    );
+    lines.push(
+      `"Google Ads Spend Savings Equivalent","$${report.kpis.adSpendSavingsEquivalent.toLocaleString()}"`,
+    );
+    lines.push(
+      `"Technical Health Score","${report.kpis.technicalHealthScore}/100"`,
+    );
+    lines.push(
+      `"AI Search Visibility Score","${report.kpis.aiSearchVisibilityScore}/100"`,
+    );
     lines.push("");
 
     // Ranking Distribution
@@ -533,15 +582,19 @@ export const AdvancedAnalyticsService = {
     lines.push(`"Positions 11 - 20","${report.rankingDistribution.top20}"`);
     lines.push(`"Positions 21 - 50","${report.rankingDistribution.top50}"`);
     lines.push(`"Positions 51 - 100","${report.rankingDistribution.top100}"`);
-    lines.push(`"Not Ranking / Tracking","${report.rankingDistribution.notRanking}"`);
+    lines.push(
+      `"Not Ranking / Tracking","${report.rankingDistribution.notRanking}"`,
+    );
     lines.push("");
 
     // Top Keywords
     lines.push(`"Top Performing Commercial Keywords"`);
-    lines.push(`"Keyword","Rank","Delta","Search Volume","Est. CPC ($)","Monthly Value ($)","Intent","URL"`);
+    lines.push(
+      `"Keyword","Rank","Delta","Search Volume","Est. CPC ($)","Monthly Value ($)","Intent","URL"`,
+    );
     for (const kw of report.topPerformingKeywords) {
       lines.push(
-        `"${kw.keyword}","${kw.position}","${kw.positionDelta >= 0 ? "+" + kw.positionDelta : String(kw.positionDelta)}","${kw.searchVolume}","$${kw.estimatedCpc.toFixed(2)}","$${kw.monthlyTrafficValue.toLocaleString()}","${kw.intent}","${kw.url}"`
+        `"${kw.keyword}","${kw.position}","${kw.positionDelta >= 0 ? "+" + kw.positionDelta : String(kw.positionDelta)}","${kw.searchVolume}","$${kw.estimatedCpc.toFixed(2)}","$${kw.monthlyTrafficValue.toLocaleString()}","${kw.intent}","${kw.url}"`,
       );
     }
 

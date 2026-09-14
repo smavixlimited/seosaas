@@ -43,10 +43,7 @@ interface VenixTopBarProps {
   drawerOpen?: boolean;
 }
 
-export function VenixTopBar({
-  projectId,
-  onToggleSidebar,
-}: VenixTopBarProps) {
+export function VenixTopBar({ projectId, onToggleSidebar }: VenixTopBarProps) {
   const navigate = useNavigate();
   const session = useSession();
   const { themePreference, setThemePreference } = useThemePreference();
@@ -280,13 +277,16 @@ export function VenixTopBar({
     },
   ];
 
-  const filteredTools = quickTools.filter((t) =>
-    t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTools = quickTools.filter(
+    (t) =>
+      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.category.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const filteredProjects = projects.filter((p) =>
-    (p.name || p.domain || "").toLowerCase().includes(searchQuery.toLowerCase())
+    (p.name || p.domain || "")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase()),
   );
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -306,7 +306,8 @@ export function VenixTopBar({
   };
 
   const userEmail = session.data?.user?.email || "";
-  const userName = session.data?.user?.name || (userEmail ? userEmail.split("@")[0] : "User");
+  const userName =
+    session.data?.user?.name || (userEmail ? userEmail.split("@")[0] : "User");
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-base-300 bg-base-100/95 px-4 backdrop-blur-md transition-colors md:px-6">
@@ -394,8 +395,13 @@ export function VenixTopBar({
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-xs font-semibold text-primary hover:bg-primary/10 transition-colors text-left"
                   >
-                    <Icon icon="solar:target-bold-duotone" className="size-4 shrink-0" />
-                    <span className="truncate">Search &ldquo;{searchQuery}&rdquo; in Keyword Radar</span>
+                    <Icon
+                      icon="solar:target-bold-duotone"
+                      className="size-4 shrink-0"
+                    />
+                    <span className="truncate">
+                      Search &ldquo;{searchQuery}&rdquo; in Keyword Radar
+                    </span>
                     <ArrowRight className="size-3.5 ml-auto shrink-0 opacity-70" />
                   </button>
                   <button
@@ -411,8 +417,13 @@ export function VenixTopBar({
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-xs font-semibold text-secondary dark:text-accent hover:bg-base-200 transition-colors text-left"
                   >
-                    <Icon icon="solar:eye-bold-duotone" className="size-4 shrink-0" />
-                    <span className="truncate">Decode Competitor &ldquo;{searchQuery}&rdquo;</span>
+                    <Icon
+                      icon="solar:eye-bold-duotone"
+                      className="size-4 shrink-0"
+                    />
+                    <span className="truncate">
+                      Decode Competitor &ldquo;{searchQuery}&rdquo;
+                    </span>
                     <ArrowRight className="size-3.5 ml-auto shrink-0 opacity-70" />
                   </button>
                 </div>
@@ -437,10 +448,17 @@ export function VenixTopBar({
                       }}
                       className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl text-xs font-medium text-base-content hover:bg-base-200 transition-colors text-left"
                     >
-                      <Icon icon="solar:folder-bold-duotone" className="size-4 text-primary shrink-0" />
+                      <Icon
+                        icon="solar:folder-bold-duotone"
+                        className="size-4 text-primary shrink-0"
+                      />
                       <div className="truncate">
-                        <div className="font-bold text-xs truncate">{p.name || p.domain}</div>
-                        <div className="text-[10px] text-base-content/60 truncate">{p.domain}</div>
+                        <div className="font-bold text-xs truncate">
+                          {p.name || p.domain}
+                        </div>
+                        <div className="text-[10px] text-base-content/60 truncate">
+                          {p.domain}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -460,7 +478,10 @@ export function VenixTopBar({
                       onClick={() => setIsSearchOpen(false)}
                       className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-base-content hover:bg-base-200 transition-colors"
                     >
-                      <Icon icon={tool.icon} className="size-4 text-primary shrink-0" />
+                      <Icon
+                        icon={tool.icon}
+                        className="size-4 text-primary shrink-0"
+                      />
                       <span className="truncate">{tool.name}</span>
                       <span className="ml-auto text-[10px] text-base-content/50 font-semibold px-1.5 py-0.5 rounded-md bg-base-200">
                         {tool.category}
@@ -479,7 +500,10 @@ export function VenixTopBar({
         <div className="fixed inset-0 z-50 flex flex-col bg-base-100/98 p-4 backdrop-blur-lg sm:hidden animate-in fade-in duration-150">
           <div className="flex items-center gap-2 pb-3 border-b border-base-300">
             <form onSubmit={handleSearchSubmit} className="flex-1 relative">
-              <Search size={16} className="absolute left-3 top-3 text-base-content/60" />
+              <Search
+                size={16}
+                className="absolute left-3 top-3 text-base-content/60"
+              />
               <input
                 autoFocus
                 type="text"
@@ -510,7 +534,10 @@ export function VenixTopBar({
                   onClick={() => setMobileSearchOpen(false)}
                   className="flex items-center gap-3 p-2 rounded-xl text-xs font-semibold text-base-content hover:bg-base-200 block"
                 >
-                  <Icon icon={tool.icon} className="size-4 text-primary shrink-0" />
+                  <Icon
+                    icon={tool.icon}
+                    className="size-4 text-primary shrink-0"
+                  />
                   <span>{tool.name}</span>
                 </Link>
               ))}
@@ -730,9 +757,15 @@ export function VenixTopBar({
                           }`}
                         >
                           {n.category === "credits" ? (
-                            <Zap size={14} className="shrink-0 text-amber-500" />
+                            <Zap
+                              size={14}
+                              className="shrink-0 text-amber-500"
+                            />
                           ) : n.category === "rank" ? (
-                            <ShieldCheck size={14} className="shrink-0 text-primary" />
+                            <ShieldCheck
+                              size={14}
+                              className="shrink-0 text-primary"
+                            />
                           ) : (
                             <Bell size={14} className="shrink-0" />
                           )}

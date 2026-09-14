@@ -71,7 +71,6 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
     },
   });
 
-
   const addRoadmapMutation = useMutation({
     mutationFn: (item: TrendingQueryItem) =>
       createRoadmapTask({
@@ -120,14 +119,17 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
 
   const downloadCsv = () => {
     if (filteredItems.length === 0) return;
-    const headers = "Query,Category,Question Stem,Search Volume,CPC,Difficulty,Intent,Growth Rate\n";
+    const headers =
+      "Query,Category,Question Stem,Search Volume,CPC,Difficulty,Intent,Growth Rate\n";
     const rows = filteredItems
       .map(
         (it) =>
           `"${it.query}","${it.category}","${it.stem || ""}","${it.searchVolume}","$${it.cpc}","${it.difficulty}/100","${it.intent}","+${it.growthRatePercent}%"`,
       )
       .join("\n");
-    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([headers + rows], {
+      type: "text/csv;charset=utf-8;",
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
@@ -148,7 +150,10 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
       <div className="rounded-3xl border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-base-100 p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="h-12 w-12 rounded-2xl bg-primary text-white flex items-center justify-center shrink-0 shadow-md shadow-primary/20">
-            <Icon icon="solar:chart-2-bold" className="h-7 w-7 text-amber-300" />
+            <Icon
+              icon="solar:chart-2-bold"
+              className="h-7 w-7 text-amber-300"
+            />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -161,13 +166,17 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
             </div>
 
             <p className="text-xs text-base-content/70 mt-0.5">
-              Explore real-time search trends, question clusters (Who, What, Where, Why, How), and Google Trends breakouts.
+              Explore real-time search trends, question clusters (Who, What,
+              Where, Why, How), and Google Trends breakouts.
             </p>
           </div>
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 max-w-md w-full sm:w-auto">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex items-center gap-2 max-w-md w-full sm:w-auto"
+        >
           <input
             type="text"
             placeholder="Search any niche (e.g., ai agents, seo)..."
@@ -239,7 +248,10 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
                 disabled={filteredItems.length === 0}
                 className="btn btn-outline btn-xs rounded-xl font-bold gap-1 w-fit"
               >
-                <Icon icon="solar:download-minimalistic-bold" className="h-3.5 w-3.5" />
+                <Icon
+                  icon="solar:download-minimalistic-bold"
+                  className="h-3.5 w-3.5"
+                />
                 <span>Export CSV</span>
               </button>
             </div>
@@ -333,7 +345,10 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
         </div>
       ) : filteredItems.length === 0 ? (
         <div className="p-12 text-center rounded-3xl border border-base-300 bg-base-100 space-y-3">
-          <Icon icon="solar:magnifer-bold" className="h-10 w-10 text-base-content/30 mx-auto" />
+          <Icon
+            icon="solar:magnifer-bold"
+            className="h-10 w-10 text-base-content/30 mx-auto"
+          />
           <h3 className="text-base font-bold text-base-content">
             No queries found for this filter
           </h3>
@@ -485,16 +500,28 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
             {/* Keyword Meta Specs */}
             <div className="grid grid-cols-3 gap-3">
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Search Volume</span>
-                <span className="text-sm font-black text-primary">{selectedBriefItem.searchVolume.toLocaleString()} /mo</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Search Volume
+                </span>
+                <span className="text-sm font-black text-primary">
+                  {selectedBriefItem.searchVolume.toLocaleString()} /mo
+                </span>
               </div>
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Difficulty (KD)</span>
-                <span className="text-sm font-black text-amber-500">{selectedBriefItem.difficulty}/100</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Difficulty (KD)
+                </span>
+                <span className="text-sm font-black text-amber-500">
+                  {selectedBriefItem.difficulty}/100
+                </span>
               </div>
               <div className="p-3 rounded-2xl bg-base-200/50 border border-base-300 text-center">
-                <span className="text-[10px] uppercase font-bold text-base-content/50 block">Search Intent</span>
-                <span className="text-xs font-black text-base-content uppercase block">{selectedBriefItem.intent}</span>
+                <span className="text-[10px] uppercase font-bold text-base-content/50 block">
+                  Search Intent
+                </span>
+                <span className="text-xs font-black text-base-content uppercase block">
+                  {selectedBriefItem.intent}
+                </span>
               </div>
             </div>
 
@@ -504,19 +531,42 @@ export function TrendsRadarPage({ projectId }: TrendsRadarPageProps) {
                 Recommended SEO Title &amp; H1:
               </span>
               <p className="text-sm font-black text-base-content leading-snug">
-                {selectedBriefItem.query.charAt(0).toUpperCase() + selectedBriefItem.query.slice(1)}: Complete Guide &amp; Solutions
+                {selectedBriefItem.query.charAt(0).toUpperCase() +
+                  selectedBriefItem.query.slice(1)}
+                : Complete Guide &amp; Solutions
               </p>
             </div>
 
             {/* Structured H2 & Section Blueprint */}
             <div className="space-y-2">
-              <span className="text-xs font-bold uppercase text-base-content/60 block">Recommended H2 Section Outline:</span>
+              <span className="text-xs font-bold uppercase text-base-content/60 block">
+                Recommended H2 Section Outline:
+              </span>
               <div className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-2.5 font-sans text-xs leading-relaxed text-base-content/90 font-medium">
-                <p><strong>1. Introduction &amp; Core Definition:</strong> Clear, concise direct answer in the first 50 words to win Google AI Overviews and Featured Snippets.</p>
-                <p><strong>2. Why This Matters Now:</strong> Address the market shift, pain points, and rising trend demand (+{selectedBriefItem.growthRatePercent}% search velocity).</p>
-                <p><strong>3. Step-by-Step Practical Implementation:</strong> Actionable framework showing readers exactly how to resolve or implement the solution.</p>
-                <p><strong>4. Common Mistakes to Avoid:</strong> Highlight pitfalls competitors fail to mention.</p>
-                <p><strong>5. Frequently Asked Questions (FAQ Schema):</strong> Target secondary long-tail question stems for rich snippet coverage.</p>
+                <p>
+                  <strong>1. Introduction &amp; Core Definition:</strong> Clear,
+                  concise direct answer in the first 50 words to win Google AI
+                  Overviews and Featured Snippets.
+                </p>
+                <p>
+                  <strong>2. Why This Matters Now:</strong> Address the market
+                  shift, pain points, and rising trend demand (+
+                  {selectedBriefItem.growthRatePercent}% search velocity).
+                </p>
+                <p>
+                  <strong>3. Step-by-Step Practical Implementation:</strong>{" "}
+                  Actionable framework showing readers exactly how to resolve or
+                  implement the solution.
+                </p>
+                <p>
+                  <strong>4. Common Mistakes to Avoid:</strong> Highlight
+                  pitfalls competitors fail to mention.
+                </p>
+                <p>
+                  <strong>5. Frequently Asked Questions (FAQ Schema):</strong>{" "}
+                  Target secondary long-tail question stems for rich snippet
+                  coverage.
+                </p>
               </div>
             </div>
 

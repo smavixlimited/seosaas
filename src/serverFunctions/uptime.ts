@@ -16,7 +16,14 @@ export const getUptimeMonitorsServerFn = createServerFn({ method: "GET" })
     return getUserUptimeMonitors(context.userId);
   });
 
-const frequencyEnum = z.enum(["all", "weekly", "ssl_expiry", "domain_expiry", "both", "none"]);
+const frequencyEnum = z.enum([
+  "all",
+  "weekly",
+  "ssl_expiry",
+  "domain_expiry",
+  "both",
+  "none",
+]);
 
 const addMonitorSchema = z.object({
   url: z.string().min(3),
@@ -71,6 +78,3 @@ export const triggerMonitoringCheckServerFn = createServerFn({ method: "POST" })
   .handler(async () => {
     return checkAndSendMonitoringReminders();
   });
-
-export const triggerSslExpiryCheckServerFn = triggerMonitoringCheckServerFn;
-

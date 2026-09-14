@@ -21,7 +21,13 @@ interface JournalEntry {
 // 42710: duplicate_object (constraint, type, etc.)
 // 42P06: duplicate_schema
 // 42P16: invalid_table_definition (e.g. multiple primary keys if PK exists)
-const IGNORABLE_ERROR_CODES = new Set(["42P07", "42701", "42710", "42P06", "42P16"]);
+const IGNORABLE_ERROR_CODES = new Set([
+  "42P07",
+  "42701",
+  "42710",
+  "42P06",
+  "42P16",
+]);
 
 async function run() {
   const connectionString =
@@ -30,7 +36,9 @@ async function run() {
     process.env.POSTGRES_URL;
 
   if (!connectionString) {
-    console.error("ERROR: No PostgreSQL connection string found in POSTGRES_DATABASE_URL or DATABASE_URL.");
+    console.error(
+      "ERROR: No PostgreSQL connection string found in POSTGRES_DATABASE_URL or DATABASE_URL.",
+    );
     process.exit(1);
   }
 
@@ -82,7 +90,10 @@ async function run() {
       }
 
       const fileContent = fs.readFileSync(sqlFilePath, "utf-8");
-      const hash = crypto.createHash("sha256").update(fileContent).digest("hex");
+      const hash = crypto
+        .createHash("sha256")
+        .update(fileContent)
+        .digest("hex");
 
       if (appliedHashes.has(hash)) {
         continue;
@@ -99,9 +110,14 @@ async function run() {
           await sql.unsafe(statement);
         } catch (err: any) {
           if (IGNORABLE_ERROR_CODES.has(err?.code)) {
-            console.log(`  [Notice] Schema object already exists (${err.code}), continuing.`);
+            console.log(
+              `  [Notice] Schema object already exists (${err.code}), continuing.`,
+            );
           } else {
-            console.error(`  ❌ Error executing statement in ${entry.tag}:`, err?.message || err);
+            console.error(
+              `  ❌ Error executing statement in ${entry.tag}:`,
+              err?.message || err,
+            );
             console.error(`  Statement: ${statement.substring(0, 150)}...`);
             throw err;
           }

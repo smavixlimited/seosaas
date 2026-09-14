@@ -266,9 +266,7 @@ export function getProjectNavGroups(projectId: string) {
     {
       label: "Brand Intelligence",
       solarIcon: "icon-park-outline:badge-two",
-      items: [
-        byPath("/p/$projectId/brand-analysis"),
-      ],
+      items: [byPath("/p/$projectId/brand-analysis")],
     },
 
     {

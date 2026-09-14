@@ -25,7 +25,8 @@ function CompetitorAdsRoute() {
             </span>
           </div>
           <p className="text-xs sm:text-sm text-base-content/70 mt-1">
-            Spy on winning Meta, Google, TikTok, and LinkedIn ad creatives from any competitor with zero user ad accounts needed.
+            Spy on winning Meta, Google, TikTok, and LinkedIn ad creatives from
+            any competitor with zero user ad accounts needed.
           </p>
         </div>
       </div>

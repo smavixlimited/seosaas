@@ -13,9 +13,8 @@ export interface SendEmailOptions {
 
 export async function resolveResendApiKey(): Promise<string | null> {
   try {
-    const { SystemSettingsService } = await import(
-      "@/services/system-settings.service"
-    );
+    const { SystemSettingsService } =
+      await import("@/services/system-settings.service");
     const commsSettings = await SystemSettingsService.getCommunicationsApis();
     if (commsSettings?.resendApiKey?.trim()) {
       return commsSettings.resendApiKey.trim();
@@ -31,9 +30,8 @@ export async function resolveResendApiKey(): Promise<string | null> {
 
 export async function resolveSenderAddress(fallback?: string): Promise<string> {
   try {
-    const { SystemSettingsService } = await import(
-      "@/services/system-settings.service"
-    );
+    const { SystemSettingsService } =
+      await import("@/services/system-settings.service");
     const comms = await SystemSettingsService.getCommunicationsApis();
     if (comms?.senderEmail?.trim()) {
       const name = comms.senderName?.trim() || BRAND_CONFIG.name;
@@ -41,7 +39,9 @@ export async function resolveSenderAddress(fallback?: string): Promise<string> {
     }
   } catch {}
 
-  return fallback || `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`;
+  return (
+    fallback || `${BRAND_CONFIG.name} <notifications@${BRAND_CONFIG.domain}>`
+  );
 }
 
 export async function sendResendEmail(

@@ -498,10 +498,13 @@ export function CheckoutModal({
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-primary flex items-center gap-1.5">
-                    <ShieldCheck className="h-4 w-4" /> Instant Activation with Paystack
+                    <ShieldCheck className="h-4 w-4" /> Instant Activation with
+                    Paystack
                   </div>
                   <p>
-                    Pay securely using your debit card, USSD code, or instant bank transfer. Your {plan.name} features and monthly credits activate immediately upon payment.
+                    Pay securely using your debit card, USSD code, or instant
+                    bank transfer. Your {plan.name} features and monthly credits
+                    activate immediately upon payment.
                   </p>
                 </div>
 
@@ -522,7 +525,8 @@ export function CheckoutModal({
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-orange-500/20 bg-orange-500/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-orange-600 flex items-center gap-1.5">
-                    <Zap className="h-4 w-4" /> Instant Multi-Currency with Flutterwave
+                    <Zap className="h-4 w-4" /> Instant Multi-Currency with
+                    Flutterwave
                   </div>
                   <p>
                     Pay seamlessly across Africa and globally supporting NGN,
@@ -547,11 +551,13 @@ export function CheckoutModal({
               <div className="space-y-4 pt-2">
                 <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4 text-xs space-y-1.5 text-base-content/80">
                   <div className="font-bold text-blue-500 flex items-center gap-1.5">
-                    <Globe className="h-4 w-4" /> International Credit Card / PayPal
+                    <Globe className="h-4 w-4" /> International Credit Card /
+                    PayPal
                   </div>
                   <p>
                     Subscribe seamlessly via standard USD billing supporting
-                    Visa, MasterCard, Amex, PayPal, and Apple Pay powered by LemonSqueezy.
+                    Visa, MasterCard, Amex, PayPal, and Apple Pay powered by
+                    LemonSqueezy.
                   </p>
                 </div>
 

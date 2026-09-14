@@ -40,7 +40,6 @@ const createCustomTaskSchema = z.object({
   aiPrompt: z.string().optional(),
 });
 
-
 /**
  * Fetch all tasks and metrics for a project's Action Roadmap.
  */

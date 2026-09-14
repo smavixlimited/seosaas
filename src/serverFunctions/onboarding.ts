@@ -81,7 +81,10 @@ export const getOnboardingAnswers = createServerFn({ method: "GET" })
           }
         }
       } catch (err) {
-        console.warn("Failed checking user project existence in getOnboardingAnswers:", err);
+        console.warn(
+          "Failed checking user project existence in getOnboardingAnswers:",
+          err,
+        );
       }
     }
 

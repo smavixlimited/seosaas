@@ -134,7 +134,11 @@ export function CompetitorAnalysisDecoder({
     if (typeof window !== "undefined") {
       sessionStorage.setItem("sam_pending_prompt", prompt);
     }
-    toast.success(title ? `Launching Skorvia AI for ${title}...` : "Launching Skorvia AI...");
+    toast.success(
+      title
+        ? `Launching Skorvia AI for ${title}...`
+        : "Launching Skorvia AI...",
+    );
     try {
       const { id: newSessionId } = await createSamSession({
         data: { projectId },
@@ -176,7 +180,8 @@ export function CompetitorAnalysisDecoder({
     traffic: brandMetrics.organicTraffic - competitorMetrics.organicTraffic,
     keywords: brandMetrics.organicKeywords - competitorMetrics.organicKeywords,
     backlinks: brandMetrics.backlinks - competitorMetrics.backlinks,
-    referringDomains: brandMetrics.referringDomains - competitorMetrics.referringDomains,
+    referringDomains:
+      brandMetrics.referringDomains - competitorMetrics.referringDomains,
   };
 
   return (
@@ -279,14 +284,20 @@ export function CompetitorAnalysisDecoder({
               Analyzing &amp; Decoding Head-to-Head Strategy...
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
-              Extracting live organic rankings, backlink profiles, and calculating side-by-side gap metrics between <strong>{brandDisplay}</strong> and <strong>{cleanDomain}</strong>.
+              Extracting live organic rankings, backlink profiles, and
+              calculating side-by-side gap metrics between{" "}
+              <strong>{brandDisplay}</strong> and <strong>{cleanDomain}</strong>
+              .
             </p>
           </div>
         </div>
       ) : teardownQuery.isError ? (
         <div className="rounded-3xl border border-error/30 bg-error/5 p-10 text-center space-y-4 shadow-xs">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-error/10 text-error flex items-center justify-center">
-            <Icon icon="solar:danger-triangle-bold-duotone" className="h-7 w-7" />
+            <Icon
+              icon="solar:danger-triangle-bold-duotone"
+              className="h-7 w-7"
+            />
           </div>
           <div>
             <h3 className="text-base font-bold text-base-content">
@@ -333,7 +344,9 @@ export function CompetitorAnalysisDecoder({
               Ready to Decode {cleanDomain} Head-to-Head
             </h3>
             <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
-              Run a complete 5-pillar strategic teardown to analyze their positioning hooks, funnel angles, content moat, striking-distance keywords, and attack playbook.
+              Run a complete 5-pillar strategic teardown to analyze their
+              positioning hooks, funnel angles, content moat, striking-distance
+              keywords, and attack playbook.
             </p>
           </div>
           <button
@@ -369,17 +382,24 @@ export function CompetitorAnalysisDecoder({
               <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
                 <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
                   <span>Organic Traffic</span>
-                  <Icon icon="solar:graph-up-bold" className="h-4 w-4 text-primary" />
+                  <Icon
+                    icon="solar:graph-up-bold"
+                    className="h-4 w-4 text-primary"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Your Brand
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {brandMetrics.organicTraffic.toLocaleString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Competitor
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {competitorMetrics.organicTraffic.toLocaleString()}
                     </span>
@@ -388,13 +408,14 @@ export function CompetitorAnalysisDecoder({
                 <div className="text-[10px] font-bold flex items-center gap-1">
                   {deltas.traffic >= 0 ? (
                     <span className="text-emerald-600 flex items-center gap-0.5">
-                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
-                      +{deltas.traffic.toLocaleString()} Brand Lead
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />+
+                      {deltas.traffic.toLocaleString()} Brand Lead
                     </span>
                   ) : (
                     <span className="text-amber-600 flex items-center gap-0.5">
                       <Icon icon="solar:arrow-down-bold" className="h-3 w-3" />
-                      {Math.abs(deltas.traffic).toLocaleString()} Rival Lead (Opportunity)
+                      {Math.abs(deltas.traffic).toLocaleString()} Rival Lead
+                      (Opportunity)
                     </span>
                   )}
                 </div>
@@ -404,17 +425,24 @@ export function CompetitorAnalysisDecoder({
               <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
                 <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
                   <span>Ranking Keywords</span>
-                  <Icon icon="solar:minimalistic-magnifer-bold" className="h-4 w-4 text-blue-500" />
+                  <Icon
+                    icon="solar:minimalistic-magnifer-bold"
+                    className="h-4 w-4 text-blue-500"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Your Brand
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {brandMetrics.organicKeywords.toLocaleString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Competitor
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {competitorMetrics.organicKeywords.toLocaleString()}
                     </span>
@@ -423,13 +451,14 @@ export function CompetitorAnalysisDecoder({
                 <div className="text-[10px] font-bold flex items-center gap-1">
                   {deltas.keywords >= 0 ? (
                     <span className="text-emerald-600 flex items-center gap-0.5">
-                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
-                      +{deltas.keywords.toLocaleString()} Keyword Edge
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />+
+                      {deltas.keywords.toLocaleString()} Keyword Edge
                     </span>
                   ) : (
                     <span className="text-blue-600 flex items-center gap-0.5">
                       <Icon icon="solar:target-bold" className="h-3 w-3" />
-                      {Math.abs(deltas.keywords).toLocaleString()} Keywords to Steal
+                      {Math.abs(deltas.keywords).toLocaleString()} Keywords to
+                      Steal
                     </span>
                   )}
                 </div>
@@ -439,17 +468,24 @@ export function CompetitorAnalysisDecoder({
               <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
                 <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
                   <span>Backlinks</span>
-                  <Icon icon="solar:link-bold" className="h-4 w-4 text-indigo-500" />
+                  <Icon
+                    icon="solar:link-bold"
+                    className="h-4 w-4 text-indigo-500"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Your Brand
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {brandMetrics.backlinks.toLocaleString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Competitor
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {competitorMetrics.backlinks.toLocaleString()}
                     </span>
@@ -458,13 +494,14 @@ export function CompetitorAnalysisDecoder({
                 <div className="text-[10px] font-bold flex items-center gap-1">
                   {deltas.backlinks >= 0 ? (
                     <span className="text-emerald-600 flex items-center gap-0.5">
-                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
-                      +{deltas.backlinks.toLocaleString()} Backlink Edge
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />+
+                      {deltas.backlinks.toLocaleString()} Backlink Edge
                     </span>
                   ) : (
                     <span className="text-indigo-600 flex items-center gap-0.5">
                       <Icon icon="solar:link-circle-bold" className="h-3 w-3" />
-                      {Math.abs(deltas.backlinks).toLocaleString()} Authority Gap
+                      {Math.abs(deltas.backlinks).toLocaleString()} Authority
+                      Gap
                     </span>
                   )}
                 </div>
@@ -474,17 +511,24 @@ export function CompetitorAnalysisDecoder({
               <div className="rounded-2xl border border-base-300 bg-base-200/40 p-4 space-y-2">
                 <div className="flex items-center justify-between text-[11px] font-bold text-base-content/60 uppercase">
                   <span>Referring Domains</span>
-                  <Icon icon="solar:global-bold" className="h-4 w-4 text-purple-500" />
+                  <Icon
+                    icon="solar:global-bold"
+                    className="h-4 w-4 text-purple-500"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Your Brand</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Your Brand
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {brandMetrics.referringDomains.toLocaleString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-base-content/50 block font-medium">Competitor</span>
+                    <span className="text-[10px] text-base-content/50 block font-medium">
+                      Competitor
+                    </span>
                     <span className="text-sm font-black text-base-content block">
                       {competitorMetrics.referringDomains.toLocaleString()}
                     </span>
@@ -493,13 +537,18 @@ export function CompetitorAnalysisDecoder({
                 <div className="text-[10px] font-bold flex items-center gap-1">
                   {deltas.referringDomains >= 0 ? (
                     <span className="text-emerald-600 flex items-center gap-0.5">
-                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />
-                      +{deltas.referringDomains.toLocaleString()} Root Domain Lead
+                      <Icon icon="solar:arrow-up-bold" className="h-3 w-3" />+
+                      {deltas.referringDomains.toLocaleString()} Root Domain
+                      Lead
                     </span>
                   ) : (
                     <span className="text-purple-600 flex items-center gap-0.5">
-                      <Icon icon="solar:share-circle-bold" className="h-3 w-3" />
-                      {Math.abs(deltas.referringDomains).toLocaleString()} Domain Outreaches Needed
+                      <Icon
+                        icon="solar:share-circle-bold"
+                        className="h-3 w-3"
+                      />
+                      {Math.abs(deltas.referringDomains).toLocaleString()}{" "}
+                      Domain Outreaches Needed
                     </span>
                   )}
                 </div>
@@ -569,13 +618,19 @@ export function CompetitorAnalysisDecoder({
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 text-primary">
-                      <Icon icon="solar:swords-bold-duotone" className="h-6 w-6" />
+                      <Icon
+                        icon="solar:swords-bold-duotone"
+                        className="h-6 w-6"
+                      />
                       <h3 className="text-base font-black text-base-content">
                         Head-to-Head Comparative Battlecard
                       </h3>
                     </div>
                     <p className="text-xs text-base-content/60 mt-0.5">
-                      Direct strategic angles contrasting <strong>{brandDisplay}</strong> against <strong>{cleanDomain}</strong> for sales battlecards, comparison pages, and ad counter-messaging.
+                      Direct strategic angles contrasting{" "}
+                      <strong>{brandDisplay}</strong> against{" "}
+                      <strong>{cleanDomain}</strong> for sales battlecards,
+                      comparison pages, and ad counter-messaging.
                     </p>
                   </div>
 
@@ -602,7 +657,10 @@ export function CompetitorAnalysisDecoder({
                     >
                       <div className="flex items-center justify-between">
                         <h4 className="font-black text-sm text-base-content flex items-center gap-2">
-                          <Icon icon="solar:star-bold" className="h-4 w-4 text-amber-500" />
+                          <Icon
+                            icon="solar:star-bold"
+                            className="h-4 w-4 text-amber-500"
+                          />
                           {angle.category}
                         </h4>
                         <span className="badge badge-sm badge-outline font-bold text-[10px]">
@@ -614,7 +672,10 @@ export function CompetitorAnalysisDecoder({
                         {/* Our Advantage */}
                         <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 space-y-1">
                           <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block flex items-center gap-1">
-                            <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             Your Brand Advantage ({brandDisplay})
                           </span>
                           <p className="font-semibold text-base-content/90">
@@ -625,7 +686,10 @@ export function CompetitorAnalysisDecoder({
                         {/* Competitor Weakness */}
                         <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 space-y-1">
                           <span className="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block flex items-center gap-1">
-                            <Icon icon="solar:danger-circle-bold" className="h-3.5 w-3.5" />
+                            <Icon
+                              icon="solar:danger-circle-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             Competitor Friction Point ({cleanDomain})
                           </span>
                           <p className="font-semibold text-base-content/90">
@@ -636,7 +700,10 @@ export function CompetitorAnalysisDecoder({
                         {/* Winning Pitch Hook */}
                         <div className="rounded-xl bg-primary/10 border border-primary/20 p-3 space-y-1">
                           <span className="text-[10px] uppercase font-bold text-primary block flex items-center gap-1">
-                            <Icon icon="solar:bolt-bold" className="h-3.5 w-3.5" />
+                            <Icon
+                              icon="solar:bolt-bold"
+                              className="h-3.5 w-3.5"
+                            />
                             Winning Counter-Hook / Ad Pitch
                           </span>
                           <p className="font-bold text-base-content text-xs italic">
@@ -654,7 +721,10 @@ export function CompetitorAnalysisDecoder({
                           }}
                           className="btn btn-ghost btn-xs text-xs font-bold gap-1"
                         >
-                          <Icon icon="solar:copy-bold" className="h-3.5 w-3.5" />
+                          <Icon
+                            icon="solar:copy-bold"
+                            className="h-3.5 w-3.5"
+                          />
                           Copy Hook
                         </button>
                         <button
@@ -669,7 +739,10 @@ export function CompetitorAnalysisDecoder({
                           }
                           className="btn btn-outline btn-xs rounded-xl font-bold gap-1"
                         >
-                          <Icon icon="solar:add-circle-bold" className="h-3.5 w-3.5" />
+                          <Icon
+                            icon="solar:add-circle-bold"
+                            className="h-3.5 w-3.5"
+                          />
                           Roadmap
                         </button>
                       </div>
@@ -1063,7 +1136,10 @@ export function CompetitorAnalysisDecoder({
                           }
                           className="btn btn-ghost btn-sm rounded-xl font-bold text-xs text-primary gap-1"
                         >
-                          <Icon icon="solar:magic-stick-3-bold" className="h-3.5 w-3.5" />
+                          <Icon
+                            icon="solar:magic-stick-3-bold"
+                            className="h-3.5 w-3.5"
+                          />
                           <span>Run with SAM</span>
                         </button>
                         <button

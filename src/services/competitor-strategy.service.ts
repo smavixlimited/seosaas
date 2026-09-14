@@ -175,12 +175,13 @@ export const CompetitorStrategyService = {
             contentMoat: JSON.parse(existing.contentMoatJson),
             vulnerabilities: JSON.parse(existing.vulnerabilitiesJson),
             attackPlaybook: JSON.parse(existing.attackPlaybookJson),
-            rawMetricsSummary: rawParsed?.metrics || rawParsed || {
-              organicTraffic: 0,
-              organicKeywords: 0,
-              backlinks: 0,
-              referringDomains: 0,
-            },
+            rawMetricsSummary: rawParsed?.metrics ||
+              rawParsed || {
+                organicTraffic: 0,
+                organicKeywords: 0,
+                backlinks: 0,
+                referringDomains: 0,
+              },
             headToHead: rawParsed?.headToHead,
             modelUsed: existing.modelUsed || "ai-strategy-engine",
             createdAt: existing.createdAt,
@@ -218,19 +219,18 @@ export const CompetitorStrategyService = {
     let project: any = null;
     let userBrandProfile: any = null;
     try {
-      const { ProjectRepository } = await import(
-        "@/server/features/projects/repositories/ProjectRepository"
-      );
+      const { ProjectRepository } =
+        await import("@/server/features/projects/repositories/ProjectRepository");
       project = await ProjectRepository.getProjectById(projectId);
     } catch (err) {
       console.warn("Could not load project context:", err);
     }
 
     try {
-      const { BrandCompetitorService } = await import(
-        "@/services/brand-competitor.service"
-      );
-      userBrandProfile = await BrandCompetitorService.getBrandProfile(projectId);
+      const { BrandCompetitorService } =
+        await import("@/services/brand-competitor.service");
+      userBrandProfile =
+        await BrandCompetitorService.getBrandProfile(projectId);
     } catch (profileErr) {
       console.warn("Could not load brand profile:", profileErr);
     }
@@ -266,9 +266,8 @@ export const CompetitorStrategyService = {
     let topPagesSample: Array<{ page: string; traffic: number }> = [];
 
     try {
-      const { DomainService } = await import(
-        "@/server/features/domain/services/DomainService"
-      );
+      const { DomainService } =
+        await import("@/server/features/domain/services/DomainService");
 
       const overview = await DomainService.getOverview(
         {
@@ -339,11 +338,14 @@ export const CompetitorStrategyService = {
     let brandBacklinks = 0;
     let brandReferringDomains = 0;
 
-    if (ourCleanDomain && ourCleanDomain !== cleanDomain && ourCleanDomain !== "yourdomain.com") {
+    if (
+      ourCleanDomain &&
+      ourCleanDomain !== cleanDomain &&
+      ourCleanDomain !== "yourdomain.com"
+    ) {
       try {
-        const { DomainService } = await import(
-          "@/server/features/domain/services/DomainService"
-        );
+        const { DomainService } =
+          await import("@/server/features/domain/services/DomainService");
 
         const brandOverview = await DomainService.getOverview(
           {
@@ -417,7 +419,8 @@ export const CompetitorStrategyService = {
         "Free instant domain overview scanner",
         "Quarterly SEO industry benchmark whitepapers",
       ],
-      estimatedFunnelType: "Product-Led Growth with High-Touch Enterprise Sales Reps",
+      estimatedFunnelType:
+        "Product-Led Growth with High-Touch Enterprise Sales Reps",
     };
 
     let contentMoat: Pillar3ContentMoat = {
@@ -567,7 +570,8 @@ export const CompetitorStrategyService = {
           category: "keyword_steal",
           priority: "QUICK_WIN",
           estimatedEffort: "30 mins",
-          potentialImpact: "Fast top-3 ranking gains on high-CPC commercial queries",
+          potentialImpact:
+            "Fast top-3 ranking gains on high-CPC commercial queries",
           objective: `Target keywords where ${cleanDomain} ranks on page 2 (#11-#25) by creating 10x content with embedded interactive elements and modern AEO structure.`,
           actionSteps: [
             `Extract their top striking distance queries (${vulnerabilities.strikingDistanceKeywords
@@ -720,7 +724,10 @@ Return ONLY the valid raw JSON object.`;
       }
       if (parsed.attackPlaybook) attackPlaybook = parsed.attackPlaybook;
     } catch (aiErr) {
-      console.warn("LLM generation fallback used for competitor teardown:", aiErr);
+      console.warn(
+        "LLM generation fallback used for competitor teardown:",
+        aiErr,
+      );
     }
 
     const headToHead: HeadToHeadMetrics = {

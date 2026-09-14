@@ -108,7 +108,12 @@ export const BrandMentionsService = {
       return [];
     }
 
-    return this.fetchRealDomainMentions(projectId, cleanDomain, brandName, brandUrl);
+    return this.fetchRealDomainMentions(
+      projectId,
+      cleanDomain,
+      brandName,
+      brandUrl,
+    );
   },
 
   /**
@@ -125,7 +130,8 @@ export const BrandMentionsService = {
     const realMentions: BrandMentionItem[] = [];
 
     try {
-      const { fetchBacklinksRows } = await import("@/server/lib/dataforseo/backlinks");
+      const { fetchBacklinksRows } =
+        await import("@/server/lib/dataforseo/backlinks");
       const backlinksResponse = await fetchBacklinksRows({
         target: cleanDomain,
         limit: 20,
@@ -144,8 +150,12 @@ export const BrandMentionsService = {
           projectId,
           sourceUrl: item.url_from,
           sourceDomain: item.domain_from,
-          sourceTitle: item.anchor ? `Mention with anchor "${item.anchor}"` : `Reference on ${item.domain_from}`,
-          mentionContext: item.anchor ? `Found backlink linking to "${item.url_to || cleanDomain}" with anchor text: "${item.anchor}"` : `Found referring link from ${item.domain_from}`,
+          sourceTitle: item.anchor
+            ? `Mention with anchor "${item.anchor}"`
+            : `Reference on ${item.domain_from}`,
+          mentionContext: item.anchor
+            ? `Found backlink linking to "${item.url_to || cleanDomain}" with anchor text: "${item.anchor}"`
+            : `Found referring link from ${item.domain_from}`,
           mentionType,
           domainAuthority: item.domain_from_rank ?? item.rank ?? 30,
           sentiment: "positive",
@@ -162,7 +172,10 @@ export const BrandMentionsService = {
         const { db } = await import("@/db");
         const { brandMentions } = await import("@/db/schema");
         for (const m of realMentions) {
-          await db.insert(brandMentions).values(m).catch(() => {});
+          await db
+            .insert(brandMentions)
+            .values(m)
+            .catch(() => {});
         }
       }
     } catch (err) {
@@ -336,7 +349,11 @@ export const BrandMentionsService = {
     domain: string,
   ): Promise<AeoSentimentItem[]> {
     const now = new Date().toISOString();
-    const cleanDomain = domain.replace(/^https?:\/\//, "").replace(/\/.*$/, "").trim() || "brand.com";
+    const cleanDomain =
+      domain
+        .replace(/^https?:\/\//, "")
+        .replace(/\/.*$/, "")
+        .trim() || "brand.com";
     const name = brandName.trim() || cleanDomain;
 
     // Fetch real domain backlink and authority signals to ground the AI evaluation in reality
@@ -344,7 +361,8 @@ export const BrandMentionsService = {
     let realRank = 0;
     let realRefDomains = 0;
     try {
-      const { fetchBacklinksSummary } = await import("@/server/lib/dataforseo/backlinks");
+      const { fetchBacklinksSummary } =
+        await import("@/server/lib/dataforseo/backlinks");
       const summaryResp = await fetchBacklinksSummary({ target: cleanDomain });
       if (summaryResp?.data) {
         realBacklinks = summaryResp.data.backlinks ?? 0;
@@ -417,12 +435,35 @@ Respond ONLY with valid JSON array of objects with the exact keys:
       const parsed = JSON.parse(jsonText);
       if (Array.isArray(parsed) && parsed.length >= 4) {
         aiGeneratedScores = parsed.map((item) => ({
-          aiEngine: (["perplexity", "chatgpt", "claude", "google_aio"].includes(item.aiEngine) ? item.aiEngine : "perplexity") as AiEngine,
-          sentimentScore: Number(item.sentimentScore) || (realBacklinks > 0 ? 60 : 20),
-          sentimentSummary: String(item.sentimentSummary || `${name} evaluated on ${item.aiEngine}`),
-          entityCitationStatus: (["present", "missing", "ambiguous"].includes(item.entityCitationStatus) ? item.entityCitationStatus : (realBacklinks > 10 ? "present" : "missing")) as "present" | "missing" | "ambiguous",
-          keyStrengthsHighlighted: Array.isArray(item.keyStrengthsHighlighted) && item.keyStrengthsHighlighted.length > 0 ? item.keyStrengthsHighlighted : ["Domain indexing foundation", "Brand name alignment"],
-          keyMissingGaps: Array.isArray(item.keyMissingGaps) && item.keyMissingGaps.length > 0 ? item.keyMissingGaps : ["Add structured Schema.org JSON-LD markup", "Build high-relevance digital PR citations"],
+          aiEngine: (["perplexity", "chatgpt", "claude", "google_aio"].includes(
+            item.aiEngine,
+          )
+            ? item.aiEngine
+            : "perplexity") as AiEngine,
+          sentimentScore:
+            Number(item.sentimentScore) || (realBacklinks > 0 ? 60 : 20),
+          sentimentSummary: String(
+            item.sentimentSummary || `${name} evaluated on ${item.aiEngine}`,
+          ),
+          entityCitationStatus: (["present", "missing", "ambiguous"].includes(
+            item.entityCitationStatus,
+          )
+            ? item.entityCitationStatus
+            : realBacklinks > 10
+              ? "present"
+              : "missing") as "present" | "missing" | "ambiguous",
+          keyStrengthsHighlighted:
+            Array.isArray(item.keyStrengthsHighlighted) &&
+            item.keyStrengthsHighlighted.length > 0
+              ? item.keyStrengthsHighlighted
+              : ["Domain indexing foundation", "Brand name alignment"],
+          keyMissingGaps:
+            Array.isArray(item.keyMissingGaps) && item.keyMissingGaps.length > 0
+              ? item.keyMissingGaps
+              : [
+                  "Add structured Schema.org JSON-LD markup",
+                  "Build high-relevance digital PR citations",
+                ],
           modelUsed: String(item.modelUsed || "openrouter-ai"),
         }));
       }
@@ -432,8 +473,16 @@ Respond ONLY with valid JSON array of objects with the exact keys:
 
     if (aiGeneratedScores.length === 0) {
       const isEstablished = realBacklinks >= 20 || realRank >= 20;
-      const baseScore = isEstablished ? Math.min(85, 40 + Math.round(realRank * 0.8)) : (realBacklinks > 0 ? 35 : 18);
-      const citationStatus = isEstablished ? "present" : (realBacklinks > 0 ? "ambiguous" : "missing");
+      const baseScore = isEstablished
+        ? Math.min(85, 40 + Math.round(realRank * 0.8))
+        : realBacklinks > 0
+          ? 35
+          : 18;
+      const citationStatus = isEstablished
+        ? "present"
+        : realBacklinks > 0
+          ? "ambiguous"
+          : "missing";
 
       aiGeneratedScores = [
         {
@@ -444,8 +493,14 @@ Respond ONLY with valid JSON array of objects with the exact keys:
             : `Perplexity currently has minimal citation records for ${name} (${cleanDomain}). Entity visibility requires establishing authoritative web references and schema markup.`,
           entityCitationStatus: citationStatus,
           keyStrengthsHighlighted: isEstablished
-            ? ["Accurate domain indexing and brand name recognition", "Clear information hierarchy for generative retrieval"]
-            : ["Domain registered and crawlable", "Clean URL structure ready for citation discovery"],
+            ? [
+                "Accurate domain indexing and brand name recognition",
+                "Clear information hierarchy for generative retrieval",
+              ]
+            : [
+                "Domain registered and crawlable",
+                "Clean URL structure ready for citation discovery",
+              ],
           keyMissingGaps: [
             "Expand structured schema and Wikidata/SameAs identity linkages",
             "Increase high-authority citations in industry publications",
@@ -460,8 +515,14 @@ Respond ONLY with valid JSON array of objects with the exact keys:
             : `ChatGPT Search does not yet cite ${name} (${cleanDomain}) prominently in generic industry queries due to limited corpus co-occurrence.`,
           entityCitationStatus: citationStatus,
           keyStrengthsHighlighted: isEstablished
-            ? ["Direct brand matching on commercial queries", "Helpful landing page context"]
-            : ["Exact brand domain match", "Opportunity to establish primary niche topical authority"],
+            ? [
+                "Direct brand matching on commercial queries",
+                "Helpful landing page context",
+              ]
+            : [
+                "Exact brand domain match",
+                "Opportunity to establish primary niche topical authority",
+              ],
           keyMissingGaps: [
             "Publish authoritative comparison and solution guides",
             "Grow third-party reviews on established directories",
@@ -476,8 +537,14 @@ Respond ONLY with valid JSON array of objects with the exact keys:
             : `Claude identifies ${name} (${cleanDomain}) as a developing entity. Structured Organization schema is required to disambiguate the brand.`,
           entityCitationStatus: citationStatus,
           keyStrengthsHighlighted: isEstablished
-            ? ["Clear technical messaging and domain purpose", "Strong content readability"]
-            : ["Focused brand positioning", "Fast loading technical infrastructure"],
+            ? [
+                "Clear technical messaging and domain purpose",
+                "Strong content readability",
+              ]
+            : [
+                "Focused brand positioning",
+                "Fast loading technical infrastructure",
+              ],
           keyMissingGaps: [
             "Deploy Organization and SoftwareApplication JSON-LD schema",
             "Deepen developer documentation and technical FAQs",
@@ -492,8 +559,14 @@ Respond ONLY with valid JSON array of objects with the exact keys:
             : `Google AI Overviews does not currently generate direct brand entity snapshots for ${cleanDomain} due to low Knowledge Graph authority.`,
           entityCitationStatus: isEstablished ? "ambiguous" : "missing",
           keyStrengthsHighlighted: isEstablished
-            ? ["Indexed organic web presence and keyword relevance", "Mobile-friendly page signals"]
-            : ["Googlebot indexable architecture", "Direct brand search eligibility"],
+            ? [
+                "Indexed organic web presence and keyword relevance",
+                "Mobile-friendly page signals",
+              ]
+            : [
+                "Googlebot indexable architecture",
+                "Direct brand search eligibility",
+              ],
           keyMissingGaps: [
             "Link official social profiles via Schema SameAs properties",
             "Produce comprehensive cornerstone pillar content",
@@ -539,7 +612,9 @@ Respond ONLY with valid JSON array of objects with the exact keys:
           sentimentScore: s.sentimentScore,
           sentimentSummary: s.sentimentSummary,
           entityCitationStatus: s.entityCitationStatus,
-          keyStrengthsHighlightedJson: JSON.stringify(s.keyStrengthsHighlighted),
+          keyStrengthsHighlightedJson: JSON.stringify(
+            s.keyStrengthsHighlighted,
+          ),
           keyMissingGapsJson: JSON.stringify(s.keyMissingGaps),
           modelUsed: s.modelUsed,
           createdAt: now,

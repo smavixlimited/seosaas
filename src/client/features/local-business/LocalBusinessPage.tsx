@@ -88,7 +88,9 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
   const localQuery = useQuery<LocalBusinessData>({
     queryKey: ["localBusinessDashboard", projectId],
     queryFn: () =>
-      getLocalBusinessDashboard({ data: { projectId } }) as Promise<LocalBusinessData>,
+      getLocalBusinessDashboard({
+        data: { projectId },
+      }) as Promise<LocalBusinessData>,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -97,15 +99,25 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
     if (localQuery.data?.profile) {
       setFormData((prev) => ({
         ...prev,
-        businessName: prev.businessName || localQuery.data.profile.businessName || "",
+        businessName:
+          prev.businessName || localQuery.data.profile.businessName || "",
         websiteUrl: prev.websiteUrl || localQuery.data.profile.websiteUrl || "",
-        countryCode: prev.countryCode !== "US" ? prev.countryCode : (localQuery.data.profile.countryCode || "US"),
-        streetAddress: prev.streetAddress || localQuery.data.profile.streetAddress || "",
+        countryCode:
+          prev.countryCode !== "US"
+            ? prev.countryCode
+            : localQuery.data.profile.countryCode || "US",
+        streetAddress:
+          prev.streetAddress || localQuery.data.profile.streetAddress || "",
         city: prev.city || localQuery.data.profile.city || "",
         state: prev.state || localQuery.data.profile.state || "",
         postalCode: prev.postalCode || localQuery.data.profile.postalCode || "",
-        phoneNumber: prev.phoneNumber || localQuery.data.profile.phoneNumber || "",
-        primaryCategory: prev.primaryCategory !== "Local Business / Services" ? prev.primaryCategory : (localQuery.data.profile.primaryCategory || "Local Business / Services"),
+        phoneNumber:
+          prev.phoneNumber || localQuery.data.profile.phoneNumber || "",
+        primaryCategory:
+          prev.primaryCategory !== "Local Business / Services"
+            ? prev.primaryCategory
+            : localQuery.data.profile.primaryCategory ||
+              "Local Business / Services",
       }));
     }
   }, [localQuery.data]);
@@ -189,7 +201,9 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
         postalCode: "94105",
         countryCode: localQuery.data?.profile?.countryCode || "US",
         phoneNumber: "+1 (415) 555-0199",
-        websiteUrl: localQuery.data?.profile?.websiteUrl || `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
+        websiteUrl:
+          localQuery.data?.profile?.websiteUrl ||
+          `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
         primaryCategory: "Corporate Office & Services",
         gbpClaimed: true,
         gbpHealthScore: 78,
@@ -200,22 +214,90 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
         listingsToFixCount: 14,
         totalListingsCount: 33,
         directoriesCoverage: [
-          { directory: "Google Business Profile", status: "Matched", details: "Active verified profile" },
-          { directory: "Google Search", status: "Matched", details: "Ranking in local 3-pack" },
-          { directory: "Google Assistant", status: "Matched", details: "Voice query verified" },
-          { directory: "Apple Maps", status: "Not Present", details: "Missed opportunity. Submit to Apple Business Connect." },
-          { directory: "Bing Places", status: "Not Present", details: "Missed opportunity. Syndicate from Google Profile." },
-          { directory: "Facebook", status: "Wrong Address", details: "Address mismatch on Facebook Page" },
-          { directory: "Instagram", status: "Not Present", details: "Link location to Instagram profile" },
-          { directory: "Siri", status: "Not Present", details: "Missed opportunity for Apple voice queries" },
-          { directory: "Waze", status: "Wrong Address", details: "Navigation coordinates need updating" },
-          { directory: "Where To?", status: "No Address", details: "Missed opportunity for in-car GPS" },
+          {
+            directory: "Google Business Profile",
+            status: "Matched",
+            details: "Active verified profile",
+          },
+          {
+            directory: "Google Search",
+            status: "Matched",
+            details: "Ranking in local 3-pack",
+          },
+          {
+            directory: "Google Assistant",
+            status: "Matched",
+            details: "Voice query verified",
+          },
+          {
+            directory: "Apple Maps",
+            status: "Not Present",
+            details: "Missed opportunity. Submit to Apple Business Connect.",
+          },
+          {
+            directory: "Bing Places",
+            status: "Not Present",
+            details: "Missed opportunity. Syndicate from Google Profile.",
+          },
+          {
+            directory: "Facebook",
+            status: "Wrong Address",
+            details: "Address mismatch on Facebook Page",
+          },
+          {
+            directory: "Instagram",
+            status: "Not Present",
+            details: "Link location to Instagram profile",
+          },
+          {
+            directory: "Siri",
+            status: "Not Present",
+            details: "Missed opportunity for Apple voice queries",
+          },
+          {
+            directory: "Waze",
+            status: "Wrong Address",
+            details: "Navigation coordinates need updating",
+          },
+          {
+            directory: "Where To?",
+            status: "No Address",
+            details: "Missed opportunity for in-car GPS",
+          },
         ],
         citations: [
-          { directory: "Google Business Profile", url: "https://maps.google.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "consistent" },
-          { directory: "Apple Maps", url: "https://maps.apple.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "missing" },
-          { directory: "Bing Places", url: "https://bingplaces.com", name: brand, address: "100 Market Street, San Francisco, CA", phone: "+1 (415) 555-0199", status: "missing" },
-          { directory: "Facebook", url: "https://facebook.com", name: `${brand} Inc`, address: "88 Market St, San Francisco, CA", phone: "+1 (415) 555-0199", status: "mismatch" },
+          {
+            directory: "Google Business Profile",
+            url: "https://maps.google.com",
+            name: brand,
+            address: "100 Market Street, San Francisco, CA",
+            phone: "+1 (415) 555-0199",
+            status: "consistent",
+          },
+          {
+            directory: "Apple Maps",
+            url: "https://maps.apple.com",
+            name: brand,
+            address: "100 Market Street, San Francisco, CA",
+            phone: "+1 (415) 555-0199",
+            status: "missing",
+          },
+          {
+            directory: "Bing Places",
+            url: "https://bingplaces.com",
+            name: brand,
+            address: "100 Market Street, San Francisco, CA",
+            phone: "+1 (415) 555-0199",
+            status: "missing",
+          },
+          {
+            directory: "Facebook",
+            url: "https://facebook.com",
+            name: `${brand} Inc`,
+            address: "88 Market St, San Francisco, CA",
+            phone: "+1 (415) 555-0199",
+            status: "mismatch",
+          },
         ],
         reviews: [
           {
@@ -258,7 +340,9 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
           postalCode: "94105",
           countryCode: localQuery.data?.profile?.countryCode || "US",
           phoneNumber: "+1 (415) 555-0199",
-          websiteUrl: localQuery.data?.profile?.websiteUrl || `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
+          websiteUrl:
+            localQuery.data?.profile?.websiteUrl ||
+            `https://${brand.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`,
           primaryCategory: "Corporate Office & Services",
           lat: 37.7749,
           lng: -122.4194,
@@ -282,15 +366,96 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
         previousAverageRank: 3.8,
         netGainedPositions: 8,
         points: [
-          { row: 0, col: 0, lat: 37.7949, lng: -122.4394, rank: 2, distanceKm: 2.3, previousRank: 4, rankDelta: 2 },
-          { row: 0, col: 1, lat: 37.7949, lng: -122.4194, rank: 1, distanceKm: 1.6, previousRank: 2, rankDelta: 1 },
-          { row: 0, col: 2, lat: 37.7949, lng: -122.3994, rank: 3, distanceKm: 2.3, previousRank: 5, rankDelta: 2 },
-          { row: 1, col: 0, lat: 37.7749, lng: -122.4394, rank: 2, distanceKm: 1.6, previousRank: 3, rankDelta: 1 },
-          { row: 1, col: 1, lat: 37.7749, lng: -122.4194, rank: 1, distanceKm: 0.0, previousRank: 1, rankDelta: 0 },
-          { row: 1, col: 2, lat: 37.7749, lng: -122.3994, rank: 2, distanceKm: 1.6, previousRank: 3, rankDelta: 1 },
-          { row: 2, col: 0, lat: 37.7549, lng: -122.4394, rank: 4, distanceKm: 2.3, previousRank: 6, rankDelta: 2 },
-          { row: 2, col: 1, lat: 37.7549, lng: -122.4194, rank: 3, distanceKm: 1.6, previousRank: 4, rankDelta: 1 },
-          { row: 2, col: 2, lat: 37.7549, lng: -122.3994, rank: 3, distanceKm: 2.3, previousRank: 5, rankDelta: 2 },
+          {
+            row: 0,
+            col: 0,
+            lat: 37.7949,
+            lng: -122.4394,
+            rank: 2,
+            distanceKm: 2.3,
+            previousRank: 4,
+            rankDelta: 2,
+          },
+          {
+            row: 0,
+            col: 1,
+            lat: 37.7949,
+            lng: -122.4194,
+            rank: 1,
+            distanceKm: 1.6,
+            previousRank: 2,
+            rankDelta: 1,
+          },
+          {
+            row: 0,
+            col: 2,
+            lat: 37.7949,
+            lng: -122.3994,
+            rank: 3,
+            distanceKm: 2.3,
+            previousRank: 5,
+            rankDelta: 2,
+          },
+          {
+            row: 1,
+            col: 0,
+            lat: 37.7749,
+            lng: -122.4394,
+            rank: 2,
+            distanceKm: 1.6,
+            previousRank: 3,
+            rankDelta: 1,
+          },
+          {
+            row: 1,
+            col: 1,
+            lat: 37.7749,
+            lng: -122.4194,
+            rank: 1,
+            distanceKm: 0.0,
+            previousRank: 1,
+            rankDelta: 0,
+          },
+          {
+            row: 1,
+            col: 2,
+            lat: 37.7749,
+            lng: -122.3994,
+            rank: 2,
+            distanceKm: 1.6,
+            previousRank: 3,
+            rankDelta: 1,
+          },
+          {
+            row: 2,
+            col: 0,
+            lat: 37.7549,
+            lng: -122.4394,
+            rank: 4,
+            distanceKm: 2.3,
+            previousRank: 6,
+            rankDelta: 2,
+          },
+          {
+            row: 2,
+            col: 1,
+            lat: 37.7549,
+            lng: -122.4194,
+            rank: 3,
+            distanceKm: 1.6,
+            previousRank: 4,
+            rankDelta: 1,
+          },
+          {
+            row: 2,
+            col: 2,
+            lat: 37.7549,
+            lng: -122.3994,
+            rank: 3,
+            distanceKm: 2.3,
+            previousRank: 5,
+            rankDelta: 2,
+          },
         ],
       },
     };
@@ -298,7 +463,11 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
 
   const rawData = localQuery.data;
   const isConfigured = rawData?.isConfigured === true;
-  const data = isConfigured ? rawData : (isPreviewMode ? sampleDemoData : rawData);
+  const data = isConfigured
+    ? rawData
+    : isPreviewMode
+      ? sampleDemoData
+      : rawData;
   const profile = data?.profile;
   const grid = data?.grid;
   const locations = data?.locations ?? [];
@@ -513,7 +682,10 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
             }}
             className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 whitespace-nowrap shrink-0"
           >
-            <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
+            <Icon
+              icon="logos:google-icon"
+              className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5"
+            />
             <span>Connect Google Business</span>
           </button>
 
@@ -547,7 +719,9 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                   Connect &amp; Track Your Local Business
                 </h2>
                 <p className="text-xs md:text-sm text-base-content/70 leading-relaxed">
-                  Start tracking your local Google Map Pack rankings, syndicate NAP across 33 key business directories, automate customer review requests, and publish AI replies straight to Google.
+                  Start tracking your local Google Map Pack rankings, syndicate
+                  NAP across 33 key business directories, automate customer
+                  review requests, and publish AI replies straight to Google.
                 </p>
               </div>
 
@@ -557,7 +731,10 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                   onClick={() => setIsPreviewMode(true)}
                   className="btn btn-outline rounded-2xl font-bold text-xs gap-2 w-full sm:w-auto shrink-0"
                 >
-                  <Icon icon="solar:eye-bold" className="h-4 w-4 text-primary" />
+                  <Icon
+                    icon="solar:eye-bold"
+                    className="h-4 w-4 text-primary"
+                  />
                   <span>Preview Interactive Demo</span>
                 </button>
                 <button
@@ -568,7 +745,10 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                   }}
                   className="btn btn-primary rounded-2xl font-bold text-white shadow-md shadow-primary/20 text-xs gap-2 w-full sm:w-auto shrink-0 whitespace-nowrap"
                 >
-                  <Icon icon="logos:google-icon" className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5" />
+                  <Icon
+                    icon="logos:google-icon"
+                    className="h-4 w-4 shrink-0 bg-white rounded-full p-0.5"
+                  />
                   <span>Connect Google Account</span>
                 </button>
               </div>
@@ -627,28 +807,42 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                             setFormData((prev) => ({
                               ...prev,
                               businessName: res.name,
-                              streetAddress: res.formattedAddress.split(",")[0] || res.formattedAddress,
+                              streetAddress:
+                                res.formattedAddress.split(",")[0] ||
+                                res.formattedAddress,
                               city: res.city,
                               state: res.state,
                               postalCode: res.postalCode,
                               phoneNumber: res.phoneNumber || prev.phoneNumber,
                               websiteUrl: res.websiteUrl || prev.websiteUrl,
-                              primaryCategory: res.primaryCategory || prev.primaryCategory,
+                              primaryCategory:
+                                res.primaryCategory || prev.primaryCategory,
                               placeId: res.placeId,
                               lat: res.lat,
                               lng: res.lng,
                             }));
                             setSearchResults([]);
                             setSearchQuery(res.name);
-                            toast.success(`Selected "${res.name}". Form auto-filled!`);
+                            toast.success(
+                              `Selected "${res.name}". Form auto-filled!`,
+                            );
                           }}
                           className="w-full text-left p-3.5 hover:bg-base-200/60 transition-colors flex items-start gap-3"
                         >
-                          <Icon icon="solar:map-point-bold" className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          <Icon
+                            icon="solar:map-point-bold"
+                            className="h-4 w-4 text-primary shrink-0 mt-0.5"
+                          />
                           <div className="space-y-0.5 flex-1 min-w-0">
-                            <div className="text-xs font-bold text-base-content truncate">{res.name}</div>
-                            <div className="text-[11px] text-base-content/60 truncate">{res.formattedAddress}</div>
-                            <div className="text-[10px] text-primary font-mono">{res.primaryCategory}</div>
+                            <div className="text-xs font-bold text-base-content truncate">
+                              {res.name}
+                            </div>
+                            <div className="text-[11px] text-base-content/60 truncate">
+                              {res.formattedAddress}
+                            </div>
+                            <div className="text-[10px] text-primary font-mono">
+                              {res.primaryCategory}
+                            </div>
                           </div>
                         </button>
                       ))}
@@ -659,24 +853,45 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                 {/* Feature highlights */}
                 <div className="p-4 rounded-2xl bg-base-200/50 border border-base-300 space-y-2.5 text-xs text-base-content/70">
                   <div className="font-bold text-base-content flex items-center gap-1.5">
-                    <Icon icon="solar:shield-check-bold" className="h-4 w-4 text-emerald-500" />
+                    <Icon
+                      icon="solar:shield-check-bold"
+                      className="h-4 w-4 text-emerald-500"
+                    />
                     <span>Included in Local SEO Suite:</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5 text-primary shrink-0"
+                    />
                     <span>Live 3x3 and 5x5 Geo-Grid ranking heatmap</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>33-Directory NAP consistency &amp; syndication audit</span>
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5 text-primary shrink-0"
+                    />
+                    <span>
+                      33-Directory NAP consistency &amp; syndication audit
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>AI Review Auto-Responder with 1-click Google publishing</span>
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5 text-primary shrink-0"
+                    />
+                    <span>
+                      AI Review Auto-Responder with 1-click Google publishing
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>Printable review QR flyer &amp; SMS campaign generator</span>
+                    <Icon
+                      icon="solar:check-circle-bold"
+                      className="h-3.5 w-3.5 text-primary shrink-0"
+                    />
+                    <span>
+                      Printable review QR flyer &amp; SMS campaign generator
+                    </span>
                   </div>
                 </div>
               </div>
@@ -690,7 +905,8 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     Location &amp; Business Details
                   </h3>
                   <p className="text-xs text-base-content/60">
-                    Verify and save your primary physical store or service area details.
+                    Verify and save your primary physical store or service area
+                    details.
                   </p>
                 </div>
 
@@ -701,7 +917,10 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                       toast.error("Please enter a business name");
                       return;
                     }
-                    if (!formData.streetAddress.trim() || !formData.city.trim()) {
+                    if (
+                      !formData.streetAddress.trim() ||
+                      !formData.city.trim()
+                    ) {
                       toast.error("Please enter street address and city");
                       return;
                     }
@@ -711,71 +930,107 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1 sm:col-span-2">
-                      <label className="text-xs font-bold text-base-content/80">Business Name *</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Business Name *
+                      </label>
                       <input
                         type="text"
                         required
                         value={formData.businessName}
-                        onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            businessName: e.target.value,
+                          })
+                        }
                         placeholder="e.g. Acme Dental & Orthodontics"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1 sm:col-span-2">
-                      <label className="text-xs font-bold text-base-content/80">Street Address *</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Street Address *
+                      </label>
                       <input
                         type="text"
                         required
                         value={formData.streetAddress}
-                        onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            streetAddress: e.target.value,
+                          })
+                        }
                         placeholder="e.g. 100 Market Street, Suite 300"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">City *</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        City *
+                      </label>
                       <input
                         type="text"
                         required
                         value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, city: e.target.value })
+                        }
                         placeholder="e.g. San Francisco"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">State / Region *</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        State / Region *
+                      </label>
                       <input
                         type="text"
                         required
                         value={formData.state}
-                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, state: e.target.value })
+                        }
                         placeholder="e.g. CA or Lagos State"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">Postal / ZIP Code *</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Postal / ZIP Code *
+                      </label>
                       <input
                         type="text"
                         required
                         value={formData.postalCode}
-                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            postalCode: e.target.value,
+                          })
+                        }
                         placeholder="e.g. 94105"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">Country Code</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Country Code
+                      </label>
                       <input
                         type="text"
                         value={formData.countryCode}
-                        onChange={(e) => setFormData({ ...formData, countryCode: e.target.value.toUpperCase() })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            countryCode: e.target.value.toUpperCase(),
+                          })
+                        }
                         placeholder="e.g. US, GB, CA, NG"
                         maxLength={2}
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-mono"
@@ -783,33 +1038,54 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">Phone Number</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Phone Number
+                      </label>
                       <input
                         type="tel"
                         value={formData.phoneNumber}
-                        onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            phoneNumber: e.target.value,
+                          })
+                        }
                         placeholder="e.g. +1 (415) 555-0199"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-mono"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-base-content/80">Primary Business Category</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Primary Business Category
+                      </label>
                       <input
                         type="text"
                         value={formData.primaryCategory}
-                        onChange={(e) => setFormData({ ...formData, primaryCategory: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            primaryCategory: e.target.value,
+                          })
+                        }
                         placeholder="e.g. Dental Clinic, Corporate Office, Restaurant"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
                     </div>
 
                     <div className="space-y-1 sm:col-span-2">
-                      <label className="text-xs font-bold text-base-content/80">Website URL</label>
+                      <label className="text-xs font-bold text-base-content/80">
+                        Website URL
+                      </label>
                       <input
                         type="url"
                         value={formData.websiteUrl}
-                        onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            websiteUrl: e.target.value,
+                          })
+                        }
                         placeholder="https://example.com"
                         className="input input-bordered input-sm w-full rounded-xl text-xs font-medium"
                       />
@@ -832,12 +1108,18 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     >
                       {saveLocationMutation.isPending ? (
                         <>
-                          <Icon icon="solar:refresh-circle-bold" className="h-4 w-4 animate-spin" />
+                          <Icon
+                            icon="solar:refresh-circle-bold"
+                            className="h-4 w-4 animate-spin"
+                          />
                           <span>Saving Location...</span>
                         </>
                       ) : (
                         <>
-                          <Icon icon="solar:check-read-bold" className="h-4 w-4" />
+                          <Icon
+                            icon="solar:check-read-bold"
+                            className="h-4 w-4"
+                          />
                           <span>Save &amp; Track Location</span>
                         </>
                       )}
@@ -855,10 +1137,15 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
           {isPreviewMode && !isConfigured && (
             <div className="alert alert-warning shadow-sm rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2">
-                <Icon icon="solar:info-circle-bold" className="h-5 w-5 text-warning-content shrink-0" />
+                <Icon
+                  icon="solar:info-circle-bold"
+                  className="h-5 w-5 text-warning-content shrink-0"
+                />
                 <span>
-                  <strong>Interactive Sample Demo:</strong> You are exploring sample data for{" "}
-                  <strong>{profile?.businessName}</strong>. Connect your real location to start tracking live Google rankings and sync directory citations.
+                  <strong>Interactive Sample Demo:</strong> You are exploring
+                  sample data for <strong>{profile?.businessName}</strong>.
+                  Connect your real location to start tracking live Google
+                  rankings and sync directory citations.
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -951,650 +1238,673 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
             </button>
           </div>
 
-      {/* TAB 1: Semrush Local Overview Screen (Matching User Images 1 & 2) */}
-      {activeTab === "overview" && (
-        <div className="space-y-6">
-          {/* Main Semrush Hero Card */}
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 md:p-8 shadow-sm space-y-6">
-            {/* Top Bar inside card */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-base-200">
-              <div className="flex items-center gap-2">
-                <span className="badge badge-sm badge-outline font-bold text-primary gap-1 py-3 px-3">
-                  <span className="size-2 rounded-full bg-primary animate-ping" />
-                  <span>Real time data: 100%</span>
-                </span>
-                <span className="badge badge-sm badge-success text-white font-bold">
-                  Connected via Google OAuth
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3 text-xs">
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyToClipboard(window.location.href, "Report link copied!")
-                  }
-                  className="link link-hover font-bold text-primary flex items-center gap-1"
-                >
-                  <Icon icon="solar:link-bold" className="h-3.5 w-3.5" />
-                  <span>Copy link</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOauthStep("select");
-                    setIsOAuthModalOpen(true);
-                  }}
-                  className="link link-hover font-bold text-base-content/70 flex items-center gap-1"
-                >
-                  <Icon icon="solar:magnifer-bold" className="h-3.5 w-3.5" />
-                  <span>Switch connected business</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Business Info Header */}
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Icon
-                  icon="solar:map-point-bold"
-                  className="h-5 w-5 text-primary shrink-0"
-                />
-                <h2 className="text-xl md:text-2xl font-black text-base-content">
-                  {activeLocation?.businessName || profile?.businessName}
-                </h2>
-              </div>
-              <p className="text-xs text-base-content/70 pl-7">
-                {activeLocation?.streetAddress || profile?.streetAddress},{" "}
-                {activeLocation?.city || profile?.city},{" "}
-                {activeLocation?.postalCode || profile?.postalCode},{" "}
-                {activeLocation?.countryCode || profile?.countryCode},{" "}
-                {activeLocation?.phoneNumber || profile?.phoneNumber}
-              </p>
-            </div>
-
-            {/* 3 Semrush-Style Cards: Online Presence, Listings to Fix, Average Rating */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-              {/* Card 1: Online Presence */}
-              <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
-                <div className="text-xs font-bold text-base-content/60">
-                  Online presence
-                </div>
-                <div className="text-[11px] text-base-content/50 font-medium">
-                  Overall assessment
-                </div>
-                <div className="flex items-center gap-3 pt-1">
-                  <div className="flex items-end gap-1 h-7">
-                    <div className="w-2.5 h-3 bg-rose-500 rounded-xs" />
-                    <div className="w-2.5 h-4 bg-rose-500 rounded-xs" />
-                    <div className="w-2.5 h-6 bg-base-300 rounded-xs" />
-                    <div className="w-2.5 h-7 bg-base-300 rounded-xs" />
+          {/* TAB 1: Semrush Local Overview Screen (Matching User Images 1 & 2) */}
+          {activeTab === "overview" && (
+            <div className="space-y-6">
+              {/* Main Semrush Hero Card */}
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 md:p-8 shadow-sm space-y-6">
+                {/* Top Bar inside card */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-base-200">
+                  <div className="flex items-center gap-2">
+                    <span className="badge badge-sm badge-outline font-bold text-primary gap-1 py-3 px-3">
+                      <span className="size-2 rounded-full bg-primary animate-ping" />
+                      <span>Real time data: 100%</span>
+                    </span>
+                    <span className="badge badge-sm badge-success text-white font-bold">
+                      Connected via Google OAuth
+                    </span>
                   </div>
-                  <span className="text-2xl font-black text-rose-500">
-                    {profile?.onlineAssessment || "Poor"}
-                  </span>
-                </div>
-              </div>
 
-              {/* Card 2: Listings to Fix */}
-              <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
-                <div className="text-xs font-bold text-base-content/60">
-                  Listings to fix
-                </div>
-                <div className="text-[11px] text-base-content/50 font-medium">
-                  Upon subscription
-                </div>
-                <div className="text-2xl font-black text-base-content font-mono pt-1">
-                  <span className="text-error">
-                    {profile?.listingsToFixCount || 30}
-                  </span>
-                  <span className="text-base-content/40 text-lg font-normal">
-                    {" "}
-                    / {profile?.totalListingsCount || 33}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card 3: Average Star Rating */}
-              <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
-                <div className="text-xs font-bold text-base-content/60">
-                  Average star rating
-                </div>
-                <div className="text-[11px] text-base-content/50 font-medium">
-                  Customers love high ratings
-                </div>
-                <div className="text-lg font-black text-base-content flex items-center gap-1.5 pt-2">
-                  {profile?.totalReviews && profile.totalReviews > 0 ? (
-                    <>
-                      <span className="text-amber-500">
-                        ⭐ {profile.averageRating}
-                      </span>
-                      <span className="text-xs text-base-content/50 font-normal">
-                        ({profile.totalReviews} reviews)
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-warning">⚠️</span>
-                      <span className="text-base-content/80 text-base font-bold">
-                        No reviews
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Semrush Table: "Fix these to improve and expand your coverage" */}
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
-            <div>
-              <h3 className="text-base font-black text-base-content">
-                Fix these to improve and expand your coverage
-              </h3>
-              <p className="text-xs text-base-content/60">
-                Directory-by-directory verification showing missing citations,
-                mismatched addresses, or incorrect business phone numbers.
-              </p>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="table table-sm w-full">
-                <thead>
-                  <tr className="text-xs font-bold text-base-content/60 border-b border-base-300">
-                    <th className="w-1/4">Directory</th>
-                    <th className="w-1/3">Status</th>
-                    <th>Details</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-base-200 text-xs">
-                  {profile?.directoriesCoverage?.map(
-                    (cov: DirectoryCoverageItem, idx: number) => {
-                      const isMissing =
-                        cov.status === "Not Present" ||
-                        cov.status === "No Address";
-                      const isMismatch = cov.status.includes("Wrong");
-                      const isMatched = cov.status === "Matched";
-                      return (
-                        <tr
-                          key={idx}
-                          className="hover:bg-base-200/40 transition-colors"
-                        >
-                          <td className="font-bold text-base-content flex items-center gap-2 py-3">
-                            <Icon
-                              icon="solar:shop-bold"
-                              className="h-4 w-4 text-primary shrink-0"
-                            />
-                            <span>{cov.directory}</span>
-                          </td>
-                          <td>
-                            {isMatched ? (
-                              <span className="text-emerald-600 font-bold flex items-center gap-1">
-                                <Icon
-                                  icon="solar:check-circle-bold"
-                                  className="h-3.5 w-3.5"
-                                />
-                                <span>Matched &amp; Active</span>
-                              </span>
-                            ) : (
-                              <span
-                                className={`font-bold ${isMissing ? "text-error" : "text-amber-600"}`}
-                              >
-                                {cov.status}
-                              </span>
-                            )}
-                          </td>
-                          <td className="text-base-content/70 font-medium">
-                            {cov.details}
-                          </td>
-                        </tr>
-                      );
-                    },
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 2: Local Geo-Grid Rank Tracker with Timeline Comparison */}
-      {activeTab === "grid" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div>
-                <h3 className="text-base font-black text-base-content">
-                  Local Map Pack Geo-Grid:{" "}
-                  <span className="text-primary font-mono">
-                    {grid?.keyword}
-                  </span>
-                </h3>
-                <p className="text-xs text-base-content/60">
-                  Simulating local Google Maps queries across GPS coordinate
-                  pins around {activeLocation?.locationName || "your Brand"}.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => setShowTimelineCompare(!showTimelineCompare)}
-                  className={`btn btn-xs rounded-xl font-bold gap-1 ${
-                    showTimelineCompare
-                      ? "btn-primary text-white"
-                      : "btn-outline"
-                  }`}
-                >
-                  <Icon icon="solar:history-bold" className="h-3.5 w-3.5" />
-                  <span>
-                    {showTimelineCompare
-                      ? "Timeline View Active"
-                      : "Compare History"}
-                  </span>
-                </button>
-
-                <input
-                  type="text"
-                  value={gridKeyword}
-                  onChange={(e) => setGridKeyword(e.target.value)}
-                  placeholder="e.g. corporate office near me"
-                  className="input input-bordered input-sm rounded-xl text-xs w-full sm:w-56 font-medium"
-                />
-                <select
-                  value={gridSize}
-                  onChange={(e) => setGridSize(e.target.value as "3x3" | "5x5")}
-                  className="select select-bordered select-sm rounded-xl text-xs font-medium w-full sm:w-auto"
-                >
-                  <option value="3x3">3x3 Grid (9 Pins)</option>
-                  <option value="5x5">5x5 Grid (25 Pins)</option>
-                </select>
-                <button
-                  type="button"
-                  disabled={scanGridMutation.isPending}
-                  onClick={() =>
-                    scanGridMutation.mutate({
-                      keyword: gridKeyword,
-                      size: gridSize,
-                      lat: activeLocation?.lat || grid?.centerLat || 6.4474,
-                      lng: activeLocation?.lng || grid?.centerLng || 3.4735,
-                    })
-                  }
-                  className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 w-full sm:w-auto"
-                >
-                  <Icon
-                    icon="solar:radar-2-bold"
-                    className={`h-4 w-4 ${scanGridMutation.isPending ? "animate-spin" : ""}`}
-                  />
-                  <span>
-                    {scanGridMutation.isPending
-                      ? "Scanning Pins..."
-                      : "Run Grid Scan"}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* Grid Visualizer */}
-            <div className="p-6 rounded-2xl bg-base-200/50 border border-base-300 flex flex-col items-center justify-center space-y-6">
-              <div className="flex items-center gap-4 text-xs font-bold flex-wrap justify-center">
-                <span className="flex items-center gap-1 text-emerald-600">
-                  <span className="size-3 rounded-full bg-emerald-500" /> Rank
-                  1–3 (Map Pack Winner)
-                </span>
-                <span className="flex items-center gap-1 text-amber-500">
-                  <span className="size-3 rounded-full bg-amber-500" /> Rank
-                  4–10 (Page 1)
-                </span>
-                <span className="flex items-center gap-1 text-rose-500">
-                  <span className="size-3 rounded-full bg-rose-500" /> Rank 11+
-                  (Low Visibility)
-                </span>
-              </div>
-
-              <div
-                className="grid gap-3 max-w-md w-full"
-                style={{
-                  gridTemplateColumns: `repeat(${grid?.gridSize === "5x5" ? 5 : 3}, minmax(0, 1fr))`,
-                }}
-              >
-                {grid?.points.map((pt: LocalGridPoint, idx: number) => {
-                  const isTop3 = pt.rank <= 3;
-                  const isPage1 = pt.rank <= 10;
-                  return (
-                    <div
-                      key={idx}
-                      className={`aspect-square rounded-2xl border-2 flex flex-col items-center justify-center p-2 shadow-xs transition-transform hover:scale-105 ${
-                        isTop3
-                          ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-300"
-                          : isPage1
-                            ? "bg-amber-500/10 border-amber-500 text-amber-700 dark:text-amber-300"
-                            : "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-300"
-                      }`}
-                    >
-                      <span className="text-base sm:text-xl font-black font-mono">
-                        #{pt.rank}
-                      </span>
-                      {showTimelineCompare &&
-                      pt.rankDelta !== undefined &&
-                      pt.rankDelta !== 0 ? (
-                        <span
-                          className={`text-[10px] font-black font-mono ${pt.rankDelta > 0 ? "text-emerald-600" : "text-rose-500"}`}
-                        >
-                          {pt.rankDelta > 0
-                            ? `▲ +${pt.rankDelta}`
-                            : `▼ ${pt.rankDelta}`}
-                        </span>
-                      ) : (
-                        <span className="text-[9px] text-base-content/50 font-mono">
-                          {pt.distanceKm}km
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 3: Reviews & AI Reply with Direct Google Publish */}
-      {activeTab === "reviews" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
-            <div>
-              <h3 className="text-base font-black text-base-content">
-                Customer Reviews &amp; Direct 1-Click AI Publishing
-              </h3>
-              <p className="text-xs text-base-content/60">
-                Draft tone-aware AI replies with Skorvia and publish them
-                straight to Google Maps.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              {profile?.reviews.map((rev: LocalReviewItem) => (
-                <div
-                  key={rev.id}
-                  className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-3"
-                >
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-base-content">
-                        {rev.author}
-                      </span>
-                      <span className="text-xs text-amber-500 font-bold">
-                        {"⭐".repeat(rev.rating)}
-                      </span>
-                      <span className="text-xs text-base-content/40 font-mono">
-                        {rev.relativeTime}
-                      </span>
-                    </div>
-
+                  <div className="flex items-center gap-3 text-xs">
                     <button
                       type="button"
                       onClick={() =>
-                        handleOpenAiReply(
-                          rev,
-                          activeLocation?.businessName || profile.businessName,
+                        copyToClipboard(
+                          window.location.href,
+                          "Report link copied!",
                         )
                       }
-                      className="btn btn-xs btn-primary rounded-xl font-bold text-white shadow-xs gap-1"
+                      className="link link-hover font-bold text-primary flex items-center gap-1"
                     >
-                      <Icon icon="solar:stars-bold" className="h-3.5 w-3.5" />
-                      <span>
-                        {rev.response
-                          ? "Edit / Re-Draft Reply"
-                          : "Draft AI Reply"}
-                      </span>
+                      <Icon icon="solar:link-bold" className="h-3.5 w-3.5" />
+                      <span>Copy link</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOauthStep("select");
+                        setIsOAuthModalOpen(true);
+                      }}
+                      className="link link-hover font-bold text-base-content/70 flex items-center gap-1"
+                    >
+                      <Icon
+                        icon="solar:magnifer-bold"
+                        className="h-3.5 w-3.5"
+                      />
+                      <span>Switch connected business</span>
                     </button>
                   </div>
-
-                  <p className="text-xs text-base-content/80 leading-relaxed italic">
-                    &ldquo;{rev.text}&rdquo;
-                  </p>
-
-                  {rev.response && (
-                    <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-base-content/80 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[10px] uppercase text-primary tracking-wider flex items-center gap-1">
-                          <Icon
-                            icon="solar:check-circle-bold"
-                            className="h-3 w-3 text-emerald-500"
-                          />
-                          <span>Owner Reply (Published Live to Google)</span>
-                        </span>
-                        {rev.responsePublishedAt && (
-                          <span className="text-[10px] text-base-content/40 font-mono">
-                            {new Date(
-                              rev.responsePublishedAt,
-                            ).toLocaleDateString()}
-                          </span>
-                        )}
-                      </div>
-                      <p>{rev.response}</p>
-                    </div>
-                  )}
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* TAB 4: Review Generation & QR Campaign Center */}
-      {activeTab === "campaign" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-6">
-            <div>
-              <h3 className="text-base font-black text-base-content">
-                Customer Review Generation Center
-              </h3>
-              <p className="text-xs text-base-content/60">
-                Generate high-converting short review links, printable in-store
-                QR code flyers, and ready-to-send SMS/Email review request
-                templates.
-              </p>
-            </div>
-
-            {/* Link & QR Code Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-5 rounded-2xl bg-base-200/50 border border-base-300 space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <Icon icon="solar:link-circle-bold" className="h-5 w-5" />
+                {/* Business Info Header */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Icon
+                      icon="solar:map-point-bold"
+                      className="h-5 w-5 text-primary shrink-0"
+                    />
+                    <h2 className="text-xl md:text-2xl font-black text-base-content">
+                      {activeLocation?.businessName || profile?.businessName}
+                    </h2>
                   </div>
+                  <p className="text-xs text-base-content/70 pl-7">
+                    {activeLocation?.streetAddress || profile?.streetAddress},{" "}
+                    {activeLocation?.city || profile?.city},{" "}
+                    {activeLocation?.postalCode || profile?.postalCode},{" "}
+                    {activeLocation?.countryCode || profile?.countryCode},{" "}
+                    {activeLocation?.phoneNumber || profile?.phoneNumber}
+                  </p>
+                </div>
+
+                {/* 3 Semrush-Style Cards: Online Presence, Listings to Fix, Average Rating */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  {/* Card 1: Online Presence */}
+                  <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
+                    <div className="text-xs font-bold text-base-content/60">
+                      Online presence
+                    </div>
+                    <div className="text-[11px] text-base-content/50 font-medium">
+                      Overall assessment
+                    </div>
+                    <div className="flex items-center gap-3 pt-1">
+                      <div className="flex items-end gap-1 h-7">
+                        <div className="w-2.5 h-3 bg-rose-500 rounded-xs" />
+                        <div className="w-2.5 h-4 bg-rose-500 rounded-xs" />
+                        <div className="w-2.5 h-6 bg-base-300 rounded-xs" />
+                        <div className="w-2.5 h-7 bg-base-300 rounded-xs" />
+                      </div>
+                      <span className="text-2xl font-black text-rose-500">
+                        {profile?.onlineAssessment || "Poor"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Listings to Fix */}
+                  <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
+                    <div className="text-xs font-bold text-base-content/60">
+                      Listings to fix
+                    </div>
+                    <div className="text-[11px] text-base-content/50 font-medium">
+                      Upon subscription
+                    </div>
+                    <div className="text-2xl font-black text-base-content font-mono pt-1">
+                      <span className="text-error">
+                        {profile?.listingsToFixCount || 30}
+                      </span>
+                      <span className="text-base-content/40 text-lg font-normal">
+                        {" "}
+                        / {profile?.totalListingsCount || 33}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card 3: Average Star Rating */}
+                  <div className="p-5 rounded-2xl bg-base-200/40 border border-base-300 space-y-2">
+                    <div className="text-xs font-bold text-base-content/60">
+                      Average star rating
+                    </div>
+                    <div className="text-[11px] text-base-content/50 font-medium">
+                      Customers love high ratings
+                    </div>
+                    <div className="text-lg font-black text-base-content flex items-center gap-1.5 pt-2">
+                      {profile?.totalReviews && profile.totalReviews > 0 ? (
+                        <>
+                          <span className="text-amber-500">
+                            ⭐ {profile.averageRating}
+                          </span>
+                          <span className="text-xs text-base-content/50 font-normal">
+                            ({profile.totalReviews} reviews)
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-warning">⚠️</span>
+                          <span className="text-base-content/80 text-base font-bold">
+                            No reviews
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Semrush Table: "Fix these to improve and expand your coverage" */}
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
+                <div>
+                  <h3 className="text-base font-black text-base-content">
+                    Fix these to improve and expand your coverage
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Directory-by-directory verification showing missing
+                    citations, mismatched addresses, or incorrect business phone
+                    numbers.
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="table table-sm w-full">
+                    <thead>
+                      <tr className="text-xs font-bold text-base-content/60 border-b border-base-300">
+                        <th className="w-1/4">Directory</th>
+                        <th className="w-1/3">Status</th>
+                        <th>Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-base-200 text-xs">
+                      {profile?.directoriesCoverage?.map(
+                        (cov: DirectoryCoverageItem, idx: number) => {
+                          const isMissing =
+                            cov.status === "Not Present" ||
+                            cov.status === "No Address";
+                          const isMismatch = cov.status.includes("Wrong");
+                          const isMatched = cov.status === "Matched";
+                          return (
+                            <tr
+                              key={idx}
+                              className="hover:bg-base-200/40 transition-colors"
+                            >
+                              <td className="font-bold text-base-content flex items-center gap-2 py-3">
+                                <Icon
+                                  icon="solar:shop-bold"
+                                  className="h-4 w-4 text-primary shrink-0"
+                                />
+                                <span>{cov.directory}</span>
+                              </td>
+                              <td>
+                                {isMatched ? (
+                                  <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                    <Icon
+                                      icon="solar:check-circle-bold"
+                                      className="h-3.5 w-3.5"
+                                    />
+                                    <span>Matched &amp; Active</span>
+                                  </span>
+                                ) : (
+                                  <span
+                                    className={`font-bold ${isMissing ? "text-error" : "text-amber-600"}`}
+                                  >
+                                    {cov.status}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="text-base-content/70 font-medium">
+                                {cov.details}
+                              </td>
+                            </tr>
+                          );
+                        },
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: Local Geo-Grid Rank Tracker with Timeline Comparison */}
+          {activeTab === "grid" && (
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div>
-                    <h4 className="font-bold text-sm text-base-content">
-                      Short Google Review URL
-                    </h4>
-                    <p className="text-[11px] text-base-content/60">
-                      Send this 1-click link to recent customers.
+                    <h3 className="text-base font-black text-base-content">
+                      Local Map Pack Geo-Grid:{" "}
+                      <span className="text-primary font-mono">
+                        {grid?.keyword}
+                      </span>
+                    </h3>
+                    <p className="text-xs text-base-content/60">
+                      Simulating local Google Maps queries across GPS coordinate
+                      pins around {activeLocation?.locationName || "your Brand"}
+                      .
                     </p>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={
-                      campaignKit?.shortReviewUrl ||
-                      activeLocation?.reviewLink ||
-                      "https://g.page/r/yourbrand/review"
-                    }
-                    className="input input-bordered input-sm w-full rounded-xl text-xs font-mono bg-base-100"
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      copyToClipboard(
-                        campaignKit?.shortReviewUrl ||
-                          activeLocation?.reviewLink ||
-                          "",
-                        "Google Review URL copied!",
-                      )
-                    }
-                    className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-xs gap-1"
-                  >
-                    <Icon icon="solar:copy-bold" className="h-4 w-4" />
-                    <span>Copy</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-2xl bg-base-200/50 border border-base-300 flex items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm text-base-content">
-                    In-Store Printable QR Code
-                  </h4>
-                  <p className="text-[11px] text-base-content/60">
-                    Display at checkout counters, receipts, or table tents.
-                  </p>
-                  <a
-                    href={campaignKit?.qrCodeUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn btn-xs btn-outline btn-primary rounded-lg font-bold gap-1 mt-2"
-                  >
-                    <Icon
-                      icon="solar:download-minimalistic-bold"
-                      className="h-3 w-3"
-                    />
-                    <span>Download High-Res QR</span>
-                  </a>
-                </div>
-
-                {campaignKit?.qrCodeUrl ? (
-                  <img
-                    src={campaignKit.qrCodeUrl}
-                    alt="Review QR Code"
-                    className="h-20 w-20 rounded-xl border border-base-300 p-1 bg-white shrink-0 shadow-xs"
-                  />
-                ) : (
-                  <div className="h-20 w-20 rounded-xl bg-base-300 animate-pulse shrink-0" />
-                )}
-              </div>
-            </div>
-
-            {/* Outbound SMS & Email Templates */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-black text-base-content">
-                High-Converting Outreach Templates
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {campaignKit?.smsTemplates.map((sms) => (
-                  <div
-                    key={sms.id}
-                    className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-2 flex flex-col justify-between"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs text-base-content flex items-center gap-1.5">
-                          <Icon
-                            icon="solar:chat-line-bold"
-                            className="h-4 w-4 text-primary"
-                          />
-                          <span>{sms.title}</span>
-                        </span>
-                        <span className="badge badge-xs badge-ghost font-mono">
-                          SMS
-                        </span>
-                      </div>
-                      <p className="text-xs text-base-content/70 leading-relaxed font-sans bg-base-100 p-3 rounded-xl border border-base-300">
-                        {sms.message}
-                      </p>
-                    </div>
-
+                  <div className="flex items-center gap-2 flex-wrap">
                     <button
                       type="button"
                       onClick={() =>
-                        copyToClipboard(sms.message, "SMS template copied!")
+                        setShowTimelineCompare(!showTimelineCompare)
                       }
-                      className="btn btn-xs btn-outline rounded-xl font-bold gap-1 w-fit self-end"
+                      className={`btn btn-xs rounded-xl font-bold gap-1 ${
+                        showTimelineCompare
+                          ? "btn-primary text-white"
+                          : "btn-outline"
+                      }`}
                     >
-                      <Icon icon="solar:copy-bold" className="h-3 w-3" />
-                      <span>Copy SMS Text</span>
+                      <Icon icon="solar:history-bold" className="h-3.5 w-3.5" />
+                      <span>
+                        {showTimelineCompare
+                          ? "Timeline View Active"
+                          : "Compare History"}
+                      </span>
+                    </button>
+
+                    <input
+                      type="text"
+                      value={gridKeyword}
+                      onChange={(e) => setGridKeyword(e.target.value)}
+                      placeholder="e.g. corporate office near me"
+                      className="input input-bordered input-sm rounded-xl text-xs w-full sm:w-56 font-medium"
+                    />
+                    <select
+                      value={gridSize}
+                      onChange={(e) =>
+                        setGridSize(e.target.value as "3x3" | "5x5")
+                      }
+                      className="select select-bordered select-sm rounded-xl text-xs font-medium w-full sm:w-auto"
+                    >
+                      <option value="3x3">3x3 Grid (9 Pins)</option>
+                      <option value="5x5">5x5 Grid (25 Pins)</option>
+                    </select>
+                    <button
+                      type="button"
+                      disabled={scanGridMutation.isPending}
+                      onClick={() =>
+                        scanGridMutation.mutate({
+                          keyword: gridKeyword,
+                          size: gridSize,
+                          lat: activeLocation?.lat || grid?.centerLat || 6.4474,
+                          lng: activeLocation?.lng || grid?.centerLng || 3.4735,
+                        })
+                      }
+                      className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-md shadow-primary/20 gap-1.5 w-full sm:w-auto"
+                    >
+                      <Icon
+                        icon="solar:radar-2-bold"
+                        className={`h-4 w-4 ${scanGridMutation.isPending ? "animate-spin" : ""}`}
+                      />
+                      <span>
+                        {scanGridMutation.isPending
+                          ? "Scanning Pins..."
+                          : "Run Grid Scan"}
+                      </span>
                     </button>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+                </div>
 
-      {/* TAB 5: NAP Consistency */}
-      {activeTab === "nap" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
-            <div>
-              <h3 className="text-base font-black text-base-content">
-                Name, Address &amp; Phone (NAP) Consistency
-              </h3>
-              <p className="text-xs text-base-content/60">
-                Auditing business citations across major global business
-                directories to prevent local ranking penalties for{" "}
-                {activeLocation?.locationName}.
-              </p>
-            </div>
+                {/* Grid Visualizer */}
+                <div className="p-6 rounded-2xl bg-base-200/50 border border-base-300 flex flex-col items-center justify-center space-y-6">
+                  <div className="flex items-center gap-4 text-xs font-bold flex-wrap justify-center">
+                    <span className="flex items-center gap-1 text-emerald-600">
+                      <span className="size-3 rounded-full bg-emerald-500" />{" "}
+                      Rank 1–3 (Map Pack Winner)
+                    </span>
+                    <span className="flex items-center gap-1 text-amber-500">
+                      <span className="size-3 rounded-full bg-amber-500" /> Rank
+                      4–10 (Page 1)
+                    </span>
+                    <span className="flex items-center gap-1 text-rose-500">
+                      <span className="size-3 rounded-full bg-rose-500" /> Rank
+                      11+ (Low Visibility)
+                    </span>
+                  </div>
 
-            <div className="overflow-x-auto">
-              <table className="table table-sm w-full">
-                <thead>
-                  <tr className="text-xs font-bold text-base-content/60 border-b border-base-300">
-                    <th>Directory</th>
-                    <th>Listed Name</th>
-                    <th>Listed Address</th>
-                    <th>Listed Phone</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {profile?.citations.map(
-                    (cit: LocalCitationItem, idx: number) => (
-                      <tr
-                        key={idx}
-                        className="border-b border-base-200 text-xs font-medium"
-                      >
-                        <td className="font-bold text-base-content">
-                          {cit.directory}
-                        </td>
-                        <td>{cit.name}</td>
-                        <td className="text-base-content/70">{cit.address}</td>
-                        <td className="font-mono text-base-content/70">
-                          {cit.phone}
-                        </td>
-                        <td>
-                          {cit.status === "consistent" ? (
-                            <span className="badge badge-xs badge-success text-white font-bold gap-1">
-                              <Icon
-                                icon="solar:check-circle-bold"
-                                className="h-3 w-3"
-                              />
-                              <span>Matched</span>
+                  <div
+                    className="grid gap-3 max-w-md w-full"
+                    style={{
+                      gridTemplateColumns: `repeat(${grid?.gridSize === "5x5" ? 5 : 3}, minmax(0, 1fr))`,
+                    }}
+                  >
+                    {grid?.points.map((pt: LocalGridPoint, idx: number) => {
+                      const isTop3 = pt.rank <= 3;
+                      const isPage1 = pt.rank <= 10;
+                      return (
+                        <div
+                          key={idx}
+                          className={`aspect-square rounded-2xl border-2 flex flex-col items-center justify-center p-2 shadow-xs transition-transform hover:scale-105 ${
+                            isTop3
+                              ? "bg-emerald-500/10 border-emerald-500 text-emerald-700 dark:text-emerald-300"
+                              : isPage1
+                                ? "bg-amber-500/10 border-amber-500 text-amber-700 dark:text-amber-300"
+                                : "bg-rose-500/10 border-rose-500 text-rose-700 dark:text-rose-300"
+                          }`}
+                        >
+                          <span className="text-base sm:text-xl font-black font-mono">
+                            #{pt.rank}
+                          </span>
+                          {showTimelineCompare &&
+                          pt.rankDelta !== undefined &&
+                          pt.rankDelta !== 0 ? (
+                            <span
+                              className={`text-[10px] font-black font-mono ${pt.rankDelta > 0 ? "text-emerald-600" : "text-rose-500"}`}
+                            >
+                              {pt.rankDelta > 0
+                                ? `▲ +${pt.rankDelta}`
+                                : `▼ ${pt.rankDelta}`}
                             </span>
                           ) : (
-                            <span className="badge badge-xs badge-error text-white font-bold gap-1">
-                              <Icon
-                                icon="solar:danger-triangle-bold"
-                                className="h-3 w-3"
-                              />
-                              <span>Mismatch</span>
+                            <span className="text-[9px] text-base-content/50 font-mono">
+                              {pt.distanceKm}km
                             </span>
                           )}
-                        </td>
-                      </tr>
-                    ),
-                  )}
-                </tbody>
-              </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
+
+          {/* TAB 3: Reviews & AI Reply with Direct Google Publish */}
+          {activeTab === "reviews" && (
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
+                <div>
+                  <h3 className="text-base font-black text-base-content">
+                    Customer Reviews &amp; Direct 1-Click AI Publishing
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Draft tone-aware AI replies with Skorvia and publish them
+                    straight to Google Maps.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {profile?.reviews.map((rev: LocalReviewItem) => (
+                    <div
+                      key={rev.id}
+                      className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-3"
+                    >
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-base-content">
+                            {rev.author}
+                          </span>
+                          <span className="text-xs text-amber-500 font-bold">
+                            {"⭐".repeat(rev.rating)}
+                          </span>
+                          <span className="text-xs text-base-content/40 font-mono">
+                            {rev.relativeTime}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleOpenAiReply(
+                              rev,
+                              activeLocation?.businessName ||
+                                profile.businessName,
+                            )
+                          }
+                          className="btn btn-xs btn-primary rounded-xl font-bold text-white shadow-xs gap-1"
+                        >
+                          <Icon
+                            icon="solar:stars-bold"
+                            className="h-3.5 w-3.5"
+                          />
+                          <span>
+                            {rev.response
+                              ? "Edit / Re-Draft Reply"
+                              : "Draft AI Reply"}
+                          </span>
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-base-content/80 leading-relaxed italic">
+                        &ldquo;{rev.text}&rdquo;
+                      </p>
+
+                      {rev.response && (
+                        <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-base-content/80 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-[10px] uppercase text-primary tracking-wider flex items-center gap-1">
+                              <Icon
+                                icon="solar:check-circle-bold"
+                                className="h-3 w-3 text-emerald-500"
+                              />
+                              <span>
+                                Owner Reply (Published Live to Google)
+                              </span>
+                            </span>
+                            {rev.responsePublishedAt && (
+                              <span className="text-[10px] text-base-content/40 font-mono">
+                                {new Date(
+                                  rev.responsePublishedAt,
+                                ).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
+                          <p>{rev.response}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: Review Generation & QR Campaign Center */}
+          {activeTab === "campaign" && (
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-6">
+                <div>
+                  <h3 className="text-base font-black text-base-content">
+                    Customer Review Generation Center
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Generate high-converting short review links, printable
+                    in-store QR code flyers, and ready-to-send SMS/Email review
+                    request templates.
+                  </p>
+                </div>
+
+                {/* Link & QR Code Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-5 rounded-2xl bg-base-200/50 border border-base-300 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                        <Icon
+                          icon="solar:link-circle-bold"
+                          className="h-5 w-5"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm text-base-content">
+                          Short Google Review URL
+                        </h4>
+                        <p className="text-[11px] text-base-content/60">
+                          Send this 1-click link to recent customers.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={
+                          campaignKit?.shortReviewUrl ||
+                          activeLocation?.reviewLink ||
+                          "https://g.page/r/yourbrand/review"
+                        }
+                        className="input input-bordered input-sm w-full rounded-xl text-xs font-mono bg-base-100"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          copyToClipboard(
+                            campaignKit?.shortReviewUrl ||
+                              activeLocation?.reviewLink ||
+                              "",
+                            "Google Review URL copied!",
+                          )
+                        }
+                        className="btn btn-sm btn-primary rounded-xl font-bold text-white shadow-xs gap-1"
+                      >
+                        <Icon icon="solar:copy-bold" className="h-4 w-4" />
+                        <span>Copy</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-base-200/50 border border-base-300 flex items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-sm text-base-content">
+                        In-Store Printable QR Code
+                      </h4>
+                      <p className="text-[11px] text-base-content/60">
+                        Display at checkout counters, receipts, or table tents.
+                      </p>
+                      <a
+                        href={campaignKit?.qrCodeUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn btn-xs btn-outline btn-primary rounded-lg font-bold gap-1 mt-2"
+                      >
+                        <Icon
+                          icon="solar:download-minimalistic-bold"
+                          className="h-3 w-3"
+                        />
+                        <span>Download High-Res QR</span>
+                      </a>
+                    </div>
+
+                    {campaignKit?.qrCodeUrl ? (
+                      <img
+                        src={campaignKit.qrCodeUrl}
+                        alt="Review QR Code"
+                        className="h-20 w-20 rounded-xl border border-base-300 p-1 bg-white shrink-0 shadow-xs"
+                      />
+                    ) : (
+                      <div className="h-20 w-20 rounded-xl bg-base-300 animate-pulse shrink-0" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Outbound SMS & Email Templates */}
+                <div className="space-y-4">
+                  <h4 className="text-sm font-black text-base-content">
+                    High-Converting Outreach Templates
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {campaignKit?.smsTemplates.map((sms) => (
+                      <div
+                        key={sms.id}
+                        className="p-4 rounded-2xl bg-base-200/40 border border-base-300 space-y-2 flex flex-col justify-between"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-xs text-base-content flex items-center gap-1.5">
+                              <Icon
+                                icon="solar:chat-line-bold"
+                                className="h-4 w-4 text-primary"
+                              />
+                              <span>{sms.title}</span>
+                            </span>
+                            <span className="badge badge-xs badge-ghost font-mono">
+                              SMS
+                            </span>
+                          </div>
+                          <p className="text-xs text-base-content/70 leading-relaxed font-sans bg-base-100 p-3 rounded-xl border border-base-300">
+                            {sms.message}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            copyToClipboard(sms.message, "SMS template copied!")
+                          }
+                          className="btn btn-xs btn-outline rounded-xl font-bold gap-1 w-fit self-end"
+                        >
+                          <Icon icon="solar:copy-bold" className="h-3 w-3" />
+                          <span>Copy SMS Text</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: NAP Consistency */}
+          {activeTab === "nap" && (
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm space-y-4">
+                <div>
+                  <h3 className="text-base font-black text-base-content">
+                    Name, Address &amp; Phone (NAP) Consistency
+                  </h3>
+                  <p className="text-xs text-base-content/60">
+                    Auditing business citations across major global business
+                    directories to prevent local ranking penalties for{" "}
+                    {activeLocation?.locationName}.
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="table table-sm w-full">
+                    <thead>
+                      <tr className="text-xs font-bold text-base-content/60 border-b border-base-300">
+                        <th>Directory</th>
+                        <th>Listed Name</th>
+                        <th>Listed Address</th>
+                        <th>Listed Phone</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {profile?.citations.map(
+                        (cit: LocalCitationItem, idx: number) => (
+                          <tr
+                            key={idx}
+                            className="border-b border-base-200 text-xs font-medium"
+                          >
+                            <td className="font-bold text-base-content">
+                              {cit.directory}
+                            </td>
+                            <td>{cit.name}</td>
+                            <td className="text-base-content/70">
+                              {cit.address}
+                            </td>
+                            <td className="font-mono text-base-content/70">
+                              {cit.phone}
+                            </td>
+                            <td>
+                              {cit.status === "consistent" ? (
+                                <span className="badge badge-xs badge-success text-white font-bold gap-1">
+                                  <Icon
+                                    icon="solar:check-circle-bold"
+                                    className="h-3 w-3"
+                                  />
+                                  <span>Matched</span>
+                                </span>
+                              ) : (
+                                <span className="badge badge-xs badge-error text-white font-bold gap-1">
+                                  <Icon
+                                    icon="solar:danger-triangle-bold"
+                                    className="h-3 w-3"
+                                  />
+                                  <span>Mismatch</span>
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ),
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1706,18 +2016,28 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                     Select a Google Business Profile to Connect:
                   </h4>
                   <p className="text-xs text-base-content/60">
-                    {detectedProfilesQuery.data && detectedProfilesQuery.data.length > 0 ? (
+                    {detectedProfilesQuery.data &&
+                    detectedProfilesQuery.data.length > 0 ? (
                       <>
-                        We found <strong>{detectedProfilesQuery.data.length} verified location{detectedProfilesQuery.data.length === 1 ? "" : "s"}</strong> associated with your account.
+                        We found{" "}
+                        <strong>
+                          {detectedProfilesQuery.data.length} verified location
+                          {detectedProfilesQuery.data.length === 1 ? "" : "s"}
+                        </strong>{" "}
+                        associated with your account.
                       </>
                     ) : (
-                      <>No pre-existing Google Business Profiles found on this account.</>
+                      <>
+                        No pre-existing Google Business Profiles found on this
+                        account.
+                      </>
                     )}
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-1">
-                  {detectedProfilesQuery.data && detectedProfilesQuery.data.length > 0 ? (
+                  {detectedProfilesQuery.data &&
+                  detectedProfilesQuery.data.length > 0 ? (
                     detectedProfilesQuery.data.map((item) => (
                       <div
                         key={item.id}
@@ -1785,7 +2105,8 @@ export function LocalBusinessPage({ projectId }: LocalBusinessPageProps) {
                           No Google Business Profile listings found
                         </p>
                         <p className="text-[11px] text-base-content/60 max-w-xs mx-auto">
-                          Create a listing on Google Business Profile, or add your business location manually below.
+                          Create a listing on Google Business Profile, or add
+                          your business location manually below.
                         </p>
                       </div>
                       <div className="flex items-center justify-center gap-2 pt-2">

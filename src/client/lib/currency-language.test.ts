@@ -24,4 +24,3 @@ describe("Internationalization: Multi-Currency Suite", () => {
     expect(codes).toContain("AUD"); // Australian Dollar
   });
 });
-

@@ -130,12 +130,15 @@ export class SamChatAgent extends Think {
     // 1. Check SystemSettings dynamic configuration (configured in Admin Dashboard)
     try {
       const aiSettings = SystemSettingsService.getAiApisSync();
-      if (aiSettings?.openaiApiKey && aiSettings.openaiApiKey.trim().length > 0) {
+      if (
+        aiSettings?.openaiApiKey &&
+        aiSettings.openaiApiKey.trim().length > 0
+      ) {
         const modelId =
-          (aiSettings.defaultModel &&
+          aiSettings.defaultModel &&
           (aiSettings.defaultModel.startsWith("gpt-") ||
             aiSettings.defaultModel.startsWith("o1") ||
-            aiSettings.defaultModel.startsWith("o3")))
+            aiSettings.defaultModel.startsWith("o3"))
             ? aiSettings.defaultModel
             : "gpt-4o-mini";
         return buildChatAgentModel(
@@ -145,14 +148,20 @@ export class SamChatAgent extends Think {
         );
       }
 
-      if (aiSettings?.openrouterApiKey && aiSettings.openrouterApiKey.trim().length > 0) {
+      if (
+        aiSettings?.openrouterApiKey &&
+        aiSettings.openrouterApiKey.trim().length > 0
+      ) {
         return buildChatAgentModel(
           aiSettings.openrouterApiKey.trim(),
           aiSettings.defaultModel || "anthropic/claude-3.5-sonnet",
         );
       }
 
-      if (aiSettings?.geminiApiKey && aiSettings.geminiApiKey.trim().length > 0) {
+      if (
+        aiSettings?.geminiApiKey &&
+        aiSettings.geminiApiKey.trim().length > 0
+      ) {
         return buildChatAgentModel(
           aiSettings.geminiApiKey.trim(),
           aiSettings.defaultModel || "gemini-2.0-flash",

@@ -282,7 +282,8 @@ function BrandLookupPageInner({
           AI Search &amp; Brand Authority
         </h1>
         <p className="text-xs text-base-content/60">
-          Monitor brand perception across ChatGPT, Perplexity &amp; Google AI Overviews, test custom prompts, and analyze citations.
+          Monitor brand perception across ChatGPT, Perplexity &amp; Google AI
+          Overviews, test custom prompts, and analyze citations.
         </p>
       </div>
 

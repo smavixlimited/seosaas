@@ -86,7 +86,11 @@ export const deleteAudit = createServerFn({ method: "POST" })
 
 function generateRuleBasedFix(issueType: string, pageUrl: string): string {
   const urlObj = (() => {
-    try { return new URL(pageUrl); } catch { return null; }
+    try {
+      return new URL(pageUrl);
+    } catch {
+      return null;
+    }
   })();
   const pathname = urlObj?.pathname || pageUrl;
 
@@ -112,7 +116,11 @@ function generateRuleBasedFix(issueType: string, pageUrl: string): string {
     return `<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "WebPage",\n  "url": "${pageUrl}",\n  "name": "${pathname}"\n}\n</script>`;
   }
 
-  if (issueType.includes("redirect") || issueType.includes("404") || issueType.includes("broken")) {
+  if (
+    issueType.includes("redirect") ||
+    issueType.includes("404") ||
+    issueType.includes("broken")
+  ) {
     return `# Nginx 301 Redirect\nrewrite ^${pathname}$ / permanent;\n\n# Cloudflare _redirects\n${pathname}  /  301`;
   }
 

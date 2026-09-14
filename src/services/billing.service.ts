@@ -78,7 +78,10 @@ export async function getGatewayConfig(gatewayId: string) {
   return gw;
 }
 
-export async function getSystemPaymentSettings(): Promise<Record<string, unknown> | null> {
+export async function getSystemPaymentSettings(): Promise<Record<
+  string,
+  unknown
+> | null> {
   try {
     const [row] = await db
       .select()
@@ -129,7 +132,8 @@ export async function initializePaystackCheckout(params: {
       body: JSON.stringify({
         email: params.email,
         amount: Math.round(params.amountNgn * 100), // Paystack expects amount in Kobo
-        callback_url: params.callbackUrl || "https://skorvia.com/billing?status=success",
+        callback_url:
+          params.callbackUrl || "https://skorvia.com/billing?status=success",
         metadata: {
           userId: params.userId,
           planId: params.planId,
@@ -143,7 +147,11 @@ export async function initializePaystackCheckout(params: {
   const data = (await response.json()) as {
     status: boolean;
     message?: string;
-    data?: { authorization_url: string; access_code: string; reference: string };
+    data?: {
+      authorization_url: string;
+      access_code: string;
+      reference: string;
+    };
   };
 
   if (!data.status || !data.data) {
@@ -197,7 +205,8 @@ export async function initializeFlutterwaveCheckout(params: {
       tx_ref: txRef,
       amount: params.amount,
       currency,
-      redirect_url: params.callbackUrl || "https://skorvia.com/billing?status=success",
+      redirect_url:
+        params.callbackUrl || "https://skorvia.com/billing?status=success",
       meta: {
         userId: params.userId,
         planId: params.planId,
@@ -287,7 +296,9 @@ export async function initializeLemonSqueezyCheckout(params: {
             },
           },
           product_options: {
-            redirect_url: params.callbackUrl || "https://skorvia.com/billing?status=success",
+            redirect_url:
+              params.callbackUrl ||
+              "https://skorvia.com/billing?status=success",
           },
         },
         relationships: {
@@ -319,7 +330,9 @@ export async function initializeLemonSqueezyCheckout(params: {
 
   const checkoutUrl = data.data?.attributes?.url;
   if (!checkoutUrl) {
-    const errorDetail = data.errors?.[0]?.detail || "LemonSqueezy checkout session creation failed";
+    const errorDetail =
+      data.errors?.[0]?.detail ||
+      "LemonSqueezy checkout session creation failed";
     throw new AppError("UPSTREAM_UNAVAILABLE", errorDetail);
   }
 

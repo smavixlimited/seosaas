@@ -145,7 +145,6 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
       }}
     >
       <div className="relative w-full max-w-2xl bg-base-100 rounded-3xl shadow-2xl border border-base-300/80 overflow-hidden flex flex-col my-auto transition-all">
-        
         {/* Header */}
         <div className="px-6 py-5 border-b border-base-200/80 bg-base-200/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -165,7 +164,8 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                 </span>
               </div>
               <p className="text-xs text-base-content/60">
-                Configure SEO crawling, rankings, and intelligence for this brand.
+                Configure SEO crawling, rankings, and intelligence for this
+                brand.
               </p>
             </div>
           </div>
@@ -184,17 +184,21 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="flex flex-col">
           <div className="p-6 space-y-5 max-h-[calc(85vh-130px)] overflow-y-auto">
-            
             {/* Brand Name & Domain */}
             <div className="space-y-4">
               <label className="flex flex-col gap-1.5">
                 <span className="font-bold text-xs text-base-content flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Icon icon="solar:tag-bold-duotone" className="h-3.5 w-3.5 text-primary" />
+                    <Icon
+                      icon="solar:tag-bold-duotone"
+                      className="h-3.5 w-3.5 text-primary"
+                    />
                     <span>Brand / Business Name</span>
                     <span className="text-error">*</span>
                   </span>
-                  <span className="text-[11px] text-base-content/40 font-normal">Required</span>
+                  <span className="text-[11px] text-base-content/40 font-normal">
+                    Required
+                  </span>
                 </span>
                 <input
                   type="text"
@@ -207,17 +211,23 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                   className="input input-bordered h-11 rounded-xl w-full text-sm font-semibold focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
                 <span className="text-[11px] text-base-content/50">
-                  The primary name used across audit reports, ranking cards, and PDF exports.
+                  The primary name used across audit reports, ranking cards, and
+                  PDF exports.
                 </span>
               </label>
 
               <label className="flex flex-col gap-1.5">
                 <span className="font-bold text-xs text-base-content flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Icon icon="solar:global-bold-duotone" className="h-3.5 w-3.5 text-emerald-500" />
+                    <Icon
+                      icon="solar:global-bold-duotone"
+                      className="h-3.5 w-3.5 text-emerald-500"
+                    />
                     <span>Website Domain / URL</span>
                   </span>
-                  <span className="text-[11px] text-base-content/40 font-normal">Recommended</span>
+                  <span className="text-[11px] text-base-content/40 font-normal">
+                    Recommended
+                  </span>
                 </span>
                 <input
                   type="text"
@@ -228,7 +238,8 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                   className="input input-bordered h-11 rounded-xl w-full text-sm font-mono focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
                 <span className="text-[11px] text-base-content/50">
-                  Target domain for automated site audits, health monitoring, and SERP positions.
+                  Target domain for automated site audits, health monitoring,
+                  and SERP positions.
                 </span>
               </label>
             </div>
@@ -236,11 +247,15 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
             {/* Target Location & Language */}
             <div className="rounded-2xl border border-base-200 bg-base-200/40 p-4 space-y-3">
               <div className="flex items-center gap-2 text-xs font-bold text-base-content">
-                <Icon icon="solar:map-point-bold-duotone" className="h-4 w-4 text-indigo-500" />
+                <Icon
+                  icon="solar:map-point-bold-duotone"
+                  className="h-4 w-4 text-indigo-500"
+                />
                 <span>Target Search Location &amp; Language</span>
               </div>
               <p className="text-[11px] text-base-content/60">
-                Used to calculate search volume, keyword difficulty, and regional Google SERP rankings.
+                Used to calculate search volume, keyword difficulty, and
+                regional Google SERP rankings.
               </p>
               <ProjectMarketFields value={market} onChange={setMarket} />
             </div>
@@ -253,14 +268,23 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                 className="w-full px-4 py-3 flex items-center justify-between text-xs font-bold text-base-content hover:bg-base-200/40 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="h-4 w-4 text-purple-500" />
+                  <Icon
+                    icon="solar:magic-stick-3-bold-duotone"
+                    className="h-4 w-4 text-purple-500"
+                  />
                   <span>Strategic Brand &amp; AI Context</span>
-                  <span className="text-[10px] text-base-content/50 font-normal">(Optional)</span>
+                  <span className="text-[10px] text-base-content/50 font-normal">
+                    (Optional)
+                  </span>
                 </div>
                 <div className="flex items-center gap-1 text-primary">
                   <span>{showAdvanced ? "Hide Details" : "Add Context"}</span>
                   <Icon
-                    icon={showAdvanced ? "solar:alt-arrow-up-bold" : "solar:alt-arrow-down-bold"}
+                    icon={
+                      showAdvanced
+                        ? "solar:alt-arrow-up-bold"
+                        : "solar:alt-arrow-down-bold"
+                    }
                     className="h-3 w-3"
                   />
                 </div>
@@ -270,7 +294,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                 <div className="p-4 pt-1 border-t border-base-200 space-y-3.5 text-xs animate-in fade-in duration-150">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label className="flex flex-col gap-1">
-                      <span className="font-bold text-base-content/80">Industry / Niche</span>
+                      <span className="font-bold text-base-content/80">
+                        Industry / Niche
+                      </span>
                       <input
                         type="text"
                         value={industry}
@@ -281,7 +307,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                     </label>
 
                     <label className="flex flex-col gap-1">
-                      <span className="font-bold text-base-content/80">Target Audience (ICP)</span>
+                      <span className="font-bold text-base-content/80">
+                        Target Audience (ICP)
+                      </span>
                       <input
                         type="text"
                         value={audience}
@@ -294,7 +322,9 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
                   <div>
                     <label className="flex flex-col gap-1">
-                      <span className="font-bold text-base-content/80">Unique Value Proposition (USP)</span>
+                      <span className="font-bold text-base-content/80">
+                        Unique Value Proposition (USP)
+                      </span>
                       <input
                         type="text"
                         value={usp}
@@ -313,7 +343,10 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <label className="flex flex-col gap-1">
                         <span className="text-[11px] font-semibold text-base-content/70 flex items-center gap-1.5">
-                          <Icon icon="ri:twitter-x-fill" className="h-3 w-3 text-base-content" />
+                          <Icon
+                            icon="ri:twitter-x-fill"
+                            className="h-3 w-3 text-base-content"
+                          />
                           <span>Twitter / X</span>
                         </span>
                         <input
@@ -327,7 +360,10 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
                       <label className="flex flex-col gap-1">
                         <span className="text-[11px] font-semibold text-base-content/70 flex items-center gap-1.5">
-                          <Icon icon="logos:linkedin-icon" className="h-3 w-3" />
+                          <Icon
+                            icon="logos:linkedin-icon"
+                            className="h-3 w-3"
+                          />
                           <span>LinkedIn</span>
                         </span>
                         <input
@@ -355,7 +391,10 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
                       <label className="flex flex-col gap-1">
                         <span className="text-[11px] font-semibold text-base-content/70 flex items-center gap-1.5">
-                          <Icon icon="logos:instagram-icon" className="h-3 w-3" />
+                          <Icon
+                            icon="logos:instagram-icon"
+                            className="h-3 w-3"
+                          />
                           <span>Instagram</span>
                         </span>
                         <input
@@ -399,7 +438,6 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
                 </div>
               )}
             </div>
-
           </div>
 
           {/* Footer */}
@@ -431,7 +469,6 @@ export function CreateProjectModal({ onClose }: { onClose: () => void }) {
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

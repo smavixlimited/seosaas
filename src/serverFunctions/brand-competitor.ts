@@ -138,4 +138,3 @@ export const runBrandAnalysis = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     return BrandCompetitorService.runBrandAnalysis(data.projectId);
   });
-

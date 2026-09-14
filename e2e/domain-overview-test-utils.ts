@@ -180,7 +180,7 @@ export async function openDomainOverview(page: Page, tab: DomainTab) {
     }
     window.sessionStorage.setItem("domain-overview-e2e-cleared", "1");
   });
-  
+
   const projectId = "default";
   const params = new URLSearchParams({
     domain: PRIMARY_TEST_DOMAIN,

@@ -108,7 +108,10 @@ export function AudienceTrustPreAdGate({
                 </h2>
               </div>
               <p className="text-xs text-base-content/70 mt-0.5">
-                Evaluates reader trust, core web vitals, editorial attribution, conversion tracking, return policies, and comment moderation risks specifically tailored to your brand&apos;s industry and conversion goal.
+                Evaluates reader trust, core web vitals, editorial attribution,
+                conversion tracking, return policies, and comment moderation
+                risks specifically tailored to your brand&apos;s industry and
+                conversion goal.
               </p>
             </div>
           </div>
@@ -137,7 +140,10 @@ export function AudienceTrustPreAdGate({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-primary/20">
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
-              <Icon icon="solar:buildings-bold" className="h-3.5 w-3.5 text-primary" />
+              <Icon
+                icon="solar:buildings-bold"
+                className="h-3.5 w-3.5 text-primary"
+              />
               Brand Industry / Sector
             </label>
             <select
@@ -145,19 +151,36 @@ export function AudienceTrustPreAdGate({
               onChange={(e) => setIndustry(e.target.value)}
               className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-primary"
             >
-              <option value="Media / News & Publishing">Media, News &amp; Publishing / Editorial Blogs</option>
-              <option value="E-Commerce / Direct-to-Consumer">E-Commerce &amp; DTC Retail</option>
-              <option value="B2B SaaS / Software & Tech">B2B SaaS / Enterprise Tech</option>
-              <option value="Local Business & Services">Local Business &amp; In-Person Services</option>
-              <option value="Lead Generation & Direct Response">Lead Generation &amp; Direct Response</option>
-              <option value="Healthcare & Wellness">Healthcare &amp; Wellness</option>
-              <option value="Financial Services & FinTech">Financial Services &amp; FinTech</option>
+              <option value="Media / News & Publishing">
+                Media, News &amp; Publishing / Editorial Blogs
+              </option>
+              <option value="E-Commerce / Direct-to-Consumer">
+                E-Commerce &amp; DTC Retail
+              </option>
+              <option value="B2B SaaS / Software & Tech">
+                B2B SaaS / Enterprise Tech
+              </option>
+              <option value="Local Business & Services">
+                Local Business &amp; In-Person Services
+              </option>
+              <option value="Lead Generation & Direct Response">
+                Lead Generation &amp; Direct Response
+              </option>
+              <option value="Healthcare & Wellness">
+                Healthcare &amp; Wellness
+              </option>
+              <option value="Financial Services & FinTech">
+                Financial Services &amp; FinTech
+              </option>
             </select>
           </div>
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
-              <Icon icon="solar:target-bold" className="h-3.5 w-3.5 text-emerald-500" />
+              <Icon
+                icon="solar:target-bold"
+                className="h-3.5 w-3.5 text-emerald-500"
+              />
               Campaign Goal / Conversion Objective
             </label>
             <select
@@ -165,19 +188,36 @@ export function AudienceTrustPreAdGate({
               onChange={(e) => setCampaignGoal(e.target.value)}
               className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-primary"
             >
-              <option value="Site Traffic & Reader Engagement">Site Traffic &amp; Reader Engagement (News/Blogs/Media)</option>
-              <option value="E-Commerce Sales / Direct Checkout (ROAS)">E-Commerce Sales / Direct Checkout (ROAS)</option>
-              <option value="Lead Generation & Inquiries">Lead Generation &amp; Inquiries</option>
-              <option value="High-Ticket B2B Demos / Sales Calls">High-Ticket B2B Demos / Sales Calls</option>
-              <option value="Local Store Footfall & Phone Calls">Local Store Footfall &amp; Phone Calls</option>
-              <option value="App Installs & User Signups">App Installs &amp; User Signups</option>
-              <option value="Brand Awareness & Video Views">Brand Awareness &amp; Video Views</option>
+              <option value="Site Traffic & Reader Engagement">
+                Site Traffic &amp; Reader Engagement (News/Blogs/Media)
+              </option>
+              <option value="E-Commerce Sales / Direct Checkout (ROAS)">
+                E-Commerce Sales / Direct Checkout (ROAS)
+              </option>
+              <option value="Lead Generation & Inquiries">
+                Lead Generation &amp; Inquiries
+              </option>
+              <option value="High-Ticket B2B Demos / Sales Calls">
+                High-Ticket B2B Demos / Sales Calls
+              </option>
+              <option value="Local Store Footfall & Phone Calls">
+                Local Store Footfall &amp; Phone Calls
+              </option>
+              <option value="App Installs & User Signups">
+                App Installs &amp; User Signups
+              </option>
+              <option value="Brand Awareness & Video Views">
+                Brand Awareness &amp; Video Views
+              </option>
             </select>
           </div>
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-base-content/70 flex items-center gap-1.5">
-              <Icon icon="solar:chart-square-bold" className="h-3.5 w-3.5 text-sky-500" />
+              <Icon
+                icon="solar:chart-square-bold"
+                className="h-3.5 w-3.5 text-sky-500"
+              />
               Target Paid Ad Platform
             </label>
             <select
@@ -185,12 +225,20 @@ export function AudienceTrustPreAdGate({
               onChange={(e) => setAdPlatform(e.target.value)}
               className="select select-bordered select-sm w-full rounded-xl bg-base-100 text-xs font-semibold focus:outline-secondary"
             >
-              <option value="Meta Ads (Facebook & Instagram)">Meta Ads (Facebook &amp; Instagram)</option>
-              <option value="Google Search & Performance Max">Google Search &amp; Performance Max</option>
+              <option value="Meta Ads (Facebook & Instagram)">
+                Meta Ads (Facebook &amp; Instagram)
+              </option>
+              <option value="Google Search & Performance Max">
+                Google Search &amp; Performance Max
+              </option>
               <option value="TikTok Ads">TikTok Ads</option>
               <option value="LinkedIn Ads">LinkedIn Ads</option>
-              <option value="X (Twitter) & Native News Exchanges">X (Twitter) &amp; Native Exchanges</option>
-              <option value="Multi-Channel Paid Traffic">Multi-Channel Paid Traffic</option>
+              <option value="X (Twitter) & Native News Exchanges">
+                X (Twitter) &amp; Native Exchanges
+              </option>
+              <option value="Multi-Channel Paid Traffic">
+                Multi-Channel Paid Traffic
+              </option>
             </select>
           </div>
         </div>
@@ -264,16 +312,34 @@ export function AudienceTrustPreAdGate({
                 {/* Target Strategy Tags */}
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
-                    <Icon icon="solar:buildings-bold" className="h-3.5 w-3.5 text-primary" />
-                    Industry: <strong className="text-white">{audit.industry || "General"}</strong>
+                    <Icon
+                      icon="solar:buildings-bold"
+                      className="h-3.5 w-3.5 text-primary"
+                    />
+                    Industry:{" "}
+                    <strong className="text-white">
+                      {audit.industry || "General"}
+                    </strong>
                   </span>
                   <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
-                    <Icon icon="solar:target-bold" className="h-3.5 w-3.5 text-emerald-400" />
-                    Goal: <strong className="text-white">{audit.campaignGoal || campaignGoal}</strong>
+                    <Icon
+                      icon="solar:target-bold"
+                      className="h-3.5 w-3.5 text-emerald-400"
+                    />
+                    Goal:{" "}
+                    <strong className="text-white">
+                      {audit.campaignGoal || campaignGoal}
+                    </strong>
                   </span>
                   <span className="badge badge-neutral badge-sm font-semibold gap-1 text-slate-300 py-2.5">
-                    <Icon icon="solar:chart-square-bold" className="h-3.5 w-3.5 text-sky-400" />
-                    Platform: <strong className="text-white">{audit.adPlatform || adPlatform}</strong>
+                    <Icon
+                      icon="solar:chart-square-bold"
+                      className="h-3.5 w-3.5 text-sky-400"
+                    />
+                    Platform:{" "}
+                    <strong className="text-white">
+                      {audit.adPlatform || adPlatform}
+                    </strong>
                   </span>
                 </div>
 

@@ -89,7 +89,9 @@ export function IssuesView({
   issues: AuditIssueRow[];
   projectId?: string;
 }) {
-  const [activeTab, setActiveTab] = useState<"all" | "need_fix" | "passed">("need_fix");
+  const [activeTab, setActiveTab] = useState<"all" | "need_fix" | "passed">(
+    "need_fix",
+  );
   const [activeFixModal, setActiveFixModal] = useState<{
     issueType: string;
     title: string;
@@ -107,7 +109,9 @@ export function IssuesView({
   );
 
   const passedTests = useMemo(() => {
-    return (Object.entries(AUDIT_ISSUE_TYPES) as [string, AuditIssueDescriptor][])
+    return (
+      Object.entries(AUDIT_ISSUE_TYPES) as [string, AuditIssueDescriptor][]
+    )
       .filter(([typeKey]) => !failedIssueTypes.has(typeKey))
       .map(([typeKey, desc]) => ({
         typeKey,
@@ -147,7 +151,9 @@ export function IssuesView({
           }`}
         >
           <Icon icon="solar:danger-triangle-bold" className="h-4 w-4" />
-          <span>Need to Fix ({groups.reduce((acc, g) => acc + g.issues.length, 0)})</span>
+          <span>
+            Need to Fix ({groups.reduce((acc, g) => acc + g.issues.length, 0)})
+          </span>
         </button>
 
         <button
@@ -173,7 +179,12 @@ export function IssuesView({
           }`}
         >
           <Icon icon="solar:checklist-minimalistic-bold" className="h-4 w-4" />
-          <span>All Checks ({groups.reduce((acc, g) => acc + g.issues.length, 0) + passedTests.length})</span>
+          <span>
+            All Checks (
+            {groups.reduce((acc, g) => acc + g.issues.length, 0) +
+              passedTests.length}
+            )
+          </span>
         </button>
       </div>
 
@@ -183,9 +194,17 @@ export function IssuesView({
           <>
             {sections.length === 0 ? (
               <div className="p-8 text-center bg-base-100 text-base-content/70 space-y-1">
-                <Icon icon="solar:check-circle-bold" className="h-8 w-8 text-success mx-auto mb-2" />
-                <p className="font-bold text-sm text-base-content">No technical issues detected!</p>
-                <p className="text-xs">Your site passed all crawler audits with zero critical flags or warnings.</p>
+                <Icon
+                  icon="solar:check-circle-bold"
+                  className="h-8 w-8 text-success mx-auto mb-2"
+                />
+                <p className="font-bold text-sm text-base-content">
+                  No technical issues detected!
+                </p>
+                <p className="text-xs">
+                  Your site passed all crawler audits with zero critical flags
+                  or warnings.
+                </p>
               </div>
             ) : (
               sections.map((section) => (
@@ -214,10 +233,16 @@ export function IssuesView({
             </div>
             <div className="divide-y divide-base-300/50 max-h-[500px] overflow-y-auto">
               {passedTests.map((test) => (
-                <div key={test.typeKey} className="px-4 py-2.5 flex items-center justify-between gap-3 hover:bg-base-200/30 transition-colors">
+                <div
+                  key={test.typeKey}
+                  className="px-4 py-2.5 flex items-center justify-between gap-3 hover:bg-base-200/30 transition-colors"
+                >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div className="h-5 w-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0">
-                      <Icon icon="solar:check-circle-bold" className="h-3.5 w-3.5" />
+                      <Icon
+                        icon="solar:check-circle-bold"
+                        className="h-3.5 w-3.5"
+                      />
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-base-content truncate">
@@ -322,7 +347,10 @@ function IssueRow({
 
   const addGroupToRoadmapMutation = useMutation({
     mutationFn: async () => {
-      const priorityMap: Record<IssueSeverity, "critical" | "high" | "medium" | "low"> = {
+      const priorityMap: Record<
+        IssueSeverity,
+        "critical" | "high" | "medium" | "low"
+      > = {
         critical: "critical",
         warning: "high",
         info: "medium",
@@ -332,7 +360,8 @@ function IssueRow({
         data: {
           projectId,
           title: `Fix ${group.title} (${group.issues.length} pages)`,
-          description: group.howToFix || group.explanation || `Resolve ${group.title}`,
+          description:
+            group.howToFix || group.explanation || `Resolve ${group.title}`,
           category: "technical",
           priority: priorityMap[group.severity] || "medium",
           targetUrl: firstUrl,
@@ -406,7 +435,10 @@ function IssueRow({
             {addGroupToRoadmapMutation.isPending ? (
               <span className="loading loading-spinner loading-xs" />
             ) : (
-              <Icon icon="solar:checklist-minimalistic-bold" className="h-3.5 w-3.5 text-primary" />
+              <Icon
+                icon="solar:checklist-minimalistic-bold"
+                className="h-3.5 w-3.5 text-primary"
+              />
             )}
             <span className="hidden md:inline">Add to Roadmap</span>
           </button>
@@ -499,7 +531,10 @@ function AffectedUrlRow({
 }) {
   const addToRoadmapMutation = useMutation({
     mutationFn: async () => {
-      const priorityMap: Record<IssueSeverity, "critical" | "high" | "medium" | "low"> = {
+      const priorityMap: Record<
+        IssueSeverity,
+        "critical" | "high" | "medium" | "low"
+      > = {
         critical: "critical",
         warning: "high",
         info: "medium",
@@ -508,7 +543,8 @@ function AffectedUrlRow({
         data: {
           projectId,
           title: `Fix ${group.title}: ${issue.pageUrl}`,
-          description: group.howToFix || group.explanation || `Resolve ${group.title}`,
+          description:
+            group.howToFix || group.explanation || `Resolve ${group.title}`,
           category: "technical",
           priority: priorityMap[group.severity] || "medium",
           targetUrl: issue.pageUrl,
@@ -552,7 +588,9 @@ function AffectedUrlRow({
           title="Fix with Skorvia AI"
         >
           <Icon icon="solar:magic-stick-3-bold" className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline text-[11px]">Fix with Skorvia AI</span>
+          <span className="hidden sm:inline text-[11px]">
+            Fix with Skorvia AI
+          </span>
         </button>
 
         <button

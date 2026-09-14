@@ -37,4 +37,3 @@ describe("NotificationsService", () => {
     expect(emptyItems.length).toBe(0);
   });
 });
-

@@ -28,7 +28,10 @@ async function resolveEffectiveProjectId(
       .limit(1);
     if (p?.id) return p.id;
   } catch (err) {
-    console.warn("Failed to find fallback project for competitor strategy:", err);
+    console.warn(
+      "Failed to find fallback project for competitor strategy:",
+      err,
+    );
   }
   return "default";
 }

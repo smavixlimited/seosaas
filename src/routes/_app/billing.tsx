@@ -13,7 +13,7 @@ import { BillingUsageChart } from "@/client/features/billing/BillingUsageChart";
 import { BillingFeatureBreakdown } from "@/client/features/billing/BillingFeatureBreakdown";
 import { parseTopUpAmount } from "@/client/features/billing/HostedBillingContentUtils";
 import { getCustomerPlanStatus } from "@/client/features/billing/plan-detection";
-import { useCurrency, CurrencySelector } from "@/client/lib/currency";
+import { useCurrency, CurrencySwitcher } from "@/client/lib/currency";
 import {
   CheckoutModal,
   type PlanItem,
@@ -473,7 +473,7 @@ function BillingPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Multi-Currency Switcher */}
-            <CurrencySelector />
+            <CurrencySwitcher />
 
             {/* Monthly / Yearly Switch */}
             <div className="join border border-base-300 rounded-xl p-0.5 bg-base-200/40">

@@ -110,14 +110,14 @@ export async function createProject(
 ) {
   try {
     // 1. Enforce maxDomains limit based on active plan tier
-    const existing = (await ProjectRepository.listProjects(organizationId)) ?? [];
+    const existing =
+      (await ProjectRepository.listProjects(organizationId)) ?? [];
     let maxDomains = 1;
     let planName = "Free Plan";
 
     try {
-      const { BillingPlansService } = await import(
-        "@/services/billing-plans.service"
-      );
+      const { BillingPlansService } =
+        await import("@/services/billing-plans.service");
       const { db } = await import("@/db");
       const { userQuotas, member } = await import("@/db/schema");
       const { eq } = await import("drizzle-orm");

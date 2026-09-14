@@ -42,9 +42,8 @@ export const SubscriptionLifecycleService = {
   ): Promise<DowngradeResult> {
     try {
       const { db } = await import("@/db");
-      const { userQuotas, billingCustomerStatus, member } = await import(
-        "@/db/schema"
-      );
+      const { userQuotas, billingCustomerStatus, member } =
+        await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
       const [quota] = await db
@@ -182,9 +181,8 @@ export const SubscriptionLifecycleService = {
   }): Promise<boolean> {
     try {
       const { db } = await import("@/db");
-      const { userQuotas, billingCustomerStatus, member } = await import(
-        "@/db/schema"
-      );
+      const { userQuotas, billingCustomerStatus, member } =
+        await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
       const credits =

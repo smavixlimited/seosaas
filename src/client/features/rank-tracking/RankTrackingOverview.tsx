@@ -111,7 +111,9 @@ export function RankTrackingOverview({
                 disabled={isBusy || isFreePlan}
               >
                 {isBusy && <Loader2 className="size-3 animate-spin" />}
-                {chartData.length === 0 ? "Check Rankings Now" : "Run Another Check"}
+                {chartData.length === 0
+                  ? "Check Rankings Now"
+                  : "Run Another Check"}
               </button>
             )}
           </div>

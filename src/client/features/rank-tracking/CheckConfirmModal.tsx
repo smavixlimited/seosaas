@@ -67,7 +67,9 @@ export function CheckConfirmModal({
           </p>
         </div>
         <div className="text-right">
-          <p className="font-mono font-semibold text-primary">{costCredits} Credits</p>
+          <p className="font-mono font-semibold text-primary">
+            {costCredits} Credits
+          </p>
           {isPending && <Loader2 className="size-3 animate-spin ml-auto" />}
         </div>
       </button>
