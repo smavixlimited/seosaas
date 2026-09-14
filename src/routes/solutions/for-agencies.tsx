@@ -47,7 +47,7 @@ function ForAgenciesPage() {
                 to="/sign-up"
                 className="btn btn-primary rounded-2xl px-8 font-black text-white shadow-xl shadow-primary/25 text-sm"
               >
-                Start Agency Free Trial &rarr;
+                Get Started Free &rarr;
               </Link>
               <Link
                 to="/pricing"

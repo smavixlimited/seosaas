@@ -172,9 +172,13 @@ function AdminPlansPage() {
       isActive: true,
       limits: {
         maxDomains: 50,
+        maxCompetitors: 100,
+        competitorScans: 500,
+        keywordSearches: 2500,
         monthlyCredits: 5000,
         auditPages: 100000,
         uptimeMonitors: 25,
+        teamMembers: 25,
       },
       features: {
         // 1. Overview & Strategy
@@ -248,15 +252,15 @@ function AdminPlansPage() {
               <Icon icon="solar:arrow-left-bold" className="h-4 w-4" />
               <span>Back to Plans</span>
             </button>
-            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
             <div>
-              <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">
-                {isCreating
-                  ? "Create New SaaS Plan"
-                  : `Configuring Plan: ${editingPlan.name}`}
-              </h4>
-              <p className="text-xs text-slate-400 font-mono">
-                Plan ID: {editingPlan.id}
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <span>{isCreating ? "Create New Plan" : `Editing: ${editingPlan.name}`}</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">
+                  {editingPlan.id}
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Configure plan pricing, limits, and feature entitlements.
               </p>
             </div>
           </div>
@@ -264,38 +268,27 @@ function AdminPlansPage() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => {
-                setEditingPlan(null);
-                setIsCreating(false);
-              }}
-              className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSavePlan()}
               disabled={upsertMutation.isPending}
-              className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all"
+              onClick={() => handleSavePlan()}
+              className="btn btn-primary btn-sm text-xs font-bold flex items-center gap-1.5"
             >
-              <Icon icon="solar:disk-bold-duotone" className="h-4 w-4" />
-              <span>
-                {upsertMutation.isPending ? "Saving..." : "Save Plan Matrix"}
-              </span>
+              {upsertMutation.isPending ? (
+                <Icon icon="solar:spinner-line-duotone" className="h-4 w-4 animate-spin" />
+              ) : (
+                <Icon icon="solar:diskette-bold" className="h-4 w-4" />
+              )}
+              <span>Save &amp; Publish Plan</span>
             </button>
           </div>
         </div>
 
-        {/* Plan Configuration Grid */}
+        {/* Plan Configuration Form */}
         <form onSubmit={handleSavePlan} className="space-y-6">
-          {/* General & Multi-Currency Pricing */}
+          {/* General & Pricing */}
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800 p-6 shadow-2xs space-y-4">
             <h5 className="font-bold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
-              <Icon
-                icon="solar:card-2-bold-duotone"
-                className="h-4 w-4 text-primary"
-              />
-              <span>Plan Identity &amp; Multi-Currency Pricing</span>
+              <Icon icon="solar:tag-price-bold-duotone" className="h-4 w-4 text-primary" />
+              <span>Plan Details &amp; Dual Currency Pricing</span>
             </h5>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
@@ -391,33 +384,12 @@ function AdminPlansPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-slate-600 dark:text-slate-400">
-                  Monthly AI / Search Credits
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={editingPlan.limits.monthlyCredits}
-                  onChange={(e) =>
-                    setEditingPlan({
-                      ...editingPlan,
-                      limits: {
-                        ...editingPlan.limits,
-                        monthlyCredits: Number(e.target.value),
-                      },
-                    })
-                  }
-                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="font-semibold text-slate-600 dark:text-slate-400">
-                  Maximum Tracked Domains
+                  Max Tracked Brands/Domains
                 </label>
                 <input
                   type="number"
                   min={1}
-                  value={editingPlan.limits.maxDomains}
+                  value={editingPlan.limits.maxDomains ?? 1}
                   onChange={(e) =>
                     setEditingPlan({
                       ...editingPlan,
@@ -433,12 +405,96 @@ function AdminPlansPage() {
 
               <div className="space-y-1">
                 <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Max Competitors Tracked
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editingPlan.limits.maxCompetitors ?? 2}
+                  onChange={(e) =>
+                    setEditingPlan({
+                      ...editingPlan,
+                      limits: {
+                        ...editingPlan.limits,
+                        maxCompetitors: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Monthly Competitor Scans
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editingPlan.limits.competitorScans ?? 5}
+                  onChange={(e) =>
+                    setEditingPlan({
+                      ...editingPlan,
+                      limits: {
+                        ...editingPlan.limits,
+                        competitorScans: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Monthly Keyword Searches
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editingPlan.limits.keywordSearches ?? 15}
+                  onChange={(e) =>
+                    setEditingPlan({
+                      ...editingPlan,
+                      limits: {
+                        ...editingPlan.limits,
+                        keywordSearches: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Monthly AI / Platform Credits
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={editingPlan.limits.monthlyCredits ?? 50}
+                  onChange={(e) =>
+                    setEditingPlan({
+                      ...editingPlan,
+                      limits: {
+                        ...editingPlan.limits,
+                        monthlyCredits: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
                   Audit Pages Capacity
                 </label>
                 <input
                   type="number"
-                  min={100}
-                  value={editingPlan.limits.auditPages}
+                  min={0}
+                  value={editingPlan.limits.auditPages ?? 100}
                   onChange={(e) =>
                     setEditingPlan({
                       ...editingPlan,
@@ -459,13 +515,34 @@ function AdminPlansPage() {
                 <input
                   type="number"
                   min={0}
-                  value={editingPlan.limits.uptimeMonitors}
+                  value={editingPlan.limits.uptimeMonitors ?? 0}
                   onChange={(e) =>
                     setEditingPlan({
                       ...editingPlan,
                       limits: {
                         ...editingPlan.limits,
                         uptimeMonitors: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className="h-10 w-full rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 text-xs font-mono focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-600 dark:text-slate-400">
+                  Team Members / Seats
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  value={editingPlan.limits.teamMembers ?? 1}
+                  onChange={(e) =>
+                    setEditingPlan({
+                      ...editingPlan,
+                      limits: {
+                        ...editingPlan.limits,
+                        teamMembers: Number(e.target.value),
                       },
                     })
                   }
@@ -1259,27 +1336,51 @@ function AdminPlansPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     <div>
-                      <span className="text-slate-400">Credits: </span>
+                      <span className="text-slate-400">Brands: </span>
                       <strong className="font-mono text-slate-700 dark:text-slate-200">
-                        {p.limits.monthlyCredits.toLocaleString()}
+                        {p.limits?.maxDomains ?? 1}
                       </strong>
                     </div>
                     <div>
-                      <span className="text-slate-400">Domains: </span>
+                      <span className="text-slate-400">Competitors: </span>
                       <strong className="font-mono text-slate-700 dark:text-slate-200">
-                        {p.limits.maxDomains}
+                        {p.limits?.maxCompetitors ?? 2}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">Comp. Scans: </span>
+                      <strong className="font-mono text-slate-700 dark:text-slate-200">
+                        {p.limits?.competitorScans ?? 5}/mo
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">KW Searches: </span>
+                      <strong className="font-mono text-slate-700 dark:text-slate-200">
+                        {p.limits?.keywordSearches ?? 15}/mo
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">AI Credits: </span>
+                      <strong className="font-mono text-slate-700 dark:text-slate-200">
+                        {(p.limits?.monthlyCredits ?? 50).toLocaleString()}
                       </strong>
                     </div>
                     <div>
                       <span className="text-slate-400">Audit Pages: </span>
                       <strong className="font-mono text-slate-700 dark:text-slate-200">
-                        {p.limits.auditPages.toLocaleString()}
+                        {(p.limits?.auditPages ?? 100).toLocaleString()}
                       </strong>
                     </div>
                     <div>
                       <span className="text-slate-400">Uptime Checks: </span>
                       <strong className="font-mono text-slate-700 dark:text-slate-200">
-                        {p.limits.uptimeMonitors}
+                        {p.limits?.uptimeMonitors ?? 0}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-400">Team Seats: </span>
+                      <strong className="font-mono text-slate-700 dark:text-slate-200">
+                        {p.limits?.teamMembers ?? 1}
                       </strong>
                     </div>
                   </div>

@@ -59,6 +59,7 @@ function PricingPage() {
     setIsCheckoutOpen(true);
   };
 
+  const freePlan = dbPlans.find((p) => p.id === "free");
   const starterPlan = dbPlans.find((p) => p.id === "starter");
   const proPlan = dbPlans.find((p) => p.id === "pro");
   const agencyPlan = dbPlans.find(
@@ -69,24 +70,28 @@ function PricingPage() {
     // 1. Core SEO Suite
     {
       feature: "Keyword Research & Search Intent",
+      free: freePlan?.features?.keyword_research ?? true,
       starter: starterPlan?.features?.keyword_research ?? true,
       pro: proPlan?.features?.keyword_research ?? true,
       agency: agencyPlan?.features?.keyword_research ?? true,
     },
     {
       feature: "Daily Desktop & Mobile SERP Tracker",
+      free: freePlan?.features?.rank_tracker ?? true,
       starter: starterPlan?.features?.rank_tracker ?? true,
       pro: proPlan?.features?.rank_tracker ?? true,
       agency: agencyPlan?.features?.rank_tracker ?? true,
     },
     {
       feature: "Backlink Profile & Gap Explorer",
+      free: freePlan?.features?.backlink_analysis ?? false,
       starter: starterPlan?.features?.backlink_analysis ?? true,
       pro: proPlan?.features?.backlink_analysis ?? true,
       agency: agencyPlan?.features?.backlink_analysis ?? true,
     },
     {
       feature: "Deep Technical Site Audit & Core Web Vitals",
+      free: freePlan?.features?.site_audit ?? true,
       starter: starterPlan?.features?.site_audit ?? true,
       pro: proPlan?.features?.site_audit ?? true,
       agency: agencyPlan?.features?.site_audit ?? true,
@@ -94,24 +99,28 @@ function PricingPage() {
     // 2. Local SEO
     {
       feature: "Google Business Profile (GBP) Sync",
+      free: freePlan?.features?.gbp_integration ?? false,
       starter: starterPlan?.features?.gbp_integration ?? false,
       pro: proPlan?.features?.gbp_integration ?? true,
       agency: agencyPlan?.features?.gbp_integration ?? true,
     },
     {
       feature: "Map Rank Geo-Grid Matrix (3x3 / 5x5)",
+      free: freePlan?.features?.map_rank_tracker ?? false,
       starter: starterPlan?.features?.map_rank_tracker ?? false,
       pro: proPlan?.features?.map_rank_tracker ?? true,
       agency: agencyPlan?.features?.map_rank_tracker ?? true,
     },
     {
       feature: "Review Management & 1-Click AI Responder",
+      free: freePlan?.features?.review_management ?? false,
       starter: starterPlan?.features?.review_management ?? false,
       pro: proPlan?.features?.review_management ?? false,
       agency: agencyPlan?.features?.review_management ?? true,
     },
     {
       feature: "Local Directory & NAP Consistency Audit",
+      free: freePlan?.features?.listing_management ?? false,
       starter: starterPlan?.features?.listing_management ?? false,
       pro: proPlan?.features?.listing_management ?? false,
       agency: agencyPlan?.features?.listing_management ?? true,
@@ -119,6 +128,7 @@ function PricingPage() {
     // 3. AI & Content
     {
       feature: "AI Search & AEO Citation Visibility",
+      free: freePlan?.features?.ai_visibility ?? false,
       starter:
         starterPlan?.features?.ai_visibility ??
         starterPlan?.features?.aeoAudit ??
@@ -132,18 +142,21 @@ function PricingPage() {
     },
     {
       feature: "AI Content Studio & Automated llms.txt",
+      free: freePlan?.features?.ai_content_studio ?? false,
       starter: starterPlan?.features?.ai_content_studio ?? false,
       pro: proPlan?.features?.ai_content_studio ?? true,
       agency: agencyPlan?.features?.ai_content_studio ?? true,
     },
     {
       feature: "One-Click 'AI SEO Fixer' Metadata Builder",
+      free: freePlan?.features?.ai_seo_fixer ?? false,
       starter: starterPlan?.features?.ai_seo_fixer ?? false,
       pro: proPlan?.features?.ai_seo_fixer ?? false,
       agency: agencyPlan?.features?.ai_seo_fixer ?? true,
     },
     {
       feature: "1-Click IndexNow & Google Push",
+      free: freePlan?.features?.indexnow_submitter ?? false,
       starter:
         starterPlan?.features?.indexnow_submitter ??
         starterPlan?.features?.indexnowSubmit ??
@@ -160,18 +173,21 @@ function PricingPage() {
     // 4. Infrastructure & Agency
     {
       feature: "5-Minute Uptime & SSL Monitor",
+      free: freePlan?.features?.uptime_ssl_monitoring ?? false,
       starter: starterPlan?.features?.uptime_ssl_monitoring ?? false,
       pro: proPlan?.features?.uptime_ssl_monitoring ?? true,
       agency: agencyPlan?.features?.uptime_ssl_monitoring ?? true,
     },
     {
       feature: "Drag-and-Drop 'My Reports' Builder",
+      free: freePlan?.features?.my_reports_builder ?? false,
       starter: starterPlan?.features?.my_reports_builder ?? false,
       pro: proPlan?.features?.my_reports_builder ?? false,
       agency: agencyPlan?.features?.my_reports_builder ?? true,
     },
     {
       feature: "White-Label Client PDF Reports",
+      free: freePlan?.features?.white_label_pdf ?? false,
       starter:
         starterPlan?.features?.white_label_pdf ??
         starterPlan?.features?.whiteLabelPdf ??
@@ -187,12 +203,14 @@ function PricingPage() {
     },
     {
       feature: "Multi-Seat Team Management",
-      starter: starterPlan?.features?.team_management ? "Included" : "1 Seat",
+      free: "1 Seat",
+      starter: starterPlan?.features?.team_management ? "Included" : "2 Seats",
       pro: proPlan?.features?.team_management ? "Included" : "5 Seats",
-      agency: agencyPlan?.features?.team_management ? "Unlimited" : "Unlimited",
+      agency: agencyPlan?.features?.team_management ? "Unlimited" : "25 Seats",
     },
     {
       feature: "Personal API Key & Autonomous MCP Server",
+      free: freePlan?.features?.mcp_api_access ?? false,
       starter:
         starterPlan?.features?.mcp_api_access ??
         starterPlan?.features?.mcpAccess ??
@@ -208,6 +226,7 @@ function PricingPage() {
     },
     {
       feature: "Priority Dedicated Support",
+      free: "Community",
       starter: starterPlan?.features?.priority_support
         ? "Priority"
         : "Standard",
@@ -302,9 +321,11 @@ function PricingPage() {
           </div>
 
           {/* Pricing Cards Grid */}
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {tiers.map((tier) => {
-              const formattedPrice = formatPrice(tier.priceUsd, tier.priceNgn);
+              const formattedPrice =
+                tier.priceUsd === 0 ? "$0" : formatPrice(tier.priceUsd, tier.priceNgn);
+              const isFree = tier.id === "free" || tier.priceUsd === 0;
               const isHighlighted = tier.id === "pro";
               const staticMeta = BRAND_CONFIG.pricing.tiers.find(
                 (t) => t.id === tier.id,
@@ -313,9 +334,9 @@ function PricingPage() {
               return (
                 <div
                   key={tier.id}
-                  className={`rounded-[24px] border p-8 flex flex-col justify-between relative transition-all duration-300 ${
+                  className={`rounded-[24px] border p-6 sm:p-7 flex flex-col justify-between relative transition-all duration-300 ${
                     isHighlighted
-                      ? "border-primary-500 bg-secondary dark:bg-background-5 text-white shadow-2xl ring-2 ring-primary-500/30 scale-[102%]"
+                      ? "border-primary-500 bg-secondary dark:bg-background-5 text-white shadow-2xl ring-2 ring-primary-500/30 lg:scale-[103%]"
                       : "border-stroke-4 dark:border-stroke-8 bg-background-1 dark:bg-background-6 text-secondary dark:text-accent hover:shadow-lg"
                   }`}
                 >
@@ -325,7 +346,7 @@ function PricingPage() {
                     </div>
                   )}
 
-                  <div className="space-y-6">
+                  <div className="space-y-5">
                     <div>
                       <div className="flex items-center justify-between">
                         <h3
@@ -334,13 +355,15 @@ function PricingPage() {
                           {tier.name}
                         </h3>
                         <span
-                          className={`badge ${isHighlighted ? "badge-yellow" : "badge-cyan"}`}
+                          className={`badge ${isHighlighted ? "badge-yellow" : isFree ? "badge-green" : "badge-cyan"}`}
                         >
-                          {tier.id === "starter"
-                            ? "Starter"
-                            : tier.id === "pro"
-                              ? "Scale"
-                              : "Agency"}
+                          {tier.id === "free"
+                            ? "Forever Free"
+                            : tier.id === "starter"
+                              ? "Starter"
+                              : tier.id === "pro"
+                                ? "Scale"
+                                : "Agency"}
                         </span>
                       </div>
                       <p
@@ -372,18 +395,18 @@ function PricingPage() {
                             : "text-secondary/50 dark:text-accent/50"
                         }`}
                       >
-                        / month
+                        {isFree ? "/ forever" : "/ month"}
                       </span>
                     </div>
 
-                    {isAnnual && (
+                    {isAnnual && !isFree && (
                       <p className="text-[12px] text-ns-green font-bold">
                         ✓ Billed annually (20% discount applied)
                       </p>
                     )}
 
                     <div
-                      className={`space-y-3 pt-6 border-t ${
+                      className={`space-y-3 pt-5 border-t ${
                         isHighlighted
                           ? "border-white/10"
                           : "border-stroke-4 dark:border-stroke-8"
@@ -398,7 +421,7 @@ function PricingPage() {
                       >
                         Included Capabilities
                       </p>
-                      <ul className="space-y-3 text-tagline-2">
+                      <ul className="space-y-2.5 text-tagline-2 text-xs">
                         {(
                           staticMeta?.features || [
                             "Live SERP Keyword Tracking",
@@ -406,9 +429,9 @@ function PricingPage() {
                             "Technical Site Audit",
                           ]
                         ).map((feat, idx) => (
-                          <li key={idx} className="flex items-center gap-3">
+                          <li key={idx} className="flex items-center gap-2.5">
                             <div
-                              className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${
+                              className={`h-4.5 w-4.5 rounded-full flex items-center justify-center shrink-0 ${
                                 isHighlighted
                                   ? "bg-primary-500 text-white"
                                   : "bg-primary-500/10 text-primary-500"
@@ -416,7 +439,7 @@ function PricingPage() {
                             >
                               <Icon
                                 icon="solar:check-circle-bold"
-                                className="size-4"
+                                className="size-3.5"
                               />
                             </div>
                             <span
@@ -434,18 +457,27 @@ function PricingPage() {
                     </div>
                   </div>
 
-                  <div className="pt-8">
-                    <button
-                      type="button"
-                      onClick={() => openCheckout(tier)}
-                      className={`btn btn-md w-full rounded-full font-bold shadow-md transition-all ${
-                        isHighlighted
-                          ? "btn-primary bg-primary-500 hover:bg-primary-600 text-white border-none shadow-primary-500/25"
-                          : "btn-outline border-stroke-4 dark:border-stroke-8 hover:bg-secondary hover:text-white dark:hover:bg-accent dark:hover:text-secondary"
-                      }`}
-                    >
-                      Subscribe to {tier.name}
-                    </button>
+                  <div className="pt-6">
+                    {isFree ? (
+                      <a
+                        href="/sign-up"
+                        className="btn btn-md w-full rounded-full font-bold shadow-md transition-all btn-outline border-stroke-4 dark:border-stroke-8 hover:bg-secondary hover:text-white dark:hover:bg-accent dark:hover:text-secondary flex items-center justify-center text-xs"
+                      >
+                        Get Started Free
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => openCheckout(tier)}
+                        className={`btn btn-md w-full rounded-full font-bold shadow-md transition-all text-xs ${
+                          isHighlighted
+                            ? "btn-primary bg-primary-500 hover:bg-primary-600 text-white border-none shadow-primary-500/25"
+                            : "btn-outline border-stroke-4 dark:border-stroke-8 hover:bg-secondary hover:text-white dark:hover:bg-accent dark:hover:text-secondary"
+                        }`}
+                      >
+                        Subscribe to {tier.name}
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -460,23 +492,22 @@ function PricingPage() {
                   <Icon icon="solar:shield-check-bold" className="size-6" />
                 </div>
                 <h4 className="text-heading-5 font-bold font-interTight">
-                  99.9% Data Accuracy
+                  Forever Free Default Tier
                 </h4>
                 <p className="text-tagline-2 text-accent/70">
-                  Direct live SERP scrape & verified real-time volume from
-                  premier global search infrastructure.
+                  Every account starts with our free tier. Upgrade only when your brand scales.
                 </p>
               </div>
 
               <div className="space-y-2 py-4 md:py-0 px-4">
-                <div className="mx-auto w-12 h-12 rounded-full bg-ns-cyan/20 text-ns-cyan flex items-center justify-center mb-3">
+                <div className="mx-auto w-12 h-12 rounded-full bg-ns-green/20 text-ns-green flex items-center justify-center mb-3">
                   <Icon
                     icon="solar:users-group-two-rounded-bold"
                     className="size-6"
                   />
                 </div>
                 <h4 className="text-heading-5 font-bold font-interTight">
-                  Zero Seat Tax
+                  Generous Team Seats
                 </h4>
                 <p className="text-tagline-2 text-accent/70">
                   Invite your team and clients without paying up to $45/month
@@ -517,11 +548,12 @@ function PricingPage() {
                 <thead>
                   <tr className="border-b border-stroke-4 dark:border-stroke-8 bg-background-2/50 dark:bg-background-7/50 text-[11px] font-black uppercase tracking-wider text-secondary/70 dark:text-accent/70">
                     <th className="py-4 px-6">Feature</th>
-                    <th className="py-4 px-6 text-center">Starter</th>
-                    <th className="py-4 px-6 text-center text-primary-500 font-black">
+                    <th className="py-4 px-4 text-center">Free</th>
+                    <th className="py-4 px-4 text-center">Starter</th>
+                    <th className="py-4 px-4 text-center text-primary-500 font-black">
                       Pro (Popular)
                     </th>
-                    <th className="py-4 px-6 text-center">Agency</th>
+                    <th className="py-4 px-4 text-center">Agency</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stroke-4 dark:divide-stroke-8">
@@ -533,7 +565,26 @@ function PricingPage() {
                       <td className="py-4 px-6 font-medium text-secondary/90 dark:text-accent/90">
                         {row.feature}
                       </td>
-                      <td className="py-4 px-6 text-center">
+                      <td className="py-4 px-4 text-center">
+                        {typeof row.free === "boolean" ? (
+                          row.free ? (
+                            <Icon
+                              icon="solar:check-circle-bold"
+                              className="size-5 text-ns-green mx-auto"
+                            />
+                          ) : (
+                            <Icon
+                              icon="solar:close-circle-bold"
+                              className="size-5 text-secondary/20 dark:text-accent/20 mx-auto"
+                            />
+                          )
+                        ) : (
+                          <span className="font-bold text-secondary dark:text-accent">
+                            {row.free}
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-4 px-4 text-center">
                         {typeof row.starter === "boolean" ? (
                           row.starter ? (
                             <Icon
@@ -552,7 +603,7 @@ function PricingPage() {
                           </span>
                         )}
                       </td>
-                      <td className="py-4 px-6 text-center bg-primary-500/5">
+                      <td className="py-4 px-4 text-center bg-primary-500/5">
                         {typeof row.pro === "boolean" ? (
                           row.pro ? (
                             <Icon
@@ -571,7 +622,7 @@ function PricingPage() {
                           </span>
                         )}
                       </td>
-                      <td className="py-4 px-6 text-center">
+                      <td className="py-4 px-4 text-center">
                         {typeof row.agency === "boolean" ? (
                           row.agency ? (
                             <Icon

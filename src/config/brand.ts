@@ -32,6 +32,26 @@ export const BRAND_CONFIG = {
     annualDiscountPercent: 20,
     tiers: [
       {
+        id: "free",
+        name: "Free",
+        badge: "Forever Free",
+        description:
+          "Baseline SEO tools, essential brand monitoring, and standard search metrics.",
+        priceMonthlyUSD: 0,
+        priceAnnualUSD: 0,
+        priceMonthlyNGN: 0,
+        priceAnnualNGN: 0,
+        features: [
+          "1 Tracked Domain / Brand",
+          "50 Monthly AI & Search Credits",
+          "5 Competitor Scans / mo",
+          "15 Keyword Searches / mo",
+          "100 Site Audit Pages",
+          "Core Brand Overview & Rankings",
+        ],
+        highlighted: false,
+      },
+      {
         id: "starter",
         name: "Starter",
         badge: "Essential",

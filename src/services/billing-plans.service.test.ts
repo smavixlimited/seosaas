@@ -38,9 +38,13 @@ describe("BillingPlansService (Dynamic Pricing & 24+ Quota Controls)", () => {
       isActive: true,
       limits: {
         maxDomains: 50,
+        maxCompetitors: 100,
+        competitorScans: 500,
+        keywordSearches: 2500,
         monthlyCredits: 8000,
         auditPages: 150000,
         uptimeMonitors: 30,
+        teamMembers: 25,
       },
       features: {
         advanced_analytics: true,

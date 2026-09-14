@@ -18,8 +18,8 @@ const faqItems = [
     a: "Yes. All plans include 1-click executive PDF report exports. You can customize branding, colors, domain scorecards, and action items before sharing.",
   },
   {
-    q: "Is there a free trial or credit card required upfront?",
-    a: "You can test all tools with our live interactive scanner on the homepage instantly. When you sign up, you get a 14-day free trial with zero upfront credit card requirement.",
+    q: "Is there a free plan or credit card required upfront?",
+    a: "You can test all tools with our live interactive scanner on the homepage instantly. When you sign up, you automatically start on our Forever Free plan with zero upfront credit card requirement.",
   },
 ];
 

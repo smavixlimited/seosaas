@@ -134,7 +134,7 @@ export function TemplateBenefits() {
               to="/sign-up"
               className="btn btn-primary btn-md sm:btn-lg rounded-full font-bold text-white shadow-md shrink-0 px-8"
             >
-              Start 14-Day Free Trial &rarr;
+              Get Started Free &rarr;
             </Link>
           </div>
         </div>

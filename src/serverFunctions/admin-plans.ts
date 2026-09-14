@@ -10,35 +10,50 @@ import { AppError } from "@/server/lib/errors";
 
 const planLimitsSchema = z.object({
   maxDomains: z.number().int().nonnegative(),
+  maxCompetitors: z.number().int().nonnegative(),
+  competitorScans: z.number().int().nonnegative(),
+  keywordSearches: z.number().int().nonnegative(),
   monthlyCredits: z.number().int().nonnegative(),
   auditPages: z.number().int().nonnegative(),
   uptimeMonitors: z.number().int().nonnegative(),
+  teamMembers: z.number().int().nonnegative(),
 });
 
 const planFeaturesSchema = z.object({
-  // 1. Core SEO
-  keyword_research: z.boolean().default(true),
-  rank_tracker: z.boolean().default(true),
-  backlink_analysis: z.boolean().default(true),
-  site_audit: z.boolean().default(true),
-  // 2. Local SEO
-  gbp_integration: z.boolean().default(false),
-  map_rank_tracker: z.boolean().default(false),
-  review_management: z.boolean().default(false),
-  listing_management: z.boolean().default(false),
-  // 3. AI & Content
-  ai_visibility: z.boolean().default(false),
-  ai_content_studio: z.boolean().default(false),
-  ai_seo_fixer: z.boolean().default(false),
-  indexnow_submitter: z.boolean().default(false),
-  // 4. Infrastructure & Agency
-  uptime_ssl_monitoring: z.boolean().default(false),
-  my_reports_builder: z.boolean().default(false),
-  white_label_pdf: z.boolean().default(false),
-  team_management: z.boolean().default(false),
-  mcp_api_access: z.boolean().default(false),
-  priority_support: z.boolean().default(false),
+  // 1. Overview & Strategy
+  advanced_analytics: z.boolean(),
+  action_roadmap: z.boolean(),
+  my_reports_builder: z.boolean(),
+  // 2. Brand & Reputation
+  brand_analysis: z.boolean(),
+  // 3. Competitor Intelligence
+  competitors_directory: z.boolean(),
+  competitor_ads: z.boolean(),
+  competitor_analysis: z.boolean(),
+  // 4. Core SEO
+  keyword_research: z.boolean(),
+  rank_tracker: z.boolean(),
+  backlink_analysis: z.boolean(),
+  site_audit: z.boolean(),
+  // 5. Local SEO
+  gbp_integration: z.boolean(),
+  map_rank_tracker: z.boolean(),
+  review_management: z.boolean(),
+  listing_management: z.boolean(),
+  // 6. AI & Enterprise
+  ai_visibility: z.boolean(),
+  ai_content_studio: z.boolean(),
+  ai_seo_fixer: z.boolean(),
+  indexnow_submitter: z.boolean(),
+  uptime_ssl_monitoring: z.boolean(),
+  white_label_pdf: z.boolean(),
+  team_management: z.boolean(),
+  mcp_api_access: z.boolean(),
+  priority_support: z.boolean(),
   // Backward compatibility aliases
+  ad_readiness: z.boolean().optional(),
+  viral_detector: z.boolean().optional(),
+  trends_radar: z.boolean().optional(),
   whiteLabelPdf: z.boolean().optional(),
   mcpAccess: z.boolean().optional(),
   indexnowSubmit: z.boolean().optional(),

@@ -129,7 +129,7 @@ export function TemplateAeoShowcase() {
               to="/sign-up"
               className="btn btn-primary btn-xl rounded-full font-bold text-white shadow-xl hover:scale-105 transition-all px-10"
             >
-              Claim Your 14-Day Free Trial &rarr;
+              Get Started Free &rarr;
             </Link>
             <p className="text-xs text-secondary dark:text-accent font-medium">
               No credit card required &bull; Instant setup in under 60 seconds &bull; Cancel anytime

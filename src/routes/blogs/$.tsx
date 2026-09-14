@@ -165,7 +165,7 @@ function BlogPostReaderPage() {
                     to="/sign-up"
                     className="btn btn-primary bg-primary-500 hover:bg-primary-600 text-white rounded-full px-8 font-bold border-none shadow-lg shadow-primary-500/25"
                   >
-                    Start Free 14-Day Trial
+                    Get Started Free
                   </Link>
                 </div>
               </div>

@@ -3,9 +3,13 @@ import { SecurityAuditService } from "@/services/security-audit.service";
 
 export interface SaasPlanLimits {
   maxDomains: number;
+  maxCompetitors: number;
+  competitorScans: number;
+  keywordSearches: number;
   monthlyCredits: number;
   auditPages: number;
   uptimeMonitors: number;
+  teamMembers: number;
 }
 
 export interface SaasPlanFeatures {
@@ -13,11 +17,8 @@ export interface SaasPlanFeatures {
   advanced_analytics: boolean;
   action_roadmap: boolean;
   my_reports_builder: boolean;
-  // 2. Brand & Ad Readiness
+  // 2. Brand & Reputation
   brand_analysis: boolean;
-  ad_readiness: boolean;
-  viral_detector: boolean;
-  trends_radar: boolean;
   // 3. Competitor Intelligence
   competitors_directory: boolean;
   competitor_ads: boolean;
@@ -43,6 +44,9 @@ export interface SaasPlanFeatures {
   mcp_api_access: boolean;
   priority_support: boolean;
   // Backward compatibility aliases
+  ad_readiness?: boolean;
+  viral_detector?: boolean;
+  trends_radar?: boolean;
   whiteLabelPdf?: boolean;
   mcpAccess?: boolean;
   indexnowSubmit?: boolean;
@@ -62,72 +66,202 @@ export interface AdminPlanRecord {
   features: SaasPlanFeatures;
 }
 
-const DEFAULT_PLANS: AdminPlanRecord[] = BRAND_CONFIG.pricing.tiers.map((t) => {
-  const isAgency =
-    (t.id as string) === "agency" || (t.id as string) === "enterprise";
-  const isProOrAbove = (t.id as string) !== "starter";
-
-  return {
-    id: t.id,
-    name: t.name,
-    priceUsd: t.priceMonthlyUSD,
-    priceNgn: t.priceMonthlyNGN,
+const DEFAULT_PLANS: AdminPlanRecord[] = [
+  {
+    id: "free",
+    name: "Free Plan",
+    priceUsd: 0,
+    priceNgn: 0,
     billingInterval: "month",
     isActive: true,
     limits: {
-      maxDomains: t.id === "starter" ? 5 : t.id === "pro" ? 20 : 9999,
-      monthlyCredits: t.id === "starter" ? 500 : t.id === "pro" ? 2500 : 10000,
-      auditPages: t.id === "starter" ? 5000 : t.id === "pro" ? 50000 : 250000,
-      uptimeMonitors: t.id === "starter" ? 0 : t.id === "pro" ? 5 : 50,
+      maxDomains: 1,
+      maxCompetitors: 2,
+      competitorScans: 5,
+      keywordSearches: 15,
+      monthlyCredits: 50,
+      auditPages: 100,
+      uptimeMonitors: 0,
+      teamMembers: 1,
     },
     features: {
-      // 1. Overview & Strategy
       advanced_analytics: true,
       action_roadmap: true,
-      my_reports_builder: isAgency,
-      // 2. Brand & Ad Readiness
+      my_reports_builder: false,
       brand_analysis: true,
-      ad_readiness: isProOrAbove,
-      viral_detector: isProOrAbove,
-      trends_radar: isProOrAbove,
-      // 3. Competitor Intelligence
       competitors_directory: true,
-      competitor_ads: isProOrAbove,
-      competitor_analysis: isProOrAbove,
-      // 4. Core SEO
+      competitor_ads: false,
+      competitor_analysis: false,
       keyword_research: true,
       rank_tracker: true,
-      backlink_analysis: isProOrAbove,
+      backlink_analysis: false,
       site_audit: true,
-      // 5. Local SEO
-      gbp_integration: isProOrAbove,
-      map_rank_tracker: isProOrAbove,
-      review_management: isAgency,
-      listing_management: isAgency,
-      // 6. AI Engines & Enterprise
-      ai_visibility: isProOrAbove,
-      ai_content_studio: isProOrAbove,
-      ai_seo_fixer: isAgency,
-      indexnow_submitter: isProOrAbove,
-      uptime_ssl_monitoring: isProOrAbove,
-      white_label_pdf: isAgency,
-      team_management: isAgency,
-      mcp_api_access: isProOrAbove,
-      priority_support: isAgency,
-      // Compatibility aliases
-      whiteLabelPdf: isAgency,
-      mcpAccess: isProOrAbove,
-      indexnowSubmit: isProOrAbove,
-      aeoAudit: isProOrAbove,
-      customBranding: isAgency,
-      prioritySupport: isAgency,
+      gbp_integration: false,
+      map_rank_tracker: false,
+      review_management: false,
+      listing_management: false,
+      ai_visibility: false,
+      ai_content_studio: false,
+      ai_seo_fixer: false,
+      indexnow_submitter: false,
+      uptime_ssl_monitoring: false,
+      white_label_pdf: false,
+      team_management: false,
+      mcp_api_access: false,
+      priority_support: false,
     },
-  };
-});
+  },
+  {
+    id: "starter",
+    name: "Starter Plan",
+    priceUsd: 29,
+    priceNgn: 35000,
+    billingInterval: "month",
+    isActive: true,
+    limits: {
+      maxDomains: 3,
+      maxCompetitors: 5,
+      competitorScans: 25,
+      keywordSearches: 100,
+      monthlyCredits: 500,
+      auditPages: 5000,
+      uptimeMonitors: 2,
+      teamMembers: 2,
+    },
+    features: {
+      advanced_analytics: true,
+      action_roadmap: true,
+      my_reports_builder: false,
+      brand_analysis: true,
+      competitors_directory: true,
+      competitor_ads: false,
+      competitor_analysis: true,
+      keyword_research: true,
+      rank_tracker: true,
+      backlink_analysis: true,
+      site_audit: true,
+      gbp_integration: false,
+      map_rank_tracker: false,
+      review_management: false,
+      listing_management: false,
+      ai_visibility: false,
+      ai_content_studio: false,
+      ai_seo_fixer: false,
+      indexnow_submitter: true,
+      uptime_ssl_monitoring: true,
+      white_label_pdf: false,
+      team_management: false,
+      mcp_api_access: false,
+      priority_support: false,
+    },
+  },
+  {
+    id: "pro",
+    name: "Professional Plan",
+    priceUsd: 79,
+    priceNgn: 95000,
+    billingInterval: "month",
+    isActive: true,
+    limits: {
+      maxDomains: 10,
+      maxCompetitors: 20,
+      competitorScans: 100,
+      keywordSearches: 500,
+      monthlyCredits: 2500,
+      auditPages: 50000,
+      uptimeMonitors: 10,
+      teamMembers: 5,
+    },
+    features: {
+      advanced_analytics: true,
+      action_roadmap: true,
+      my_reports_builder: false,
+      brand_analysis: true,
+      competitors_directory: true,
+      competitor_ads: true,
+      competitor_analysis: true,
+      keyword_research: true,
+      rank_tracker: true,
+      backlink_analysis: true,
+      site_audit: true,
+      gbp_integration: true,
+      map_rank_tracker: true,
+      review_management: true,
+      listing_management: true,
+      ai_visibility: true,
+      ai_content_studio: true,
+      ai_seo_fixer: false,
+      indexnow_submitter: true,
+      uptime_ssl_monitoring: true,
+      white_label_pdf: false,
+      team_management: true,
+      mcp_api_access: true,
+      priority_support: false,
+      ad_readiness: true,
+      viral_detector: true,
+      trends_radar: true,
+      aeoAudit: true,
+    },
+  },
+  {
+    id: "agency",
+    name: "Agency & Scale",
+    priceUsd: 199,
+    priceNgn: 240000,
+    billingInterval: "month",
+    isActive: true,
+    limits: {
+      maxDomains: 50,
+      maxCompetitors: 100,
+      competitorScans: 500,
+      keywordSearches: 2500,
+      monthlyCredits: 10000,
+      auditPages: 250000,
+      uptimeMonitors: 50,
+      teamMembers: 25,
+    },
+    features: {
+      advanced_analytics: true,
+      action_roadmap: true,
+      my_reports_builder: true,
+      brand_analysis: true,
+      competitors_directory: true,
+      competitor_ads: true,
+      competitor_analysis: true,
+      keyword_research: true,
+      rank_tracker: true,
+      backlink_analysis: true,
+      site_audit: true,
+      gbp_integration: true,
+      map_rank_tracker: true,
+      review_management: true,
+      listing_management: true,
+      ai_visibility: true,
+      ai_content_studio: true,
+      ai_seo_fixer: true,
+      indexnow_submitter: true,
+      uptime_ssl_monitoring: true,
+      white_label_pdf: true,
+      team_management: true,
+      mcp_api_access: true,
+      priority_support: true,
+      ad_readiness: true,
+      viral_detector: true,
+      trends_radar: true,
+      aeoAudit: true,
+      whiteLabelPdf: true,
+      mcpAccess: true,
+      indexnowSubmit: true,
+      customBranding: true,
+      prioritySupport: true,
+    },
+  },
+];
 
 export const BillingPlansService = {
   /**
    * Retrieves all SaaS plans for admin management.
+   * Merges database customizations with default plans so plans never disappear.
    */
   async getAllPlans(): Promise<AdminPlanRecord[]> {
     try {
@@ -135,31 +269,69 @@ export const BillingPlansService = {
       const { saasPlans } = await import("@/db/schema");
 
       const rows = await db.select().from(saasPlans);
-      if (rows.length === 0) {
-        return DEFAULT_PLANS;
-      }
+      const dbPlanMap = new Map(rows.map((r) => [r.id, r]));
 
-      return rows.map((p) => {
-        let limits: SaasPlanLimits = {
-          maxDomains: 5,
-          monthlyCredits: 500,
-          auditPages: 5000,
+      const allPlanIds = Array.from(
+        new Set([
+          ...DEFAULT_PLANS.map((p) => p.id),
+          ...rows.map((r) => r.id),
+        ]),
+      );
+
+      return allPlanIds.map((planId) => {
+        const defaultPlan = DEFAULT_PLANS.find((p) => p.id === planId);
+        const p = dbPlanMap.get(planId);
+
+        if (!p && defaultPlan) {
+          return defaultPlan;
+        }
+
+        if (!p) {
+          return (
+            defaultPlan || {
+              id: planId,
+              name: planId,
+              priceUsd: 0,
+              priceNgn: 0,
+              billingInterval: "month",
+              isActive: true,
+              limits: {
+                maxDomains: 1,
+                maxCompetitors: 2,
+                competitorScans: 5,
+                keywordSearches: 15,
+                monthlyCredits: 50,
+                auditPages: 100,
+                uptimeMonitors: 0,
+                teamMembers: 1,
+              },
+              features: DEFAULT_PLANS[0].features,
+            }
+          );
+        }
+
+        let limits: SaasPlanLimits = defaultPlan?.limits || {
+          maxDomains: 1,
+          maxCompetitors: 2,
+          competitorScans: 5,
+          keywordSearches: 15,
+          monthlyCredits: 50,
+          auditPages: 100,
           uptimeMonitors: 0,
+          teamMembers: 1,
         };
-        let features: SaasPlanFeatures = {
+
+        let features: SaasPlanFeatures = defaultPlan?.features || {
           advanced_analytics: true,
           action_roadmap: true,
           my_reports_builder: false,
           brand_analysis: true,
-          ad_readiness: false,
-          viral_detector: false,
-          trends_radar: false,
           competitors_directory: true,
           competitor_ads: false,
           competitor_analysis: false,
           keyword_research: true,
           rank_tracker: true,
-          backlink_analysis: true,
+          backlink_analysis: false,
           site_audit: true,
           gbp_integration: false,
           map_rank_tracker: false,
@@ -174,12 +346,6 @@ export const BillingPlansService = {
           team_management: false,
           mcp_api_access: false,
           priority_support: false,
-          whiteLabelPdf: false,
-          mcpAccess: false,
-          indexnowSubmit: false,
-          aeoAudit: false,
-          customBranding: false,
-          prioritySupport: false,
         };
 
         try {

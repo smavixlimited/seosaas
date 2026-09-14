@@ -23,7 +23,7 @@ export function TemplateCTA() {
                 Build a complete search &amp; ad engine without seat limits.
               </h2>
               <p className="text-tagline-1 text-secondary dark:text-accent">
-                Start your 14-day free trial today. Connect your domain in 60 seconds and see where your competitors are making money.
+                Start with our free plan today. Connect your domain in 60 seconds and see where your competitors are making money.
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export function TemplateCTA() {
                 <span className="flex size-4 items-center justify-center rounded-full bg-ns-green text-secondary font-bold text-[10px]">
                   ✓
                 </span>
-                <span>14-Day free access</span>
+                <span>Forever free plan</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="flex size-4 items-center justify-center rounded-full bg-ns-green text-secondary font-bold text-[10px]">

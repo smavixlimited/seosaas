@@ -232,7 +232,7 @@ function SignUpPage() {
   return (
     <AuthPageCard
       title="Create your account"
-      helperText="Start your 14-day free trial. Dominate SEO rankings, competitor ads & AI search."
+      helperText="Start free today. Dominate SEO rankings, competitor ads & AI search."
       footer={
         <div className="pt-2 text-center text-tagline-2 text-secondary/70 dark:text-accent/70 space-y-2">
           <div>

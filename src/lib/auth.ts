@@ -120,12 +120,14 @@ function createAuth() {
               await import("@/services/system-settings.service");
             const isRegEnabled =
               await SystemSettingsService.isPublicRegistrationEnabled();
-            const isDevBypass = Reflect.get(env, "BYPASS_EMAIL_VERIFICATION") === "true";
-            const isAdminEmail = user.email.toLowerCase().includes("admin") || user.email.toLowerCase().endsWith("@skorvia.com");
+            const isAdminEmail =
+              user.email.toLowerCase().includes("admin") ||
+              user.email.toLowerCase().endsWith("@skorvia.com") ||
+              user.email.toLowerCase().endsWith("@skorvia.live");
 
-            if (!isRegEnabled && !isDevBypass && !isAdminEmail) {
+            if (!isRegEnabled && !isAdminEmail) {
               throw new APIError("FORBIDDEN", {
-                message: "Public registration is currently disabled.",
+                message: "Public registration is currently disabled by administrator.",
               });
             }
             if (
@@ -141,6 +143,24 @@ function createAuth() {
           },
           after: async (user) => {
             await syncHostedSignupContact(user);
+            try {
+              const { db } = await import("@/db");
+              const { userQuotas } = await import("@/db/schema");
+              const { BillingPlansService } = await import("@/services/billing-plans.service");
+              const allPlans = await BillingPlansService.getAllPlans();
+              const freePlan = allPlans.find((p) => p.id === "free") || allPlans[0];
+              const monthlyCreditsLimit = freePlan?.limits?.monthlyCredits ?? 50;
+
+              await db.insert(userQuotas).values({
+                userId: user.id,
+                planId: "free",
+                monthlyCreditsLimit,
+                creditsUsed: 0,
+                resetAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+              });
+            } catch (err) {
+              console.warn("Could not create initial free quota for user:", err);
+            }
           },
         },
       },

@@ -264,7 +264,7 @@ function ComparisonPage() {
           <div className="mt-16 max-w-4xl mx-auto rounded-[28px] bg-gradient-to-r from-primary via-indigo-900 to-secondary p-8 sm:p-12 text-center text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10 space-y-4">
               <span className="badge badge-green text-xs font-bold">
-                Zero-Risk 14-Day Free Access
+                100% Free Plan Available
               </span>
               <h2 className="text-heading-3 font-bold text-white font-interTight">
                 Ready to replace expensive legacy SEO suites?
@@ -278,7 +278,7 @@ function ComparisonPage() {
                   to="/sign-up"
                   className="btn btn-white hover:btn-primary dark:btn-white-dark rounded-full px-8 font-bold text-xs h-12 flex items-center justify-center gap-2 shadow-lg"
                 >
-                  <span>Start 14-Day Free Trial</span>
+                  <span>Get Started Free</span>
                   <Icon icon="solar:arrow-right-linear" className="size-4" />
                 </Link>
                 <Link

@@ -12,15 +12,20 @@ describe("Skorvia SaaS End-to-End Verification Suite", () => {
       expect(BRAND_CONFIG.name).toBe("Skorvia");
       expect(BRAND_CONFIG.colors.primary).toBe("#17199b");
       expect(BRAND_CONFIG.domain).toBe("skorvia.com");
-      expect(BRAND_CONFIG.pricing.tiers.length).toBe(3);
+      expect(BRAND_CONFIG.pricing.tiers.length).toBe(4);
     });
 
     it("verifies dual-currency pricing rules across all tiers", () => {
       for (const tier of BRAND_CONFIG.pricing.tiers) {
-        expect(tier.priceMonthlyUSD).toBeGreaterThan(0);
-        expect(tier.priceMonthlyNGN).toBeGreaterThan(0);
-        expect(tier.priceAnnualUSD).toBeLessThan(tier.priceMonthlyUSD);
-        expect(tier.priceAnnualNGN).toBeLessThan(tier.priceMonthlyNGN);
+        if (tier.id === "free") {
+          expect(tier.priceMonthlyUSD).toBe(0);
+          expect(tier.priceMonthlyNGN).toBe(0);
+        } else {
+          expect(tier.priceMonthlyUSD).toBeGreaterThan(0);
+          expect(tier.priceMonthlyNGN).toBeGreaterThan(0);
+          expect(tier.priceAnnualUSD).toBeLessThan(tier.priceMonthlyUSD);
+          expect(tier.priceAnnualNGN).toBeLessThan(tier.priceMonthlyNGN);
+        }
       }
     });
   });
