@@ -1003,3 +1003,67 @@ export const backlinkProspects = sqliteTable(
     index("backlink_prospects_status_idx").on(table.status),
   ],
 );
+
+export const aiContentArticles = sqliteTable(
+  "ai_content_articles",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    title: text("title").notNull(),
+    slug: text("slug").notNull(),
+    targetKeyword: text("target_keyword").notNull(),
+    secondaryKeywordsJson: text("secondary_keywords_json")
+      .notNull()
+      .default("[]"),
+    metaDescription: text("meta_description"),
+    contentMarkdown: text("content_markdown").notNull(),
+    contentHtml: text("content_html"),
+    wordCount: integer("word_count").notNull().default(0),
+    seoScore: integer("seo_score").notNull().default(90),
+    status: text("status").notNull().default("draft"), // 'draft' | 'queued' | 'published' | 'failed'
+    platform: text("platform").notNull().default("manual"), // 'wordpress' | 'shopify' | 'webhook' | 'manual'
+    publishedUrl: text("published_url"),
+    publishedAt: text("published_at"),
+    schemaJson: text("schema_json").notNull().default("{}"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("ai_articles_project_idx").on(table.projectId),
+    index("ai_articles_status_idx").on(table.status),
+    index("ai_articles_keyword_idx").on(table.targetKeyword),
+  ],
+);
+
+export const contentPublishingIntegrations = sqliteTable(
+  "content_publishing_integrations",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id").notNull(),
+    platform: text("platform").notNull(), // 'wordpress' | 'shopify' | 'webhook'
+    isEnabled: integer("is_enabled", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    apiUrl: text("api_url"),
+    credentialsJson: text("credentials_json").notNull().default("{}"),
+    autoPublishMode: text("auto_publish_mode")
+      .notNull()
+      .default("require_approval"), // 'require_approval' | 'autopilot'
+    publishFrequency: text("publish_frequency").notNull().default("weekly"), // 'daily' | 'weekly' | 'biweekly' | 'manual'
+    lastPublishedAt: text("last_published_at"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+  },
+  (table) => [
+    index("publishing_integrations_project_idx").on(table.projectId),
+    index("publishing_integrations_platform_idx").on(table.platform),
+  ],
+);

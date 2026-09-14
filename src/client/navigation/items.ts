@@ -155,6 +155,14 @@ const projectNavItems = [
     icon: ClipboardCheck,
     solarIcon: "icon-park-outline:protect",
   },
+  {
+    to: "/p/$projectId/content-engine" as const,
+    label: "AI Content & Auto-Publish",
+    benefit:
+      "Auto-discover keyword opportunities, write 1,800+ word structured articles with JSON-LD schema, and auto-publish to WordPress, Shopify, or Webhooks.",
+    icon: Sparkles,
+    solarIcon: "icon-park-outline:write",
+  },
 
   // 5. AI SEARCH & RADAR
   {

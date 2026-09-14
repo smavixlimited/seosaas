@@ -114,6 +114,7 @@ import { Route as ProjectPProjectIdMyAnalysisRouteImport } from './routes/_proje
 import { Route as ProjectPProjectIdLocalBusinessRouteImport } from './routes/_project/p/$projectId/local-business'
 import { Route as ProjectPProjectIdKeywordsRouteImport } from './routes/_project/p/$projectId/keywords'
 import { Route as ProjectPProjectIdDomainRouteImport } from './routes/_project/p/$projectId/domain'
+import { Route as ProjectPProjectIdContentEngineRouteImport } from './routes/_project/p/$projectId/content-engine'
 import { Route as ProjectPProjectIdCompetitorsRouteImport } from './routes/_project/p/$projectId/competitors'
 import { Route as ProjectPProjectIdCompetitorAnalysisRouteImport } from './routes/_project/p/$projectId/competitor-analysis'
 import { Route as ProjectPProjectIdCompetitorAdsRouteImport } from './routes/_project/p/$projectId/competitor-ads'
@@ -676,6 +677,12 @@ const ProjectPProjectIdDomainRoute = ProjectPProjectIdDomainRouteImport.update({
   path: '/domain',
   getParentRoute: () => ProjectPProjectIdRouteRoute,
 } as any)
+const ProjectPProjectIdContentEngineRoute =
+  ProjectPProjectIdContentEngineRouteImport.update({
+    id: '/content-engine',
+    path: '/content-engine',
+    getParentRoute: () => ProjectPProjectIdRouteRoute,
+  } as any)
 const ProjectPProjectIdCompetitorsRoute =
   ProjectPProjectIdCompetitorsRouteImport.update({
     id: '/competitors',
@@ -897,6 +904,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
+  '/p/$projectId/content-engine': typeof ProjectPProjectIdContentEngineRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
@@ -1018,6 +1026,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
+  '/p/$projectId/content-engine': typeof ProjectPProjectIdContentEngineRoute
   '/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
@@ -1145,6 +1154,7 @@ export interface FileRoutesById {
   '/_project/p/$projectId/competitor-ads': typeof ProjectPProjectIdCompetitorAdsRoute
   '/_project/p/$projectId/competitor-analysis': typeof ProjectPProjectIdCompetitorAnalysisRoute
   '/_project/p/$projectId/competitors': typeof ProjectPProjectIdCompetitorsRoute
+  '/_project/p/$projectId/content-engine': typeof ProjectPProjectIdContentEngineRoute
   '/_project/p/$projectId/domain': typeof ProjectPProjectIdDomainRoute
   '/_project/p/$projectId/keywords': typeof ProjectPProjectIdKeywordsRoute
   '/_project/p/$projectId/local-business': typeof ProjectPProjectIdLocalBusinessRoute
@@ -1270,6 +1280,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/competitor-ads'
     | '/p/$projectId/competitor-analysis'
     | '/p/$projectId/competitors'
+    | '/p/$projectId/content-engine'
     | '/p/$projectId/domain'
     | '/p/$projectId/keywords'
     | '/p/$projectId/local-business'
@@ -1391,6 +1402,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/competitor-ads'
     | '/p/$projectId/competitor-analysis'
     | '/p/$projectId/competitors'
+    | '/p/$projectId/content-engine'
     | '/p/$projectId/domain'
     | '/p/$projectId/keywords'
     | '/p/$projectId/local-business'
@@ -1517,6 +1529,7 @@ export interface FileRouteTypes {
     | '/_project/p/$projectId/competitor-ads'
     | '/_project/p/$projectId/competitor-analysis'
     | '/_project/p/$projectId/competitors'
+    | '/_project/p/$projectId/content-engine'
     | '/_project/p/$projectId/domain'
     | '/_project/p/$projectId/keywords'
     | '/_project/p/$projectId/local-business'
@@ -2348,6 +2361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectPProjectIdDomainRouteImport
       parentRoute: typeof ProjectPProjectIdRouteRoute
     }
+    '/_project/p/$projectId/content-engine': {
+      id: '/_project/p/$projectId/content-engine'
+      path: '/content-engine'
+      fullPath: '/p/$projectId/content-engine'
+      preLoaderRoute: typeof ProjectPProjectIdContentEngineRouteImport
+      parentRoute: typeof ProjectPProjectIdRouteRoute
+    }
     '/_project/p/$projectId/competitors': {
       id: '/_project/p/$projectId/competitors'
       path: '/competitors'
@@ -2601,6 +2621,7 @@ interface ProjectPProjectIdRouteRouteChildren {
   ProjectPProjectIdCompetitorAdsRoute: typeof ProjectPProjectIdCompetitorAdsRoute
   ProjectPProjectIdCompetitorAnalysisRoute: typeof ProjectPProjectIdCompetitorAnalysisRoute
   ProjectPProjectIdCompetitorsRoute: typeof ProjectPProjectIdCompetitorsRoute
+  ProjectPProjectIdContentEngineRoute: typeof ProjectPProjectIdContentEngineRoute
   ProjectPProjectIdDomainRoute: typeof ProjectPProjectIdDomainRoute
   ProjectPProjectIdKeywordsRoute: typeof ProjectPProjectIdKeywordsRoute
   ProjectPProjectIdLocalBusinessRoute: typeof ProjectPProjectIdLocalBusinessRoute
@@ -2630,6 +2651,7 @@ const ProjectPProjectIdRouteRouteChildren: ProjectPProjectIdRouteRouteChildren =
     ProjectPProjectIdCompetitorAnalysisRoute:
       ProjectPProjectIdCompetitorAnalysisRoute,
     ProjectPProjectIdCompetitorsRoute: ProjectPProjectIdCompetitorsRoute,
+    ProjectPProjectIdContentEngineRoute: ProjectPProjectIdContentEngineRoute,
     ProjectPProjectIdDomainRoute: ProjectPProjectIdDomainRoute,
     ProjectPProjectIdKeywordsRoute: ProjectPProjectIdKeywordsRoute,
     ProjectPProjectIdLocalBusinessRoute: ProjectPProjectIdLocalBusinessRoute,

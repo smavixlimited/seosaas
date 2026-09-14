@@ -136,4 +136,6 @@ export const {
   competitorTrackedAds,
   waitlistUsers,
   backlinkProspects,
+  aiContentArticles,
+  contentPublishingIntegrations,
 } = schema;
