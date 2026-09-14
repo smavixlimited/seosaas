@@ -69,7 +69,7 @@ export function CompetitorAnalysisDecoder({
     queryKey: ["competitorStrategy", projectId, cleanDomain],
     queryFn: () =>
       getCompetitorStrategy({
-        data: { domain: cleanDomain, locationCode: 2840 },
+        data: { projectId, domain: cleanDomain, locationCode: 2840 },
       }),
     enabled: Boolean(cleanDomain),
   });
@@ -77,7 +77,7 @@ export function CompetitorAnalysisDecoder({
   const regenerateMutation = useMutation({
     mutationFn: () =>
       regenerateCompetitorStrategy({
-        data: { domain: cleanDomain, locationCode: 2840 },
+        data: { projectId, domain: cleanDomain, locationCode: 2840 },
       }),
     onSuccess: (data) => {
       queryClient.setQueryData(

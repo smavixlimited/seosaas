@@ -34,6 +34,7 @@ export function CompetitorStrategyTab({
     queryFn: () =>
       getCompetitorStrategy({
         data: {
+          projectId,
           domain,
           locationCode,
         },
@@ -45,6 +46,7 @@ export function CompetitorStrategyTab({
     mutationFn: () =>
       regenerateCompetitorStrategy({
         data: {
+          projectId,
           domain,
           locationCode,
         },
