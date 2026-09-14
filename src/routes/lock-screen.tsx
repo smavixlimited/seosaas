@@ -138,27 +138,6 @@ function LockScreenPage() {
             )}
           </button>
         </form>
-
-        {/* Quick Biometric or Alternative */}
-        <div className="text-center pt-2 border-t border-base-300">
-          <p className="text-xs text-base-content/60">
-            Try unlock with{" "}
-            <button
-              type="button"
-              onClick={() => {
-                toast.info("Biometric authentication verified.");
-                void navigate({ to: "/" });
-              }}
-              className="font-bold text-primary hover:underline inline-flex items-center gap-1"
-            >
-              <Icon
-                icon="solar:fingerprint-bold-duotone"
-                className="h-3.5 w-3.5"
-              />
-              Fingerprint / Face ID
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );

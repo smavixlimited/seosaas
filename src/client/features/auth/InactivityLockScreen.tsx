@@ -97,11 +97,6 @@ export function InactivityLockModal({
     }
   };
 
-  const handleBiometricUnlock = () => {
-    toast.info("Biometric unlock verified.");
-    onUnlock();
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
       <div className="w-full max-w-md rounded-3xl border border-base-300 bg-base-100 p-8 shadow-2xl space-y-6">
@@ -191,24 +186,6 @@ export function InactivityLockModal({
             )}
           </button>
         </form>
-
-        {/* Quick Biometric or Alternative */}
-        <div className="text-center pt-1 border-t border-base-300">
-          <p className="text-xs text-base-content/60">
-            Quick unlock with{" "}
-            <button
-              type="button"
-              onClick={handleBiometricUnlock}
-              className="font-bold text-primary hover:underline inline-flex items-center gap-1"
-            >
-              <Icon
-                icon="solar:fingerprint-bold-duotone"
-                className="h-3.5 w-3.5"
-              />
-              Fingerprint / Face ID
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -144,6 +144,9 @@ export function SkorviaOnboardingWizard({
       };
     },
     onSuccess: ({ target, projectId: finalProjectId }) => {
+      try {
+        localStorage.setItem("skorvia_onboarding_completed", "true");
+      } catch {}
       void queryClient.invalidateQueries({ queryKey: ["onboardingAnswers"] });
       void queryClient.invalidateQueries({ queryKey: ["projects"] });
       void queryClient.invalidateQueries({

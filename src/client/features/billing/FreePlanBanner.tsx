@@ -69,8 +69,23 @@ export function FreePlanBanner() {
   if (isOutOfCredits) {
     return (
       <BannerShell variant="error">
-        You&rsquo;ve used all your credits. {creditsActionLink} to continue
-        using Skorvia.
+        {isFreePlan ? (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
+            <span>
+              <strong>Free Plan Quota Exhausted:</strong> You have reached your Free plan quota limit for this month. Upgrade your plan for higher limits, or wait until next month when your quota automatically resets.
+            </span>
+            <Link
+              to={BILLING_ROUTE}
+              className="btn btn-xs btn-primary text-white rounded-lg font-bold shrink-0 self-start sm:self-auto"
+            >
+              Upgrade Plan &rarr;
+            </Link>
+          </div>
+        ) : (
+          <div>
+            You&rsquo;ve used all your credits. {creditsActionLink} to continue using Skorvia.
+          </div>
+        )}
       </BannerShell>
     );
   }
@@ -78,8 +93,23 @@ export function FreePlanBanner() {
   if (isLowCredits) {
     return (
       <BannerShell variant="warning">
-        You&rsquo;re running low on credits. {creditsActionLink} to keep using
-        Skorvia.
+        {isFreePlan ? (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
+            <span>
+              <strong>Low Monthly Quota:</strong> You have {dbCreditsRemaining} credits remaining on your Free plan this month.
+            </span>
+            <Link
+              to={BILLING_ROUTE}
+              className="btn btn-xs btn-warning text-white rounded-lg font-bold shrink-0 self-start sm:self-auto"
+            >
+              Upgrade &rarr;
+            </Link>
+          </div>
+        ) : (
+          <div>
+            You&rsquo;re running low on credits. {creditsActionLink} to keep using Skorvia.
+          </div>
+        )}
       </BannerShell>
     );
   }

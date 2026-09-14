@@ -20,6 +20,11 @@ export function useOnboardingRedirect() {
   });
 
   useEffect(() => {
+    const pathname = window.location.pathname;
+    const isLocalOnboardingCompleted =
+      typeof localStorage !== "undefined" &&
+      localStorage.getItem("skorvia_onboarding_completed") === "true";
+
     if (
       !isHostedMode ||
       !session?.user?.id ||
@@ -27,7 +32,12 @@ export function useOnboardingRedirect() {
       onboardingQuery.isLoading ||
       onboardingQuery.isError ||
       onboardingQuery.data?.completedAt ||
-      window.location.pathname === "/onboarding"
+      isLocalOnboardingCompleted ||
+      pathname === "/onboarding" ||
+      pathname.startsWith("/p/") ||
+      pathname.startsWith("/projects") ||
+      pathname.startsWith("/billing") ||
+      pathname.startsWith("/settings")
     ) {
       return;
     }

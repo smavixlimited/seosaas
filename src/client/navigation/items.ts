@@ -15,7 +15,6 @@ import {
   CreditCard,
   Settings,
   ShieldCheck,
-  Store,
   Gauge,
   Flame,
   Users,
@@ -157,17 +156,7 @@ const projectNavItems = [
     solarIcon: "icon-park-outline:protect",
   },
 
-  // 5. LOCAL BUSINESS
-  {
-    to: "/p/$projectId/local-business" as const,
-    label: "Local Business Hub",
-    benefit:
-      "Listing Management, Google Business Profile (GBP) Optimization, Unified Review Inbox, and Map Rank Tracker Geo-Grid Heatmap.",
-    icon: Store,
-    solarIcon: "icon-park-outline:shop",
-  },
-
-  // 6. AI SEARCH & RADAR
+  // 5. AI SEARCH & RADAR
   {
     to: "/p/$projectId/brand-lookup" as const,
     label: "Brand Lookup & AI Search",
@@ -302,11 +291,6 @@ export function getProjectNavGroups(projectId: string) {
         byPath("/p/$projectId/backlinks"),
         byPath("/p/$projectId/audit"),
       ],
-    },
-    {
-      label: "Local Business",
-      solarIcon: "icon-park-outline:shop",
-      items: [byPath("/p/$projectId/local-business")],
     },
     {
       label: "AI Search & Radar",

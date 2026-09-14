@@ -78,10 +78,10 @@ function PlatformMenu({ onClose }: { onClose: () => void }) {
 
   const col2 = [
     {
-      href: "/features/local-business",
-      title: "Google Maps Geo-Grid",
-      description: "GPS 7x7 coordinate map pack tracking",
-      icon: "solar:map-point-bold-duotone",
+      href: "/features/competitor-ad-spy",
+      title: "Competitor Ad Spy",
+      description: "Reveal live Google & Meta search ads & copy",
+      icon: "solar:eye-bold-duotone",
     },
     {
       href: "/features/site-audit",
@@ -189,10 +189,10 @@ function SolutionsMenu({ onClose }: { onClose: () => void }) {
       icon: "solar:bag-3-bold-duotone",
     },
     {
-      href: "/solutions/for-local-business",
-      title: "Local Businesses",
-      description: "Own Google Map Packs in your geographic radius",
-      icon: "solar:shop-2-bold-duotone",
+      href: "/solutions/for-startups",
+      title: "Startups & Scaleups",
+      description: "Fast-track search visibility & customer acquisition",
+      icon: "solar:rocket-bold-duotone",
     },
   ];
 
@@ -556,11 +556,11 @@ export function MarketingNavbar() {
                 AI Search &amp; AEO Monitor
               </Link>
               <Link
-                to="/features/local-business"
+                to="/features/competitor-page-decoder"
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2 text-xs font-semibold hover:bg-background-2 dark:hover:bg-background-5 rounded-lg block"
               >
-                Google Maps Geo-Grid
+                Competitor Page Decoder
               </Link>
               <Link
                 to="/features/site-audit"

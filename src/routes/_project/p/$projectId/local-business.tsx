@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { LocalBusinessPage } from "@/client/features/local-business/LocalBusinessPage";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_project/p/$projectId/local-business")({
-  component: LocalBusinessRoute,
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: "/p/$projectId",
+      params: { projectId: params.projectId },
+      replace: true,
+    });
+  },
+  component: () => null,
 });
-
-function LocalBusinessRoute() {
-  const { projectId } = Route.useParams();
-  return <LocalBusinessPage projectId={projectId} />;
-}

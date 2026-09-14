@@ -67,10 +67,10 @@ export function MarketingFooter() {
               </li>
               <li>
                 <Link
-                  to="/features/local-business"
+                  to="/features/competitor-page-decoder"
                   className="hover:text-white transition-colors"
                 >
-                  Local Maps Radar
+                  Competitor Page Decoder
                 </Link>
               </li>
               <li>
@@ -124,10 +124,10 @@ export function MarketingFooter() {
               </li>
               <li>
                 <Link
-                  to="/solutions/for-local-business"
+                  to="/pricing"
                   className="hover:text-white transition-colors"
                 >
-                  For Local Stores
+                  Pricing &amp; Plans
                 </Link>
               </li>
               <li>

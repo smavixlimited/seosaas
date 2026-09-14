@@ -16,7 +16,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Radio,
-  Store,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
@@ -236,10 +236,10 @@ export function VenixTopBar({
       icon: "solar:link-bold-duotone",
     },
     {
-      name: "Google Maps Local SEO",
-      category: "Local",
-      href: activePid ? `/p/${activePid}/local-business` : "/my-brands",
-      icon: "solar:map-point-bold-duotone",
+      name: "Team & Collaborators",
+      category: "Workspace",
+      href: "/dashboard/team",
+      icon: "solar:users-group-two-rounded-bold-duotone",
     },
     {
       name: "Instant Indexing Engine",
@@ -571,6 +571,15 @@ export function VenixTopBar({
           </Link>
         </div>
 
+        {/* Invite Team Action */}
+        <Link
+          to="/dashboard/team"
+          className="btn btn-outline btn-xs sm:btn-sm rounded-xl font-bold gap-1.5 hidden md:inline-flex border-base-300 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all shadow-xs"
+          title="Invite team members and manage seat permissions"
+        >
+          <Users size={14} className="text-primary shrink-0" />
+          <span>Invite Team</span>
+        </Link>
 
         {/* 1-Click Dark/Light Mode Switcher */}
         <button
@@ -713,12 +722,10 @@ export function VenixTopBar({
                                 : "text-primary"
                           }`}
                         >
-                          {n.category === "pixel" ? (
-                            <Radio size={14} className="shrink-0" />
-                          ) : n.category === "audit" ? (
-                            <ShieldCheck size={14} className="shrink-0" />
-                          ) : n.category === "gbp" ? (
-                            <Store size={14} className="shrink-0" />
+                          {n.category === "credits" ? (
+                            <Zap size={14} className="shrink-0 text-amber-500" />
+                          ) : n.category === "rank" ? (
+                            <ShieldCheck size={14} className="shrink-0 text-primary" />
                           ) : (
                             <Bell size={14} className="shrink-0" />
                           )}
@@ -794,6 +801,17 @@ export function VenixTopBar({
 
             <li>
               <Link
+                to="/dashboard/team"
+                onClick={() => closeDropdown()}
+                className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
+              >
+                <Users size={16} className="text-primary shrink-0" />
+                <span>Team & Members</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
                 to="/billing"
                 onClick={() => closeDropdown()}
                 className="flex items-center gap-2 rounded-xl py-2 px-2.5 font-medium hover:bg-base-200"
@@ -846,12 +864,10 @@ export function VenixTopBar({
                         : "bg-primary/10 text-primary"
                   }`}
                 >
-                  {selectedNotification.category === "pixel" ? (
-                    <Radio size={20} className="shrink-0" />
-                  ) : selectedNotification.category === "audit" ? (
-                    <ShieldCheck size={20} className="shrink-0" />
-                  ) : selectedNotification.category === "gbp" ? (
-                    <Store size={20} className="shrink-0" />
+                  {selectedNotification.category === "credits" ? (
+                    <Zap size={20} className="shrink-0 text-amber-500" />
+                  ) : selectedNotification.category === "rank" ? (
+                    <ShieldCheck size={20} className="shrink-0 text-primary" />
                   ) : (
                     <Bell size={20} className="shrink-0" />
                   )}

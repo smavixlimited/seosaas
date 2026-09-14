@@ -36,6 +36,55 @@ export const getOnboardingAnswers = createServerFn({ method: "GET" })
       where: eq(user.id, context.userId),
     });
 
+    let completedAt = answers?.completedAt ?? null;
+
+    // Safety fallback: if completedAt is missing in userOnboardingAnswers,
+    // verify if the user already has created projects or organizations.
+    // If so, mark as completed immediately to prevent onboarding looping.
+    if (!completedAt) {
+      try {
+        const { member } = await import("@/db/better-auth-schema");
+        const { projects } = await import("@/db/schema");
+        const userMembers = await db
+          .select({ orgId: member.organizationId })
+          .from(member)
+          .where(eq(member.userId, context.userId))
+          .limit(1);
+
+        if (userMembers.length > 0 && userMembers[0]?.orgId) {
+          const userProjects = await db
+            .select({ id: projects.id })
+            .from(projects)
+            .where(eq(projects.organizationId, userMembers[0].orgId))
+            .limit(1);
+
+          if (userProjects.length > 0) {
+            completedAt = new Date().toISOString();
+            // Automatically persist to userOnboardingAnswers
+            await db
+              .insert(userOnboardingAnswers)
+              .values({
+                userId: context.userId,
+                organizationId: userMembers[0].orgId,
+                completedAt,
+                gscNudgeDismissedAt: completedAt,
+                updatedAt: completedAt,
+              })
+              .onConflictDoUpdate({
+                target: userOnboardingAnswers.userId,
+                set: {
+                  completedAt,
+                  gscNudgeDismissedAt: completedAt,
+                  updatedAt: completedAt,
+                },
+              });
+          }
+        }
+      } catch (err) {
+        console.warn("Failed checking user project existence in getOnboardingAnswers:", err);
+      }
+    }
+
     let interestedFeatures: string[] = [];
     if (answers?.interestedFeatures) {
       try {

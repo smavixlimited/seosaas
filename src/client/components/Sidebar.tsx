@@ -9,6 +9,7 @@ import {
   MessageCircle,
   Settings,
   User,
+  Users,
   X,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -304,6 +305,16 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
             tabIndex={0}
             className="dropdown-content z-30 menu mb-1 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl text-xs"
           >
+            <li>
+              <Link
+                to="/dashboard/team"
+                onClick={closeMenu}
+                className="rounded-xl py-1.5 font-medium"
+              >
+                <Users className="h-4 w-4 text-primary" />
+                Team &amp; Members
+              </Link>
+            </li>
             <li>
               <Link
                 to="/settings"

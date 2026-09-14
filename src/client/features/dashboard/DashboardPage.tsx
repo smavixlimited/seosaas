@@ -328,6 +328,12 @@ export function DashboardPage({ projectId }: { projectId: string }) {
 
           <div className="flex flex-wrap items-center gap-2">
             <Link
+              to="/dashboard/team"
+              className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5 border-base-300 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all shadow-xs"
+            >
+              <Icon icon="icon-park-outline:peoples" className="h-4 w-4 text-primary" /> Invite Team
+            </Link>
+            <Link
               to="/p/$projectId/advanced-analytics"
               params={{ projectId }}
               className="btn btn-outline btn-sm rounded-xl font-bold gap-1.5"
@@ -374,7 +380,7 @@ export function DashboardPage({ projectId }: { projectId: string }) {
                 <span className="text-xs text-base-content/50 font-medium">Enterprise Suite</span>
               </div>
               <h3 className="text-lg font-black tracking-tight text-base-content mt-1">
-                Strategic SEO, AEO &amp; Local Business Modules
+                Strategic SEO, AEO &amp; Brand Intelligence Modules
               </h3>
             </div>
           </div>
@@ -431,26 +437,26 @@ export function DashboardPage({ projectId }: { projectId: string }) {
             </Link>
 
             <Link
-              to="/p/$projectId/local-business"
+              to="/p/$projectId/backlinks"
               params={{ projectId }}
-              className="group rounded-2xl border border-base-300/80 bg-base-200/40 p-4.5 hover:border-emerald-500 hover:bg-base-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+              className="group rounded-2xl border border-base-300/80 bg-base-200/40 p-4.5 hover:border-cyan-500 hover:bg-base-100 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                    <Icon icon="icon-park-outline:shop" className="h-5 w-5" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                    <Icon icon="icon-park-outline:link-three" className="h-5 w-5" />
                   </div>
-                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">Google Maps</span>
+                  <span className="badge badge-sm badge-ghost text-[10px] font-bold">Authority</span>
                 </div>
-                <h4 className="text-sm font-bold text-base-content group-hover:text-emerald-500 transition-colors">
-                  Local Business &amp; Maps
+                <h4 className="text-sm font-bold text-base-content group-hover:text-cyan-500 transition-colors">
+                  Backlinks &amp; Authority Pulse
                 </h4>
                 <p className="text-xs text-base-content/60 line-clamp-2">
-                  Geo-grid rank tracker, Google Business Profile audit, AI review reply, and NAP consistency.
+                  Referring domains, toxic anchor text monitoring, link velocity, and competitor link gap analysis.
                 </p>
               </div>
-              <div className="mt-4 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 gap-1">
-                <span>Manage Local Business</span>
+              <div className="mt-4 flex items-center text-xs font-bold text-cyan-600 dark:text-cyan-400 gap-1">
+                <span>Explore Backlinks</span>
                 <Icon icon="icon-park-outline:arrow-right" className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>

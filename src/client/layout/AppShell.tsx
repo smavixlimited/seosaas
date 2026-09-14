@@ -123,29 +123,33 @@ export function AuthenticatedAppLayout({
   }, [shouldShowMissingSeoApiKeyModal]);
 
   return (
-    <div className="flex h-[100dvh] w-full max-w-full bg-base-200/60 overflow-hidden">
+    <div className="flex h-[100dvh] w-full max-w-full bg-base-200/60 overflow-hidden print:block print:h-auto print:overflow-visible print:bg-white">
       {/* Desktop Venix Sidebar */}
-      <div className="hidden shrink-0 md:block">
+      <div className="hidden shrink-0 md:block print:hidden">
         <Sidebar projectId={sidebarProjectId} />
       </div>
 
       {/* Main Content Area with Venix TopBar */}
-      <div className="flex min-w-0 max-w-full flex-1 flex-col overflow-hidden">
-        <VenixTopBar
-          projectId={sidebarProjectId}
-          onToggleSidebar={() => setDrawerOpen((prev) => !prev)}
-          drawerOpen={drawerOpen}
-        />
-
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-base-100/50">
-          <SeoApiStatusBanners
-            shouldShowSeoApiWarning={shouldShowSeoApiWarning}
-            seoApiKeyStatusError={seoApiKeyStatusError}
+      <div className="flex min-w-0 max-w-full flex-1 flex-col overflow-hidden print:block print:h-auto print:overflow-visible print:w-full">
+        <div className="print:hidden">
+          <VenixTopBar
+            projectId={sidebarProjectId}
+            onToggleSidebar={() => setDrawerOpen((prev) => !prev)}
+            drawerOpen={drawerOpen}
           />
+        </div>
 
-          {banner}
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-base-100/50 print:block print:h-auto print:overflow-visible print:bg-white print:w-full">
+          <div className="print:hidden">
+            <SeoApiStatusBanners
+              shouldShowSeoApiWarning={shouldShowSeoApiWarning}
+              seoApiKeyStatusError={seoApiKeyStatusError}
+            />
 
-          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden w-full max-w-full">
+            {banner}
+          </div>
+
+          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden w-full max-w-full print:block print:h-auto print:overflow-visible print:w-full">
             {children}
           </div>
         </div>
