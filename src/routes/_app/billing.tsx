@@ -103,8 +103,8 @@ function BillingPage() {
     ? dbCredits.creditsRemaining
     : totalRemaining > 0
       ? totalRemaining * AUTUMN_SEO_DATA_CREDITS_PER_USD
-      : 500;
-  const liveCreditsLimit = dbCredits ? dbCredits.monthlyCreditsLimit : 500;
+      : 50;
+  const liveCreditsLimit = dbCredits ? dbCredits.monthlyCreditsLimit : 50;
   const liveCreditsUsed = dbCredits ? dbCredits.creditsUsed : 0;
   const liveBalanceUsd =
     totalRemaining > 0 ? totalRemaining : liveCreditsRemaining / 100;

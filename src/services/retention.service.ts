@@ -37,13 +37,45 @@ export const RetentionService = {
    */
   async getUserCreditUsage(userId: string): Promise<UserCreditUsageSummary> {
     let creditsUsed = 0;
-    let monthlyCreditsLimit = 500;
-    let planId = "starter";
+    let monthlyCreditsLimit = 50;
+    let planId = "free";
 
     try {
       const { db } = await import("@/db");
-      const { userQuotas, saasPlans } = await import("@/db/schema");
+      const { userQuotas, billingCustomerStatus, member } =
+        await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
+
+      // Verify active paying status
+      const [mem] = await db
+        .select({ organizationId: member.organizationId })
+        .from(member)
+        .where(eq(member.userId, userId))
+        .limit(1);
+
+      let isPaying = false;
+      let activePaidPlanId: string | null = null;
+      if (mem?.organizationId) {
+        const [bStatus] = await db
+          .select()
+          .from(billingCustomerStatus)
+          .where(eq(billingCustomerStatus.organizationId, mem.organizationId))
+          .limit(1);
+
+        if (
+          bStatus?.isPaying &&
+          (bStatus.paidPlanStatus === "active" ||
+            bStatus.paidPlanStatus === "trialing")
+        ) {
+          isPaying = true;
+          try {
+            const parsed = bStatus.customerJson
+              ? JSON.parse(bStatus.customerJson)
+              : null;
+            if (parsed?.plan) activePaidPlanId = parsed.plan;
+          } catch {}
+        }
+      }
 
       const [row] = await db
         .select()
@@ -53,35 +85,52 @@ export const RetentionService = {
 
       if (row) {
         // Check for expired subscription past 24-hour grace period
-        if (row.planId && row.planId !== "starter" && row.resetAt) {
+        if (row.planId && row.planId !== "free" && row.resetAt) {
           const { SubscriptionLifecycleService } =
             await import("@/services/subscription-lifecycle.service");
           if (SubscriptionLifecycleService.isPastGracePeriod(row.resetAt)) {
             await SubscriptionLifecycleService.downgradeUserToStarter(userId);
-            row.planId = "starter";
-            row.monthlyCreditsLimit = 500;
+            row.planId = "free";
+            row.monthlyCreditsLimit = 50;
           }
         }
 
         creditsUsed = row.creditsUsed ?? 0;
-        monthlyCreditsLimit = row.monthlyCreditsLimit ?? 500;
-        planId = row.planId ?? "starter";
+        monthlyCreditsLimit = row.monthlyCreditsLimit ?? 50;
+
+        if (!isPaying && row.planId === "starter") {
+          planId = "free";
+          monthlyCreditsLimit = 50;
+          try {
+            await db
+              .update(userQuotas)
+              .set({ planId: "free", monthlyCreditsLimit: 50 })
+              .where(eq(userQuotas.userId, userId));
+          } catch {}
+        } else {
+          planId =
+            row.planId ?? (isPaying ? activePaidPlanId || "starter" : "free");
+        }
       } else {
         // Initialize default user quotas in database for new user
         const resetAt = new Date(
           Date.now() + 30 * 24 * 60 * 60 * 1000,
         ).toISOString();
+        const initialPlanId = isPaying ? activePaidPlanId || "starter" : "free";
+        const initialLimit = isPaying ? 500 : 50;
         try {
           await db.insert(userQuotas).values({
             userId,
-            planId: "starter",
-            monthlyCreditsLimit: 500,
+            planId: initialPlanId,
+            monthlyCreditsLimit: initialLimit,
             creditsUsed: 0,
             crawlPagesUsed: 0,
             uptimeMonitorsCount: 0,
             resetAt,
           });
         } catch {}
+        planId = initialPlanId;
+        monthlyCreditsLimit = initialLimit;
       }
     } catch (err) {
       console.warn("getUserCreditUsage database error, using fallback:", err);

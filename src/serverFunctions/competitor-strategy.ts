@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAuthenticatedContext } from "@/serverFunctions/middleware";
 import { CompetitorStrategyService } from "@/services/competitor-strategy.service";
+import { PlanEntitlementService } from "@/services/plan-entitlement.service";
 
 const competitorStrategyInputSchema = z.object({
   projectId: z.string().optional(),
@@ -43,6 +44,10 @@ export const getCompetitorStrategy = createServerFn({ method: "POST" })
   .middleware(requireAuthenticatedContext)
   .validator(competitorStrategyInputSchema)
   .handler(async ({ data, context }) => {
+    await PlanEntitlementService.assertFeatureAccess(
+      context.userId,
+      "competitor_analysis",
+    );
     const effectiveProjectId = await resolveEffectiveProjectId(
       data.projectId,
       context.organizationId,

@@ -6,6 +6,7 @@ import {
   AdPlatform,
 } from "@/services/competitor-ads.service";
 import { RoadmapService } from "@/services/roadmap.service";
+import { PlanEntitlementService } from "@/services/plan-entitlement.service";
 
 const adPlatformSchema = z.enum([
   "meta",
@@ -25,7 +26,11 @@ export const getCompetitorAdsServerFn = createServerFn({ method: "POST" })
       forceRefresh: z.boolean().optional(),
     }),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    await PlanEntitlementService.assertFeatureAccess(
+      context.userId,
+      "competitor_ads",
+    );
     return CompetitorAdsService.getCompetitorAds({
       projectId: data.projectId,
       competitorDomain: data.competitorDomain,

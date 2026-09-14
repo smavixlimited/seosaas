@@ -7,6 +7,7 @@ import {
   exportAdAngleToRoadmapServerFn,
 } from "@/serverFunctions/competitor-ads";
 import { listBrandCompetitors } from "@/serverFunctions/brand-competitor";
+import { FeatureUpgradeGate } from "@/client/components/billing/FeatureUpgradeGate";
 import type {
   AdPlatform,
   CompetitorAdItem,
@@ -173,6 +174,26 @@ export function CompetitorAdLibrary({
       return matchesPlatform && matchesAngle;
     });
   }, [adsList, selectedPlatform, selectedAngleFilter]);
+
+  if (
+    adsQuery.error &&
+    (adsQuery.error.message?.includes("not available on your current plan") ||
+      adsQuery.error.message?.includes("FORBIDDEN_PLAN_FEATURE") ||
+      adsQuery.error.message?.includes("upgrade your plan"))
+  ) {
+    return (
+      <FeatureUpgradeGate
+        featureTitle="Competitor Ad Spying"
+        featureDescription="Unlock full multi-network competitor ad copy intelligence across Google Search Ads, Meta, TikTok, and LinkedIn."
+        requiredPlanName="Starter or Pro Plan"
+        bullets={[
+          "Live competitor search ads & sitelinks",
+          "Creative copy, winning angles & longevity analysis",
+          "Automated strategic counter-plays into Action Roadmap",
+        ]}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-150">

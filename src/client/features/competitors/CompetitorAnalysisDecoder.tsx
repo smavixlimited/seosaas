@@ -11,7 +11,9 @@ import {
   getCompetitorStrategy,
   regenerateCompetitorStrategy,
 } from "@/serverFunctions/competitor-strategy";
+import { FeatureUpgradeGate } from "@/client/components/billing/FeatureUpgradeGate";
 import { createSamSession } from "@/serverFunctions/sam";
+import type { CompetitorStrategyTeardown } from "@/services/competitor-strategy.service";
 import { invalidateSamSessions } from "@/client/features/sam/samQueries";
 import { createRoadmapTask } from "@/serverFunctions/roadmap";
 import { CompetitorAdLibrary } from "@/client/features/competitors/CompetitorAdLibrary";
@@ -292,32 +294,50 @@ export function CompetitorAnalysisDecoder({
           </div>
         </div>
       ) : teardownQuery.isError ? (
-        <div className="rounded-3xl border border-error/30 bg-error/5 p-10 text-center space-y-4 shadow-xs">
-          <div className="mx-auto w-14 h-14 rounded-2xl bg-error/10 text-error flex items-center justify-center">
-            <Icon
-              icon="solar:danger-triangle-bold-duotone"
-              className="h-7 w-7"
-            />
+        teardownQuery.error instanceof Error &&
+        (teardownQuery.error.message.includes("upgrade your plan") ||
+          teardownQuery.error.message.includes(
+            "not available on your current plan",
+          ) ||
+          teardownQuery.error.message.includes("FORBIDDEN_PLAN_FEATURE")) ? (
+          <FeatureUpgradeGate
+            featureTitle="Competitor Strategy Teardown"
+            featureDescription="Unlock deep head-to-head positioning, organic traffic gaps, content moats, and actionable attack playbooks against any competitor."
+            requiredPlanName="Starter or Pro Plan"
+            bullets={[
+              "Direct head-to-head metrics (Traffic, Keywords, Backlinks)",
+              "Content moat & striking distance keyword vulnerabilities",
+              "1-click export of tactical attack plays into Action Roadmap",
+            ]}
+          />
+        ) : (
+          <div className="rounded-3xl border border-error/30 bg-error/5 p-10 text-center space-y-4 shadow-xs">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-error/10 text-error flex items-center justify-center">
+              <Icon
+                icon="solar:danger-triangle-bold-duotone"
+                className="h-7 w-7"
+              />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-base-content">
+                Unable to Complete Teardown for {cleanDomain}
+              </h3>
+              <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
+                {teardownQuery.error instanceof Error
+                  ? teardownQuery.error.message
+                  : "An unexpected error occurred while analyzing the competitor domain. Please try again."}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => teardownQuery.refetch()}
+              className="btn btn-primary btn-sm rounded-xl font-bold text-xs"
+            >
+              <Icon icon="solar:refresh-bold" className="h-4 w-4" />
+              <span>Retry Analysis</span>
+            </button>
           </div>
-          <div>
-            <h3 className="text-base font-bold text-base-content">
-              Unable to Complete Teardown for {cleanDomain}
-            </h3>
-            <p className="text-xs text-base-content/60 max-w-md mx-auto mt-1">
-              {teardownQuery.error instanceof Error
-                ? teardownQuery.error.message
-                : "An unexpected error occurred while analyzing the competitor domain. Please try again."}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => teardownQuery.refetch()}
-            className="btn btn-primary btn-sm rounded-xl font-bold text-xs"
-          >
-            <Icon icon="solar:refresh-bold" className="h-4 w-4" />
-            <span>Retry Analysis</span>
-          </button>
-        </div>
+        )
       ) : !cleanDomain ? (
         <div className="rounded-3xl border border-base-300 bg-base-100 p-12 text-center space-y-4 shadow-xs">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-base-200 text-base-content/40 flex items-center justify-center">

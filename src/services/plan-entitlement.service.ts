@@ -23,13 +23,14 @@ export const PlanEntitlementService = {
    * Resolves the user's active plan, effective feature permissions, and quota usage.
    */
   async getUserEntitlements(userId: string): Promise<UserEntitlementsResult> {
-    let planId = "starter";
+    let planId = "free";
     let creditsUsed = 0;
-    let monthlyCreditsLimit = 500;
+    let monthlyCreditsLimit = 50;
 
     try {
       const { db } = await import("@/db");
-      const { userQuotas } = await import("@/db/schema");
+      const { userQuotas, billingCustomerStatus, member } =
+        await import("@/db/schema");
       const { eq } = await import("drizzle-orm");
 
       const [quota] = await db
@@ -38,10 +39,51 @@ export const PlanEntitlementService = {
         .where(eq(userQuotas.userId, userId))
         .limit(1);
 
+      // Verify if the user belongs to an organization with an active paying subscription
+      const [mem] = await db
+        .select({ organizationId: member.organizationId })
+        .from(member)
+        .where(eq(member.userId, userId))
+        .limit(1);
+
+      let isPaying = false;
+      let activePaidPlanId: string | null = null;
+      if (mem?.organizationId) {
+        const [bStatus] = await db
+          .select()
+          .from(billingCustomerStatus)
+          .where(eq(billingCustomerStatus.organizationId, mem.organizationId))
+          .limit(1);
+
+        if (
+          bStatus?.isPaying &&
+          (bStatus.paidPlanStatus === "active" ||
+            bStatus.paidPlanStatus === "trialing")
+        ) {
+          isPaying = true;
+          try {
+            const parsed = bStatus.customerJson
+              ? JSON.parse(bStatus.customerJson)
+              : null;
+            if (parsed?.plan) activePaidPlanId = parsed.plan;
+          } catch {}
+        }
+      }
+
       if (quota) {
-        planId = quota.planId ?? "starter";
         creditsUsed = quota.creditsUsed ?? 0;
-        monthlyCreditsLimit = quota.monthlyCreditsLimit ?? 500;
+        monthlyCreditsLimit = quota.monthlyCreditsLimit ?? 50;
+
+        // Auto-downgrade unbilled legacy "starter" quotas to "free"
+        if (!isPaying && quota.planId === "starter") {
+          planId = "free";
+          monthlyCreditsLimit = 50;
+        } else {
+          planId =
+            quota.planId ?? (isPaying ? activePaidPlanId || "starter" : "free");
+        }
+      } else {
+        planId = isPaying ? activePaidPlanId || "starter" : "free";
       }
     } catch {
       // Fallback

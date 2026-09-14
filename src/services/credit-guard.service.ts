@@ -45,7 +45,7 @@ export const CreditGuardService = {
 
         await db.insert(userQuotas).values({
           userId: params.userId,
-          planId: "free-trial",
+          planId: "free",
           monthlyCreditsLimit: initialLimit,
           creditsUsed: amount,
           resetAt: new Date(

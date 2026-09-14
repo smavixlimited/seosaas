@@ -110,8 +110,8 @@ export async function assertUserQuotaGuardrail(
       .insert(userQuotas)
       .values({
         userId,
-        planId: "starter",
-        monthlyCreditsLimit: 500,
+        planId: "free",
+        monthlyCreditsLimit: 50,
         creditsUsed: 0,
         crawlPagesUsed: 0,
         uptimeMonitorsCount: 0,
@@ -121,9 +121,9 @@ export async function assertUserQuotaGuardrail(
       .returning();
 
     const remaining =
-      (newUserQuota?.monthlyCreditsLimit ?? 500) -
+      (newUserQuota?.monthlyCreditsLimit ?? 50) -
       (newUserQuota?.creditsUsed ?? 0);
-    return { remaining, planId: "starter" };
+    return { remaining, planId: "free" };
   }
 
   // Check if reset period has elapsed

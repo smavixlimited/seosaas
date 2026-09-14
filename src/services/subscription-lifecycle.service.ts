@@ -68,12 +68,12 @@ export const SubscriptionLifecycleService = {
         Date.now() + 30 * 24 * 60 * 60 * 1000,
       ).toISOString();
 
-      // 1. Update user quotas to Starter defaults
+      // 1. Update user quotas to Free defaults
       await db
         .update(userQuotas)
         .set({
-          planId: "starter",
-          monthlyCreditsLimit: 500,
+          planId: "free",
+          monthlyCreditsLimit: 50,
           resetAt: nextResetAt,
           updatedAt: now,
         })

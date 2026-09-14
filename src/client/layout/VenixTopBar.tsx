@@ -67,8 +67,8 @@ export function VenixTopBar({ projectId, onToggleSidebar }: VenixTopBarProps) {
   });
 
   const creditData = creditUsageQuery.data;
-  const creditsRemaining = creditData ? creditData.creditsRemaining : 500;
-  const creditsLimit = creditData ? creditData.monthlyCreditsLimit : 500;
+  const creditsRemaining = creditData ? creditData.creditsRemaining : 50;
+  const creditsLimit = creditData ? creditData.monthlyCreditsLimit : 50;
   const percentUsed = creditData ? creditData.percentageUsed : 0;
   const isNearLimit = creditData ? creditData.isNearLimit : false;
   const isDepleted = creditData ? creditData.isDepleted : false;
