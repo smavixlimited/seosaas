@@ -368,21 +368,7 @@ export const CompetitorStrategyService = {
       }
     }
 
-    // Fallback baseline heuristics if API had zero or offline mock
-    if (competitorTraffic === 0 && competitorKeywords === 0) {
-      competitorTraffic = 145000;
-      competitorKeywords = 5200;
-      competitorBacklinks = 18400;
-      competitorReferringDomains = 960;
-    }
-    if (brandTraffic === 0 && brandKeywords === 0) {
-      brandTraffic = 18500;
-      brandKeywords = 1200;
-      brandBacklinks = 3400;
-      brandReferringDomains = 210;
-    }
-
-    // 4. Calculate Head-to-Head Deltas
+    // 4. Calculate Authentic Head-to-Head Deltas
     const headToHeadDeltas = {
       traffic: brandTraffic - competitorTraffic,
       keywords: brandKeywords - competitorKeywords,
