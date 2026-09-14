@@ -19,8 +19,10 @@ import {
 import { BRAND_CONFIG } from "@/config/brand";
 import {
   AUDIT_ISSUE_TYPES,
+  getIssueDescriptor,
   type AuditIssueDescriptor,
 } from "@/shared/audit-issues";
+import { calculateAuditGrade } from "@/shared/audit-grading";
 
 type ResultsTab = "issues" | "pages" | "performance";
 
@@ -53,10 +55,15 @@ export function ResultsView({
     return counts;
   }, [issues]);
 
-  const healthScore = useMemo(() => {
-    const deductions = severityCounts.critical * 15 + severityCounts.warning * 5 + severityCounts.info * 1;
-    return Math.max(10, Math.min(100, 100 - deductions));
-  }, [severityCounts]);
+  const auditGrade = useMemo(() => {
+    return calculateAuditGrade({
+      issues,
+      pagesCrawled: audit.pagesCrawled,
+      lighthouseScores: lighthouse.map(
+        (l) => l.seoScore ?? l.performanceScore,
+      ),
+    });
+  }, [issues, audit.pagesCrawled, lighthouse]);
 
   const failedIssueTypes = useMemo(
     () => new Set(issues.map((i) => i.issueType)),
@@ -103,6 +110,7 @@ export function ResultsView({
           totalLighthouse={lighthouse.length}
           averageResponseMs={stats.averageResponseMs}
           lighthouseSummary={stats.lighthouseSummary}
+          auditGrade={auditGrade}
         />
 
         <div className="card bg-base-100 border border-base-300">
@@ -167,9 +175,36 @@ export function ResultsView({
               <h1 className="text-2xl font-black tracking-tight text-slate-900">
                 Technical SEO Site Audit Report
               </h1>
-              <p className="text-xs text-slate-500 font-mono mt-0.5">
-                Target URL: {audit.startUrl}
-              </p>
+              <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                <span className="text-xs font-bold font-mono text-slate-700">
+                  Target URL: {audit.startUrl}
+                </span>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider border shadow-2xs"
+                  style={{
+                    backgroundColor:
+                      auditGrade.category === "green"
+                        ? "#ecfdf5"
+                        : auditGrade.category === "orange"
+                          ? "#fffbeb"
+                          : "#fff1f2",
+                    color:
+                      auditGrade.category === "green"
+                        ? "#047857"
+                        : auditGrade.category === "orange"
+                          ? "#b45309"
+                          : "#be123c",
+                    borderColor:
+                      auditGrade.category === "green"
+                        ? "#a7f3d0"
+                        : auditGrade.category === "orange"
+                          ? "#fde68a"
+                          : "#fecdd3",
+                  }}
+                >
+                  {auditGrade.score}% • Grade {auditGrade.letterGrade} ({auditGrade.label})
+                </span>
+              </div>
             </div>
           </div>
           <div className="text-right text-xs text-slate-600 space-y-1">
@@ -190,14 +225,27 @@ export function ResultsView({
               SEO Health Score
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className={`text-4xl font-black tabular-nums ${healthScore >= 80 ? "text-emerald-600" : healthScore >= 50 ? "text-amber-600" : "text-rose-600"}`}>
-                {healthScore}
+              <span
+                className="text-4xl font-black tabular-nums"
+                style={{
+                  color:
+                    auditGrade.category === "green"
+                      ? "#059669"
+                      : auditGrade.category === "orange"
+                        ? "#d97706"
+                        : "#e11d48",
+                }}
+              >
+                {auditGrade.score}%
               </span>
               <span className="text-sm font-bold text-slate-400">/ 100</span>
             </div>
-            <span className="text-xs font-medium text-slate-600 mt-0.5">
-              {healthScore >= 85 ? "Grade A — Excellent Health" : healthScore >= 70 ? "Grade B — Minor Optimizations Needed" : "Grade C — Critical Action Required"}
+            <span className="text-xs font-bold text-slate-700 mt-0.5">
+              Grade {auditGrade.letterGrade} — {auditGrade.label}
             </span>
+            <p className="text-[10px] text-slate-500 mt-1 leading-tight">
+              {auditGrade.summary}
+            </p>
           </div>
 
           <div className="col-span-4 grid grid-cols-4 gap-3 text-center pl-2">
@@ -236,31 +284,155 @@ export function ResultsView({
             </div>
           ) : (
             <div className="space-y-3">
-              {issues.map((issue, idx) => (
-                <div key={issue.id || idx} className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 print-break-inside-avoid shadow-2xs">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                        issue.severity === "critical" ? "bg-rose-100 text-rose-800" : issue.severity === "warning" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"
-                      }`}>
-                        {issue.severity}
-                      </span>
-                      <h3 className="text-sm font-bold text-slate-900">{issue.issueType.replace(/[-_]+/g, " ").toUpperCase()}</h3>
+              {issues.map((issue, idx) => {
+                const desc = getIssueDescriptor(issue.issueType);
+                return (
+                  <div key={issue.id || idx} className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 print-break-inside-avoid shadow-2xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
+                          issue.severity === "critical" ? "bg-rose-100 text-rose-800" : issue.severity === "warning" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"
+                        }`}>
+                          {issue.severity}
+                        </span>
+                        <h3 className="text-sm font-bold text-slate-900">
+                          {desc?.title || issue.issueType.replace(/[-_]+/g, " ").toUpperCase()}
+                        </h3>
+                      </div>
+                      <span className="text-xs font-mono text-slate-500 truncate max-w-sm">{issue.pageUrl}</span>
                     </div>
-                    <span className="text-xs font-mono text-slate-500 truncate max-w-sm">{issue.pageUrl}</span>
+                    {desc?.explanation && (
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {desc.explanation}
+                      </p>
+                    )}
+                    {desc?.howToFix && (
+                      <div className="p-2.5 rounded-lg bg-indigo-50/60 border border-indigo-100 text-xs text-indigo-900">
+                        <strong className="font-bold text-indigo-950">Recommended Fix: </strong>
+                        {desc.howToFix}
+                      </div>
+                    )}
+                    {issue.detailsJson && (
+                      <p className="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded border border-slate-150">
+                        {issue.detailsJson}
+                      </p>
+                    )}
                   </div>
-                  {issue.detailsJson && (
-                    <p className="text-xs font-mono text-slate-600 bg-slate-50 p-2 rounded border border-slate-150">
-                      {issue.detailsJson}
-                    </p>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
 
-        {/* Section 2: Passed Technical SEO Benchmarks */}
+        {/* Section 2: Crawled Pages Inventory Table */}
+        {pages.length > 0 && (
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
+              <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-blue-500" />
+                <span>Crawled Pages Inventory ({pages.length} pages)</span>
+              </h2>
+              <span className="text-xs text-slate-500 font-semibold">Live HTTP Status &amp; On-Page Health</span>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-500">
+                  <tr>
+                    <th className="p-2.5">URL</th>
+                    <th className="p-2.5 text-center">Status</th>
+                    <th className="p-2.5">Title</th>
+                    <th className="p-2.5 text-center">H1</th>
+                    <th className="p-2.5 text-center">Words</th>
+                    <th className="p-2.5 text-center">Missing Alt</th>
+                    <th className="p-2.5 text-right">Latency</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700">
+                  {pages.map((p, idx) => (
+                    <tr key={p.id || idx} className="print-break-inside-avoid">
+                      <td className="p-2.5 font-mono text-[11px] max-w-xs truncate text-slate-900 font-semibold">
+                        {p.url}
+                      </td>
+                      <td className="p-2.5 text-center">
+                        <span className={`px-2 py-0.5 rounded font-mono font-bold text-[10px] ${
+                          (p.statusCode ?? 200) < 300 ? "bg-emerald-100 text-emerald-800" : (p.statusCode ?? 200) < 400 ? "bg-blue-100 text-blue-800" : "bg-rose-100 text-rose-800"
+                        }`}>
+                          {p.statusCode ?? "200"}
+                        </span>
+                      </td>
+                      <td className="p-2.5 max-w-xs truncate text-[11px]">
+                        {p.title || "<Missing Title>"}
+                      </td>
+                      <td className="p-2.5 text-center font-mono">{p.h1Count}</td>
+                      <td className="p-2.5 text-center font-mono">{p.wordCount ?? 0}</td>
+                      <td className="p-2.5 text-center font-mono">
+                        {(p.imagesMissingAlt ?? 0) > 0 ? (
+                          <span className="text-rose-600 font-bold">{p.imagesMissingAlt}</span>
+                        ) : (
+                          "0"
+                        )}
+                      </td>
+                      <td className="p-2.5 text-right font-mono text-slate-500">{p.responseTimeMs ?? 0}ms</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Section 3: Performance & Core Web Vitals Table */}
+        {lighthouse.length > 0 && (
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
+              <h2 className="text-base font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-amber-500" />
+                <span>Performance &amp; Core Web Vitals ({lighthouse.length} tested)</span>
+              </h2>
+              <span className="text-xs text-slate-500 font-semibold">Lighthouse Audit Scores</span>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200 font-bold uppercase text-[10px] text-slate-500">
+                  <tr>
+                    <th className="p-2.5">Page URL</th>
+                    <th className="p-2.5 text-center">Device</th>
+                    <th className="p-2.5 text-center">Performance</th>
+                    <th className="p-2.5 text-center">SEO Score</th>
+                    <th className="p-2.5 text-center">Accessibility</th>
+                    <th className="p-2.5 text-center">LCP</th>
+                    <th className="p-2.5 text-center">CLS</th>
+                    <th className="p-2.5 text-right">TTFB</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700 font-mono text-[11px]">
+                  {lighthouse.map((lh, idx) => (
+                    <tr key={lh.id || idx} className="print-break-inside-avoid">
+                      <td className="p-2.5 max-w-xs truncate text-slate-900 font-sans font-semibold">
+                        {pages.find(p => p.id === lh.pageId)?.url || lh.pageId}
+                      </td>
+                      <td className="p-2.5 text-center uppercase text-[10px] font-bold text-slate-500">{lh.strategy}</td>
+                      <td className="p-2.5 text-center font-bold">
+                        <span className={lh.performanceScore && lh.performanceScore >= 80 ? "text-emerald-600" : lh.performanceScore && lh.performanceScore >= 50 ? "text-amber-600" : "text-rose-600"}>
+                          {lh.performanceScore ?? "-"}
+                        </span>
+                      </td>
+                      <td className="p-2.5 text-center font-bold text-emerald-600">{lh.seoScore ?? "-"}</td>
+                      <td className="p-2.5 text-center font-bold text-emerald-600">{lh.accessibilityScore ?? "-"}</td>
+                      <td className="p-2.5 text-center">{lh.lcpMs ? `${lh.lcpMs}ms` : "-"}</td>
+                      <td className="p-2.5 text-center">{lh.cls != null ? lh.cls.toFixed(2) : "-"}</td>
+                      <td className="p-2.5 text-right text-slate-500">{lh.ttfbMs ? `${lh.ttfbMs}ms` : "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Section 4: Passed Technical SEO Benchmarks */}
         {passedTests.length > 0 && (
           <div className="space-y-4 pt-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2 print-break-inside-avoid">
@@ -428,6 +600,7 @@ function StatsStrip({
   totalLighthouse,
   averageResponseMs,
   lighthouseSummary,
+  auditGrade,
 }: {
   pagesCrawled: number;
   issues: AuditResultsData["issues"];
@@ -439,6 +612,7 @@ function StatsStrip({
     avgSeo: number | null;
     avgAccessibility: number | null;
   };
+  auditGrade: ReturnType<typeof calculateAuditGrade>;
 }) {
   const severityCounts = useMemo(() => {
     const counts = { critical: 0, warning: 0, info: 0 };
@@ -449,6 +623,16 @@ function StatsStrip({
   }, [issues]);
 
   const items: StatItem[] = [
+    {
+      label: "SEO Health Score",
+      value: `${auditGrade.score}%`,
+      valueClass: auditGrade.textClass + " font-black",
+      sub: (
+        <span className="font-bold text-xs">
+          Grade {auditGrade.letterGrade} • {auditGrade.label}
+        </span>
+      ),
+    },
     { label: "Pages crawled", value: String(pagesCrawled) },
     {
       label: "Issues found",

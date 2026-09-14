@@ -18,6 +18,7 @@ import {
   StatusBadge,
   SUPPORT_EMAIL,
 } from "@/client/features/audit/shared";
+import { calculateAuditGrade } from "@/shared/audit-grading";
 
 export const Route = createFileRoute<"/_project/p/$projectId/audit/">(
   "/_project/p/$projectId/audit/",
@@ -131,6 +132,16 @@ function AuditDetail({
     (isFailed && resultsQuery.isSuccess && !failedWithResults) ||
     (isComplete && status && status.pagesCrawled <= 1);
 
+  const auditGrade = resultsQuery.data
+    ? calculateAuditGrade({
+        issues: resultsQuery.data.issues,
+        pagesCrawled: status?.pagesCrawled ?? resultsQuery.data.pages.length,
+        lighthouseScores: resultsQuery.data.lighthouse.map(
+          (l) => l.seoScore ?? l.performanceScore,
+        ),
+      })
+    : null;
+
   return (
     <div className="w-full min-w-0 max-w-full px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-8">
       <div className="mx-auto w-full min-w-0 max-w-7xl space-y-4">
@@ -138,10 +149,23 @@ function AuditDetail({
           <button className="btn btn-ghost btn-sm px-0" onClick={onBack}>
             &larr; All audits
           </button>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <h1 className="text-2xl font-semibold">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 className="text-2xl font-bold tracking-tight">
               {status ? extractHostname(status.startUrl) : "Site Audit"}
             </h1>
+            {auditGrade && (
+              <span
+                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black border shadow-2xs ${auditGrade.badgeClass}`}
+                title={`Technical SEO Score: ${auditGrade.score}/100 • ${auditGrade.label}`}
+              >
+                <span className="tabular-nums text-sm font-black">
+                  {auditGrade.score}%
+                </span>
+                <span className="text-[11px] font-bold uppercase tracking-wider opacity-90">
+                  Grade {auditGrade.letterGrade}
+                </span>
+              </span>
+            )}
             {status?.status !== "running" && status && (
               <StatusBadge status={status.status} />
             )}
